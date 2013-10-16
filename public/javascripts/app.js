@@ -5,29 +5,33 @@ var eyeballApp = angular.module('eyeballApp',[
 
 eyeballApp.factory('socket', function ($rootScope) {
 
-    return {
-        on: function (socket,eventName, callback) {
-            socket.on(eventName, function () {
-                var args = arguments;
-                $rootScope.$apply(function () {
-                    callback.apply(socket, args);
-                });
-            });
-        },
-        emit: function (socket,eventName, data, callback) {
-            socket.emit(eventName, data, function () {
-                var args = arguments;
-                $rootScope.$apply(function () {
-                    if (callback) {
+    function connection() {
+        var socket = io.connect();
+        return {
+            on: function (eventName, callback) {
+                socket.on(eventName, function () {
+                    var args = arguments;
+                    $rootScope.$apply(function () {
                         callback.apply(socket, args);
-                    }
+                    });
                 });
-            })
-        },
-        disconnect : function(socket) {
-            socket.disconnect();
-        }
-    };
+            },
+            emit: function (eventName, data, callback) {
+                socket.emit(eventName, data, function () {
+                    var args = arguments;
+                    $rootScope.$apply(function () {
+                        if (callback) {
+                            callback.apply(socket, args);
+                        }
+                    });
+                })
+            },
+            disconnect : function() {
+                socket.disconnect();
+            }
+        };
+    }
+    return connection;
 });
 
 eyeballApp.config(['$routeProvider',
@@ -49,6 +53,8 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$routeParams','soc
 
     function ReportCtrl($scope,$http,$routeParams,socket) {
         console.log("ReportCtrl");
+        $scope.results = [];
+
         var queryString = ($routeParams.query ? $routeParams.query.split(":")[1] : '');
         var query = queryString.split("&");
         var queryParams = {};
@@ -61,6 +67,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$routeParams','soc
         }
 
         if(queryParams.build) {
+
             $scope.$on("test_"+queryParams.build,function(){
                 console.log("Listened to test broadcast");
 
@@ -71,14 +78,15 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$routeParams','soc
                     message : "Testing..."
                 };
 
-                var connection = io.connect();
+                var conn = socket();
 
-                socket.on(connection,"commitRecord_"+queryParams.build,function(data) {
+                conn.on("commitRecord_"+queryParams.build,function(data) {
+                    console.log("listened");
                     $scope.testInfo.progress = data.progress;
                     $scope.results.push(data.record);
                     if(data.progress === 100) {
                         console.log("disconnecting");
-                        socket.disconnect(connection);
+                        conn.disconnect();
                         $scope.testInfo.status = "";
                         $scope.testInfo.message = "Testing...done!";
                     }
@@ -100,7 +108,7 @@ eyeballControllers.controller('TestCtrl',['$rootScope','$scope','$http','$locati
 
     function TestCtrl($rootScope,$scope,$http,$location,$timeout) {
         $scope.testCriteria = {};
-
+        console.log("TestCtrl");
         $scope.test = function() {
             $scope.testCriteria.build =(new Date()).getTime().toString() + Math.random().toString();
             $location.path('/report/:build='+$scope.testCriteria.build);

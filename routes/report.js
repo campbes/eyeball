@@ -13,7 +13,7 @@ module.exports = function(req,res) {
         if(err) {
             res.send(err);
         }
-        console.log(results.length);
+        //console.log(results.length);
         res.send(JSON.stringify(results));
     });
 
