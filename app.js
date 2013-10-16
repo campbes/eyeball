@@ -42,7 +42,7 @@ var partials = function(req,res) {
 
 app.get('/partials/*',partials);
 
-DB = require("mongojs").connect("eyeball", ["urls"])["urls"];
+DB = require("mongojs").connect("mongodb://eyeball:eyeball@ds047958.mongolab.com:47958/eyeball", ["urls"])["urls"];
 
 var server = http.createServer(app);
 server.listen(app.get('port'), function(){

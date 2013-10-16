@@ -37,7 +37,7 @@ div#myModal.modal.fade(tabindex="-1",role="dialog",aria-labelledby="myModalLabel
             div.modal-body
                 form(role="form",ng-controller="TestCtrl",ng-submit="test()")
                     div.form-group
-                        label(for="url") Datafile
-                        input#url.form-control(name="datafile",placeholder="Enter a single URL to test",ng-model="testCriteria.datafile")
+                        label(for="url") URL
+                        input#url.form-control(name="url",placeholder="Enter a single URL to test",ng-model="testCriteria.url")
                     button.btn.btn-default(type="button",data-dismiss="modal") Cancel
                     button.btn.btn-primary(type="submit") Go!
