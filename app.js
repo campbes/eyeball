@@ -7,8 +7,11 @@ var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
 var test = require('./routes/test');
+var report = require('./routes/report');
 var http = require('http');
 var path = require('path');
+var request = require('request');
+socket = require('socket.io');
 
 var app = express();
 
@@ -30,8 +33,22 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/users', user.list);
-app.post('/test', test.test);
+app.post('/test', test);
+app.get('/report',report);
 
-http.createServer(app).listen(app.get('port'), function(){
+var partials = function(req,res) {
+    res.render('partials/'+req.params[0]);
+};
+
+app.get('/partials/*',partials);
+
+DB = require("mongojs").connect("eyeball", ["urls"])["urls"];
+
+var server = http.createServer(app);
+server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+eyeball = {
+    io : socket.listen(server)
+};

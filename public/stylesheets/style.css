@@ -1,8 +1,22 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+td {
+    max-width: 300px;
+    word-wrap: break-word;
 }
-
-a {
-  color: #00B7FF;
+.gradeA {
+    background : #690 !important;
+}
+.gradeB {
+    background : #9C9 !important;
+}
+.gradeC {
+    background : #FC6 !important;
+}
+.gradeD {
+    background : #F96 !important;
+}
+.gradeE {
+    background : #F63 !important;
+}
+.gradeF {
+    background : #C33 !important;
 }

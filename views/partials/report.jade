@@ -1,0 +1,43 @@
+div(ng-controller='ReportCtrl')
+    div.navbar
+        button.btn.btn-primary(type="button" data-toggle="modal" data-target="#myModal") Test
+    div.container.table-responsive
+        div.panel.panel-default.ng-hide(ng-show="testInfo.testing")
+            div.panel-heading {{testInfo.message}}
+            div.panel-body
+                div(class="progress progress-striped {{testInfo.status}}")
+                    div.progress-bar(role="progressbar",aria-valuenow="{{testInfo.progress}}",aria-valuemin="0",aria-valuemax="100",style="width:{{testInfo.progress}}%")
+
+        table.table.table-striped
+            tr
+                th URL
+                th Date
+                th Build
+                th Tag
+                th YSlow
+                th Load time
+                th DomMonster
+                th Validator
+            tr(ng-repeat='r in results')
+                td {{r.url}}
+                td {{r.timestamp | date:'shortDate'}}
+                td {{r.build}}
+                td {{r.tag}}
+                td(class='grade{{r.metrics.yslow.grades.o}}') {{r.metrics.yslow.grades.o}}
+                td(class='grade{{r.metrics.yslow.grades.lt}}') {{r.metrics.yslow.grades.lt}}
+                td(class='grade{{r.metrics.dommonster.grades.COMPOSITE_stats}}') {{r.metrics.dommonster.grades.COMPOSITE_stats}}
+                td(class='grade{{r.metrics.validator.grades.COMPOSITE_info}}') {{r.metrics.validator.grades.COMPOSITE_info}}
+
+div#myModal.modal.fade(tabindex="-1",role="dialog",aria-labelledby="myModalLabel",aria-hidden="true")
+    div.modal-dialog
+        div.modal-content
+            div.modal-header
+                button.close(type="button",data-dismiss="modal",aria-hidden="true")
+                h4.modal-title Test
+            div.modal-body
+                form(role="form",ng-controller="TestCtrl",ng-submit="test()")
+                    div.form-group
+                        label(for="url") Datafile
+                        input#url.form-control(name="datafile",placeholder="Enter a single URL to test",ng-model="testCriteria.datafile")
+                    button.btn.btn-default(type="button",data-dismiss="modal") Cancel
+                    button.btn.btn-primary(type="submit") Go!
