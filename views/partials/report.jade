@@ -29,23 +29,23 @@ div.container.table-responsive
             th Date
             th Build
             th Tag
-            th Load time
-            th YSlow
-            th DomMonster
-            th Validator
+            th.text-center Load time
+            th.text-center YSlow
+            th.text-center DomMonster
+            th.text-center Validator
         tr.warning
             td
             td
             td
                 a(href='#/report') {{query.build}}
             td
-            td
+            td.text-center
                 span(class="label label-{{totals.time.class}}") {{totals.time.message}} ({{totals.time.score}}%)
-            td
+            td.text-center
                 span(class="label label-{{totals.yslow.o.class}}") {{totals.yslow.o.message}} ({{totals.yslow.o.score}}%)
-            td
+            td.text-center
                 span(class="label label-{{totals.dommonster.COMPOSITE_stats.class}}") {{totals.dommonster.COMPOSITE_stats.message}} ({{totals.dommonster.COMPOSITE_stats.score}}%)
-            td
+            td.text-center
 
         tr(ng-repeat='r in results')
             td {{r.url}}
@@ -53,10 +53,10 @@ div.container.table-responsive
             td
                 a(href='#/report/:build={{r.build}}') {{r.build}}
             td {{r.tag}}
-            td(class='grade{{r.metrics.yslow.grades.lt}}',ng-mouseover='popover($event,{name:"time",value : r.metrics.yslow.data.lt/1000})') {{r.metrics.yslow.grades.lt}}
-            td(class='grade{{r.metrics.yslow.grades.o}}',ng-mouseover='popover($event,r.metrics.yslow)') {{r.metrics.yslow.grades.o}}
-            td(class='grade{{r.metrics.dommonster.grades.COMPOSITE_stats}}',ng-mouseover='popover($event,r.metrics.dommonster)') {{r.metrics.dommonster.grades.COMPOSITE_stats}}
-            td(class='grade{{r.metrics.validator.grades.COMPOSITE_info}}') {{r.metrics.validator.grades.COMPOSITE_info}}
+            td(class='text-center grade{{r.metrics.yslow.grades.lt}}',ng-mouseover='popover($event,{name:"time",value : r.metrics.yslow.data.lt/1000})') {{r.metrics.yslow.grades.lt}}
+            td(class='text-center grade{{r.metrics.yslow.grades.o}}',ng-mouseover='popover($event,r.metrics.yslow)') {{r.metrics.yslow.grades.o}}
+            td(class='text-center grade{{r.metrics.dommonster.grades.COMPOSITE_stats}}',ng-mouseover='popover($event,r.metrics.dommonster)') {{r.metrics.dommonster.grades.COMPOSITE_stats}}
+            td(class='text-center grade{{r.metrics.validator.grades.COMPOSITE_info}}') {{r.metrics.validator.grades.COMPOSITE_info}}
 
     div#popoverContent.ng-hide
         span(ng-if='popoverContent.name === "time"') {{popoverContent.value}} s
