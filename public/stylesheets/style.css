@@ -3,7 +3,7 @@ td {
     word-wrap: break-word;
 }
 .gradeA {
-    background : #690 !important;
+    background : #5cb85c !important;
 }
 .gradeB {
     background : #9C9 !important;
@@ -18,5 +18,5 @@ td {
     background : #F63 !important;
 }
 .gradeF {
-    background : #C33 !important;
+    background : #d9534f !important;
 }
