@@ -34,7 +34,8 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/users', user.list);
 app.post('/test', test);
-app.get('/report',report);
+app.get('/report',report.overview);
+app.get('/report/yslow',report.yslow);
 
 var partials = function(req,res) {
     res.render('partials/'+req.params[0]);

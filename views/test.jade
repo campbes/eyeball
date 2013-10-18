@@ -1,0 +1,21 @@
+mixin test
+    div(ng-controller='TestCtrl')
+        div.panel.panel-default.ng-hide(ng-show="testInfo.testing")
+            div.panel-heading {{testInfo.message}}
+            div.panel-body
+                div(class="progress progress-striped {{testInfo.status}}")
+                    div.progress-bar(role="progressbar",aria-valuenow="{{testInfo.progress}}",aria-valuemin="0",aria-valuemax="100",style="width:{{testInfo.progress}}%")
+
+        div#myModal.modal.fade(tabindex="-1",role="dialog",aria-labelledby="myModalLabel",aria-hidden="true")
+            div.modal-dialog
+                div.modal-content
+                    div.modal-header
+                        button.close(type="button",data-dismiss="modal",aria-hidden="true")
+                        h4.modal-title Test
+                    div.modal-body
+                        form(role="form",ng-submit="test()")
+                            div.form-group
+                                label(for="url") URL
+                                input#url.form-control(name="url",placeholder="Enter a single URL to test",ng-model="testCriteria.url")
+                            button.btn.btn-default(type="button",data-dismiss="modal") Cancel
+                            button.btn.btn-primary(type="submit") Go!

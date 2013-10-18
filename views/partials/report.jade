@@ -1,62 +1,66 @@
+include ../test
+
 div.navbar
     button.btn.btn-primary(type="button" data-toggle="modal" data-target="#myModal") Test
-div.container.table-responsive
 
-    div(ng-controller='TestCtrl')
-        div.panel.panel-default.ng-hide(ng-show="testInfo.testing")
-            div.panel-heading {{testInfo.message}}
-            div.panel-body
-                div(class="progress progress-striped {{testInfo.status}}")
-                    div.progress-bar(role="progressbar",aria-valuenow="{{testInfo.progress}}",aria-valuemin="0",aria-valuemax="100",style="width:{{testInfo.progress}}%")
+div.container.table-responsive(ng-controller='ReportOverviewCtrl')
 
-        div#myModal.modal.fade(tabindex="-1",role="dialog",aria-labelledby="myModalLabel",aria-hidden="true")
-            div.modal-dialog
-                div.modal-content
-                    div.modal-header
-                        button.close(type="button",data-dismiss="modal",aria-hidden="true")
-                        h4.modal-title Test
-                    div.modal-body
-                        form(role="form",ng-submit="test()")
-                            div.form-group
-                                label(for="url") URL
-                                input#url.form-control(name="url",placeholder="Enter a single URL to test",ng-model="testCriteria.url")
-                            button.btn.btn-default(type="button",data-dismiss="modal") Cancel
-                            button.btn.btn-primary(type="submit") Go!
+    mixin test
 
-    table.table.table-striped
-        tr
-            th URL
-            th Date
-            th Build
-            th Tag
-            th.text-center Load time
-            th.text-center YSlow
-            th.text-center DomMonster
-            th.text-center Validator
-        tr.warning
-            td
-            td
-            td
-                a(href='#/report') {{query.build}}
-            td
-            td.text-center
-                span(class="label label-{{totals.time.class}}") {{totals.time.message}} ({{totals.time.score}}%)
-            td.text-center
-                span(class="label label-{{totals.yslow.o.class}}") {{totals.yslow.o.message}} ({{totals.yslow.o.score}}%)
-            td.text-center
-                span(class="label label-{{totals.dommonster.COMPOSITE_stats.class}}") {{totals.dommonster.COMPOSITE_stats.message}} ({{totals.dommonster.COMPOSITE_stats.score}}%)
-            td.text-center
+    table#results.table.table-striped.tablesorter
+        thead
+            tr
+                th URL
+                th Date
+                th Build
+                th Tag
+                th.text-center Load time
+                th.text-center YSlow
+                th.text-center DomMonster
+                th.text-center Validator
+        tbody
+            tr.warning
+                td(data-sort="a")
+                    a(href='#/report?build={{query.build}}',ng-if='query.url') {{query.url}}
+                td
+                td
+                    a(href='#/report?url={{query.url}}',ng-if='query.build') {{query.build}}
+                td
+                td.text-center
+                    span(class="label label-{{totals.time.class}}") {{totals.time.message}} ({{totals.time.score}}%)
+                td.text-center
+                    span(class="label label-{{totals.yslow.o.class}}") {{totals.yslow.o.message}} ({{totals.yslow.o.score}}%)
+                td.text-center
+                    span(class="label label-{{totals.dommonster.COMPOSITE_stats.class}}") {{totals.dommonster.COMPOSITE_stats.message}} ({{totals.dommonster.COMPOSITE_stats.score}}%)
+                td.text-center
 
-        tr(ng-repeat='r in results')
-            td {{r.url}}
-            td {{r.timestamp | date:'shortDate'}}
-            td
-                a(href='#/report/:build={{r.build}}') {{r.build}}
-            td {{r.tag}}
-            td(class='text-center grade{{r.metrics.yslow.grades.lt}}',ng-mouseover='popover($event,{name:"time",value : r.metrics.yslow.data.lt/1000})') {{r.metrics.yslow.grades.lt}}
-            td(class='text-center grade{{r.metrics.yslow.grades.o}}',ng-mouseover='popover($event,r.metrics.yslow)') {{r.metrics.yslow.grades.o}}
-            td(class='text-center grade{{r.metrics.dommonster.grades.COMPOSITE_stats}}',ng-mouseover='popover($event,r.metrics.dommonster)') {{r.metrics.dommonster.grades.COMPOSITE_stats}}
-            td(class='text-center grade{{r.metrics.validator.grades.COMPOSITE_info}}') {{r.metrics.validator.grades.COMPOSITE_info}}
+            tr(ng-repeat='r in results')
+                td
+                    a(href='#/report?url={{r.url}}&build={{query.build}}') {{r.url}}
+                td {{r.timestamp | date:'shortDate'}}
+                td
+                    a(href='#/report?build={{r.build}}&url={{query.url}}') {{r.build}}
+                td {{r.tag}}
+                td(class='text-center grade{{r.metrics.yslow.grades.lt}}',ng-mouseover='popover($event,{name:"time",value : r.metrics.yslow.data.lt/1000})') {{r.metrics.yslow.grades.lt}}
+                td(class='text-center grade{{r.metrics.yslow.grades.o}}')
+                    a(href='#/report/yslow?{{queryString}}',ng-mouseover='popover($event,r.metrics.yslow)') {{r.metrics.yslow.grades.o}}
+                td(class='text-center grade{{r.metrics.dommonster.grades.COMPOSITE_stats}}',ng-mouseover='popover($event,r.metrics.dommonster)') {{r.metrics.dommonster.grades.COMPOSITE_stats}}
+                td(class='text-center grade{{r.metrics.validator.grades.COMPOSITE_info}}') {{r.metrics.validator.grades.COMPOSITE_info}}
+
+            tr.warning
+                td(data-sort="z")
+                    a(href='#/report?build={{query.build}}',ng-if='query.url') {{query.url}}
+                td
+                td
+                    a(href='#/report?url={{query.url}}',ng-if='query.build') {{query.build}}
+                td
+                td.text-center
+                    span(class="label label-{{totals.time.class}}") {{totals.time.message}} ({{totals.time.score}}%)
+                td.text-center
+                    span(class="label label-{{totals.yslow.o.class}}") {{totals.yslow.o.message}} ({{totals.yslow.o.score}}%)
+                td.text-center
+                    span(class="label label-{{totals.dommonster.COMPOSITE_stats.class}}") {{totals.dommonster.COMPOSITE_stats.message}} ({{totals.dommonster.COMPOSITE_stats.score}}%)
+                td.text-center
 
     div#popoverContent.ng-hide
         span(ng-if='popoverContent.name === "time"') {{popoverContent.value}} s

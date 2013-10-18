@@ -1,7 +1,6 @@
 var eyeballApp = angular.module('eyeballApp',[
     'ngRoute',
-    'eyeballControllers',
-    'ui.bootstrap'
+    'eyeballControllers'
 ]);
 
 eyeballApp.factory('socket', function ($rootScope) {
@@ -56,56 +55,41 @@ eyeballApp.config(['$routeProvider',
             when('/report', {
                 templateUrl: '/partials/report',
                 controller : 'ReportCtrl'
-            }).when('/report/:query', {
-                templateUrl: '/partials/report',
+            }).when('/report/yslow', {
+                templateUrl: '/partials/yslow',
                 controller : 'ReportCtrl'
-            }).
-            otherwise({
+            }).otherwise({
                   redirectTo: '/report'
             });
     }]);
 
 var eyeballControllers = angular.module('eyeballControllers',[]);
 
-eyeballControllers.controller('ReportCtrl',['$scope','$http','$routeParams','$timeout',
 
-    function ReportCtrl($scope,$http,$routeParams,$timeout) {
+eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeout','$routeParams',
+
+    function ReportCtrl($scope,$http,$location,$timeout,$routeParams) {
         console.log("ReportCtrl");
         $scope.results = [];
         $scope.totals = {};
+        $scope.query = $routeParams;
 
-        var queryString = ($routeParams.query ? $routeParams.query.split(":")[1] : '');
-        var query = queryString.split("&");
-        var queryParams = {};
-        for (var i=0; i<query.length; i++) {
-            var qComp = query[i].split("=");
-            if(qComp[1]) {
-                queryParams[qComp[0]] = qComp[1];
-            }
-        }
-        $scope.query = queryParams;
+        var queryString = ($location.url().indexOf("?") > -1 ? $location.url().split("?")[1] : "");
 
-        $http({
-            url: '/report?'+queryString,
-            method: "GET"
-        }).success(function(results) {
-            $scope.results = results;
-            $scope.updateTotals();
-        });
+        $scope.queryString = queryString;
 
-        $scope.updateTotals = function() {
-            $scope.totals = {
-                time : totals.getTotal($scope.results,'yslow','lt'),
-                yslow : {
-                    o : totals.getTotal($scope.results,'yslow','o')
-                },
-                dommonster : {
-                    COMPOSITE_stats : totals.getTotal($scope.results,'dommonster','COMPOSITE_stats')
-                }
-            };
+        $scope.getResults = function(url,updateTotals) {
+            $http({
+                url: url + '?'+queryString,
+                method: "GET"
+            }).success(function(results) {
+                    $scope.results = results;
+                    updateTotals();
+                });
         };
 
         $scope.popover = function(e,metric) {
+            console.log(metric);
             $scope.popoverContent = metric;
             $timeout(function(){
                 var el = $(e.srcElement);
@@ -117,8 +101,51 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$routeParams','$ti
                     trigger : 'hover'
                 }).popover('show');
             },1);
+        };
+
+        var tables = document.getElementsByTagName('table');
+        for (var i=tables.length-1; i>=0; i--) {
+            new Tablesort(tables[i]);
         }
 
+    }
+]);
+
+
+eyeballControllers.controller('ReportOverviewCtrl',['$scope',
+
+    function ReportOverviewCtrl($scope) {
+        console.log("ReportOverviewCtrl");
+
+        $scope.getResults('report', function() {
+            $scope.totals = {
+                time : totals.getTotal($scope.results,'yslow','lt'),
+                yslow : {
+                    o : totals.getTotal($scope.results,'yslow','o')
+                },
+                dommonster : {
+                    COMPOSITE_stats : totals.getTotal($scope.results,'dommonster','COMPOSITE_stats')
+                }
+            };
+        });
+    }
+]);
+
+eyeballControllers.controller('ReportYslowCtrl',['$scope',
+
+    function ReportOverviewCtrl($scope) {
+        console.log("ReportOverviewCtrl");
+
+        $scope.getResults('report/yslow', function() {
+            $scope.totals = {
+                yslow : {
+                    o : totals.getTotal($scope.results,'yslow','o'),
+                    w : totals.getTotal($scope.results,'yslow','w'),
+                    w_c : totals.getTotal($scope.results,'yslow','w_c'),
+                    r : totals.getTotal($scope.results,'yslow','r')
+                }
+            };
+        });
     }
 ]);
 
@@ -159,7 +186,7 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','testData
                 build : $scope.testCriteria.build
             });
 
-            $location.path('/report/:build='+$scope.testCriteria.build);
+            $location.path('/report/?build='+$scope.testCriteria.build);
 
             $http({
                 url: '/test',
