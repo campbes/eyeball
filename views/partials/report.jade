@@ -43,7 +43,8 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                 td {{r.tag}}
                 td(class='text-center grade{{r.metrics.yslow.grades.lt}}',ng-mouseover='popover($event,{name:"time",value : r.metrics.yslow.data.lt/1000})') {{r.metrics.yslow.grades.lt}}
                 td(class='text-center grade{{r.metrics.yslow.grades.o}}')
-                    a(href='#/report/yslow?{{queryString}}',ng-mouseover='popover($event,r.metrics.yslow)') {{r.metrics.yslow.grades.o}}
+                    a(href='#/report/yslow?{{queryString}}',ng-mouseover='popover($event,r.metrics.yslow)')
+                        span(class='badge grade{{r.metrics.yslow.grades.o}}') {{r.metrics.yslow.grades.o}}
                 td(class='text-center grade{{r.metrics.dommonster.grades.COMPOSITE_stats}}',ng-mouseover='popover($event,r.metrics.dommonster)') {{r.metrics.dommonster.grades.COMPOSITE_stats}}
                 td(class='text-center grade{{r.metrics.validator.grades.COMPOSITE_info}}') {{r.metrics.validator.grades.COMPOSITE_info}}
 
@@ -65,7 +66,7 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
     div#popoverContent.ng-hide
         span(ng-if='popoverContent.name === "time"') {{popoverContent.value}} s
         ul.list-group(ng-if='popoverContent.tool === "yslow"')
-            li.list-group-item.active Overall&nbsp;
+            li(class='list-group-item grade{{popoverContent.grades.o}}') Overall&nbsp;
                 span(class='badge grade{{popoverContent.grades.o}}') {{popoverContent.grades.o}}
             li.list-group-item Page Size&nbsp;
                 span(class='badge grade{{popoverContent.grades.w}}') {{popoverContent.grades.w}}

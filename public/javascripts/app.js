@@ -93,6 +93,9 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
             $scope.popoverContent = metric;
             $timeout(function(){
                 var el = $(e.srcElement);
+                if (!el.attr('ng-mouseover')) {
+                    return false;
+                }
                 el.popover({
                     html : true,
                     content : $('#popoverContent').html(),

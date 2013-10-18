@@ -29,6 +29,10 @@ td>a {
     color: #000;
 }
 
+.gradeB .badge {
+    border: 1px solid #FFF;
+}
+
 /*tablesorter*/
 
 th.sort-header {
