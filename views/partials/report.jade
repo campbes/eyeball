@@ -7,7 +7,7 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
 
     mixin test
 
-    table#results.table.table-striped.tablesorter
+    table#results.table.table-striped.tablesorter(ng-mouseover='test($event)')
         thead
             tr
                 th URL
@@ -26,7 +26,7 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                 td
                     a(href='#/report?url={{query.url}}',ng-if='query.build') {{query.build}}
                 td
-                td.text-center
+                td.text-center()
                     span(class="label label-{{totals.time.class}}") {{totals.time.message}} ({{totals.time.score}}%)
                 td.text-center
                     span(class="label label-{{totals.yslow.o.class}}") {{totals.yslow.o.message}} ({{totals.yslow.o.score}}%)
@@ -41,11 +41,15 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                 td
                     a(href='#/report?build={{r.build}}&url={{query.url}}') {{r.build}}
                 td {{r.tag}}
-                td(class='text-center grade{{r.metrics.yslow.grades.lt}}',ng-mouseover='popover($event,{name:"time",value : r.metrics.yslow.data.lt/1000})') {{r.metrics.yslow.grades.lt}}
-                td(class='text-center grade{{r.metrics.yslow.grades.o}}')
-                    a(href='#/report/yslow?{{queryString}}',ng-mouseover='popover($event,r.metrics.yslow)') {{r.metrics.yslow.grades.o}}
-                td(class='text-center grade{{r.metrics.dommonster.grades.COMPOSITE_stats}}',ng-mouseover='popover($event,r.metrics.dommonster)') {{r.metrics.dommonster.grades.COMPOSITE_stats}}
-                td(class='text-center grade{{r.metrics.validator.grades.COMPOSITE_info}}') {{r.metrics.validator.grades.COMPOSITE_info}}
+                td(class='text-center grade{{r.metrics.yslow.grades.lt}}',ng-mouseenter='popover($event,{name:"time",value : r.metrics.yslow.data.lt/1000})')
+                    span.badge {{r.metrics.yslow.grades.lt}}
+                td(class='text-center grade{{r.metrics.yslow.grades.o}}',ng-mouseenter='popover($event,r.metrics.yslow)')
+                    a(href='#/report/yslow?{{queryString}}')
+                        span.badge {{r.metrics.yslow.grades.o}}
+                td(class='text-center grade{{r.metrics.dommonster.grades.COMPOSITE_stats}}',ng-mouseenter='popover($event,r.metrics.dommonster)')
+                    span.badge {{r.metrics.dommonster.grades.COMPOSITE_stats}}
+                td(class='text-center grade{{r.metrics.validator.grades.COMPOSITE_info}}')
+                    span.badge {{r.metrics.validator.grades.COMPOSITE_info}}
 
             tr.warning
                 td(data-sort="z")
@@ -65,7 +69,7 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
     div#popoverContent.ng-hide
         span(ng-if='popoverContent.name === "time"') {{popoverContent.value}} s
         ul.list-group(ng-if='popoverContent.tool === "yslow"')
-            li.list-group-item.active Overall&nbsp;
+            li(class='list-group-item grade{{popoverContent.grades.o}}') Overall&nbsp;
                 span(class='badge grade{{popoverContent.grades.o}}') {{popoverContent.grades.o}}
             li.list-group-item Page Size&nbsp;
                 span(class='badge grade{{popoverContent.grades.w}}') {{popoverContent.grades.w}}

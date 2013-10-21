@@ -88,6 +88,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
                 });
         };
 
+        // make the popover a directive
         $scope.popover = function(e,metric) {
             console.log(metric);
             $scope.popoverContent = metric;
@@ -101,6 +102,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
                     trigger : 'hover'
                 }).popover('show');
             },1);
+
         };
 
         var tables = document.getElementsByTagName('table');
