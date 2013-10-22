@@ -40,6 +40,8 @@ div.container.table-responsive(ng-controller='ReportYslowCtrl')
                 a(href='#/report?build={{r.build}}&url={{query.url}}') {{r.build}}
             td {{r.tag}}
             td(class='text-center grade{{r.metrics.yslow.grades.o}}') {{r.metrics.yslow.grades.o}}
-            td(class='text-center grade{{r.metrics.yslow.grades.w}}') {{r.metrics.yslow.grades.w}} ({{r.metrics.yslow.data.w}})
+            td(class='text-center grade{{r.metrics.yslow.grades.w}}')
+                span.badge {{r.metrics.yslow.grades.w}}
+                |&nbsp;{{r.metrics.yslow.data.w}}
             td(class='text-center grade{{r.metrics.yslow.grades.w_c}}') {{r.metrics.yslow.grades.w_c}}
             td(class='text-center grade{{r.metrics.yslow.grades.r}}') {{r.metrics.yslow.grades.r}}

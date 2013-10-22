@@ -7,27 +7,104 @@ td>a {
     width: 100%;
     height: 100%;
 }
+
+.gradeA,
+.gradeB,
+.gradeC,
+.gradeD,
+.gradeE,
+.gradeF {
+    color: #FFF !important;
+}
+.gradeA .badge,
+.gradeB .badge,
+.gradeC .badge,
+.gradeD .badge,
+.gradeE .badge,
+.gradeF .badge {
+    background : #FFF !important;
+}
 .gradeA {
     background : #5cb85c !important;
+}
+.gradeA .badge {
+    color : #5cb85c !important;
 }
 .gradeB {
     background : #9C9 !important;
 }
+.gradeB .badge {
+    color : #9C9 !important;
+}
 .gradeC {
     background : #FC6 !important;
+}
+.gradeC .badge {
+    color : #FC6 !important;
 }
 .gradeD {
     background : #F96 !important;
 }
+.gradeD .badge {
+    color : #F96 !important;
+}
 .gradeE {
     background : #F63 !important;
+}
+.gradeE .badge {
+    color : #F63 !important;
 }
 .gradeF {
     background : #d9534f !important;
 }
-.gradeA a, .gradeB a, .gradeC a, .gradeD a, .gradeE a, .gradeF a {
-    color: #000;
+.gradeF .badge {
+    color : #d9534f !important;
 }
+
+/*
+.gradeA,
+.gradeA .badge {
+    background : #5cb85c !important;
+}
+.gradeB,
+.gradeB .badge {
+    background : #9C9 !important;
+}
+.gradeC,
+.gradeC .badge {
+    background : #FC6 !important;
+}
+.gradeD,
+.gradeD .badge {
+    background : #F96 !important;
+}
+.gradeE,
+.gradeE .badge {
+    background : #F63 !important;
+}
+.gradeF,
+.gradeF .badge {
+    background : #d9534f !important;
+}
+.gradeA,
+.gradeB,
+.gradeC,
+.gradeD,
+.gradeE,
+.gradeF {
+    color: #FFF !important;
+}
+
+.gradeA .badge,
+.gradeB .badge,
+.gradeC .badge,
+.gradeD .badge,
+.gradeE .badge,
+.gradeF .badge {
+    border: 1px solid #FFF;
+}
+ */
+
 
 .gradeB .badge {
     border: 1px solid #FFF;
