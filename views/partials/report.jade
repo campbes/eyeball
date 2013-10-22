@@ -41,12 +41,15 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                 td
                     a(href='#/report?build={{r.build}}&url={{query.url}}') {{r.build}}
                 td {{r.tag}}
-                td(class='text-center grade{{r.metrics.yslow.grades.lt}}',ng-mouseover='popover($event,{name:"time",value : r.metrics.yslow.data.lt/1000})') {{r.metrics.yslow.grades.lt}}
-                td(class='text-center grade{{r.metrics.yslow.grades.o}}')
-                    a(href='#/report/yslow?{{queryString}}',ng-mouseover='popover($event,r.metrics.yslow)')
-                        span(class='badge grade{{r.metrics.yslow.grades.o}}') {{r.metrics.yslow.grades.o}}
-                td(class='text-center grade{{r.metrics.dommonster.grades.COMPOSITE_stats}}',ng-mouseover='popover($event,r.metrics.dommonster)') {{r.metrics.dommonster.grades.COMPOSITE_stats}}
-                td(class='text-center grade{{r.metrics.validator.grades.COMPOSITE_info}}') {{r.metrics.validator.grades.COMPOSITE_info}}
+                td(class='text-center grade{{r.metrics.yslow.grades.lt}}',data-type='grades',ng-mouseenter='setPopoverContent({name:"time",value : r.metrics.yslow.data.lt/1000, grade : r.metrics.yslow.grades.lt})',ng-mouseleave='setPopoverContent()')
+                    span.badge {{r.metrics.yslow.grades.lt}}
+                td(class='text-center grade{{r.metrics.yslow.grades.o}}',data-type='grades',ng-mouseenter='setPopoverContent(r.metrics.yslow)',ng-mouseleave='setPopoverContent()')
+                    a(href='#/report/yslow?{{queryString}}')
+                        span.badge {{r.metrics.yslow.grades.o}}
+                td(class='text-center grade{{r.metrics.dommonster.grades.COMPOSITE_stats}}',data-type='grades',ng-mouseenter='setPopoverContent(r.metrics.dommonster)',ng-mouseleave='setPopoverContent()')
+                    span.badge {{r.metrics.dommonster.grades.COMPOSITE_stats}}
+                td(class='text-center grade{{r.metrics.validator.grades.COMPOSITE_info}}',data-type='grades',ng-mouseenter='setPopoverContent(r.metrics.validator)',ng-mouseleave='setPopoverContent()')
+                    span.badge {{r.metrics.validator.grades.COMPOSITE_info}}
 
             tr.warning
                 td(data-sort="z")
@@ -64,10 +67,12 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                 td.text-center
 
     div#popoverContent.ng-hide
-        span(ng-if='popoverContent.name === "time"') {{popoverContent.value}} s
+        ul.list-group(ng-if='popoverContent.name === "time"')
+            li(class='list-group-item grade{{popoverContent.grade}}') {{popoverContent.value}} s&nbsp;
+                span(class='badge') {{popoverContent.grade}}
         ul.list-group(ng-if='popoverContent.tool === "yslow"')
             li(class='list-group-item grade{{popoverContent.grades.o}}') Overall&nbsp;
-                span(class='badge grade{{popoverContent.grades.o}}') {{popoverContent.grades.o}}
+                span(class='badge') {{popoverContent.grades.o}}
             li.list-group-item Page Size&nbsp;
                 span(class='badge grade{{popoverContent.grades.w}}') {{popoverContent.grades.w}}
             li.list-group-item Page Size (cached)&nbsp;
@@ -80,6 +85,6 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                 span(class='badge grade{{popoverContent.grades.yminify}}') {{popoverContent.grades.yminify}}
 
         ul.list-group(ng-if='popoverContent.tool === "dommonster"')
-            li.list-group-item.active Overall&nbsp;
-                span(class='badge grade{{popoverContent.grades.COMPOSITE_stats}}') {{popoverContent.grades.COMPOSITE_stats}}
+            li(class='list-group-item grade{{popoverContent.grades.COMPOSITE_stats}}') Overall&nbsp;
+                span(class='badge') {{popoverContent.grades.COMPOSITE_stats}}
 

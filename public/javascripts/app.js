@@ -49,6 +49,58 @@ eyeballApp.service('testDataStore',function(){
 
 });
 
+eyeballApp.factory('exos',function() {
+
+    function init(popover) {
+        Exos.enable([
+            {'td[data-type="grades"]' : {
+                'mouseenter' : {
+                    fn : popover.show
+                },
+                'mouseleave' : {
+                    fn : popover.hide
+                }
+            }}
+        ]);
+
+    }
+
+    return {
+        init : init
+    }
+
+});
+
+eyeballApp.factory('tablesort',function() {
+    return {
+        init : function() {
+            var tables = document.getElementsByTagName('table');
+            for (var i=tables.length-1; i>=0; i--) {
+                new Tablesort(tables[i]);
+            }
+        }
+    }
+});
+
+eyeballApp.factory('popover',function(){
+    return {
+        show : function(e,obj) {
+            var el = $(obj);
+            el.popover({
+                html : true,
+                content : $('#popoverContent').html(),
+                placement: 'left',
+                container : 'body',
+                trigger : 'manual'
+            }).popover('show');
+
+        },
+        hide : function(e,obj) {
+            $(obj).popover('destroy');
+        }
+    }
+});
+
 eyeballApp.config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.
@@ -66,13 +118,14 @@ eyeballApp.config(['$routeProvider',
 var eyeballControllers = angular.module('eyeballControllers',[]);
 
 
-eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeout','$routeParams',
+eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeout','$routeParams','exos','popover','tablesort',
 
-    function ReportCtrl($scope,$http,$location,$timeout,$routeParams) {
+    function ReportCtrl($scope,$http,$location,$timeout,$routeParams,exos,popover,tablesort) {
         console.log("ReportCtrl");
         $scope.results = [];
         $scope.totals = {};
         $scope.query = $routeParams;
+        $scope.popoverContent = null;
 
         var queryString = ($location.url().indexOf("?") > -1 ? $location.url().split("?")[1] : "");
 
@@ -88,30 +141,13 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
                 });
         };
 
-        // make the popover a directive
-        $scope.popover = function(e,metric) {
-            console.log(metric);
-            $scope.popoverContent = metric;
-            $timeout(function(){
-                var el = $(e.srcElement);
-                if (!el.attr('ng-mouseover')) {
-                    return false;
-                }
-                el.popover({
-                    html : true,
-                    content : $('#popoverContent').html(),
-                    placement: 'left',
-                    container : 'body',
-                    trigger : 'hover'
-                }).popover('show');
-            },1);
-
+        $scope.setPopoverContent = function(data) {
+            $scope.popoverContent = data;
         };
 
-        var tables = document.getElementsByTagName('table');
-        for (var i=tables.length-1; i>=0; i--) {
-            new Tablesort(tables[i]);
-        }
+        exos.init(popover);
+
+        tablesort.init();
 
     }
 ]);
