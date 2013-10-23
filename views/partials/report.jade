@@ -1,13 +1,11 @@
 include ../test
-
-div.navbar
-    button.btn.btn-primary(type="button" data-toggle="modal" data-target="#myModal") Test
+include ../common
 
 div.container.table-responsive(ng-controller='ReportOverviewCtrl')
 
     mixin test
 
-    table#results.table.table-striped.tablesorter
+    table#results.table.table-striped
         thead
             tr
                 th URL
@@ -35,7 +33,7 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                 td.text-center
 
             tr(ng-repeat='r in results')
-                td
+                td  {{r._id}}
                     a(href='#/report?url={{r.url}}&build={{query.build}}') {{r.url}}
                 td {{r.timestamp | date:'shortDate'}}
                 td

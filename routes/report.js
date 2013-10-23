@@ -1,14 +1,8 @@
-var url = url = require('url');
+var url = require('url');
 
 function getDbQuery(req) {
     var queryString = url.parse(req.url, true).query || {};
     var dbQuery = {};
-
-    var id = queryString.id;
-    if(id) {
-        dbQuery._id = mongojs.ObjectId(id);
-        return dbQuery;
-    }
 
     function getMultiValues(key) {
         var val = queryString[key];

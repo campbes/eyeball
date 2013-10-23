@@ -14,7 +14,16 @@ html(ng-app='eyeballApp',lang='en')
         script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.0-rc.3/angular-route.min.js')
         script(src='/socket.io/socket.io.js')
         script(src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
-        script(src='/javascripts/tablesort.js')
         script(src='//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js')
-        script(src='/javascripts/app.js')
+        script(src='/javascripts/tablesort.js')
         script(src='/javascripts/exos-1.0.2.min.js')
+
+        if env === 'development'
+            script(src='/javascripts/app/app.js')
+            script(src='/javascripts/app/services.js')
+            script(src='/javascripts/app/controllers/report.js')
+            script(src='/javascripts/app/controllers/test.js')
+            script(src='/javascripts/app/controllers/detail.js')
+        else
+            script(src='/javascripts/eyeball-#{version}.js')
+

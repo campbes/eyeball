@@ -13,9 +13,9 @@ mixin test
                         button.close(type="button",data-dismiss="modal",aria-hidden="true")
                         h4.modal-title Test
                     div.modal-body
-                        form(role="form",ng-submit="test()")
+                        form(role="form")
                             div.form-group
                                 label(for="url") URL
                                 input#url.form-control(name="url",placeholder="Enter a single URL to test",ng-model="testCriteria.url")
                             button.btn.btn-default(type="button",data-dismiss="modal") Cancel
-                            button.btn.btn-primary(type="submit") Go!
+                            button.btn.btn-primary(type="submit",data-dismiss="modal",ng-click="test()") Go!

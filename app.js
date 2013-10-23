@@ -2,11 +2,13 @@
 /**
  * Module dependencies.
  */
+var package = require('./package.json');
 
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
 var test = require('./routes/test');
+var detail = require('./routes/detail');
 var report = require('./routes/report');
 var http = require('http');
 var path = require('path');
@@ -36,6 +38,7 @@ app.get('/users', user.list);
 app.post('/test', test);
 app.get('/report',report.overview);
 app.get('/report/yslow',report.yslow);
+app.get('/detail', detail);
 
 var partials = function(req,res) {
     res.render('partials/'+req.params[0]);
@@ -53,4 +56,9 @@ server.listen(app.get('port'), function(){
 
 eyeball = {
     io : socket.listen(server)
+};
+
+app.locals = {
+    env : app.settings.env,
+    version : package.version
 };

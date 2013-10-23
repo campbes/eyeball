@@ -393,7 +393,15 @@ module.exports = function(req,res) {
                 updateRecord(record,'har',har);
 
                 if(tests.yslow) {
-                    var yslow = YSLOW.util.getResults(YSLOW.harImporter.run(jsdom.jsdom(), har, 'ydefault').context, 'all');
+                    var yslow = YSLOW.util.getResults(YSLOW.harImporter.run(jsdom.jsdom(), har, 'ydefault').context, 'grade,stats');
+
+                    for(var i in yslow.g) {
+                        if(yslow.g.hasOwnProperty(i)) {
+                            yslow.g[i].grade = grades.getGrades(yslow.g[i].score);
+                            yslow.g[i].rule = YSLOW.doc.rules[i].name;
+                        }
+                    }
+
                     console.log('got yslow result');
                     updateRecord(record,'yslow',yslow);
                 }
