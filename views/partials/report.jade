@@ -24,12 +24,8 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                 td
                     a(href='#/report?url={{query.url}}',ng-if='query.build') {{query.build}}
                 td
-                td.text-center
-                    span(class="label label-{{totals.time.class}}") {{totals.time.message}} ({{totals.time.score}}%)
-                td.text-center
-                    span(class="label label-{{totals.yslow.o.class}}") {{totals.yslow.o.message}} ({{totals.yslow.o.score}}%)
-                td.text-center
-                    span(class="label label-{{totals.dommonster.COMPOSITE_stats.class}}") {{totals.dommonster.COMPOSITE_stats.message}} ({{totals.dommonster.COMPOSITE_stats.score}}%)
+                td(ng-repeat='f in fields').text-center
+                    span(class="label label-{{totals[f.tool][f.metric].class}}") {{totals[f.tool][f.metric].message}} ({{totals[f.tool][f.metric].score}}%)
                 td.text-center
 
             tr(ng-repeat='r in results')
@@ -39,13 +35,9 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                 td
                     a(href='#/report?build={{r.build}}&url={{query.url}}') {{r.build}}
                 td {{r.tag}}
-                td(class='text-center grade{{r.metrics.yslow.grades.lt}}',data-type='grades',ng-mouseenter='setPopoverContent({name:"time",value : r.metrics.yslow.data.lt/1000, grade : r.metrics.yslow.grades.lt})',ng-mouseleave='setPopoverContent()')
-                    span.badge {{r.metrics.yslow.grades.lt}}
-                td(class='text-center grade{{r.metrics.yslow.grades.o}}',data-type='grades',ng-mouseenter='setPopoverContent(r.metrics.yslow)',ng-mouseleave='setPopoverContent()')
-                    a(href='#/report/yslow?{{queryString}}')
-                        span.badge {{r.metrics.yslow.grades.o}}
-                td(class='text-center grade{{r.metrics.dommonster.grades.COMPOSITE_stats}}',data-type='grades',ng-mouseenter='setPopoverContent(r.metrics.dommonster)',ng-mouseleave='setPopoverContent()')
-                    span.badge {{r.metrics.dommonster.grades.COMPOSITE_stats}}
+                td(ng-repeat='f in fields',class='text-center grade{{r.metrics[f.tool].grades[f.metric]}}',data-type='grades',ng-mouseenter='setPopoverContent(r.metrics[f.tool])',ng-mouseleave='setPopoverContent()')
+                    span.badge {{r.metrics[f.tool].grades[f.metric]}}
+
                 td(class='text-center grade{{r.metrics.validator.grades.COMPOSITE_info}}',data-type='grades',ng-mouseenter='setPopoverContent(r.metrics.validator)',ng-mouseleave='setPopoverContent()')
                     span.badge {{r.metrics.validator.grades.COMPOSITE_info}}
 
@@ -56,18 +48,14 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                 td
                     a(href='#/report?url={{query.url}}',ng-if='query.build') {{query.build}}
                 td
-                td.text-center
-                    span(class="label label-{{totals.time.class}}") {{totals.time.message}} ({{totals.time.score}}%)
-                td.text-center
-                    span(class="label label-{{totals.yslow.o.class}}") {{totals.yslow.o.message}} ({{totals.yslow.o.score}}%)
-                td.text-center
-                    span(class="label label-{{totals.dommonster.COMPOSITE_stats.class}}") {{totals.dommonster.COMPOSITE_stats.message}} ({{totals.dommonster.COMPOSITE_stats.score}}%)
+                td(ng-repeat='f in fields').text-center
+                    span(class="label label-{{totals[f.tool][f.metric].class}}") {{totals[f.tool][f.metric].message}} ({{totals[f.tool][f.metric].score}}%)
                 td.text-center
 
     div#popoverContent.ng-hide
-        ul.list-group(ng-if='popoverContent.name === "time"')
-            li(class='list-group-item grade{{popoverContent.grade}}') {{popoverContent.value}} s&nbsp;
-                span(class='badge') {{popoverContent.grade}}
+        ul.list-group(ng-if='popoverContent.tool === "time"')
+            li(class='list-group-item grade{{popoverContent.grades.lt}}') {{popoverContent.data.lt/1000}} s&nbsp;
+                span(class='badge') {{popoverContent.grades.lt}}
         ul.list-group(ng-if='popoverContent.tool === "yslow"')
             li(class='list-group-item grade{{popoverContent.grades.o}}') Overall&nbsp;
                 span(class='badge') {{popoverContent.grades.o}}
@@ -80,7 +68,7 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
             li.list-group-item Requests (cached)&nbsp;
                 span(class='badge grade{{popoverContent.grades.r_c}}') {{popoverContent.grades.r_c}}
             li.list-group-item Inline JS/CSS&nbsp;
-                span(class='badge grade{{popoverContent.grades.yminify}}') {{popoverContent.grades.yminify}}
+                span(class='badge grade{{popoverContent.grades.g.yminify}}') {{popoverContent.grades.g.yminify}}
 
         ul.list-group(ng-if='popoverContent.tool === "dommonster"')
             li(class='list-group-item grade{{popoverContent.grades.COMPOSITE_stats}}') Overall&nbsp;

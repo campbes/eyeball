@@ -24,6 +24,9 @@ var grades = (function() {
     var gradeMapping = {
         percentage : { A : 90,B : 80,C : 70,D : 60,E : 50, F : 0},
         points : {F : 32,E : 16,D : 8,C : 4,B : 2,A : 1},
+        time : {
+            lt : { F : 6000,E : 5000,D : 4000,C : 3000,B : 2000,A : 0}
+        },
         yslow : {
             o : { A : 90,B : 80,C : 70,D : 60,E : 50, F : 0},
             w : { F : 1000000,E : 750000,D : 500000,C : 250000,B : 125000,A : 0},
@@ -227,6 +230,7 @@ module.exports = function(req,res) {
     var tests = {
         har : true,
         yslow : true, // requires har
+        time : true, //requires yslow
         dommonster : true,
         validator : false
     };
@@ -234,6 +238,9 @@ module.exports = function(req,res) {
     function commitRecord(record){
         clearTimeout(record.recordTimer);
         delete record.recordTimer;
+
+        console.log(record);
+
         DB.insert(record,function(err,msg){
             if(err) {
                 console.log(err);
@@ -395,6 +402,9 @@ module.exports = function(req,res) {
                 if(tests.yslow) {
                     var yslow = yslowOverrideGetResults(YSLOW.harImporter.run(jsdom.jsdom(), har, 'ydefault').context, 'grade,stats');
                     console.log('got yslow result');
+                    updateRecord(record,'time',{
+                        lt : yslow.lt
+                    });
                     updateRecord(record,'yslow',yslow);
                 }
 

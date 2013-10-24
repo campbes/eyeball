@@ -71,7 +71,10 @@ exports.overview = function(req,res) {
         "metrics.yslow.tool" : 1,
         "metrics.dommonster.tool" : 1,
         "metrics.validator.tool" : 1,
-        "metrics.yslow.data.lt" : 1,
+        //"metrics.yslow.data.lt" : 1,
+        "metrics.time.tool" : 1,
+        "metrics.time.data" : 1,
+        "metrics.time.grades" : 1,
         "metrics.yslow.grades" : 1,
         "metrics.dommonster.grades" : 1,
         "metrics.validator.grades" : 1

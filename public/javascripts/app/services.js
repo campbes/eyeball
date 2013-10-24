@@ -54,6 +54,9 @@ eyeballApp.factory('exos',function() {
                 },
                 'mouseleave' : {
                     fn : popover.hide
+                },
+                'click' : {
+                    fn : popover.hide
                 }
             }}
         ]);

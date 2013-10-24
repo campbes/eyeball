@@ -20,7 +20,7 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','testData
                 console.log("listened");
                 console.log($scope.results);
                 $scope.testInfo.progress = data.progress;
-                $scope.results.push(data.record);
+                $scope.pushResults(data.record,$scope.updateTotals);
                 //$scope.updateTotals();
                 if(data.progress === 100) {
                     console.log("disconnecting");
