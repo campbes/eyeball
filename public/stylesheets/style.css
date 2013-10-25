@@ -3,9 +3,9 @@ td {
     word-wrap: break-word;
 }
 td>a {
-    display : inline-block;
+    /*display : inline-block;
     width: 100%;
-    height: 100%;
+    height: 100%;*/
 }
 
 .gradeA,
@@ -110,6 +110,9 @@ td>a {
     border: 1px solid #FFF;
 }
 
+#chartArea {
+    margin-top: 30px;
+}
 /*tablesorter*/
 
 th.sort-header {

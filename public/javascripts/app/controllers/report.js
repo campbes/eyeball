@@ -8,6 +8,19 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         $scope.popoverContent = null;
         $scope.fields = [];
 
+        $scope.charts={
+            options : [
+                {name : "Date", value : "timestamp"},
+                {name : "Build", value : "build"}
+            ],
+            time : {},
+            yslow : {},
+            dommonster : {}
+        };
+        $scope.charts.time.xAxis = $scope.charts.options[0];
+        $scope.charts.yslow.xAxis = $scope.charts.options[0];
+        $scope.charts.dommonster.xAxis = $scope.charts.options[0];
+
         var updateTotals = function() {
             for(var i=0; i<$scope.fields.length; i++) {
                 if(!$scope.totals[$scope.fields[i].tool]) {
@@ -15,15 +28,21 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
                 }
                 $scope.totals[$scope.fields[i].tool][$scope.fields[i].metric] = render.totals.getTotal($scope.results,$scope.fields[i].tool,$scope.fields[i].metric);
             }
-            getChartData($scope.results,render);
         };
 
         $scope.$watch('results',function(){
-            // might be nicer to fire update results form here? but it needs to know what its updating...
-            // can it determine this form the results object itself?
             console.log("results changed");
             updateTotals();
         });
+
+        function setChartWatch(tool,metric) {
+            $scope.$watch('charts.'+tool+'.xAxis',function(){
+                console.log(tool+" chart changed");
+                $timeout(function(){
+                    drawChart(getChartData($scope.results,render,$scope.charts[tool].xAxis,tool,metric),tool+'Chart',{title : 'Title'});
+                },1000);
+            });
+        }
 
         var queryString = ($location.url().indexOf("?") > -1 ? $location.url().split("?")[1] : "");
 
@@ -40,11 +59,13 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
 
         $scope.pushResults = function(result) {
             $scope.results = $scope.results.concat([result]);
-            console.log($scope.results);
         };
 
         $scope.setFields = function(fields) {
             $scope.fields = fields;
+            for(var i=0; i<$scope.fields.length; i++) {
+                setChartWatch($scope.fields[i].tool,$scope.fields[i].metric);
+            }
         };
 
         $scope.setPopoverContent = function(data) {
@@ -64,9 +85,9 @@ eyeballControllers.controller('ReportOverviewCtrl',['$scope',
         console.log("ReportOverviewCtrl");
 
         $scope.setFields([
-            {tool : 'time', metric : 'lt'},
-            {tool : 'yslow', metric : 'o'},
-            {tool : 'dommonster', metric : 'COMPOSITE_stats'}
+            {tool : 'time', metric : 'lt', name: 'Load time'},
+            {tool : 'yslow', metric : 'o', name: 'YSlow'},
+            {tool : 'dommonster', metric : 'COMPOSITE_stats', name : 'DomMonster'}
         ]);
 
         $scope.getResults('report',$scope.updateTotals);
@@ -92,20 +113,21 @@ eyeballControllers.controller('ReportYslowCtrl',['$scope','render',
 ]);
 
 
-function getPivotData(results,tool,field,render) {
+function getPivotData(results,tool,field,render,xAxis) {
 
-    var xAxis = null;
     var pivot = [['Date','A','B','C','D','E','F']];
     var xValArray = [];
     var i =null;
     var res = null;
     var xVal = null;
 
-    for (i=results.length-1; i>=0; i--) {
+    for (i=0; i<results.length; i++) {
         if(results[i].metrics) {
+            results[i].metrics[tool].timestamp = new Date(results[i].timestamp).toDateString();
+            results[i].metrics[tool].build = String(results[i].build);
             res = results[i].metrics[tool];
             if(res) {
-                xVal = (xAxis ? res[xAxis] : res.tool);
+                xVal = (xAxis ? res[xAxis.value] : res.timestamp);
                 if(xValArray.indexOf(xVal) === -1) {
                     xValArray[xValArray.length] = xVal;
                 }
@@ -120,11 +142,11 @@ function getPivotData(results,tool,field,render) {
         var d = 0;
         var e = 0;
         var f = 0;
-        for (i=results.length-1; i>=0; i--) {
+        for (i=0; i<results.length; i++) {
             if(results[i].metrics) {
                 res = results[i].metrics[tool];
                 if(res) {
-                    xVal = (xAxis ? res[xAxis] : res.tool);
+                    xVal = (xAxis ? res[xAxis.value] : res.timestamp);
                     if (xVal === xValArray[j] && res.grades) {
                         var grades = render.accessObject(res.grades,field);
 
@@ -146,17 +168,21 @@ function getPivotData(results,tool,field,render) {
     return pivot;
 }
 
-function getChartData(results,render) {
-    var chartData = {
+function getChartData(results,render,xAxis,tool,metric) {
+
+    return getPivotData(results,tool,metric,render,xAxis);
+    /*return  {
+        time : {
+            lt : getPivotData(results,'time','lt',render)
+        },
         yslow : {
-            o : getPivotData(results,'yslow','o',render),
-            lt : getPivotData(results,'yslow','lt',render),
+            o : getPivotData(results,'yslow','o',render,xAxis),
             w : getPivotData(results,'yslow','w',render),
             r : getPivotData(results,'yslow','r',render),
             inline : getPivotData(results,'yslow','g.yminify.score',render)
-        }/*,
+        },
          dommonster : {
-         o : getPivotData(results,'dommonster','COMPOSITE_stats'),
+         o : getPivotData(results,'dommonster','COMPOSITE_stats',render),
          e : getPivotData(results,'dommonster','stats.elements'),
          n : getPivotData('dommonster','stats.nodecount'),
          t : getPivotData('dommonster','stats.textnodes'),
@@ -169,14 +195,15 @@ function getChartData(results,render) {
          o : getPivotData('validator','COMPOSITE_info'),
          e : getPivotData('validator','info.errors'),
          w : getPivotData('validator','info.warnings')
-         } */
-    };
+         }
+    }; */
 
-    drawChart(chartData.yslow.o,'yslow',{title : 'YSlow'});
 }
 
 
 function drawChart(results,container,options) {
+
+    console.log(results);
     var data = new google.visualization.arrayToDataTable(
         results
     );
@@ -224,7 +251,7 @@ function drawChart(results,container,options) {
         function($0, $1, $2, $3) { query[$1] = $3; }
     );
 
-    var chartType = query.chartType || 'column';
+    var chartType = (data.length > 2 ? "area" : "column");
 
     if(chartType === 'area') {
         chart = new google.visualization.AreaChart(document.getElementById(container));
@@ -236,14 +263,14 @@ function drawChart(results,container,options) {
         vAxis : {
             format : '#.##%'
         },
-        areaOpacity: 0.8,
+        areaOpacity: 1,
         series : [
-            {color: '#00CC00'},
-            {color: '#9ACD32'},
-            {color: '#FFFF00'},
-            {color: '#FF8C00'},
-            {color: '#FF4500'},
-            {color: '#CC0000'}
+            {color: '#5cb85c'},
+            {color: '#99CC99'},
+            {color: '#FFCC66'},
+            {color: '#FF9966'},
+            {color: '#FF6633'},
+            {color: '#d9534f'}
         ],
         isStacked: true,
         backgroundColor: {fill:'transparent'}

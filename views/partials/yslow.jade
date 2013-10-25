@@ -5,33 +5,52 @@ div.container.table-responsive(ng-controller='ReportYslowCtrl')
 
     mixin test
 
-    table.table.table-striped
-        tr
-            th URL
-            th Date
-            th Build
-            th Tag
-            th.text-center Overall
-            th.text-center Page size
-            th.text-center Page size (cached)
-            th.text-center HTTP Requests
-        tr.warning
-            td
-                a(href='#/report?build={{query.build}}') {{query.url}}
-            td
-            td
-                a(href='#/report?url={{query.url}}') {{query.build}}
-            td
-              td.text-center
-                span(class="label label-{{totals.yslow.o.class}}") {{totals.yslow.o.message}} ({{totals.yslow.o.score}}%)
-            td.text-center
-                span(class="label label-{{totals.yslow.w.class}}") {{totals.yslow.w.message}} ({{totals.yslow.w.score}}%)
-            td.text-center
-                span(class="label label-{{totals.yslow.w_c.class}}") {{totals.yslow.w_c.message}} ({{totals.yslow.w_c.score}}%)
-            td.text-center
-                span(class="label label-{{totals.yslow.r.class}}") {{totals.yslow.r.message}} ({{totals.yslow.r.score}}%)
+    ul.nav.nav-tabs
+        li
+            a(href='#/report?build={{query.build}}') Overview
+        li.active
+            a(href='#/report/yslow?build={{query.build}}') YSlow
+        li
+            a(href='#/report/dommonster?build={{query.build}}') DomMonster
 
-        tr(ng-repeat='r in results')
+        div.btn-group(data-toggle="buttons")
+            label.btn.btn-primary.active(ng-click="reportView = 'table'")
+                input(type="radio")
+                |Report
+            label.btn.btn-primary(ng-click="reportView = 'chart'")
+                input(type="radio")
+                |Charts
+
+    div#chartArea(ng-hide="reportView !== 'chart'")
+
+    div(ng-hide="reportView === 'chart'")
+        table.table.table-striped
+            tr
+                th URL
+                th Date
+                th Build
+                th Tag
+                th.text-center Overall
+                th.text-center Page size
+                th.text-center Page size (cached)
+                th.text-center HTTP Requests
+            tr.warning
+                td
+                    a(href='#/report?build={{query.build}}') {{query.url}}
+                td
+                td
+                    a(href='#/report?url={{query.url}}') {{query.build}}
+                td
+                  td.text-center
+                    span(class="label label-{{totals.yslow.o.class}}") {{totals.yslow.o.message}} ({{totals.yslow.o.score}}%)
+                td.text-center
+                    span(class="label label-{{totals.yslow.w.class}}") {{totals.yslow.w.message}} ({{totals.yslow.w.score}}%)
+                td.text-center
+                    span(class="label label-{{totals.yslow.w_c.class}}") {{totals.yslow.w_c.message}} ({{totals.yslow.w_c.score}}%)
+                td.text-center
+                    span(class="label label-{{totals.yslow.r.class}}") {{totals.yslow.r.message}} ({{totals.yslow.r.score}}%)
+
+            tr(ng-repeat='r in results')
             td
                 a(href='#/report?url={{r.url}}&build={{query.build}}') {{r.url}}
             td {{r.timestamp | date:'shortDate'}}
