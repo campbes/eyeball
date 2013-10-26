@@ -1,0 +1,19 @@
+include ../test
+include ../common
+
+mixin test
+
+
+div.container
+
+    ul.nav.nav-tabs
+        li
+            a(href='#') Detail
+        li
+            a(href='#') HAR analysis
+        li.active
+            a(href='#') History
+
+    div.panel.panel-default
+        div.panel-heading Overview
+        div#overviewHistory.panel-body

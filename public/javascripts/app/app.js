@@ -15,9 +15,14 @@ eyeballApp.config(['$routeProvider',
             }).when('/detail/:id', {
                 templateUrl: '/partials/detail',
                 controller : 'DetailCtrl'
+            }).when('/history/:id', {
+                templateUrl: '/partials/history',
+                controller : 'HistoryCtrl'
             }).otherwise({
                   redirectTo: '/report'
             });
     }]);
 
 var eyeballControllers = angular.module('eyeballControllers',[]);
+
+google.load('visualization', '1.0', {'packages':['corechart']});

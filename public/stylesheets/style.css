@@ -8,6 +8,10 @@ td>a {
     height: 100%;*/
 }
 
+#overviewHistory {
+    height: 500px;
+}
+
 .gradeA,
 .gradeB,
 .gradeC,

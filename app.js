@@ -9,6 +9,7 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var test = require('./routes/test');
 var detail = require('./routes/detail');
+var history = require('./routes/history');
 var report = require('./routes/report');
 var http = require('http');
 var path = require('path');
@@ -39,6 +40,7 @@ app.post('/test', test);
 app.get('/report',report.overview);
 app.get('/report/yslow',report.yslow);
 app.get('/detail', detail);
+app.get('/history', history);
 
 var partials = function(req,res) {
     res.render('partials/'+req.params[0]);
@@ -46,8 +48,8 @@ var partials = function(req,res) {
 
 app.get('/partials/*',partials);
 
-//DB = require("mongojs").connect("mongodb://eyeball:eyeball@ds047958.mongolab.com:47958/eyeball", ["urls"])["urls"];
-DB = require("mongojs").connect("eyeball", ["urls"])["urls"];
+DB = require("mongojs").connect("mongodb://eyeball:eyeball@ds047958.mongolab.com:47958/eyeball", ["urls"])["urls"];
+//DB = require("mongojs").connect("eyeball", ["urls"])["urls"];
 
 var server = http.createServer(app);
 server.listen(app.get('port'), function(){
