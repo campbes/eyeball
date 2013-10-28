@@ -1,0 +1,27 @@
+include ../test
+include ../common
+
+mixin test
+
+
+div.container
+
+    ul.nav.nav-tabs
+        li
+            a(href='#/detail/:{{id}}') Detail
+        li.disabled
+            a(href='') HAR analysis
+        li.active
+            a(href='') History
+
+    div.well
+        ul.list-unstyled
+            li
+                strong {{id}}
+                |&nbsp;({{timestamp}})
+            li {{url}}
+
+    div.panel.panel-default
+        div.panel-heading Overview
+        div.panel-body.text-center
+            div#harContainer

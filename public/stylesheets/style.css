@@ -92,6 +92,32 @@ ul.chartControl a {
     color : #d9534f !important;
 }
 
+#harContainer div {
+    height: 15px;
+    float: left;
+}
+#harContainer td {
+    max-width: 100%;
+}
+#harContainer tr td:first-of-type {
+    max-width: 200px;
+}
+.receive {
+    background : #9C9 !important;
+}
+
+.wait {
+    background : #FC6 !important;
+}
+
+.send {
+    background : #F96 !important;
+}
+
+.blocked {
+    background : #d9534f !important;
+}
+
 /*
 .gradeA,
 .gradeA .badge {

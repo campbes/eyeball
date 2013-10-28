@@ -15,6 +15,9 @@ eyeballApp.config(['$routeProvider',
             }).when('/detail/:id', {
                 templateUrl: '/partials/detail',
                 controller : 'DetailCtrl'
+            }).when('/har/:id', {
+                templateUrl: '/partials/har',
+                controller : 'HarCtrl'
             }).when('/history/:id', {
                 templateUrl: '/partials/history',
                 controller : 'HistoryCtrl'

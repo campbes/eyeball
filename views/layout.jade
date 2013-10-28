@@ -23,6 +23,7 @@ html(ng-app='eyeballApp',lang='en')
         script(src='//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js')
         script(src='/javascripts/tablesort.js')
         script(src='/javascripts/exos-1.0.2.min.js')
+        script(src='/javascripts/harpy-alpha.js')
         script(src='https://www.google.com/jsapi')
 
         if env === 'development'
@@ -32,6 +33,7 @@ html(ng-app='eyeballApp',lang='en')
             script(src='/javascripts/app/controllers/test.js')
             script(src='/javascripts/app/controllers/detail.js')
             script(src='/javascripts/app/controllers/history.js')
+            script(src='/javascripts/app/controllers/har.js')
         else
             script(src='/javascripts/eyeball-#{version}.js')
 
