@@ -8,12 +8,33 @@ div.container
 
     ul.nav.nav-tabs
         li
-            a(href='#') Detail
-        li
-            a(href='#') HAR analysis
+            a(href='#/detail/:{{id}}') Detail
+        li.disabled
+            a(href='') HAR analysis
         li.active
-            a(href='#') History
+            a(href='') History
+
+    div.well
+        ul.list-unstyled
+            li
+                strong {{id}}
+                |&nbsp;({{timestamp}})
+            li {{url}}
 
     div.panel.panel-default
         div.panel-heading Overview
-        div#overviewHistory.panel-body
+        div.panel-body.text-center
+            div#overviewHistory.historyChart
+                img(src="/images/ajax-loader.gif")
+            ul.pagination.chartControl
+                li(ng-repeat="d in data",ng-class="{'active' : id === d._id}")
+                    a(href="#/history/:{{d._id}}",title="{{d.timestamp | date:'shortDate'}} ({{d._id}}...)") {{$index+1}}
+
+    div.panel.panel-default
+        div.panel-heading YSlow
+        div.panel-body.text-center
+            div#yslowHistory.historyChart
+                img(src="/images/ajax-loader.gif")
+            ul.pagination.chartControl
+                li(ng-repeat="d in data",ng-class="{'active' : id === d._id}")
+                    a(href="#/history/:{{d._id}}",title="{{d.timestamp | date:'shortDate'}} ({{d._id}}...)") {{$index+1}}

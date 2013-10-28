@@ -8,25 +8,23 @@ div.container
 
     ul.nav.nav-tabs
         li.active
-            a(href='#') Detail
+            a(href='') Detail
+        li.disabled
+            a(href='') HAR analysis
         li
-            a(href='#') HAR analysis
-        li
-            a(href='#') History
+            a(href='#/history/:{{id}}') History
 
     div(class='panel panel-default')
         div.panel-heading Overview
         div.panel-body
-            table
+            table.keyinfo
                 tr
                     td(class='alert grade{{data.metrics.yslow.grades.lt}}')
                         span(class='badge') {{data.metrics.yslow.grades.lt}}
                         |&nbsp;Load time ({{data.metrics.yslow.data.lt/1000}} s)
-                    td
                     td(class='alert grade{{data.metrics.yslow.grades.o}}')
                         span(class='badge') {{data.metrics.yslow.grades.o}}
                         |&nbsp;YSlow
-                    td
                     td(class='alert grade{{data.metrics.dommonster.grades.COMPOSITE_stats}}')
                         span(class='badge') {{data.metrics.dommonster.grades.COMPOSITE_stats}}
                         |&nbsp;DomMonster

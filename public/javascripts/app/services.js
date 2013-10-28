@@ -353,11 +353,25 @@ eyeballApp.factory('chart', ['render', function(render){
 
         var config = {
             vAxis : {
-                format : 'grade',
+                ticks: [
+                    { v : 6, f : "A" },
+                    { v : 5, f : "B" },
+                    { v : 4, f : "C" },
+                    { v : 3, f : "D" },
+                    { v : 2, f : "E" },
+                    { v : 1, f : "F" }
+                ],
                 viewWindow : {
                     min : 1,
                     max : 6
                 }
+            },
+            hAxis : {
+                textPosition: 'none'
+            },
+            chartArea : {
+                width: 800,
+                height: 300
             },
             annotation : {
                 '1': {style: 'line'}
@@ -366,12 +380,6 @@ eyeballApp.factory('chart', ['render', function(render){
 
         chart.draw(view,config);
 
-        $('#'+container+' text:contains("grade")').each(
-            function() {
-                var grade = map(Number($(this).text().replace("grade","")));
-                $(this).text(grade);
-            }
-        );
     }
 
     function map(grade) {
@@ -382,12 +390,6 @@ eyeballApp.factory('chart', ['render', function(render){
             case 'D' : return 3;
             case 'E' : return 2;
             case 'F' : return 1;
-            case 6 : return 'A';
-            case 5 : return 'B';
-            case 4 : return 'C';
-            case 3 : return 'D';
-            case 2 : return 'E';
-            case 1 : return 'F';
         }
     }
 

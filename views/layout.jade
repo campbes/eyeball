@@ -7,6 +7,12 @@ html(ng-app='eyeballApp',lang='en')
         link(rel='stylesheet', href='/stylesheets/style.css')
 
     body
+        div.navbar.navbar-default.navbar-fixed-top(role="navigation")
+            a.navbar-brand(href='#') Eyeball
+            button.btn.btn-primary.navbar-btn(type="button" data-toggle="modal" data-target="#modalTest") Test
+            |&nbsp;
+            button.btn.btn-default.navbar-btn(type="button" data-toggle="modal" data-target="#modalFilter") Filter
+
         div(ng-view)
             block content
 

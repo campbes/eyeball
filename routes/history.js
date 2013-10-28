@@ -16,7 +16,16 @@ module.exports = function(req,res) {
             url : results[0].url
         };
 
-        DB.find(dbQuery,function(err,data) {
+        DB.find(dbQuery,{
+            url : 1,
+            timestamp: 1,
+            build : 1,
+            tag : 1,
+            "metrics.time.grades" : 1,
+            "metrics.yslow.grades" : 1,
+            "metrics.dommonster.grades" : 1,
+            "metrics.validator.grades" : 1
+        },function(err,data) {
             if(err) {
                 res.send(err);
             }

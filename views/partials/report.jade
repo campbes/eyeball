@@ -110,4 +110,16 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                     span(class='badge') {{popoverContent.grades.COMPOSITE_stats}}
 
 
-
+    div#modalFilter.modal.fade(tabindex="-1",role="dialog",aria-labelledby="modalFilterLabel",aria-hidden="true")
+        div.modal-dialog
+            div.modal-content
+                div.modal-header
+                    button.close(type="button",data-dismiss="modal",aria-hidden="true")
+                    h4.modal-title Filter report
+                div.modal-body
+                    form(role="form")
+                        div.form-group
+                            label(for="url") URL
+                            input#url.form-control(name="url",placeholder="Enter a single URL to filter by",ng-model="query.url")
+                        button.btn.btn-default(type="button",data-dismiss="modal") Cancel
+                        button.btn.btn-primary(type="submit",data-dismiss="modal",ng-click="filter()") Go!
