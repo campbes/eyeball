@@ -11,7 +11,8 @@ eyeballControllers.controller('HarCtrl',['$scope','$routeParams','$http',
                 $scope.data = data;
 
                 var viewer = new Harpy.Viewer(JSON.stringify(data.metrics.har.data),{
-                    tablesize : 800
+                    tablesize : 800,
+                    tableclass : 'table-condensed table-striped'
                 });
                 viewer.draw("harContainer");
             });

@@ -16,7 +16,8 @@ var Harpy = function() {
 
         options = options || {};
 
-        var output = "<table>";
+
+        var output = (options.tableclass ? "<table class='"+options.tableclass+"'>" : "<table>");
         har = JSON.parse(har);
 
         var time = har.log.pages[0].pageTimings.onLoad;

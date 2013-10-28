@@ -98,6 +98,7 @@ ul.chartControl a {
 }
 #harContainer td {
     max-width: 100%;
+    font-size: 70%;
 }
 #harContainer tr td:first-of-type {
     max-width: 200px;
