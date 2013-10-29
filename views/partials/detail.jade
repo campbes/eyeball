@@ -52,7 +52,22 @@ div.container
                             td
                                 span(class='badge grade{{data.metrics.yslow.grades.w_c}}') {{data.metrics.yslow.grades.w_c}}
                             td  Page size (cached)
-                            td  {{data.metrics.yslow.data.w}} bytes
+                            td  {{data.metrics.yslow.data.w_c}} bytes
+                        tr
+                            td
+                                span(class='badge grade{{data.metrics.yslow.grades.r}}') {{data.metrics.yslow.grades.r}}
+                            td  HTTP Requests
+                            td  {{data.metrics.yslow.data.r}}
+                        tr
+                            td
+                                span(class='badge grade{{data.metrics.yslow.grades.r_c}}') {{data.metrics.yslow.grades.r_c}}
+                            td  HTTP Requests (cached)
+                            td  {{data.metrics.yslow.data.r}}
+                        tr
+                            td
+                                span(class='badge grade{{data.metrics.yslow.grades.g.yminify}}') {{data.metrics.yslow.grades.g.yminify}}
+                            td  Inline JS/CSS
+                            td  {{data.metrics.yslow.data.g.yminify}}
                 div.col-md-8
                     table.table.table-striped
                         tr(ng-repeat='i in data.metrics.yslow.data.g',ng-if='i.score < 100')

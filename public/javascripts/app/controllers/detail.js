@@ -9,6 +9,7 @@ eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http',
             method: "GET"
         }).success(function(data) {
             $scope.data = data;
+                console.log(data);
         });
 
     }

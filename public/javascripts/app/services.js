@@ -370,15 +370,17 @@ eyeballApp.factory('chart', ['render', function(render){
                 textPosition: 'none'
             },
             chartArea : {
-                width: 800,
-                height: 300
+                //width: 800,
+                height: 400
             },
             annotation : {
                 '1': {style: 'line'}
             },
-            tooltip : {
+            /*tooltip : {
                 trigger: 'none'
-            }
+            } ,*/
+            lineWidth : 4,
+            focusTarget : 'category'
         };
 
         function selectHandler() {

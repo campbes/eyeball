@@ -21,20 +21,9 @@ table.keyinfo td {
 }
 
 .historyChart {
-    height: 350px;
+    height: 450px;
 }
-ul.chartControl {
-    width: 800px !important;
-    display: table;
-    margin: auto;
-}
-ul.chartControl li {
-    display: table-cell;
-    text-align: center;
-}
-ul.chartControl a {
-    width: 100%;
-}
+
 .nav-tabs {
     margin-bottom: 20px;
 }
