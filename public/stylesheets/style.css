@@ -92,85 +92,16 @@ ul.chartControl a {
     color : #d9534f !important;
 }
 
-#harContainer div {
-    height: 15px;
-    float: left;
-}
-#harContainer td {
-    max-width: 100%;
-    font-size: 70%;
-}
-#harContainer tr td:first-of-type {
-    max-width: 200px;
-}
-.receive {
-    background : #9C9 !important;
-}
-
-.wait {
-    background : #FC6 !important;
-}
-
-.send {
-    background : #F96 !important;
-}
-
-.blocked {
-    background : #d9534f !important;
-}
-
-/*
-.gradeA,
-.gradeA .badge {
-    background : #5cb85c !important;
-}
-.gradeB,
-.gradeB .badge {
-    background : #9C9 !important;
-}
-.gradeC,
-.gradeC .badge {
-    background : #FC6 !important;
-}
-.gradeD,
-.gradeD .badge {
-    background : #F96 !important;
-}
-.gradeE,
-.gradeE .badge {
-    background : #F63 !important;
-}
-.gradeF,
-.gradeF .badge {
-    background : #d9534f !important;
-}
-.gradeA,
-.gradeB,
-.gradeC,
-.gradeD,
-.gradeE,
-.gradeF {
-    color: #FFF !important;
-}
-
-.gradeA .badge,
-.gradeB .badge,
-.gradeC .badge,
-.gradeD .badge,
-.gradeE .badge,
-.gradeF .badge {
-    border: 1px solid #FFF;
-}
- */
-
-
-.gradeB .badge {
-    border: 1px solid #FFF;
-}
-
 #chartArea {
     margin-top: 30px;
 }
+
+/*harpy*/
+.harpy td {
+    text-align: left;
+    font-size: 85%;
+}
+
 /*tablesorter*/
 
 th.sort-header {
