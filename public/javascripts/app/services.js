@@ -326,7 +326,7 @@ eyeballApp.factory('chart', ['render', function(render){
         }
 
 
-    function drawHistoryChart(results,cols,container) {
+    function drawHistoryChart(results,cols,container,handler) {
         var el = document.getElementById(container);
 
         if(!el) {
@@ -375,9 +375,22 @@ eyeballApp.factory('chart', ['render', function(render){
             },
             annotation : {
                 '1': {style: 'line'}
+            },
+            tooltip : {
+                trigger: 'none'
             }
         };
 
+        function selectHandler() {
+            if(handler) {
+                var sel = chart.getSelection()[0];
+                handler({
+                    id : view.getValue(sel.row,0)
+                });
+            }
+        }
+
+        google.visualization.events.addListener(chart, 'select', selectHandler);
         chart.draw(view,config);
 
     }

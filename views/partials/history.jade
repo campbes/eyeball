@@ -26,7 +26,7 @@ div.container
         div.panel-body.text-center
             div#overviewHistory.historyChart
                 img(src="/images/ajax-loader.gif")
-            ul.pagination.chartControl
+            //ul.pagination.chartControl
                 li(ng-repeat="d in data",ng-class="{'active' : id === d._id}")
                     a(href="#/history/:{{d._id}}",title="{{d.timestamp | date:'shortDate'}} ({{d._id}}...)") {{$index+1}}
 
@@ -35,6 +35,6 @@ div.container
         div.panel-body.text-center
             div#yslowHistory.historyChart
                 img(src="/images/ajax-loader.gif")
-            ul.pagination.chartControl
+            //ul.pagination.chartControl
                 li(ng-repeat="d in data",ng-class="{'active' : id === d._id}")
                     a(href="#/history/:{{d._id}}",title="{{d.timestamp | date:'shortDate'}} ({{d._id}}...)") {{$index+1}}

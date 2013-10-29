@@ -1,12 +1,18 @@
-eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','chart',
+eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','chart','$location',
 
-    function HistoryCtrl($scope,$routeParams,$http,chart) {
+    function HistoryCtrl($scope,$routeParams,$http,chart,$location) {
 
         $scope.data = [];
         $scope.id = $routeParams.id.substr(1);
         $scope.query = $routeParams;
         $scope.url = 'Getting url...';
         $scope.timestamp = 'Getting timestamp...';
+
+        function relocate(obj) {
+            $scope.$apply(function(){
+                $location.path('/history/:'+obj.id);
+            });
+        }
 
         $http({
             url: '/history?id='+$scope.id,
@@ -25,14 +31,14 @@ eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','ch
                         $scope.timestamp = data[i].timestamp;
                     }
                     overview.push([
-                        data[i]._id + " ("+data[i].timestamp+")",
+                        data[i]._id,
                         highlight,
                         chart.gradeMap((data[i].metrics.time ? data[i].metrics.time.grades.lt : data[i].metrics.yslow.grades.lt)),
                         chart.gradeMap(data[i].metrics.yslow.grades.o),
                         chart.gradeMap(data[i].metrics.dommonster.grades.COMPOSITE_stats)
                     ]);
                     yslow.push([
-                        data[i]._id + " ("+data[i].timestamp+")",
+                        data[i]._id,
                         highlight,
                         chart.gradeMap(data[i].metrics.yslow.grades.o),
                         chart.gradeMap(data[i].metrics.yslow.grades.r),
@@ -55,8 +61,8 @@ eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','ch
                     ['number', 'Size']
                 ];
 
-                chart.drawHistoryChart(overview,colsOverview,'overviewHistory');
-                chart.drawHistoryChart(yslow,colsYslow,'yslowHistory');
+                chart.drawHistoryChart(overview,colsOverview,'overviewHistory',relocate);
+                chart.drawHistoryChart(yslow,colsYslow,'yslowHistory',relocate);
 
 
             });
