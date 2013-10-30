@@ -631,6 +631,7 @@ function yslowOverrideGetResults(yscontext, info) {
 
     if (include_grade) {
         results = yscontext.result_set.getResults();
+
         for (i = 0, len = results.length; i < len; i += 1) {
             obj = {};
             result = results[i];

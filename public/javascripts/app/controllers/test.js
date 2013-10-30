@@ -1,6 +1,6 @@
-eyeballControllers.controller('TestCtrl',['$scope','$http','$location','testDataStore','socket',
+eyeballControllers.controller('TestCtrl',['$scope','$http','$location','testDataStore','socket','$timeout',
 
-    function TestCtrl($scope,$http,$location,testDataStore,socket) {
+    function TestCtrl($scope,$http,$location,testDataStore,socket,$timeout) {
         console.log("TestCtrl");
         $scope.testCriteria = {};
         var testData = testDataStore.get();
@@ -18,9 +18,8 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','testData
             var conn = socket();
             conn.on("commitRecord_"+testData.build,function(data) {
                 console.log("listened");
-                console.log($scope.results);
                 $scope.testInfo.progress = data.progress;
-                $scope.pushResults(data.record,$scope.updateTotals);
+                $scope.pushResults(data.record);
                 //$scope.updateTotals();
                 if(data.progress === 100) {
                     console.log("disconnecting");
@@ -33,6 +32,7 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','testData
 
 
         $scope.test = function() {
+
             $scope.testCriteria.build =(new Date()).getTime().toString() + Math.random().toString();
 
             testDataStore.set({
@@ -43,15 +43,17 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','testData
                 build : $scope.testCriteria.build
             });
 
-            $location.path('/report').search({build : $scope.testCriteria.build});
+            $timeout(function(){
+                $location.path('/report').search({build : $scope.testCriteria.build});
 
-            $http({
-                url: '/test',
-                method: "POST",
-                data : $scope.testCriteria
-            }).success(function() {
-                    console.log("posted");
-                });
+                $http({
+                    url: '/test',
+                    method: "POST",
+                    data : $scope.testCriteria
+                }).success(function() {
+                        console.log("posted");
+                    });
+            },500);
         }
 
     }

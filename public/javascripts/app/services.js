@@ -244,11 +244,6 @@ eyeballApp.factory('chart', ['render', function(render){
             return pivot;
         }
 
-        function getChartData(results,xAxis,tool,metric) {
-            return getPivotData(results,tool,metric,xAxis);
-        }
-
-
         function drawChart(results,xAxis,tool,metric) {
 
             results = getPivotData(results,tool,metric,xAxis);
@@ -298,10 +293,11 @@ eyeballApp.factory('chart', ['render', function(render){
 
             var chartType = (results.length > 2 ? "area" : "column");
 
+            console.log(el);
             if(chartType === 'area') {
-                chart = new google.visualization.AreaChart(document.getElementById(container));
+                chart = new google.visualization.AreaChart(el);
             } else {
-                chart = new google.visualization.ColumnChart(document.getElementById(container));
+                chart = new google.visualization.ColumnChart(el);
             }
 
             var config = {
@@ -317,8 +313,12 @@ eyeballApp.factory('chart', ['render', function(render){
                     {color: '#FF6633'},
                     {color: '#d9534f'}
                 ],
+                chartArea : {
+                    height : 300
+                },
                 isStacked: true,
-                backgroundColor: {fill:'transparent'}
+                backgroundColor: {fill:'transparent'},
+                focusTarget : 'category'
             };
 
             chart.draw(view,config);

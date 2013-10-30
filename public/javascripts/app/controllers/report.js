@@ -8,7 +8,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         $scope.query = $routeParams;
         $scope.popoverContent = null;
         $scope.fields = [];
-
+        $scope.reportView = '';
         $scope.charts={
             options : [
                 {name : "Date", value : "timestamp"},
@@ -38,10 +38,12 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
 
         function setChartWatch(tool,metric) {
             $scope.$watch('charts.'+tool+'.xAxis',function(){
-                console.log(tool+" chart changed");
-                $timeout(function(){
-                    chart.drawPivotChart($scope.results,$scope.charts[tool].xAxis,tool,metric);
-                },1000);
+                if($scope.reportView === 'chart') {
+                    console.log(tool+" chart changed");
+                    $timeout(function(){
+                        chart.drawPivotChart($scope.results,$scope.charts[tool].xAxis,tool,metric);
+                    },1000);
+                }
             });
         }
 
@@ -71,6 +73,19 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
 
         $scope.setPopoverContent = function(data) {
             $scope.popoverContent = data;
+        };
+
+        $scope.setReportView = function(view) {
+            $scope.reportView = view;
+            if(view === 'chart') {
+                $timeout(function(){
+                    for(var i=0; i<$scope.fields.length; i++) {
+                        var tool = $scope.fields[i].tool;
+                        var metric = $scope.fields[i].metric;
+                        chart.drawPivotChart($scope.results,$scope.charts[tool].xAxis,tool,metric);
+                    }
+                },100)
+            }
         };
 
         exos.init(popover);

@@ -14,10 +14,10 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
             a(href='#/report/dommonster?build={{query.build}}') DomMonster
 
         div.btn-group(data-toggle="buttons")
-            label.btn.btn-primary.active(ng-click="reportView = 'table'")
+            label.btn.btn-primary.active(ng-click="setReportView('table')")
                 input(type="radio")
                 |Report view
-            label.btn.btn-primary(ng-click="reportView = 'chart'")
+            label.btn.btn-primary(ng-click="setReportView('chart')")
                 input(type="radio")
                 |Chart view
 
@@ -30,7 +30,7 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                     select(ng-model="charts[f.tool].xAxis",ng-options="c.name for c in charts.options")
 
                 div.panel-body
-                    div(id="{{f.tool}}Chart")
+                    div(id="{{f.tool}}Chart").pivotChart
 
     div(ng-hide="reportView === 'chart'")
         table#results.table.table-striped
@@ -57,6 +57,10 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                     td(ng-repeat='f in fields').text-center
                         span(class="label label-{{totals[f.tool][f.metric].class}}") {{totals[f.tool][f.metric].message}} ({{totals[f.tool][f.metric].score}}%)
                     td.text-center
+
+                tr(ng-if="results.length === 0 && testing")
+                    td(colspan="7")
+                        img(src="/images/ajax-loader.gif")
 
                 tr(ng-repeat='r in results')
                     td
@@ -110,7 +114,7 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                     span(class='badge') {{popoverContent.grades.COMPOSITE_stats}}
 
 
-    div#modalFilter.modal.fade(tabindex="-1",role="dialog",aria-labelledby="modalFilterLabel",aria-hidden="true")
+    //div#modalFilter.modal.fade(tabindex="-1",role="dialog",aria-labelledby="modalFilterLabel",aria-hidden="true")
         div.modal-dialog
             div.modal-content
                 div.modal-header

@@ -23,6 +23,9 @@ table.keyinfo td {
 .historyChart {
     height: 450px;
 }
+.pivotChart {
+    height: 350px;
+}
 
 .nav-tabs {
     margin-bottom: 20px;
