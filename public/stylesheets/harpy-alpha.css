@@ -6,8 +6,27 @@ table.harpy div {
     float: left;
     height: 20px;
 }
+table.harpy tr.total {
+    background: #EEE;
+    font-weight: bold;
+}
+table.harpy tr.html {
+    background: #FFE;
+}
+table.harpy tr.css {
+    background: #EEF;
+}
+table.harpy tr.js {
+    background: #FEF;
+}
+table.harpy tr.text {
+    background: #FFE;
+}
 table.harpy th {
     width: 20px;
+}
+table.harpy th.timeline{
+    width: auto;
 }
 table.harpy td:nth-child(even) {
     background: #EEE;
@@ -20,12 +39,8 @@ table.harpy td {
 table.harpy td.url {
     width: 100px;
 }
-table.harpy th.timeline{
-    width: auto;
-}
 table.harpy td.total {
     text-align: right;
-    font-weight: bold;
 }
 table.harpy div.blocked {
     background: #d9534f;
@@ -37,12 +52,17 @@ table.harpy div.connect {
     background: #F96;
 }
 table.harpy div.send {
-    background: #FC6;
+    background: #9C9;
 }
 table.harpy div.wait {
-    background: #9C9;
+    background: #FC6;
 }
 table.harpy div.receive {
     background: #5cb85c;
     margin-right: 5px;
+}
+div.harpyChart {
+    width: 350px;
+    float: left;
+    height: 250px;
 }

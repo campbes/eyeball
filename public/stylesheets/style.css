@@ -89,10 +89,11 @@ table.keyinfo td {
 }
 
 /*harpy*/
-.harpy td {
+.harpy td, .harpy th {
     text-align: left;
     font-size: 85%;
 }
+
 
 /*tablesorter*/
 

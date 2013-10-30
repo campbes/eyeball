@@ -1,6 +1,6 @@
-eyeballControllers.controller('HarCtrl',['$scope','$routeParams','$http',
+eyeballControllers.controller('HarCtrl',['$scope','$routeParams','$http','tablesort',
 
-    function HarCtrl($scope,$routeParams,$http) {
+    function HarCtrl($scope,$routeParams,$http,tablesort) {
 
         $scope.id = $routeParams.id.substr(1);
 
@@ -9,12 +9,9 @@ eyeballControllers.controller('HarCtrl',['$scope','$routeParams','$http',
             method: "GET"
         }).success(function(data) {
                 $scope.data = data;
-
-                var viewer = new Harpy.Viewer(JSON.stringify(data.metrics.har.data),{
-                    tablesize : 800,
-                    tableclass : 'table-condensed table-striped'
-                });
+                var viewer = new Harpy.Viewer(JSON.stringify(data.metrics.har.data));
                 viewer.draw("harContainer");
+                //tablesort.init();
             });
 
     }
