@@ -1,10 +1,15 @@
 table.harpy {
-    width: 100%;
+    width: 95%;
     border-collapse: collapse;
 }
 table.harpy div {
     float: left;
     height: 20px;
+}
+table.harpy div.loadMarker {
+    border-left: 1px dashed #F63;
+    border-right: 1px dashed #5cb85c;
+    position: absolute;
 }
 table.harpy tr.total {
     background: #EEE;
@@ -20,7 +25,7 @@ table.harpy tr.js {
     background: #FEF;
 }
 table.harpy tr.text {
-    background: #FFE;
+    background: #FEE;
 }
 table.harpy th {
     width: 20px;
@@ -39,14 +44,14 @@ table.harpy td {
 table.harpy td.url {
     width: 100px;
 }
-table.harpy td.total {
-    text-align: right;
+table.harpy tr.total span {
+    float: right;
 }
 table.harpy div.blocked {
     background: #d9534f;
 }
 table.harpy div.dns {
-    background : #F63 !important;
+    background : #F63;
 }
 table.harpy div.connect {
     background: #F96;
@@ -62,7 +67,7 @@ table.harpy div.receive {
     margin-right: 5px;
 }
 div.harpyChart {
-    width: 350px;
+    width: 24%;
     float: left;
-    height: 250px;
+    height: 220px;
 }
