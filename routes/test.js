@@ -379,7 +379,13 @@ module.exports = function(req,res) {
         });
     }
 
-    function createRecord(page) {
+    function combineHARs(hars) {
+        console.log(hars.length);
+    }
+
+    function createRecord(passes) {
+
+        var page = passes[1];
 
         var record = {
             url : page.address,
@@ -393,6 +399,12 @@ module.exports = function(req,res) {
             console.log("Gave up waiting for metrics");
             commitRecord(record);
         },10000);
+
+        createHAR(passes[0],function(har1) {
+            createHAR(passes[1],function(har2) {
+                combineHARs([har1,har2]);
+            });
+        });
 
         if(tests.har) {
             createHAR(page,function(har){
@@ -476,53 +488,58 @@ module.exports = function(req,res) {
             return page;
         }
 
-        ph.createPage(function(err,page) {
-            if(err) {
-                console.log(err);
-            }
+        var passes = [];
 
-            var url = urls[0];
-            urls.splice(0,1);
-
-            page = setupPage(page);
-            page.address = url;
-
-            page.open(page.address, function (err,status) {
-
+        function createPage(pass,url) {
+            ph.createPage(function(err,page) {
                 if(err) {
                     console.log(err);
                 }
-
-                if (status !== 'success') {
-                    console.log('FAIL to load the address');
-                    ph.exit(1);
-                } else {
-                    page.endTime = new Date();
-                    page.evaluate(function () {
-                        return {
-                            title : document.title,
-                            content : document.documentElement.outerHTML
-                        };
-                    },function(err,doc){
-                        page.title = doc.title;
-                        page.content = doc.content;
-                        page.close();
-
-                        createRecord(page);
-
-                        if(urls.length > 0) {
-                            openPage(ph);
-                        } else {
-                            ph.exit();
-                            res.send("OK");
-                        }
-
-                    });
+                if(pass === 0){
+                    url = urls[0];
+                    urls.splice(0,1);
                 }
+                page = setupPage(page);
+                page.address = url;
+                page.open(page.address, function (err,status) {
+                    if(err) {
+                        console.log(err);
+                    }
+                    if (status !== 'success') {
+                        console.log('FAIL to load the address');
+                        ph.exit(1);
+                    } else {
+                        page.endTime = new Date();
+                        page.evaluate(function () {
+                            return {
+                                title : document.title,
+                                content : document.documentElement.outerHTML
+                            };
+                        },function(err,doc){
+                            page.title = doc.title;
+                            page.content = doc.content;
+                            page.close();
+                            passes[pass] = page;
+
+                            if(pass === 0) {
+                                createPage(1,url);
+                            } else if(pass === 1) {
+                                createRecord(passes);
+
+                                if(urls.length > 0) {
+                                    openPage(ph);
+                                } else {
+                                    ph.exit();
+                                    res.send("OK");
+                                }
+                            }
+                        });
+                    }
+                });
             });
+        }
 
-        });
-
+        createPage(0);
     }
 
     var phantomMax = 10;
