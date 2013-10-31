@@ -9,19 +9,16 @@ div.container
     ul.nav.nav-tabs
         li
             a(href='#/detail/:{{id}}') Detail
-        li.disabled
-            a(href='') HAR analysis
         li.active
-            a(href='') History
-
-    div.well
-        ul.list-unstyled
-            li
-                strong {{id}}
-                |&nbsp;({{timestamp}})
-            li {{url}}
+            a(href='') HAR analysis
+        li
+            a(href='#/history/:{{id}}') History
 
     div.panel.panel-default
-        div.panel-heading Overview
+        div.panel-heading Primed cache
         div.panel-body.text-center
             div#harContainer
+    div.panel.panel-default
+        div.panel-heading Uncached
+        div.panel-body.text-center
+            div#harUncached

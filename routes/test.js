@@ -380,7 +380,75 @@ module.exports = function(req,res) {
     }
 
     function combineHARs(hars) {
-        console.log(hars.length);
+
+        var har = hars[0];
+        var cachedHar = hars[1];
+        console.log(cachedHar.log.entries.length);
+
+        function matchEntry(url) {
+            for(var i=cachedHar.log.entries.length-1; i>=0; i--) {
+                if(cachedHar.log.entries[i].request.url === url) {
+                    return cachedHar.log.entries[i];
+                }
+            }
+            return false;
+        }
+
+        cachedHar.log.creater = {
+            name : "Eyeball",
+            version : "0.0.0"
+        };
+
+        for (var i=0; i<har.log.entries.length; i++) {
+            var matched = matchEntry(har.log.entries[i].request.url);
+            if(!matched) {
+                var entry = {
+                    startedDateTime: cachedHar.log.pages[0].startedDateTime,
+                    time: 0,
+                    request: {
+                        method: har.log.entries[i].request.method,
+                        url: har.log.entries[i].request.url,
+                        httpVersion: "HTTP/1.1",
+                        cookies: [],
+                        headers: har.log.entries[i].request.headers,
+                        queryString: [],
+                        headersSize: -1,
+                        bodySize: -1
+                    },
+                    response: {
+                        status: '(cache)',
+                        statusText: '(cache)',
+                        httpVersion: "HTTP/1.1",
+                        cookies: [],
+                        headers: har.log.entries[i].response.headers,
+                        redirectURL: "",
+                        headersSize: -1,
+                        bodySize: 0,
+                        content: {
+                            size: har.log.entries[i].response.bodySize,
+                            mimeType: har.log.entries[i].response.content.mimeType
+                        }
+                    },
+                    cache: {
+                        afterRequest : har.log.entries[i].response.bodySize
+                    },
+                    timings: {
+                        blocked: 0,
+                        dns: 0,
+                        connect: 0,
+                        send: 0,
+                        wait: 0,
+                        receive: 0,
+                        ssl: -1
+                    },
+                    pageref: har.log.entries[i].pageref
+                };
+
+                cachedHar.log.entries.push(entry);
+            }
+        }
+
+        return cachedHar;
     }
 
     function createRecord(passes) {
@@ -400,26 +468,26 @@ module.exports = function(req,res) {
             commitRecord(record);
         },10000);
 
-        createHAR(passes[0],function(har1) {
-            createHAR(passes[1],function(har2) {
-                combineHARs([har1,har2]);
-            });
-        });
+        var harUncached = null;
+        var harCached = null;
 
         if(tests.har) {
-            createHAR(page,function(har){
-                console.log("created har");
-                updateRecord(record,'har',har);
-
-                if(tests.yslow) {
-                    var yslow = yslowOverrideGetResults(YSLOW.harImporter.run(jsdom.jsdom(), har, 'ydefault').context, 'grade,stats');
-                    console.log('got yslow result');
-                    updateRecord(record,'time',{
-                        lt : yslow.lt
-                    });
-                    updateRecord(record,'yslow',yslow);
-                }
-
+            createHAR(passes[0],function(har1) {
+                harUncached = har1;
+                createHAR(passes[1],function(har2) {
+                    harCached = combineHARs([har1,har2]);
+                    console.log("created har");
+                    updateRecord(record,'har',harCached);
+                    updateRecord(record,'harUncached',harUncached);
+                    if(tests.yslow) {
+                        var yslow = yslowOverrideGetResults(YSLOW.harImporter.run(jsdom.jsdom(), harCached, 'ydefault').context, 'grade,stats');
+                        console.log('got yslow result');
+                        updateRecord(record,'time',{
+                            lt : yslow.lt
+                        });
+                        updateRecord(record,'yslow',yslow);
+                    }
+                });
             });
         }
 

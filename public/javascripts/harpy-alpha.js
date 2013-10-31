@@ -99,14 +99,14 @@ var Harpy = function() {
             }
         };
 
-        output += "<tr>";
+        output += "<thead><tr>";
         output += "<th>Req.</th>";
         output += "<th>Meth.</th>";
         output += "<th>URL</th>";
         output += "<th class='status'>Status</th>";
         output += "<th>Type</th>";
         output += "<th class='size'>Size</th>";
-        output += "<th class='timeline'></th></tr>";
+        output += "<th class='timeline'></th></tr></thead><tbody>";
 
         for(var i=0; i<har.log.entries.length; i++) {
             var entry = har.log.entries[i];
@@ -134,7 +134,7 @@ var Harpy = function() {
             if(i>0) {
                 url = url.replace(har.log.entries[0].request.url,"");
             }
-            output += "<tr class='"+type+"'>";
+            output += "<tr class='"+type+(entry.response.status === '(cache)' ? ' cache' : '')+"'>";
             output += "<td>"+(i+1)+"</td>"
             output += "<td>"+entry.request.method+"</td>"
             output += "<td title='"+url+"' class='url'>"+url.substr(0,30)+(url.length > 30 ? "..." : "")+"</td>";
@@ -158,7 +158,7 @@ var Harpy = function() {
         output += "<td>"+har.log.entries.length+"</td>";
         output += "<td></td><td></td><td></td><td></td><td>"+format((stats.size.download+stats.size.cache),'size')+"</td>";
         output += "<td> ("+format(stats.size.cache,'size')+" from cache)<span title='DOM: "+format(time.onContentLoad || time.onLoad,'time')+", Page: "+format(time.onLoad,'time')+"'>"+format(time.total,'time')+"</span></td>";
-        output += "</tr>";
+        output += "</tr></tbody>";
 
         this.resize = function() {
             var timeline = $('#'+el+' th.timeline');
@@ -177,7 +177,7 @@ var Harpy = function() {
                     }
                     this.style.marginLeft = left + "px";
                     this.style.width = width + "px";
-                    this.style.height = $('#'+el+' table.harpy').height() + "px";
+                    this.style.height = $('#'+el+' table.harpy>tbody').height() + "px";
                 }
                 if(this.hasAttribute('data-start')) {
                     this.style.marginLeft = Number(this.getAttribute('data-start'))*unit + "px";
@@ -248,10 +248,6 @@ var Harpy = function() {
         this.draw = function(elID) {
             el = elID;
             this.el = el;
-            var table = document.createElement("TABLE");
-            table.className = "harpy";
-            table.innerHTML = output;
-            document.getElementById(el).appendChild(table);
 
             if(!google.visualization) {
                 google.load("visualization", "1", {packages:["corechart"]});
@@ -259,6 +255,12 @@ var Harpy = function() {
             } else {
                 drawCharts();
             }
+
+            var table = document.createElement("TABLE");
+            table.className = "harpy";
+            table.innerHTML = output;
+            document.getElementById(el).appendChild(table);
+
             this.resize();
         }
     }

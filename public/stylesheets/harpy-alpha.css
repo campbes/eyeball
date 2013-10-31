@@ -27,6 +27,9 @@ table.harpy tr.js {
 table.harpy tr.text {
     background: #FEE;
 }
+table.harpy tr.cache {
+    color: #BBB;
+}
 table.harpy th {
     width: 20px;
 }
