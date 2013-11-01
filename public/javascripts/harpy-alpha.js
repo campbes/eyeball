@@ -11,7 +11,6 @@ var Harpy = function() {
         str += "<div class='send' data-time='"+obj.timings.send+"'></div>";
         str += "<div class='wait' data-time='"+obj.timings.wait+"'></div>";
         str += "<div class='receive' data-time='"+obj.timings.receive+"'></div>";
-        str += "<div>"+format(obj.timings.blocked+obj.timings.dns+obj.timings.connect+obj.timings.send+obj.timings.wait+obj.timings.receive,'time')+"</div>";
         return str;
     }
 
@@ -34,13 +33,17 @@ var Harpy = function() {
         switch(type) {
             case "size" :
                 if(val > 1024) {
-                    return Math.round(val/1024)+ " KB";
+                    val = val/102.4;
+                    val = Math.round(val);
+                    return val/10+ " KB";
                 }
                 return val+ " B";
                 break;
             case "time" :
                 if(val > 1000) {
-                    return val/1000+ " s";
+                    val = val/10;
+                    val = Math.round(val);
+                    return val/100+ " s";
                 }
                 return val+ " ms";
 
@@ -103,10 +106,12 @@ var Harpy = function() {
         output += "<th>Req.</th>";
         output += "<th>Meth.</th>";
         output += "<th>URL</th>";
-        output += "<th class='status'>Status</th>";
+        output += "<th>Status</th>";
         output += "<th>Type</th>";
-        output += "<th class='size'>Size</th>";
-        output += "<th class='timeline'></th></tr></thead><tbody>";
+        output += "<th>Size</th>";
+        output += "<th class='timeline'>"+buildMarker(time)+"</th>";
+       //output += "<th>Time</th>";
+        output += "</tr></thead><tbody>";
 
         for(var i=0; i<har.log.entries.length; i++) {
             var entry = har.log.entries[i];
@@ -115,7 +120,6 @@ var Harpy = function() {
 
             var endTime = new Date(entry.startedDateTime).getTime() + entry.time;
             if(endTime > startTime.getTime() + time.total) {
-                console.log()
                 time.total = endTime - startTime;
             }
 
@@ -147,23 +151,21 @@ var Harpy = function() {
             } else {
                 output += "<td>"+format(entry.response.bodySize,'size')+"</td>";
             }
-            output += "<td>";
-            if(i === 0) {
-                output += buildMarker(time);
-            }
-            output += buildTimeline(entry,startTime)+"</td>"
+            output += "<td title='"+format(entry.time,'time')+"'>";
+            output += buildTimeline(entry,startTime)+"</td>";
+            //output += "<td><div>"+format(entry.time,'time')+"</div></td>";
             output += "</tr>";
         }
         output += "</tbody><tfoot><tr class='total'>";
         output += "<td>"+har.log.entries.length+"</td>";
         output += "<td></td><td></td><td></td><td></td><td>"+format((stats.size.download+stats.size.cache),'size')+"</td>";
         output += "<td> ("+format(stats.size.cache,'size')+" from cache)<span title='DOM: "+format(time.onContentLoad || time.onLoad,'time')+", Page: "+format(time.onLoad,'time')+"'>"+format(time.total,'time')+"</span></td>";
+        //output += "<td title='DOM: "+format(time.onContentLoad || time.onLoad,'time')+", Page: "+format(time.onLoad,'time')+"'>"+format(time.total,'time')+"</td>";
         output += "</tr></tfoot>";
 
         this.resize = function() {
             var timeline = $('#'+el+' th.timeline');
-            var unit = (timeline.width()-60)/time.total;
-            console.log(time.total);
+            var unit = timeline.width()/time.total;
             var times = $('#'+el+' table.harpy div');
             times.each(function() {
                 if(this.className === 'loadMarker') {
@@ -260,8 +262,8 @@ var Harpy = function() {
             table.className = "harpy";
             table.innerHTML = output;
             document.getElementById(el).appendChild(table);
+            setTimeout(this.resize,1);
 
-            this.resize();
             if($.tablesorter){
                 $(table).tablesorter({
                     sortList : [[0,0]]

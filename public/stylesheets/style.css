@@ -91,21 +91,8 @@ table.keyinfo td {
 /*harpy*/
 .harpy td, .harpy th {
     text-align: left;
-    font-size: 85%;
+    font-size: 75%;
 }
 /*.harpy th {
     min-width: 45px;
 } */
-
-th.header {
-    background:  url("../images/bg.gif") no-repeat center right;
-    cursor: pointer;
-    font-weight: bold;
-    padding-right: 20px;
-}
-th.headerSortUp {
-    background-image: url("../images/asc.gif");
-}
-th.headerSortDown {
-    background-image: url("../images/desc.gif");
-}

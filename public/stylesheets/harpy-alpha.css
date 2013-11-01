@@ -10,6 +10,7 @@ table.harpy div.loadMarker {
     border-left: 1px dashed #F63;
     border-right: 1px dashed #5cb85c;
     position: absolute;
+    margin-top: 10px;
 }
 table.harpy tr.total {
     background: #EEE;
@@ -35,12 +36,13 @@ table.harpy th {
 }
 table.harpy th.timeline{
     width: auto;
+    padding: 5px;
 }
 table.harpy th.header {
     background:  url("../images/bg.gif") no-repeat center right;
     cursor: pointer;
     font-weight: bold;
-    padding-right: 20px;
+    padding-right: 18px;
 }
 table.harpy th.headerSortUp {
     background-image: url("../images/asc.gif");
