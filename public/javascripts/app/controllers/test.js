@@ -1,12 +1,12 @@
-eyeballControllers.controller('TestCtrl',['$scope','$http','$location','testDataStore','socket','$timeout',
+eyeballControllers.controller('TestCtrl',['$scope','$http','$location','persist','socket','$timeout',
 
-    function TestCtrl($scope,$http,$location,testDataStore,socket,$timeout) {
+    function TestCtrl($scope,$http,$location,persist,socket,$timeout) {
         console.log("TestCtrl");
         $scope.testCriteria = {};
-        var testData = testDataStore.get();
-        $scope.testInfo = testData;
+        var testInfo = persist.get('testInfo') || {};
+        $scope.testInfo = testInfo;
 
-        testDataStore.set({
+        persist.set('testInfo',{
             testing : false,
             progress : 0,
             status : "",
@@ -14,9 +14,9 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','testData
             build : $scope.testCriteria.build
         });
 
-        if(testData.testing === true) {
+        if(testInfo.testing === true) {
             var conn = socket();
-            conn.on("commitRecord_"+testData.build,function(data) {
+            conn.on("commitRecord_"+testInfo.build,function(data) {
                 console.log("listened");
                 $scope.testInfo.progress = data.progress;
                 $scope.pushResults(data.record);
@@ -26,6 +26,8 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','testData
                     conn.disconnect();
                     $scope.testInfo.status = "";
                     $scope.testInfo.message = "Testing...done!";
+                    // separate property owned by parent scope
+                    $scope.$emit('testComplete');
                 }
             });
         }
@@ -35,7 +37,7 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','testData
 
             $scope.testCriteria.build =(new Date()).getTime().toString() + Math.random().toString();
 
-            testDataStore.set({
+            persist.set('testInfo',{
                 testing : true,
                 progress : 0,
                 status : "active",

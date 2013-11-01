@@ -29,16 +29,16 @@ eyeballApp.factory('socket', function ($rootScope) {
     return connection;
 });
 
-eyeballApp.service('testDataStore',function(){
+eyeballApp.service('persist',function(){
 
-    var testData = {};
+    var persist = {};
 
     return {
-        get : function() {
-            return testData;
+        get : function(key) {
+            return persist[key];
         },
-        set : function(data) {
-            testData = data;
+        set : function(key,data) {
+            persist[key] = data;
         }
     }
 

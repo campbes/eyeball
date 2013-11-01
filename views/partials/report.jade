@@ -58,7 +58,7 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                         span(class="label label-{{totals[f.tool][f.metric].class}}") {{totals[f.tool][f.metric].message}} ({{totals[f.tool][f.metric].score}}%)
                     td.text-center
 
-                tr(ng-if="results.length === 0 && testing")
+                tr(ng-show="busy")
                     td(colspan="7")
                         img(src="/images/ajax-loader.gif")
 

@@ -1,6 +1,6 @@
-eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeout','$routeParams','exos','popover','tablesort','render','chart',
+eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeout','$routeParams','exos','popover','tablesort','render','chart','persist',
 
-    function ReportCtrl($scope,$http,$location,$timeout,$routeParams,exos,popover,tablesort,render,chart) {
+    function ReportCtrl($scope,$http,$location,$timeout,$routeParams,exos,popover,tablesort,render,chart,persist) {
         console.log("ReportCtrl");
 
         $scope.results = [];
@@ -18,6 +18,15 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
             yslow : {},
             dommonster : {}
         };
+
+        var testInfo = persist.get('testInfo') || {};
+        $scope.busy =  testInfo.testing;
+
+        $scope.$on('testComplete',function() {
+            console.log("ok");
+            $scope.busy = false;
+        });
+
         $scope.charts.time.xAxis = $scope.charts.options[0];
         $scope.charts.yslow.xAxis = $scope.charts.options[0];
         $scope.charts.dommonster.xAxis = $scope.charts.options[0];
@@ -52,11 +61,13 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         $scope.queryString = queryString;
 
         $scope.getResults = function(url) {
+            $scope.busy = true;
             $http({
                 url: url + '?'+queryString,
                 method: "GET"
             }).success(function(results) {
                     $scope.results = results;
+                    $scope.busy = false;
                 });
         };
 
@@ -100,9 +111,9 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
     }
 ]);
 
-eyeballControllers.controller('ReportOverviewCtrl',['$scope',
+eyeballControllers.controller('ReportOverviewCtrl',['$scope','persist',
 
-    function ReportOverviewCtrl($scope) {
+    function ReportOverviewCtrl($scope,persist) {
         console.log("ReportOverviewCtrl");
 
         $scope.setFields([
@@ -110,9 +121,11 @@ eyeballControllers.controller('ReportOverviewCtrl',['$scope',
             {tool : 'yslow', metric : 'o', name: 'YSlow'},
             {tool : 'dommonster', metric : 'COMPOSITE_stats', name : 'DomMonster'}
         ]);
-
-        $scope.getResults('report',$scope.updateTotals);
-
+        var testInfo = persist.get('testInfo') || {};
+        console.log(testInfo);
+        if(!testInfo.testing) {
+            $scope.getResults('report',$scope.updateTotals);
+        }
     }
 
 ]);
