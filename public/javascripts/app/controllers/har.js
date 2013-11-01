@@ -11,9 +11,12 @@ eyeballControllers.controller('HarCtrl',['$scope','$routeParams','$http','tables
                 $scope.data = data;
                 var viewer = new Harpy.Viewer(JSON.stringify(data.metrics.har.data));
                 viewer.draw("harContainer");
-                //tablesort.init();
                 var uncachedViewer = new Harpy.Viewer(JSON.stringify(data.metrics.harUncached.data));
                 uncachedViewer.draw("harUncached");
+
+
+
+                //tablesort.init();
             });
 
     }

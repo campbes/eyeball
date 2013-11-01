@@ -89,7 +89,13 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         };
 
         exos.init(popover);
-        tablesort.init();
+        tablesort.init('table',{
+            headers : {
+                0 : {
+                    sorter : false
+                }
+            }
+        });
 
     }
 ]);

@@ -79,9 +79,10 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                     td(class='text-center grade{{r.metrics.validator.grades.COMPOSITE_info}}',data-type='grades',ng-mouseenter='setPopoverContent(r.metrics.validator)',ng-mouseleave='setPopoverContent()')
                         span.badge {{r.metrics.validator.grades.COMPOSITE_info}}
 
+            tfoot
                 tr.warning
                     td
-                    td(data-sort="z")
+                    td
                         a(href='#/report?build={{query.build}}',ng-if='query.url') {{query.url.substr(0,20)}}...
                     td
                     td

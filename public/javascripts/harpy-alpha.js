@@ -154,11 +154,11 @@ var Harpy = function() {
             output += buildTimeline(entry,startTime)+"</td>"
             output += "</tr>";
         }
-        output += "<tr class='total'>";
+        output += "</tbody><tfoot><tr class='total'>";
         output += "<td>"+har.log.entries.length+"</td>";
         output += "<td></td><td></td><td></td><td></td><td>"+format((stats.size.download+stats.size.cache),'size')+"</td>";
         output += "<td> ("+format(stats.size.cache,'size')+" from cache)<span title='DOM: "+format(time.onContentLoad || time.onLoad,'time')+", Page: "+format(time.onLoad,'time')+"'>"+format(time.total,'time')+"</span></td>";
-        output += "</tr></tbody>";
+        output += "</tr></tfoot>";
 
         this.resize = function() {
             var timeline = $('#'+el+' th.timeline');
@@ -262,6 +262,12 @@ var Harpy = function() {
             document.getElementById(el).appendChild(table);
 
             this.resize();
+            if($.tablesorter){
+                $(table).tablesorter({
+                    sortList : [[0,0]]
+                });
+            }
+
         }
     }
 

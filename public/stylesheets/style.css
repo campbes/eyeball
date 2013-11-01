@@ -93,36 +93,19 @@ table.keyinfo td {
     text-align: left;
     font-size: 85%;
 }
+/*.harpy th {
+    min-width: 45px;
+} */
 
-
-/*tablesorter*/
-
-th.sort-header {
-    cursor:pointer;
+th.header {
+    background:  url("../images/bg.gif") no-repeat center right;
+    cursor: pointer;
+    font-weight: bold;
+    padding-right: 20px;
 }
-th.sort-header::-moz-selection,
-th.sort-header::selection {
-    background:transparent;
+th.headerSortUp {
+    background-image: url("../images/asc.gif");
 }
-table th.sort-header:after {
-    content:'';
-    float:right;
-    margin-top:8px;
-    border-width:0 4px 4px;
-    border-style:solid;
-    border-color:#404040 transparent;
-    visibility:hidden;
-}
-table th.sort-header:hover:after {
-    visibility:visible;
-}
-table th.sort-up:after,
-table th.sort-down:after,
-table th.sort-down:hover:after {
-    visibility:visible;
-    opacity:0.4;
-}
-table th.sort-up:after {
-    border-bottom:none;
-    border-width:4px 4px 0;
+th.headerSortDown {
+    background-image: url("../images/desc.gif");
 }

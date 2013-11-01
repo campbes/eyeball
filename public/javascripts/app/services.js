@@ -71,11 +71,8 @@ eyeballApp.factory('exos',function() {
 
 eyeballApp.factory('tablesort',function() {
     return {
-        init : function() {
-            var tables = document.getElementsByTagName('table');
-            for (var i=tables.length-1; i>=0; i--) {
-                new Tablesort(tables[i]);
-            }
+        init : function(selector,cfg) {
+            $(selector).tablesorter(cfg);
         }
     }
 });
