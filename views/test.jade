@@ -15,9 +15,40 @@ mixin test
                         button.close(type="button",data-dismiss="modal",aria-hidden="true")
                         h4.modal-title Test
                     div.modal-body
-                        form(role="form")
+                        form(role="form").form-horizontal
                             div.form-group
-                                label(for="url") URL
-                                input#url.form-control(name="url",placeholder="Enter a single URL to test",ng-model="testCriteria.url")
-                            button.btn.btn-default(type="button",data-dismiss="modal") Cancel
-                            button.btn.btn-primary(type="button",data-dismiss="modal",ng-click="test()") Go!
+                                label.col-sm-3.control-label Input type
+                                div.col-sm-9
+                                    div.radio-inline
+                                        label
+                                            input(type="radio",name="inputType",value="datafile",ng-model="testCriteria.inputType",ng-checked="testCriteria.inputType === 'datafile'")
+                                            | Datafile
+                                    div.radio-inline
+                                        label
+                                            input(type="radio",name="inputType",value="url",ng-model="testCriteria.inputType")
+                                            | Single URL
+                            div.form-group(ng-if="testCriteria.inputType === 'datafile'")
+                                label.col-sm-3.control-label(for='datafile') Datafile
+                                div.col-sm-9
+                                    input#datafile.form-control(type='text',placeholder='Path (or URL) to list of URLs',ng-model="testCriteria.datafile")
+                            div.form-group(ng-if="testCriteria.inputType === 'url'")
+                                label.col-sm-3.control-label(for='url') URL
+                                div.col-sm-9
+                                    input#url.form-control(type='text',placeholder='URL to test',ng-model="testCriteria.url")
+                            div.form-group
+                                label.col-sm-3.control-label(for='tag') Tag
+                                div.col-sm-9
+                                    input#tag.form-control(type='text',placeholder="Tag to group multiple runs",ng-model="testCriteria.tag")
+                            div.form-group
+                                label.col-sm-3.control-label(for="regex") Regex
+                                div.col-sm-4
+                                    input#regex.form-control(type='text',placeholder="Regex to modify all input URLs",ng-model="testCriteria.regex")
+                                div.col-sm-5
+                                    input#regexReplace.form-control(type='text',placeholder="Replacement text",ng-model="testCriteria.regexReplace")
+                            div.form-group
+                                label.col-sm-3.control-label(for="reps") Repetitions
+                                div.col-sm-9
+                                    input#reps.form-control(type='text',placeholder="Number of times to repeat all tested URLs",ng-model="testCriteria.reps")
+                            div.form-group
+                                div.col-sm-offset-3.col-sm-9
+                                    button.btn.btn-primary(type="submit",data-dismiss="modal",ng-click="test()") Go!

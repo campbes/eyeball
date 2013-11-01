@@ -200,27 +200,12 @@ module.exports = function(req,res) {
     var url = req.body.url;
     var reps = req.body.reps;
     var tag = req.body.tag || '';
-    var environment = tweakEnvironment(req.body.env);
+    var regex = req.body.regex;
+    var regexReplace = req.body.regexReplace;
 
     var urls = null;
     var urlsLength = 0;
     var committedRecords = 0;
-
-    function tweakEnvironment(str) {
-        if(!str) {
-            return '';
-        }
-        if(str.match(/^d[0-9]{2,3}(edi|del)/)) {
-            return str + ".dev."
-        }
-        if(str.match(/^c[0-9]{2,3}(edi|del)/)) {
-            return str + ".cls."
-        }
-        if(str.match(/^(p|l)[0-3]{2,3}(edi|del)/)) {
-            return str + "."
-        }
-        return str;
-    }
 
     var YSLOW = require('yslow').YSLOW;
     var jsdom = require('jsdom');
@@ -238,8 +223,6 @@ module.exports = function(req,res) {
     function commitRecord(record){
         clearTimeout(record.recordTimer);
         delete record.recordTimer;
-
-        console.log(record);
 
         DB.insert(record,function(err,msg){
             if(err) {
@@ -383,7 +366,6 @@ module.exports = function(req,res) {
 
         var har = hars[0];
         var cachedHar = hars[1];
-        console.log(cachedHar.log.entries.length);
 
         function matchEntry(url) {
             for(var i=cachedHar.log.entries.length-1; i>=0; i--) {
@@ -614,9 +596,11 @@ module.exports = function(req,res) {
 
     function go(data) {
 
-        data = data.replace(/@ENV@/g,environment);
+        if(regex && regexReplace) {
+            data = data.replace(new RegExp(regex),regexReplace);
+        }
         urls = data.split("\r\n");
-
+        console.log(urls);
         if(reps) {
             var urlset = urls;
             for(var i=0; i<reps; i++) {

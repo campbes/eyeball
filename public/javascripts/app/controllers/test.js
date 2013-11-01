@@ -2,7 +2,9 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','persist'
 
     function TestCtrl($scope,$http,$location,persist,socket,$timeout) {
         console.log("TestCtrl");
-        $scope.testCriteria = {};
+        $scope.testCriteria = {
+            inputType : "datafile"
+        };
         var testInfo = persist.get('testInfo') || {};
         $scope.testInfo = testInfo;
 
