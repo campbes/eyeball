@@ -1,0 +1,49 @@
+mixin filter
+    div#modalFilter.modal.fade(tabindex="-1",role="dialog",aria-labelledby="modalFilterLabel",aria-hidden="true")
+        div.modal-dialog
+            div.modal-content
+                div.modal-header
+                    button.close(type="button",data-dismiss="modal",aria-hidden="true")
+                    h4.modal-title Filter report
+                div.modal-body
+                    form(role="form").form-horizontal
+                        div.form-group
+                            label.col-sm-3.control-label(for="url") URL
+                            div.col-sm-9
+                                input#url.form-control(name="url",placeholder="Enter a single (full or partial) URL to filter by",ng-model="filterParams.url")
+                        div.form-group
+                            label.col-sm-3.control-label(for="build") Build
+                            div.col-sm-9
+                                input#build.form-control(name="build",placeholder="Enter a single or comma-separated list of build IDs",ng-model="filterParams.build")
+                        div.form-group
+                            label.col-sm-3.control-label(for="start") Date
+                            div.col-sm-4
+                                input#start.form-control(type='text',placeholder="Start date",ng-model="filterParams.start")
+                            label.col-sm-1.control-label(for="end") to
+                            div.col-sm-4
+                                input#end.form-control(type='text',placeholder="End date",ng-model="filterParams.end")
+                        div.form-group
+                            label.col-sm-3.control-label(for="tag") Tag
+                            div.col-sm-9
+                                input#tag.form-control(name="tag",placeholder="Enter a tag",ng-model="filterParams.tag")
+                        div.form-group
+                            div.col-sm-offset-3.col-sm-9
+                                button.btn.btn-primary(type="submit",data-dismiss="modal",ng-click="filter()") Go!
+
+mixin charts
+    div#chartArea(ng-hide="reportView !== 'chart'")
+        div.panel.panel-default(ng-repeat="ch in charts")
+            div.panel-heading {{ch.name}}
+                |&nbsp;
+                select(ng-model="ch.xAxis",ng-options="c.name for c in chartOptions")
+            div.panel-body
+                div(id="{{ch.tool}}Chart").pivotChart
+
+mixin reportView
+    div.btn-group(data-toggle="buttons")
+        label.btn.btn-primary.active(ng-click="setReportView('table')")
+            input(type="radio")
+            |Report view
+        label.btn.btn-primary(ng-click="setReportView('chart')")
+            input(type="radio")
+            |Chart view

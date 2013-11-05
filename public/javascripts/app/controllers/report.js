@@ -149,12 +149,14 @@ eyeballControllers.controller('ReportYslowCtrl',['$scope','render',
 
         $scope.setFields([
             {tool : 'yslow',metric : 'o'},
-            {tool : 'yslow',metric : 'w'},
-            {tool : 'yslow',metric : 'w_c'},
+            {tool : 'yslow',metric : 'w', name : 'Page size', format : 'size'},
+            {tool : 'yslow',metric : 'w_c', name : 'Page size (cached)', format : 'size'},
             {tool : 'yslow',metric : 'r'},
             {tool : 'yslow',metric : 'r_c'}
         ]);
 
         $scope.getResults('report/yslow',$scope.updateTotals);
+
+        $scope.format = render.format;
     }
 ]);

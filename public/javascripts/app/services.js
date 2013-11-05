@@ -176,9 +176,32 @@ eyeballApp.factory('render',function() {
         return obj;
     }
 
+    function format(val,type) {
+
+        switch(type) {
+            case "size" :
+                if(val > 1024) {
+                    val = val/102.4;
+                    val = Math.round(val);
+                    return val/10+ " KB";
+                }
+                return val+ " B";
+                break;
+            case "time" :
+                if(val > 1000) {
+                    val = val/10;
+                    val = Math.round(val);
+                    return val/100+ " s";
+                }
+                return val+ " ms";
+
+        }
+    }
+
     return {
         totals : totals,
-        accessObject : accessObject
+        accessObject : accessObject,
+        format : format
     }
 
 });
@@ -405,7 +428,7 @@ eyeballApp.factory('chart', ['render', function(render){
         }
     }
 
-    return {
+        return {
         drawPivotChart : drawChart,
         drawHistoryChart : drawHistoryChart,
         gradeMap : map

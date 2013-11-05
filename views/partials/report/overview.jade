@@ -1,0 +1,96 @@
+include ../../test
+include ../../report
+
+div.container.table-responsive(ng-controller='ReportOverviewCtrl')
+
+    mixin test
+
+    ul.nav.nav-tabs
+        li.active
+            a(href='#/report?build={{query.build}}') Overview
+        li
+            a(href='#/report/yslow?build={{query.build}}') YSlow
+        li
+            a(href='#/report/dommonster?build={{query.build}}') DomMonster
+        li
+            a(href='#/report/validator?build={{query.build}}') Validator
+        mixin reportView
+
+    mixin charts
+
+    div(ng-hide="reportView === 'chart'")
+        table#results.table.table-striped
+            thead
+                tr
+                    th
+                    th URL
+                    th Date
+                    th Build
+                    th Tag
+                    th(ng-repeat='f in fields').text-center {{f.name}}
+            tbody
+                tr.warning
+                    td
+                    td(data-sort="a")
+                        a(href='#/report?build={{query.build}}',ng-if='query.url') {{query.url.substr(0,20)}}...
+                    td
+                    td
+                        a(href='#/report?url={{query.url}}',ng-if='query.build') {{query.build.substr(0,6)}}...
+                    td
+                    td(ng-repeat='f in fields').text-center
+                        span(class="label label-{{totals[f.tool][f.metric].class}}") {{totals[f.tool][f.metric].message}} ({{totals[f.tool][f.metric].score}}%)
+
+                tr(ng-show="busy")
+                    td(colspan="7")
+                        img(src="/images/ajax-loader.gif")
+
+                tr(ng-repeat='r in results')
+                    td
+                        a(href='#/detail/:{{r._id}}')
+                            button.btn.btn-default(type='button')
+                                span.glyphicon.glyphicon-list-alt
+                    td
+                        a(href='#/report?url={{r.url}}&build={{query.build}}') {{r.url}}
+                    td
+                        a(href='#/report?start={{r.timestamp | date:"yyyy-MM-dd"}}&end={{r.timestamp | date:"yyyy-MM-dd"}}&build={{query.build}}') {{r.timestamp | date:'d MMM yyyy'}}
+                    td
+                        a(href='#/report?build={{r.build}}&url={{query.url}}') {{r.build.substr(0,6)}}...
+                    td {{r.tag}}
+                    td(ng-repeat='f in fields',class='text-center grade{{r.metrics[f.tool].grades[f.metric]}}',data-type='grades',ng-mouseenter='setPopoverContent(r.metrics[f.tool])',ng-mouseleave='setPopoverContent()')
+                        span.badge {{r.metrics[f.tool].grades[f.metric]}}
+
+            tfoot
+                tr.warning
+                    td
+                    td
+                        a(href='#/report?build={{query.build}}',ng-if='query.url') {{query.url.substr(0,20)}}...
+                    td
+                    td
+                        a(href='#/report?url={{query.url}}',ng-if='query.build') {{query.build.substr(0,6)}}...
+                    td
+                    td(ng-repeat='f in fields').text-center
+                        span(class="label label-{{totals[f.tool][f.metric].class}}") {{totals[f.tool][f.metric].message}} ({{totals[f.tool][f.metric].score}}%)
+
+    div#popoverContent.ng-hide
+        ul.list-group(ng-if='popoverContent.tool === "time"')
+            li(class='list-group-item grade{{popoverContent.grades.lt}}') {{popoverContent.data.lt/1000}} s&nbsp;
+                span(class='badge') {{popoverContent.grades.lt}}
+        ul.list-group(ng-if='popoverContent.tool === "yslow"')
+            li(class='list-group-item grade{{popoverContent.grades.o}}') Overall&nbsp;
+                span(class='badge') {{popoverContent.grades.o}}
+            li.list-group-item Page Size&nbsp;
+                span(class='badge grade{{popoverContent.grades.w}}') {{popoverContent.grades.w}}
+            li.list-group-item Page Size (cached)&nbsp;
+                span(class='badge grade{{popoverContent.grades.w_c}}') {{popoverContent.grades.w_c}}
+            li.list-group-item Requests&nbsp;
+                span(class='badge grade{{popoverContent.grades.r}}') {{popoverContent.grades.r}}
+            li.list-group-item Requests (cached)&nbsp;
+                span(class='badge grade{{popoverContent.grades.r_c}}') {{popoverContent.grades.r_c}}
+            li.list-group-item Inline JS/CSS&nbsp;
+                span(class='badge grade{{popoverContent.grades.g.yminify}}') {{popoverContent.grades.g.yminify}}
+
+        ul.list-group(ng-if='popoverContent.tool === "dommonster"')
+            li(class='list-group-item grade{{popoverContent.grades.COMPOSITE_stats}}') Overall&nbsp;
+                span(class='badge') {{popoverContent.grades.COMPOSITE_stats}}
+
+    mixin filter
