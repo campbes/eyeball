@@ -10,21 +10,16 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         $scope.popoverContent = null;
         $scope.fields = [];
         $scope.reportView = '';
-        $scope.charts={
-            options : [
-                {name : "Date", value : "timestamp"},
-                {name : "Build", value : "build"}
-            ],
-            time : {},
-            yslow : {},
-            dommonster : {}
-        };
+        $scope.chartOptions = [
+            {name : "Date", value : "timestamp"},
+            {name : "Build", value : "build"}
+        ];
+        $scope.charts = [];
         for(var i in $scope.query) {
             if($scope.query.hasOwnProperty(i)) {
                 $scope.filterParams[i] = $scope.query[i];
             }
         }
-
 
         var testInfo = persist.get('testInfo') || {};
         $scope.busy =  testInfo.testing;
@@ -33,10 +28,6 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
             console.log("ok");
             $scope.busy = false;
         });
-
-        $scope.charts.time.xAxis = $scope.charts.options[0];
-        $scope.charts.yslow.xAxis = $scope.charts.options[0];
-        $scope.charts.dommonster.xAxis = $scope.charts.options[0];
 
         var updateTotals = function() {
             for(var i=0; i<$scope.fields.length; i++) {
@@ -52,12 +43,13 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
             updateTotals();
         });
 
-        function setChartWatch(tool,metric) {
-            $scope.$watch('charts.'+tool+'.xAxis',function(){
+        function setupChart(i) {
+            var ch = $scope.charts[i];
+            $scope.$watch('charts['+i+'].xAxis',function(){
                 if($scope.reportView === 'chart') {
-                    console.log(tool+" chart changed");
+                    console.log(ch.tool+" chart changed");
                     $timeout(function(){
-                        chart.drawPivotChart($scope.results,$scope.charts[tool].xAxis,tool,metric);
+                        chart.drawPivotChart($scope.results,ch.xAxis,ch.tool,ch.metric);
                     },1000);
                 }
             });
@@ -85,7 +77,13 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         $scope.setFields = function(fields) {
             $scope.fields = fields;
             for(var i=0; i<$scope.fields.length; i++) {
-                setChartWatch($scope.fields[i].tool,$scope.fields[i].metric);
+                $scope.charts[i] = {
+                    tool : $scope.fields[i].tool,
+                    metric : $scope.fields[i].metric,
+                    name : $scope.fields[i].name,
+                    xAxis : $scope.chartOptions[0]
+                };
+                setupChart(i);
             }
         };
 
@@ -97,10 +95,9 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
             $scope.reportView = view;
             if(view === 'chart') {
                 $timeout(function(){
-                    for(var i=0; i<$scope.fields.length; i++) {
-                        var tool = $scope.fields[i].tool;
-                        var metric = $scope.fields[i].metric;
-                        chart.drawPivotChart($scope.results,$scope.charts[tool].xAxis,tool,metric);
+                    for(var i=0; i<$scope.charts.length; i++) {
+                        var ch = $scope.charts[i];
+                        chart.drawPivotChart($scope.results,ch.xAxis,ch.tool,ch.metric);
                     }
                 },100)
             }
@@ -132,8 +129,10 @@ eyeballControllers.controller('ReportOverviewCtrl',['$scope','persist',
         $scope.setFields([
             {tool : 'time', metric : 'lt', name: 'Load time'},
             {tool : 'yslow', metric : 'o', name: 'YSlow'},
-            {tool : 'dommonster', metric : 'COMPOSITE_stats', name : 'DomMonster'}
+            {tool : 'dommonster', metric : 'COMPOSITE_stats', name : 'DomMonster'},
+            {tool : 'validator', metric : 'lt', name: 'Validator'}
         ]);
+
         var testInfo = persist.get('testInfo') || {};
         console.log(testInfo);
         if(!testInfo.testing) {
@@ -152,7 +151,8 @@ eyeballControllers.controller('ReportYslowCtrl',['$scope','render',
             {tool : 'yslow',metric : 'o'},
             {tool : 'yslow',metric : 'w'},
             {tool : 'yslow',metric : 'w_c'},
-            {tool : 'yslow',metric : 'r'}
+            {tool : 'yslow',metric : 'r'},
+            {tool : 'yslow',metric : 'r_c'}
         ]);
 
         $scope.getResults('report/yslow',$scope.updateTotals);

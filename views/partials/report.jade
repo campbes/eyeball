@@ -1,7 +1,7 @@
 include ../test
 include ../common
 
-div.container.table-responsive(ng-controller='ReportOverviewCtrl')
+div.container.table-responsive(ng-controller='ReportCtrl')
 
     mixin test
 
@@ -23,14 +23,12 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
 
 
     div#chartArea(ng-hide="reportView !== 'chart'")
-        div.col-md-6(ng-repeat="f in fields")
-            div.panel.panel-default
-                div.panel-heading {{f.name}}
-                    |&nbsp;
-                    select(ng-model="charts[f.tool].xAxis",ng-options="c.name for c in charts.options")
-
-                div.panel-body
-                    div(id="{{f.tool}}Chart").pivotChart
+        div.panel.panel-default(ng-repeat="ch in charts")
+            div.panel-heading {{ch.name}}
+                |&nbsp;
+                select(ng-model="ch.xAxis",ng-options="c.name for c in chartOptions")
+            div.panel-body
+                div(id="{{ch.tool}}Chart").pivotChart
 
     div(ng-hide="reportView === 'chart'")
         table#results.table.table-striped
@@ -41,10 +39,7 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                     th Date
                     th Build
                     th Tag
-                    th.text-center Load time
-                    th.text-center YSlow
-                    th.text-center DomMonster
-                    th.text-center Validator
+                    th(ng-repeat='f in fields').text-center {{f.name}}
             tbody
                 tr.warning
                     td
@@ -56,7 +51,6 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                     td
                     td(ng-repeat='f in fields').text-center
                         span(class="label label-{{totals[f.tool][f.metric].class}}") {{totals[f.tool][f.metric].message}} ({{totals[f.tool][f.metric].score}}%)
-                    td.text-center
 
                 tr(ng-show="busy")
                     td(colspan="7")
