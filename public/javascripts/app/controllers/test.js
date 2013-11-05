@@ -37,7 +37,7 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','persist'
 
         $scope.test = function() {
 
-            $scope.testCriteria.build =(new Date()).getTime().toString() + Math.random().toString();
+            $scope.testCriteria.build =(new Date()).getTime().toString() + (Math.random()*10).toString();
 
             persist.set('testInfo',{
                 testing : true,

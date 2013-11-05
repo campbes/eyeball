@@ -25,7 +25,7 @@ function getDbQuery(req) {
     var build = getMultiValues("build");
     var tag = getMultiValues("tag");
     var start = (queryString.start ? new Date(queryString.start) : "");
-    var end = (queryString.end ? new Date(queryString.end) : "");
+    var end = (queryString.end ? new Date(new Date(queryString.end).getTime() + 86399999) : "");
 
     if(build) {
         dbQuery.build = build;
@@ -49,10 +49,8 @@ function getDbQuery(req) {
     }
 
     if(queryString.url) {
-        dbQuery.url = queryString.url
-    } else if(queryString.urlRegex) {
         dbQuery.url = {
-            $regex : queryString.urlRegex
+            $regex : queryString.url
         };
     }
 

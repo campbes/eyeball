@@ -6,6 +6,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         $scope.results = [];
         $scope.totals = {};
         $scope.query = $routeParams;
+        $scope.filterParams = {};
         $scope.popoverContent = null;
         $scope.fields = [];
         $scope.reportView = '';
@@ -18,6 +19,12 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
             yslow : {},
             dommonster : {}
         };
+        for(var i in $scope.query) {
+            if($scope.query.hasOwnProperty(i)) {
+                $scope.filterParams[i] = $scope.query[i];
+            }
+        }
+
 
         var testInfo = persist.get('testInfo') || {};
         $scope.busy =  testInfo.testing;
@@ -97,6 +104,12 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
                     }
                 },100)
             }
+        };
+
+        $scope.filter = function() {
+            $timeout(function(){
+                $location.path('/report').search($scope.filterParams);
+            },500);
         };
 
         exos.init(popover);
