@@ -1,5 +1,4 @@
 include ../test
-include ../common
 
 mixin test
 
@@ -21,20 +20,9 @@ div.container
                 |&nbsp;({{timestamp}})
             li {{url}}
 
-    div.panel.panel-default
-        div.panel-heading Overview
-        div.panel-body.text-center
-            div#overviewHistory.historyChart
-                img(src="/images/ajax-loader.gif")
-            //ul.pagination.chartControl
-                li(ng-repeat="d in data",ng-class="{'active' : id === d._id}")
-                    a(href="#/history/:{{d._id}}",title="{{d.timestamp | date:'shortDate'}} ({{d._id}}...)") {{$index+1}}
 
-    div.panel.panel-default
-        div.panel-heading YSlow
+    div.panel.panel-default(ng-repeat="f in fields")
+        div.panel-heading {{f.name}}
         div.panel-body.text-center
-            div#yslowHistory.historyChart
+            div(id="{{f.tool}}History").historyChart
                 img(src="/images/ajax-loader.gif")
-            //ul.pagination.chartControl
-                li(ng-repeat="d in data",ng-class="{'active' : id === d._id}")
-                    a(href="#/history/:{{d._id}}",title="{{d.timestamp | date:'shortDate'}} ({{d._id}}...)") {{$index+1}}

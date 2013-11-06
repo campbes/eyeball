@@ -441,16 +441,16 @@ eyeballApp.factory('fieldConfig',function(){
 
     return {
         overview : [
-            {tool : 'time', metric : 'lt', name: 'Load time'},
+            {tool : 'time', metric : 'lt', name: 'Load time', format : 'time'},
             {tool : 'yslow', metric : 'o', name: 'YSlow'},
             {tool : 'dommonster', metric : 'COMPOSITE_stats', name : 'DomMonster'},
             {tool : 'validator', metric : 'lt', name: 'Validator'}
         ],
         time : [
-            {tool : 'time', metric : 'lt', name: 'Load time'},
-            {tool : 'time', metric : 'dt', name: 'DOM load time'},
-            {tool : 'time', metric : 'lt_u', name: 'Load time (uncached)'},
-            {tool : 'time', metric : 'dt_u', name: 'DOM load time (uncached)'}
+            {tool : 'time', metric : 'lt', name: 'Load time', format : 'time'},
+            {tool : 'time', metric : 'dt', name: 'DOM load time', format : 'time'},
+            {tool : 'time', metric : 'lt_u', name: 'Load time (uncached)', format : 'time'},
+            {tool : 'time', metric : 'dt_u', name: 'DOM load time (uncached)', format : 'time'}
         ],
         yslow : [
             {tool : 'yslow',metric : 'o', name : 'Overall'},
@@ -458,6 +458,16 @@ eyeballApp.factory('fieldConfig',function(){
             {tool : 'yslow',metric : 'w_c', name : 'Page size (cached)', format : 'size'},
             {tool : 'yslow',metric : 'r', name : 'HTTP requests'},
             {tool : 'yslow',metric : 'r_c', name : 'HTTP requests (cached)'}
+        ] ,
+        dommonster : [
+            {tool : 'dommonster', metric : 'COMPOSITE_stats', name : 'Overall'}
+        ],
+        history : [
+            {tool : 'overview', name : 'Overview'},
+            {tool : 'time', metric : 'lt', name: 'Load time', format : 'time'},
+            {tool : 'yslow', metric : 'o', name: 'YSlow'},
+            {tool : 'dommonster', metric : 'COMPOSITE_stats', name : 'DomMonster'},
+            {tool : 'validator', metric : 'lt', name: 'Validator'}
         ]
     };
 

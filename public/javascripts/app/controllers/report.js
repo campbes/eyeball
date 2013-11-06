@@ -142,12 +142,25 @@ eyeballControllers.controller('ReportOverviewCtrl',['$scope','persist','fieldCon
 
 eyeballControllers.controller('ReportYslowCtrl',['$scope','render','fieldConfig',
 
-    function ReportOverviewCtrl($scope,render,fieldConfig) {
+    function ReportYslowCtrl($scope,render,fieldConfig) {
         console.log("ReportOverviewCtrl");
 
         $scope.setFields(fieldConfig.yslow);
 
         $scope.getResults('report/yslow',$scope.updateTotals);
+
+        $scope.format = render.format;
+    }
+]);
+
+eyeballControllers.controller('ReportTimeCtrl',['$scope','render','fieldConfig',
+
+    function ReportTimeCtrl($scope,render,fieldConfig) {
+        console.log("ReportOverviewCtrl");
+
+        $scope.setFields(fieldConfig.time);
+
+        $scope.getResults('report/time',$scope.updateTotals);
 
         $scope.format = render.format;
     }

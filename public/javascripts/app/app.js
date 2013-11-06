@@ -9,6 +9,9 @@ eyeballApp.config(['$routeProvider',
             when('/report', {
                 templateUrl: '/partials/report/overview',
                 controller : 'ReportCtrl'
+            }).when('/report/time', {
+                templateUrl: '/partials/report/time',
+                controller : 'ReportCtrl'
             }).when('/report/yslow', {
                 templateUrl: '/partials/report/yslow',
                 controller : 'ReportCtrl'

@@ -18,57 +18,27 @@ div.container
         div.panel-body
             table.keyinfo
                 tr
-                    td(class='alert grade{{data.metrics.yslow.grades.lt}}')
-                        span(class='badge') {{data.metrics.yslow.grades.lt}}
-                        |&nbsp;Load time ({{data.metrics.yslow.data.lt/1000}} s)
-                    td(class='alert grade{{data.metrics.yslow.grades.o}}')
-                        span(class='badge') {{data.metrics.yslow.grades.o}}
-                        |&nbsp;YSlow
-                    td(class='alert grade{{data.metrics.dommonster.grades.COMPOSITE_stats}}')
-                        span(class='badge') {{data.metrics.dommonster.grades.COMPOSITE_stats}}
-                        |&nbsp;DomMonster
+                    td(ng-repeat="f in fields", class='alert grade{{data.metrics[f.tool].grades[f.metric]}}')
+                        span(class='badge') {{data.metrics[f.tool].grades[f.metric]}}
+                        |&nbsp;{{f.name}} ({{format(data.metrics[f.tool].data[f.metric],f.format)}})
 
-
-    div(class='panel panel-default')
-        div(class='panel-heading grade{{data.metrics.yslow.grades.o}}')
-            span.badge {{data.metrics.yslow.grades.o}}
-            |&nbsp;YSlow
+    div(ng-repeat="f in fields",class='panel panel-default')
+        div(class='panel-heading grade{{data.metrics[f.tool].grades[f.metric]}}')
+            span.badge {{data.metrics[f.tool].grades[f.metric]}}
+            |&nbsp;{{f.name}}
         div.panel-body
             div.row
                 div.col-md-4
                     table.table.table-striped
-                        tr
-                            td(class='grade{{data.metrics.yslow.grades.o}}')
-                                span.badge {{data.metrics.yslow.grades.o}}
-                            td(class='grade{{data.metrics.yslow.grades.o}}') Overall
-                            td(class='grade{{data.metrics.yslow.grades.o}}')
-                        tr
+                        tr(ng-repeat="m in fieldConfig[f.tool]")
                             td
-                                span(class='badge grade{{data.metrics.yslow.grades.w}}') {{data.metrics.yslow.grades.w}}
-                            td  Page size
-                            td  {{data.metrics.yslow.data.w}} bytes
-                        tr
-                            td
-                                span(class='badge grade{{data.metrics.yslow.grades.w_c}}') {{data.metrics.yslow.grades.w_c}}
-                            td  Page size (cached)
-                            td  {{data.metrics.yslow.data.w_c}} bytes
-                        tr
-                            td
-                                span(class='badge grade{{data.metrics.yslow.grades.r}}') {{data.metrics.yslow.grades.r}}
-                            td  HTTP Requests
-                            td  {{data.metrics.yslow.data.r}}
-                        tr
-                            td
-                                span(class='badge grade{{data.metrics.yslow.grades.r_c}}') {{data.metrics.yslow.grades.r_c}}
-                            td  HTTP Requests (cached)
-                            td  {{data.metrics.yslow.data.r}}
-                        tr
-                            td
-                                span(class='badge grade{{data.metrics.yslow.grades.g.yminify}}') {{data.metrics.yslow.grades.g.yminify}}
-                            td  Inline JS/CSS
-                            td  {{data.metrics.yslow.data.g.yminify}}
+                                span(class='badge grade{{data.metrics[f.tool].grades[m.metric]}}') {{data.metrics[f.tool].grades[m.metric]}}
+                            td  {{m.name}}
+                            td  {{format(data.metrics[f.tool].data[m.metric],m.format)}}
                 div.col-md-8
-                    table.table.table-striped
+                    div(ng-if="f.tool === 'time'")
+                        Some explanatory stuff about the timings
+                    table.table.table-striped(ng-if="f.tool === 'yslow'")
                         tr(ng-repeat='i in data.metrics.yslow.data.g',ng-if='i.score < 100')
                             td
                                 span(class='badge grade{{i.grade}}') {{i.grade}}

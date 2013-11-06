@@ -105,3 +105,23 @@ exports.yslow = function(req,res) {
     });
 
 };
+
+exports.time = function(req,res) {
+
+    var dbQuery = getDbQuery(req);
+
+    DB.find(dbQuery,{
+        url : 1,
+        timestamp: 1,
+        build : 1,
+        tag : 1,
+        "metrics.time" : 1
+    },function(err,results) {
+        if(err) {
+            res.send(err);
+        }
+        //console.log(results.length);
+        res.send(JSON.stringify(results));
+    });
+
+};

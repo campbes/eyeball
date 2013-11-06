@@ -1,12 +1,13 @@
-eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','chart','$location',
+eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','chart','$location','fieldConfig',
 
-    function HistoryCtrl($scope,$routeParams,$http,chart,$location) {
+    function HistoryCtrl($scope,$routeParams,$http,chart,$location,fieldConfig) {
 
         $scope.data = [];
         $scope.id = $routeParams.id.substr(1);
         $scope.query = $routeParams;
         $scope.url = 'Getting url...';
         $scope.timestamp = 'Getting timestamp...';
+        $scope.fields = fieldConfig.history;
 
         function relocate(obj) {
             $scope.$apply(function(){
@@ -14,68 +15,55 @@ eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','ch
             });
         }
 
+        function generateArray(data,cols,tool) {
+            var highlight = null;
+            if(data._id === $routeParams.id.substr(1)) {
+                highlight = data._id;
+                $scope.url = data.url;
+                $scope.timestamp = data.timestamp;
+            }
+            var array = [
+                data._id,
+                highlight,
+                data._id+" ("+new Date(data.timestamp).toDateString()+")"
+            ];
+
+            for(var j =0; j<fieldConfig[tool].length; j++) {
+                var f = fieldConfig[tool][j];
+                array.push((data.metrics[f.tool] ? chart.gradeMap(data.metrics[f.tool].grades[f.metric]) : null));
+            }
+
+            return array;
+        }
+
+
+
         $http({
             url: '/history?id='+$scope.id,
             method: "GET"
         }).success(function(data) {
-                var overview = [];
-                var yslow = [];
-
                 $scope.data = data;
 
-                for(var i=0; i<data.length; i++) {
-                    var highlight = null;
-                    if(data[i]._id === $routeParams.id.substr(1)) {
-                        highlight = data[i]._id;
-                        $scope.url = data[i].url;
-                        $scope.timestamp = data[i].timestamp;
+                for(var n=0; n<$scope.fields.length;n++) {
+                    var array = [];
+                    var cols = [
+                        ['string', 'ID'],
+                        [{type:'string', role:'annotation'}],
+                        [{type:'string',role:'tooltip'}]
+                    ];
+
+                    for(var i=0; i<data.length; i++) {
+                        array.push(generateArray(data[i],cols,$scope.fields[n].tool));
                     }
-                    overview.push([
-                        data[i]._id,
-                        highlight,
-                        data[i]._id+" ("+new Date(data[i].timestamp).toDateString()+")",
-                        chart.gradeMap((data[i].metrics.time ? data[i].metrics.time.grades.lt : data[i].metrics.yslow.grades.lt)),
-                        chart.gradeMap(data[i].metrics.yslow.grades.o),
-                        chart.gradeMap(data[i].metrics.dommonster.grades.COMPOSITE_stats)
-                    ]);
-                    yslow.push([
-                        data[i]._id,
-                        highlight,
-                        data[i]._id+" ("+new Date(data[i].timestamp).toDateString()+")",
-                        chart.gradeMap(data[i].metrics.yslow.grades.o),
-                        chart.gradeMap(data[i].metrics.yslow.grades.w),
-                        chart.gradeMap(data[i].metrics.yslow.grades.r),
-                        chart.gradeMap(data[i].metrics.yslow.grades.w_c),
-                        chart.gradeMap(data[i].metrics.yslow.grades.r_c),
-                        chart.gradeMap(data[i].metrics.yslow.grades.g.yminify)
-                    ]);
+                    for(var j =0; j<fieldConfig[$scope.fields[n].tool].length; j++) {
+                        cols.push(['number',fieldConfig[$scope.fields[n].tool][j].name])
+                    }
+                    chart.drawHistoryChart(array,cols,$scope.fields[n].tool+'History',relocate);
                 }
 
-                var colsOverview = [
-                    ['string', 'ID'],
-                    [{type:'string', role:'annotation'}],
-                    [{type:'string',role:'tooltip'}],
-                    ['number', 'Load time'],
-                    ['number', 'YSlow'],
-                    ['number', 'DomMonster']
-                ];
-                var colsYslow = [
-                    ['string', 'ID'],
-                    [{type:'string', role:'annotation'}],
-                    [{type:'string',role:'tooltip'}],
-                    ['number', 'Overall'],
-                    ['number', 'Size'],
-                    ['number', 'HTTP Requests'],
-                    ['number', 'Size (cached)'],
-                    ['number', 'HTTP (cached)'],
-                    ['number', 'Inline JS/CSS']
-                ];
-
-                chart.drawHistoryChart(overview,colsOverview,'overviewHistory',relocate);
-                chart.drawHistoryChart(yslow,colsYslow,'yslowHistory',relocate);
-
-
             });
+
+
 
     }
 
