@@ -508,56 +508,55 @@ module.exports = function(req,res) {
         }
     }
 
+    function setupPage(page) {
+        page.resources = [];
+
+        page.onConsoleMessage = function (msg) {
+            console.log(msg);
+        };
+
+        page.setFn('onCallback',function(msg) {
+            if(msg === "DOMContentLoaded") {
+                page.evaluate(function(){
+                    window.DOMContentLoaded = new Date().getTime();
+                })
+            }
+        });
+
+        page.setFn('onInitialized',function(){
+            console.log("Page Initialized...");
+            page.evaluate(function() {
+                document.addEventListener('DOMContentLoaded', function() {
+                    window.callPhantom('DOMContentLoaded');
+                }, false);
+            });
+        });
+
+        /*page.onLoadStarted = function () {
+            page.startTime = new Date();
+        };*/
+
+        page.onResourceRequested = function (req) {
+            page.resources[req[0].id] = {
+                request: req[0],
+                startReply: null,
+                endReply: null
+            };
+        };
+
+        page.onResourceReceived = function (res) {
+            if (res.stage === 'start') {
+                page.resources[res.id].startReply = res;
+            }
+            if (res.stage === 'end') {
+                page.resources[res.id].endReply = res;
+            }
+        };
+
+        return page;
+    }
 
     function openPage(ph) {
-
-        function setupPage(page) {
-            page.resources = [];
-
-            page.onConsoleMessage = function (msg) {
-               console.log(msg);
-            };
-
-            page.setFn('onCallback',function(msg) {
-                if(msg === "DOMContentLoaded") {
-                    page.evaluate(function(){
-                        window.DOMContentLoaded = new Date().getTime();
-                    })
-                }
-            });
-
-            page.setFn('onInitialized',function(){
-                console.log("Page Initialized...");
-                page.evaluate(function() {
-                    document.addEventListener('DOMContentLoaded', function() {
-                        window.callPhantom('DOMContentLoaded');
-                    }, false);
-                });
-            });
-
-            page.onLoadStarted = function () {
-                page.startTime = new Date();
-            };
-
-            page.onResourceRequested = function (req) {
-                page.resources[req[0].id] = {
-                    request: req[0],
-                    startReply: null,
-                    endReply: null
-                };
-            };
-
-            page.onResourceReceived = function (res) {
-                if (res.stage === 'start') {
-                    page.resources[res.id].startReply = res;
-                }
-                if (res.stage === 'end') {
-                    page.resources[res.id].endReply = res;
-                }
-            };
-
-            return page;
-        }
 
         var passes = [];
 
@@ -572,6 +571,7 @@ module.exports = function(req,res) {
                 }
                 page = setupPage(page);
                 page.address = url;
+                page.startTime = new Date();
                 page.open(page.address, function (err,status) {
                     if(err) {
                         console.log(err);
@@ -599,7 +599,6 @@ module.exports = function(req,res) {
                                 createPage(1,url);
                             } else if(pass === 1) {
                                 createRecord(passes);
-
                                 if(urls.length > 0) {
                                     openPage(ph);
                                 } else {
