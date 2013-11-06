@@ -59,7 +59,8 @@ var grades = (function() {
             }
         }
     };
-
+    gradeMapping.time.lt_u = gradeMapping.time.lt;
+    gradeMapping.time.dt_u = gradeMapping.time.dt;
     gradeMapping.yslow.w_c = gradeMapping.yslow.w;
     gradeMapping.yslow.r_c = gradeMapping.yslow.r;
 
@@ -283,7 +284,6 @@ module.exports = function(req,res) {
     }
 
     function createHAR(page,callback) {
-
         var entries = [];
 
         page.resources.forEach(function (resource) {
@@ -301,7 +301,7 @@ module.exports = function(req,res) {
                 return;
             }
 
-            var time = new Date(endReply.time) - new Date(request.time);
+            var time = new Date(endReply.time).getTime() - new Date(request.time).getTime();
 
             entries.push({
                 startedDateTime: request.time,
@@ -336,8 +336,8 @@ module.exports = function(req,res) {
                     dns: -1,
                     connect: -1,
                     send: 0,
-                    wait: new Date(startReply.time) - new Date(request.time),
-                    receive: new Date(endReply.time) - new Date(startReply.time),
+                    wait: new Date(startReply.time).getTime() - new Date(request.time).getTime(),
+                    receive: new Date(endReply.time).getTime() - new Date(startReply.time).getTime(),
                     ssl: -1
                 },
                 pageref: page.address
@@ -356,7 +356,8 @@ module.exports = function(req,res) {
                     id: page.address,
                     title: page.title,
                     pageTimings: {
-                        onLoad: page.endTime - page.startTime
+                        onLoad: page.endTime - page.startTime,
+                        onContentLoad : page.onContentLoad - page.startTime
                     }
                 }],
                 entries: entries
@@ -378,7 +379,7 @@ module.exports = function(req,res) {
             return false;
         }
 
-        cachedHar.log.creater = {
+        cachedHar.log.creator = {
             name : "Eyeball",
             version : "0.0.0"
         };
@@ -437,10 +438,8 @@ module.exports = function(req,res) {
 
     function createRecord(passes) {
 
-        var page = passes[1];
-
         var record = {
-            url : page.address,
+            url : passes[1].address,
             timestamp: new Date(),
             build : build,
             tag : tag,
@@ -465,7 +464,9 @@ module.exports = function(req,res) {
                     updateRecord(record,'harUncached',harUncached);
                     updateRecord(record,'time',{
                         lt : harCached.log.pages[0].pageTimings.onLoad,
-                        dt :  harCached.log.pages[0].pageTimings.onContentLoad || harCached.log.pages[0].pageTimings.onLoad
+                        dt :  harCached.log.pages[0].pageTimings.onContentLoad,
+                        lt_u : harUncached.log.pages[0].pageTimings.onLoad,
+                        dt_u :  harUncached.log.pages[0].pageTimings.onContentLoad
                     });
                     if(tests.yslow) {
                         var yslow = yslowOverrideGetResults(YSLOW.harImporter.run(jsdom.jsdom(), harCached, 'ydefault').context, 'grade,stats');
@@ -477,7 +478,7 @@ module.exports = function(req,res) {
         }
 
         if(tests.dommonster) {
-            getDomMonster(page,function(dm){
+            getDomMonster(passes[1],function(dm){
                 console.log('got dommonster result');
                 updateRecord(record,'dommonster',dm);
             });
@@ -503,7 +504,7 @@ module.exports = function(req,res) {
         }
 
         if(tests.validate) {
-            validate(page.content);
+            validate(passes[1].content);
         }
     }
 
@@ -514,8 +515,25 @@ module.exports = function(req,res) {
             page.resources = [];
 
             page.onConsoleMessage = function (msg) {
-                //console.log(msg);
+               console.log(msg);
             };
+
+            page.setFn('onCallback',function(msg) {
+                if(msg === "DOMContentLoaded") {
+                    page.evaluate(function(){
+                        window.DOMContentLoaded = new Date().getTime();
+                    })
+                }
+            });
+
+            page.setFn('onInitialized',function(){
+                console.log("Page Initialized...");
+                page.evaluate(function() {
+                    document.addEventListener('DOMContentLoaded', function() {
+                        window.callPhantom('DOMContentLoaded');
+                    }, false);
+                });
+            });
 
             page.onLoadStarted = function () {
                 page.startTime = new Date();
@@ -566,11 +584,14 @@ module.exports = function(req,res) {
                         page.evaluate(function () {
                             return {
                                 title : document.title,
-                                content : document.documentElement.outerHTML
+                                content : document.documentElement.outerHTML,
+                                onContentLoad : window.DOMContentLoaded
                             };
                         },function(err,doc){
                             page.title = doc.title;
                             page.content = doc.content;
+                            page.onContentLoad = new Date(doc.onContentLoad);
+                            console.log(page);
                             page.close();
                             passes[pass] = page;
 
@@ -603,7 +624,6 @@ module.exports = function(req,res) {
             data = data.replace(new RegExp(regex),regexReplace);
         }
         urls = data.split("\r\n");
-        console.log(urls);
         if(reps) {
             var urlset = urls;
             for(var i=0; i<reps; i++) {

@@ -448,7 +448,9 @@ eyeballApp.factory('fieldConfig',function(){
         ],
         time : [
             {tool : 'time', metric : 'lt', name: 'Load time'},
-            {tool : 'time', metric : 'dt', name: 'DOM load time'}
+            {tool : 'time', metric : 'dt', name: 'DOM load time'},
+            {tool : 'time', metric : 'lt_u', name: 'Load time (uncached)'},
+            {tool : 'time', metric : 'dt_u', name: 'DOM load time (uncached)'}
         ],
         yslow : [
             {tool : 'yslow',metric : 'o', name : 'Overall'},
