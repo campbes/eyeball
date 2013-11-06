@@ -194,7 +194,8 @@ eyeballApp.factory('render',function() {
                     return val/100+ " s";
                 }
                 return val+ " ms";
-
+            default:
+                return val;
         }
     }
 
@@ -435,3 +436,27 @@ eyeballApp.factory('chart', ['render', function(render){
     }
 
 }]);
+
+eyeballApp.factory('fieldConfig',function(){
+
+    return {
+        overview : [
+            {tool : 'time', metric : 'lt', name: 'Load time'},
+            {tool : 'yslow', metric : 'o', name: 'YSlow'},
+            {tool : 'dommonster', metric : 'COMPOSITE_stats', name : 'DomMonster'},
+            {tool : 'validator', metric : 'lt', name: 'Validator'}
+        ],
+        time : [
+            {tool : 'time', metric : 'lt', name: 'Load time'},
+            {tool : 'time', metric : 'dt', name: 'DOM load time'}
+        ],
+        yslow : [
+            {tool : 'yslow',metric : 'o', name : 'Overall'},
+            {tool : 'yslow',metric : 'w', name : 'Page size', format : 'size'},
+            {tool : 'yslow',metric : 'w_c', name : 'Page size (cached)', format : 'size'},
+            {tool : 'yslow',metric : 'r', name : 'HTTP requests'},
+            {tool : 'yslow',metric : 'r_c', name : 'HTTP requests (cached)'}
+        ]
+    };
+
+});

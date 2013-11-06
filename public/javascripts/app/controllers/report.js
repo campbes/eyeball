@@ -67,6 +67,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
             }).success(function(results) {
                     $scope.results = results;
                     $scope.busy = false;
+                    console.log(results)
                 });
         };
 
@@ -88,6 +89,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         };
 
         $scope.setPopoverContent = function(data) {
+            console.log(data);
             $scope.popoverContent = data;
         };
 
@@ -121,20 +123,16 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
     }
 ]);
 
-eyeballControllers.controller('ReportOverviewCtrl',['$scope','persist',
+eyeballControllers.controller('ReportOverviewCtrl',['$scope','persist','fieldConfig',
 
-    function ReportOverviewCtrl($scope,persist) {
+    function ReportOverviewCtrl($scope,persist,fieldConfig) {
         console.log("ReportOverviewCtrl");
 
-        $scope.setFields([
-            {tool : 'time', metric : 'lt', name: 'Load time'},
-            {tool : 'yslow', metric : 'o', name: 'YSlow'},
-            {tool : 'dommonster', metric : 'COMPOSITE_stats', name : 'DomMonster'},
-            {tool : 'validator', metric : 'lt', name: 'Validator'}
-        ]);
+        $scope.setFields(fieldConfig.overview);
+        $scope.fieldConfig = fieldConfig;
 
         var testInfo = persist.get('testInfo') || {};
-        console.log(testInfo);
+
         if(!testInfo.testing) {
             $scope.getResults('report',$scope.updateTotals);
         }
@@ -142,18 +140,12 @@ eyeballControllers.controller('ReportOverviewCtrl',['$scope','persist',
 
 ]);
 
-eyeballControllers.controller('ReportYslowCtrl',['$scope','render',
+eyeballControllers.controller('ReportYslowCtrl',['$scope','render','fieldConfig',
 
-    function ReportOverviewCtrl($scope,render) {
+    function ReportOverviewCtrl($scope,render,fieldConfig) {
         console.log("ReportOverviewCtrl");
 
-        $scope.setFields([
-            {tool : 'yslow',metric : 'o'},
-            {tool : 'yslow',metric : 'w', name : 'Page size', format : 'size'},
-            {tool : 'yslow',metric : 'w_c', name : 'Page size (cached)', format : 'size'},
-            {tool : 'yslow',metric : 'r'},
-            {tool : 'yslow',metric : 'r_c'}
-        ]);
+        $scope.setFields(fieldConfig.yslow);
 
         $scope.getResults('report/yslow',$scope.updateTotals);
 
