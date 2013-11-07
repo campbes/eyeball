@@ -28,7 +28,7 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                 mixin reportLoader
                 tr(ng-repeat='r in results')
                     mixin reportFields
-                    td(ng-repeat='f in fields',class='text-center grade{{r.metrics[f.tool].grades[f.metric]}}',data-type='grades',ng-mouseenter='setPopoverContent({metrics:r.metrics[f.tool],tool:[f.tool]})',ng-mouseleave='setPopoverContent()')
+                    td(ng-repeat='f in fields',class='text-center grade{{r.metrics[f.tool].grades[f.metric]}}',data-type='grades',data-value='{{r.metrics[f.tool].grades[f.metric]}}',ng-mouseenter='setPopoverContent({metrics:r.metrics[f.tool],tool:[f.tool]})',ng-mouseleave='setPopoverContent()')
                         span.badge {{r.metrics[f.tool].grades[f.metric]}}
             mixin reportFooters
 

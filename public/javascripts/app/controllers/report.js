@@ -67,7 +67,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
             }).success(function(results) {
                     $scope.results = results;
                     $scope.busy = false;
-                    console.log(results)
+
                 });
         };
 
@@ -112,14 +112,10 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         };
 
         exos.init(popover);
-        tablesort.init('table',{
-            headers : {
-                0 : {
-                    sorter : false
-                }
-            }
-        });
 
+        $timeout(function(){
+            tablesort.init('table');
+        },500);
     }
 ]);
 

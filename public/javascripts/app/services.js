@@ -72,7 +72,12 @@ eyeballApp.factory('exos',function() {
 eyeballApp.factory('tablesort',function() {
     return {
         init : function(selector,cfg) {
-            $(selector).tablesorter(cfg);
+            var tables = $(selector);
+            tables.tablesorter(cfg);
+            var noSort = $('tbody>tr.header',tables);
+            tables.bind("sortEnd",function() {
+                noSort.insertBefore($('tbody>tr',tables).first());
+            });
         }
     }
 });
