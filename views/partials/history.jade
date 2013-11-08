@@ -1,25 +1,12 @@
 include ../test
+include ../detail
 
 mixin test
 
 
 div.container
 
-    ul.nav.nav-tabs
-        li
-            a(href='#/detail/:{{id}}') Detail
-        li
-            a(href='#/har/:{{id}}') HAR analysis
-        li.active
-            a(href='') History
-
-    div.well
-        ul.list-unstyled
-            li
-                strong {{id}}
-                |&nbsp;({{timestamp}})
-            li {{url}}
-
+    mixin detailNav('history')
 
     div.panel.panel-default(ng-repeat="f in fields")
         div.panel-heading {{f.name}}

@@ -1,20 +1,12 @@
 include ../test
+include ../detail
 
 mixin test
 
 
 div.container
 
-    ul.nav.nav-tabs
-        li.active
-            a(href='') Detail
-        li
-            a(href='#/har/:{{id}}') HAR analysis
-        li
-            a(href='#/history/:{{id}}') History
-        a(href="#/report?{{reportFilter}}").btn.btn-default
-            span.glyphicon.glyphicon-list
-            |&nbsp;Return to report
+    mixin detailNav('detail')
 
     div(class='panel panel-default')
         div.panel-heading Overview

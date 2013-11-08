@@ -1,0 +1,30 @@
+mixin detailNav(tab)
+    ul.nav.nav-tabs
+        li(class='#{(tab === "detail" ? "active" : "")}')
+            a(href='#/detail/:{{id}}') Detail
+        li(class='#{(tab === "har" ? "active" : "")}')
+            a(href='#/har/:{{id}}') HAR analysis
+        li(class='#{(tab === "history" ? "active" : "")}')
+            a(href='#/history/:{{id}}') History
+        a(href="#/report?{{reportFilter}}").btn.btn-default
+            span.glyphicon.glyphicon-list
+            |&nbsp;Return to report
+    div.well.well-sm
+        div.row
+            div.col-md-6
+                a(href="{{url}}",target="_blank").h4 {{url}}
+            div.col-md-6
+                dl.dl-horizontal
+                    dt ID
+                    dd {{id}}
+                    dt Timestamp
+                    dd {{timestamp}}
+                    dt Build
+                    dd {{build}}
+                    dt Tag
+                    dd {{tag}}
+        //ul.list-unstyled
+            li
+                strong {{id}}
+                |&nbsp;({{timestamp}})
+            li {{url}}

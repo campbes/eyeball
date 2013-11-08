@@ -1,17 +1,12 @@
 include ../test
+include ../detail
 
 mixin test
 
 
 div.container
 
-    ul.nav.nav-tabs
-        li
-            a(href='#/detail/:{{id}}') Detail
-        li.active
-            a(href='') HAR analysis
-        li
-            a(href='#/history/:{{id}}') History
+    mixin detailNav('har')
 
     div.panel.panel-default
         div.panel-heading Primed cache

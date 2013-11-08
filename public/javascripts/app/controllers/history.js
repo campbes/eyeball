@@ -1,6 +1,6 @@
-eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','chart','$location','fieldConfig',
+eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','chart','$location','fieldConfig','persist',
 
-    function HistoryCtrl($scope,$routeParams,$http,chart,$location,fieldConfig) {
+    function HistoryCtrl($scope,$routeParams,$http,chart,$location,fieldConfig,persist) {
 
         $scope.data = [];
         $scope.id = $routeParams.id.substr(1);
@@ -8,6 +8,7 @@ eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','ch
         $scope.url = 'Getting url...';
         $scope.timestamp = 'Getting timestamp...';
         $scope.fields = fieldConfig.history;
+        $scope.reportFilter = persist.get("reportFilter");
 
         function relocate(obj) {
             $scope.$apply(function(){
@@ -21,6 +22,8 @@ eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','ch
                 highlight = data._id;
                 $scope.url = data.url;
                 $scope.timestamp = data.timestamp;
+                $scope.build = data.build;
+                $scope.tag = data.tag;
             }
             var array = [
                 data._id,

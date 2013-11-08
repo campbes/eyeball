@@ -9,7 +9,10 @@ eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http','fie
             method: "GET"
         }).success(function(data) {
             $scope.data = data;
-                console.log(data);
+            $scope.url = data.url;
+            $scope.timestamp = data.timestamp;
+            $scope.build = data.build;
+            $scope.tag = data.tag;
         });
 
         $scope.fields = fieldConfig.overview;
