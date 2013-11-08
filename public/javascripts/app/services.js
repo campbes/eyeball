@@ -74,7 +74,7 @@ eyeballApp.factory('tablesort',function() {
         init : function(selector,cfg) {
             var tables = $(selector);
             tables.tablesorter(cfg);
-            var noSort = $('tbody>tr.header',tables);
+            var noSort = $('tbody>tr[data-sort="false"]',tables);
             tables.bind("sortEnd",function() {
                 noSort.insertBefore($('tbody>tr',tables).first());
             });

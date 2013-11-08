@@ -1,6 +1,6 @@
-eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http','fieldConfig','render',
+eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http','fieldConfig','render','persist',
 
-    function DetailCtrl($scope,$routeParams,$http,fieldConfig,render) {
+    function DetailCtrl($scope,$routeParams,$http,fieldConfig,render,persist) {
 
         $scope.id = $routeParams.id.substr(1);
 
@@ -15,6 +15,7 @@ eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http','fie
         $scope.fields = fieldConfig.overview;
         $scope.fieldConfig = fieldConfig;
         $scope.format = render.format;
+        $scope.reportFilter = persist.get("reportFilter");
 
     }
 

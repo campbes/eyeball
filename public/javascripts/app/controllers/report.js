@@ -58,6 +58,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         var queryString = ($location.url().indexOf("?") > -1 ? $location.url().split("?")[1] : "");
 
         $scope.queryString = queryString;
+        persist.set('reportFilter',queryString);
 
         $scope.getResults = function(url) {
             $scope.busy = true;
@@ -115,7 +116,13 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         exos.init(popover);
 
         $timeout(function(){
-            tablesort.init('table');
+            tablesort.init('table',{
+                headers : {
+                    0 : {
+                        sorter : false
+                    }
+                }
+            });
         },500);
     }
 ]);

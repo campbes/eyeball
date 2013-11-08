@@ -63,9 +63,9 @@ mixin reportFooters
         mixin reportTotals
 
 mixin reportTotals
-    tr.warning.header
+    tr.warning(data-sort='false')
         td
-        td(data-sort="a")
+        td
             a(href='#/report?start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}',ng-if='query.url',title='{{query.url}}') {{query.url.substr(0,20)}}
                 span(ng-if='query.url.length > 20') ...
         td
