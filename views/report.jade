@@ -41,10 +41,10 @@ mixin charts
 
 mixin reportView
     div.btn-group(data-toggle="buttons")
-        label.btn.btn-primary.active(ng-click="setReportView('table')")
+        label(class="btn btn-primary{{(reportView === 'table' ? ' active' : '')}}",ng-click="setReportView('table')")
             input(type="radio")
             |Report view
-        label.btn.btn-primary(ng-click="setReportView('chart')")
+        label(class="btn btn-primary{{(reportView === 'chart' ? ' active' : '')}}",ng-click="setReportView('chart')")
             input(type="radio")
             |Chart view
 
@@ -66,11 +66,19 @@ mixin reportTotals
     tr.warning.header
         td
         td(data-sort="a")
-            a(href='#/report?build={{query.build}}',ng-if='query.url') {{query.url.substr(0,20)}}...
+            a(href='#/report?start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}',ng-if='query.url',title='{{query.url}}') {{query.url.substr(0,20)}}
+                span(ng-if='query.url.length > 20') ...
         td
+            a(href='#/report?url={{query.url}}&build={{query.build}}&tag={{query.tag}}',ng-if='query.start && query.end && query.start.substr(0,10) !== query.end.substr(0,10)') {{query.start | date:'d MMM yyyy'}} - {{query.end | date:'d MMM yyyy'}}
+            a(href='#/report?url={{query.url}}&build={{query.build}}&tag={{query.tag}}',ng-if='query.start && query.end && query.start.substr(0,10) === query.end.substr(0,10)') {{query.start | date:'d MMM yyyy'}}
+            a(href='#/report?url={{query.url}}&build={{query.build}}&tag={{query.tag}}',ng-if='query.start && !query.end') {{query.start | date:'d MMM yyyy'}}
+            a(href='#/report?url={{query.url}}&build={{query.build}}&tag={{query.tag}}',ng-if='!query.start && query.end') {{query.end | date:'d MMM yyyy'}}
         td
-            a(href='#/report?url={{query.url}}',ng-if='query.build') {{query.build.substr(0,6)}}...
+            a(href='#/report?url={{r.url}}&start={{query.start}}&end={{query.end}}&tag={{query.tag}}',ng-if='query.build',title='{{query.build}}') {{query.build.substr(0,10)}}
+                span(ng-if='query.build.length > 10') ...
         td
+            a(href='#/report?url={{r.url}}&start={{query.start}}&end={{query.end}}&build={{query.build}}',ng-if='query.tag',title='{{query.tag}}') {{query.tag.substr(0,10)}}
+                span(ng-if='query.tag.length > 10') ...
         td(ng-repeat='f in fields').text-center
             span(class="label label-{{totals[f.tool][f.metric].class}}") {{totals[f.tool][f.metric].message}} ({{totals[f.tool][f.metric].score}}%)
 
@@ -85,9 +93,27 @@ mixin reportFields
             button.btn.btn-default(type='button')
                 span.glyphicon.glyphicon-list-alt
         td
-            a(href='#/report?url={{r.url}}&build={{query.build}}') {{r.url}}
+            a(href='#/report?url={{r.url}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}') {{r.url}}
         td
-            a(href='#/report?start={{r.timestamp | date:"yyyy-MM-dd"}}&end={{r.timestamp | date:"yyyy-MM-dd"}}&build={{query.build}}') {{r.timestamp | date:'d MMM yyyy'}}
+            a(href='#/report?url={{query.url}}&start={{r.timestamp | date:"yyyy-MM-dd"}}&end={{r.timestamp | date:"yyyy-MM-dd"}}&build={{query.build}}&tag={{query.tag}}') {{r.timestamp | date:'d MMM yyyy'}}
         td
-            a(href='#/report?build={{r.build}}&url={{query.url}}') {{r.build.substr(0,6)}}...
-        td {{r.tag}}
+            a(href='#/report?url={{query.url}}&start={{query.start}}&end={{query.end}}&build={{r.build}}&tag={{query.tag}}',title='{{r.build}}') {{r.build.substr(0,10)}}
+                span(ng-if='r.build.length > 10') ...
+        td
+            a(href='#/report?url={{query.url}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{r.tag}}',title='{{r.tag}}') {{r.tag.substr(0,10)}}
+                span(ng-if='r.tag.length > 10') ...
+
+mixin tabs(report)
+    ul.nav.nav-tabs
+        li(class="#{report === 'overview' ? 'active' : ''}")
+            a(href='#/report?url={{query.url}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}') Overview
+        li(class="#{report === 'time' ? 'active' : ''}")
+            a(href='#/report/time?url={{query.url}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}') Load time
+        li(class="#{report === 'yslow' ? 'active' : ''}")
+            a(href='#/report/yslow?url={{query.url}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}') YSlow
+        li(class="#{report === 'dommonster' ? 'active' : ''}")
+            a(href='#/report/dommonster?url={{query.url}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}') DomMonster
+        li(class="#{report === 'validator' ? 'active' : ''}")
+            a(href='#/report/validator?url={{query.url}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}') Validator
+
+        mixin reportView

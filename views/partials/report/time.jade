@@ -5,18 +5,7 @@ div.container.table-responsive(ng-controller='ReportTimeCtrl')
 
     mixin test
 
-    ul.nav.nav-tabs
-        li
-            a(href='#/report?build={{query.build}}') Overview
-        li.active
-            a(href='#/report/time?build={{query.build}}') Load time
-        li
-            a(href='#/report/yslow?build={{query.build}}') YSlow
-        li
-            a(href='#/report/dommonster?build={{query.build}}') DomMonster
-        li
-            a(href='#/report/validator?build={{query.build}}') Validator
-        mixin reportView
+    mixin tabs('time')
 
     mixin charts
 

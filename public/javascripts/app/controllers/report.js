@@ -9,7 +9,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         $scope.filterParams = {};
         $scope.popoverContent = null;
         $scope.fields = [];
-        $scope.reportView = '';
+        $scope.reportView = persist.get('reportView') || 'table';
         $scope.chartOptions = [
             {name : "Date", value : "timestamp"},
             {name : "Build", value : "build"}
@@ -95,6 +95,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
 
         $scope.setReportView = function(view) {
             $scope.reportView = view;
+            persist.set('reportView',$scope.reportView);
             if(view === 'chart') {
                 $timeout(function(){
                     for(var i=0; i<$scope.charts.length; i++) {
