@@ -107,9 +107,7 @@ exports.yslow = function(req,res) {
 };
 
 exports.time = function(req,res) {
-
     var dbQuery = getDbQuery(req);
-
     DB.find(dbQuery,{
         url : 1,
         timestamp: 1,
@@ -123,5 +121,38 @@ exports.time = function(req,res) {
         //console.log(results.length);
         res.send(JSON.stringify(results));
     });
+};
 
+exports.dommonster = function(req,res) {
+    var dbQuery = getDbQuery(req);
+    DB.find(dbQuery,{
+        url : 1,
+        timestamp: 1,
+        build : 1,
+        tag : 1,
+        "metrics.dommonster" : 1
+    },function(err,results) {
+        if(err) {
+            res.send(err);
+        }
+        //console.log(results.length);
+        res.send(JSON.stringify(results));
+    });
+};
+
+exports.validator = function(req,res) {
+    var dbQuery = getDbQuery(req);
+    DB.find(dbQuery,{
+        url : 1,
+        timestamp: 1,
+        build : 1,
+        tag : 1,
+        "metrics.validator" : 1
+    },function(err,results) {
+        if(err) {
+            res.send(err);
+        }
+        //console.log(results.length);
+        res.send(JSON.stringify(results));
+    });
 };

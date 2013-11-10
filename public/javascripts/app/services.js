@@ -465,6 +465,16 @@ eyeballApp.factory('fieldConfig',function(){
             {tool : 'yslow',metric : 'r_c', name : 'HTTP requests (cached)'}
         ] ,
         dommonster : [
+            {tool : 'dommonster', metric : 'COMPOSITE_stats', name : 'Overall'},
+            {tool : 'dommonster', metric : 'elements', name : 'Elements'},
+            {tool : 'dommonster', metric : 'nodes', name : 'Nodes'},
+            {tool : 'dommonster', metric : 'text nodes', name : 'Text nodes'},
+            {tool : 'dommonster', metric : 'text node size', name : 'Text node size'},
+            {tool : 'dommonster', metric : 'content percentage', name : 'Content %'},
+            {tool : 'dommonster', metric : 'average nesting depth', name : 'Nesting'},
+            {tool : 'dommonster', metric : 'serialized DOM size', name : 'DOM size'}
+        ],
+        validator : [
             {tool : 'dommonster', metric : 'COMPOSITE_stats', name : 'Overall'}
         ],
         history : [

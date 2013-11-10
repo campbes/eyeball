@@ -38,7 +38,10 @@ app.get('/', routes.index);
 app.get('/users', user.list);
 app.post('/test', test);
 app.get('/report',report.overview);
+app.get('/report/time',report.time);
 app.get('/report/yslow',report.yslow);
+app.get('/report/dommonster',report.dommonster);
+app.get('/report/validator',report.validator);
 app.get('/detail', detail);
 app.get('/history', history);
 

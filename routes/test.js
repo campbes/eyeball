@@ -42,13 +42,14 @@ var grades = (function() {
         dommonster : {
             COMPOSITE_stats : { A : 90,B : 80,C : 70,D : 60,E : 50, F : 0},
             stats : {
+                //serialization time
                 elements : {F : 1500, E: 1125,D : 1000,C : 875,B : 750,A :0},
-                nodecount : {F : 2500, E: 2125,D : 2000,C : 1875,B : 1750,A :0},
-                textnodes : {F : 1500, E: 1125,D : 1000,C : 875,B : 750,A :0},
-                textnodessize : {F : 360000, E: 290000,D : 220000,C : 150000,B : 80000,A :0},
-                contentpercent : {A : 50, B: 45,C : 40,D : 35,E : 30,F :0},
-                average : {F : 15.5, E: 14,D : 12.5,C : 11,B : 9.5,A :0},
-                domsize : {F : 204800, E: 179200,D : 153600,C : 128000,B : 102400,A :0}
+                nodes : {F : 2500, E: 2125,D : 2000,C : 1875,B : 1750,A :0},
+                "text nodes" : {F : 1500, E: 1125,D : 1000,C : 875,B : 750,A :0},
+                "text node size" : {F : 360000, E: 290000,D : 220000,C : 150000,B : 80000,A :0},
+                "content percentage" : {A : 50, B: 45,C : 40,D : 35,E : 30,F :0},
+                "average nesting depth" : {F : 15.5, E: 14,D : 12.5,C : 11,B : 9.5,A :0},
+                "serialized DOM size" : {F : 204800, E: 179200,D : 153600,C : 128000,B : 102400,A :0}
             }
         },
         validator : {
@@ -220,7 +221,7 @@ module.exports = function(req,res) {
         yslow : true, // requires har
         time : true, //requires yslow
         dommonster : true,
-        validator : false
+        validator : true
     };
 
     function commitRecord(record){
@@ -449,7 +450,7 @@ module.exports = function(req,res) {
         record.recordTimer = setTimeout(function(){
             console.log("Gave up waiting for metrics");
             commitRecord(record);
-        },10000);
+        },30000);
 
         var harUncached = null;
         var harCached = null;
@@ -485,7 +486,8 @@ module.exports = function(req,res) {
         }
 
         function validate(html) {
-            var requestW3c = request.defaults({'proxy':'http://cache2.practicallaw.com:8080'});
+            //var requestW3c = request.defaults({'proxy':'http://cache2.practicallaw.com:8080'});
+            var requestW3c = request.defaults({});
             requestW3c.post({
                 url : 'http://validator.w3.org/check',
                 form:{
@@ -496,6 +498,9 @@ module.exports = function(req,res) {
                     'User-Agent': 'Eyeball'
                 }
             },function(err,response,body) {
+                if(err) {
+                    console.log(err);
+                }
                 if (!err && response.statusCode == 200) {
                     console.log("got validator data");
                     updateRecord(record,'validator',body);
@@ -503,7 +508,7 @@ module.exports = function(req,res) {
             });
         }
 
-        if(tests.validate) {
+        if(tests.validator) {
             validate(passes[1].content);
         }
     }

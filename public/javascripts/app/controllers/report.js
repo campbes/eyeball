@@ -67,8 +67,8 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
                 method: "GET"
             }).success(function(results) {
                     $scope.results = results;
+                    console.log(results);
                     $scope.busy = false;
-
                 });
         };
 
@@ -130,13 +130,9 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
 eyeballControllers.controller('ReportOverviewCtrl',['$scope','persist','fieldConfig',
 
     function ReportOverviewCtrl($scope,persist,fieldConfig) {
-        console.log("ReportOverviewCtrl");
-
         $scope.setFields(fieldConfig.overview);
         $scope.fieldConfig = fieldConfig;
-
         var testInfo = persist.get('testInfo') || {};
-
         if(!testInfo.testing) {
             $scope.getResults('report',$scope.updateTotals);
         }
@@ -147,12 +143,8 @@ eyeballControllers.controller('ReportOverviewCtrl',['$scope','persist','fieldCon
 eyeballControllers.controller('ReportYslowCtrl',['$scope','render','fieldConfig',
 
     function ReportYslowCtrl($scope,render,fieldConfig) {
-        console.log("ReportOverviewCtrl");
-
         $scope.setFields(fieldConfig.yslow);
-
         $scope.getResults('report/yslow',$scope.updateTotals);
-
         $scope.format = render.format;
     }
 ]);
@@ -160,12 +152,26 @@ eyeballControllers.controller('ReportYslowCtrl',['$scope','render','fieldConfig'
 eyeballControllers.controller('ReportTimeCtrl',['$scope','render','fieldConfig',
 
     function ReportTimeCtrl($scope,render,fieldConfig) {
-        console.log("ReportOverviewCtrl");
-
         $scope.setFields(fieldConfig.time);
-
         $scope.getResults('report/time',$scope.updateTotals);
+        $scope.format = render.format;
+    }
+]);
 
+eyeballControllers.controller('ReportDommonsterCtrl',['$scope','render','fieldConfig',
+
+    function ReportDommonsterCtrl($scope,render,fieldConfig) {
+        $scope.setFields(fieldConfig.dommonster);
+        $scope.getResults('report/dommonster',$scope.updateTotals);
+        $scope.format = render.format;
+    }
+]);
+
+eyeballControllers.controller('ReportValidatorCtrl',['$scope','render','fieldConfig',
+
+    function ReportValidatorCtrl($scope,render,fieldConfig) {
+        $scope.setFields(fieldConfig.validator);
+        $scope.getResults('report/validator',$scope.updateTotals);
         $scope.format = render.format;
     }
 ]);
