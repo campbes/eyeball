@@ -15,13 +15,13 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                 mixin reportLoader
                 tr(ng-repeat='r in results')
                     mixin reportFields
-                    td(ng-repeat='f in fields',class='text-center grade{{r.metrics[f.tool].grades[f.metric]}}',data-type='grades',data-value='{{r.metrics[f.tool].grades[f.metric]}}',ng-mouseenter='setPopoverContent({metrics:r.metrics[f.tool],tool:[f.tool]})',ng-mouseleave='setPopoverContent()')
-                        span.badge {{r.metrics[f.tool].grades[f.metric]}}
+                    td(ng-repeat='f in fields',class='text-center grade{{getVal(r.metrics[f.tool].grades,f.metric)}}',data-type='grades',data-value='{{getVal(r.metrics[f.tool].grades,f.metric)}}',ng-mouseenter='setPopoverContent({metrics:r.metrics[f.tool],tool:[f.tool]})',ng-mouseleave='setPopoverContent()')
+                        span.badge {{getVal(r.metrics[f.tool].grades,f.metric)}}
             mixin reportFooters
 
     div#popoverContent.ng-hide
         ul.list-group
-            li(ng-repeat='f in fieldConfig[popoverContent.tool]', class='list-group-item {{($first ? "grade" + popoverContent.metrics.grades[f.metric] :"" )}}') {{f.name}}&nbsp;
-                span(class='badge grade{{popoverContent.metrics.grades[f.metric]}}') {{popoverContent.metrics.grades[f.metric]}}
+            li(ng-repeat='f in fieldConfig[popoverContent.tool]', class='list-group-item {{($first ? "grade" + getVal(popoverContent.metrics.grades,f.metric) :"" )}}') {{f.name}}&nbsp;
+                span(class='badge grade{{getVal(popoverContent.metrics.grades,f.metric)}}') {{getVal(popoverContent.metrics.grades,f.metric)}}
 
     mixin filter
