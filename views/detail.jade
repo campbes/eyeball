@@ -10,21 +10,18 @@ mixin detailNav(tab)
             span.glyphicon.glyphicon-list
             |&nbsp;Return to report
     div.well.well-sm
-        div.row
-            div.col-md-6
+            p
                 a(href="{{url}}",target="_blank").h4 {{url}}
-            div.col-md-6
-                dl.dl-horizontal
-                    dt ID
-                    dd {{id}}
-                    dt Timestamp
-                    dd {{timestamp}}
-                    dt Build
-                    dd {{build}}
-                    dt Tag
-                    dd {{tag}}
-        //ul.list-unstyled
-            li
-                strong {{id}}
-                |&nbsp;({{timestamp}})
-            li {{url}}
+            ul.list-inline
+                li
+                    strong ID
+                    |&nbsp;{{id}}
+                li
+                    strong Timestamp
+                    |&nbsp;{{timestamp}}
+                li
+                    strong Build
+                    |&nbsp;{{build}}
+                li
+                    strong Tag
+                    |&nbsp;{{tag}}

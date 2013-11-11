@@ -21,7 +21,7 @@ div.container
         div(class='panel-heading grade{{data.metrics[f.tool].grades[f.metric]}}')
             span.badge {{data.metrics[f.tool].grades[f.metric]}}
             |&nbsp;{{f.name}}
-        div.panel-body
+        div.panel-body.detail
             div.row
                 div.col-md-4
                     table.table.table-striped
@@ -37,8 +37,27 @@ div.container
                         tr(ng-repeat='i in data.metrics.yslow.data.g',ng-if='i.score < 100')
                             td
                                 span(class='badge grade{{i.grade}}') {{i.grade}}
-                            //td {{i.score}}
                             td
                                 strong {{i.rule}}
                                 p {{i.message}}
-
+                    table.table.table-striped(ng-if="f.tool === 'dommonster'")
+                        tr(ng-repeat='i in data.metrics.dommonster.data.messages.warn')
+                            td
+                                span(class='label label-danger') Danger
+                            td
+                                strong {{i.string}}
+                                p {{i.hint}}
+                        tr(ng-repeat='i in data.metrics.dommonster.data.messages.tip')
+                            td
+                                span(class='label label-warning') Warning
+                            td
+                                strong {{i.string}}
+                                p {{i.hint}}
+                    table.table.table-striped(ng-if="f.tool === 'validator'")
+                        tr(ng-repeat='i in data.metrics.validator.data.messages',ng-if='i.type!=="info"')
+                            td
+                                span(class='label label-danger',ng-if='i.type==="error"') Error
+                                span(class='label label-warning',ng-if='i.type==="warning"') Warning
+                            td
+                                strong {{i.lastLine}}:{{i.lastColumn}} {{i.message}}
+                                //p {{i.explanation}}

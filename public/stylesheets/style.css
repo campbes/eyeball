@@ -19,7 +19,9 @@ table.keyinfo {
 table.keyinfo td {
     width: 5%;
 }
-
+.detail tr>td:first-of-type {
+    width: 20px;
+}
 .historyChart {
     height: 450px;
 }
