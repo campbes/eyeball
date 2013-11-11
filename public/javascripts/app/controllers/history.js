@@ -1,6 +1,6 @@
-eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','chart','$location','fieldConfig','persist',
+eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','chart','$location','fieldConfig','persist','render',
 
-    function HistoryCtrl($scope,$routeParams,$http,chart,$location,fieldConfig,persist) {
+    function HistoryCtrl($scope,$routeParams,$http,chart,$location,fieldConfig,persist,render) {
 
         $scope.data = [];
         $scope.id = $routeParams.id.substr(1);
@@ -33,7 +33,7 @@ eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','ch
 
             for(var j =0; j<fieldConfig[tool].length; j++) {
                 var f = fieldConfig[tool][j];
-                array.push((data.metrics[f.tool] ? chart.gradeMap(data.metrics[f.tool].grades[f.metric]) : null));
+                array.push((data.metrics[f.tool] ? chart.gradeMap(render.accessObject(data.metrics[f.tool].grades,f.metric)) : null));
             }
 
             return array;

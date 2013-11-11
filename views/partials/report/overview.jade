@@ -4,22 +4,9 @@ include ../../report
 div.container.table-responsive(ng-controller='ReportOverviewCtrl')
 
     mixin test
-
     mixin tabs('overview')
-
     mixin charts
-
-    div(ng-hide="reportView === 'chart'")
-        table#results.table.table-striped
-            mixin reportHeaders
-            tbody
-                mixin reportTotals
-                mixin reportLoader
-                tr(ng-repeat='r in results')
-                    mixin reportFields
-                    td(ng-repeat='f in fields',class='text-center grade{{r.metrics[f.tool].grades[f.metric]}}',data-type='grades',data-value='{{r.metrics[f.tool].grades[f.metric]}}',ng-mouseenter='setPopoverContent({metrics:r.metrics[f.tool],tool:[f.tool]})',ng-mouseleave='setPopoverContent()')
-                        span.badge {{r.metrics[f.tool].grades[f.metric]}}
-            mixin reportFooters
+    mixin results
 
     div#popoverContent.ng-hide
         ul.list-group
