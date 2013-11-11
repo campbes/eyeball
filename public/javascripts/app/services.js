@@ -163,20 +163,17 @@ eyeballApp.factory('render',function() {
     }());
 
     function accessObject(obj,str) {
-
-        function getProp(obj,key) {
-            return obj[key];
-        }
-
         var keys = str.split(".");
         var keysLength = keys.length;
+        if(keys.length === 1) {
+            return obj[keys[0]];
+        }
         var i = null;
-
         for (i=0; i<keysLength; i++) {
             if(!obj) {
                 return null;
             }
-            obj = getProp(obj,keys[i]);
+            obj = obj[keys[i]];
         }
         return obj;
     }
