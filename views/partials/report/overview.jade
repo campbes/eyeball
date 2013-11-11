@@ -8,7 +8,7 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
     mixin charts
 
     div(ng-hide="reportView === 'chart'")
-        table#results.table.table-striped
+        table#results.table.table-striped.table-condensed
             mixin reportHeaders
             tbody
                 mixin reportTotals
