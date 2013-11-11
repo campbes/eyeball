@@ -19,6 +19,7 @@ eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http','fie
         $scope.fieldConfig = fieldConfig;
         $scope.format = render.format;
         $scope.reportFilter = persist.get("reportFilter");
+        $scope.getVal = render.accessObject;
 
     }
 

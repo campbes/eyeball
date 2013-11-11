@@ -67,10 +67,7 @@ var grades = (function() {
 
     function getGradeFromData(gradeSet,data) {
         var gr = null;
-        // make string values numbers by removing units
-        if(typeof data === "string") {
-            data = data.replace(/[A-z]|%/g,'');
-        }
+
         for(gr in gradeSet) {
             if(gradeSet.hasOwnProperty(gr)) {
                 if(data >= gradeSet[gr]) {
@@ -487,6 +484,14 @@ module.exports = function(req,res) {
         if(tests.dommonster) {
             getDomMonster(passes[1],function(dm){
                 console.log('got dommonster result');
+                for(var i in dm.stats) {
+                    if(dm.stats.hasOwnProperty(i)) {
+                        // make string values numbers by removing units
+                        if(typeof dm.stats[i] === "string") {
+                            dm.stats[i] = dm.stats[i].replace(/[A-z]|%/g,'');
+                        }
+                    }
+                }
                 updateRecord(record,'dommonster',dm);
             });
         }

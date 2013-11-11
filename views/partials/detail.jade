@@ -27,9 +27,9 @@ div.container
                     table.table.table-striped
                         tr(ng-repeat="m in fieldConfig[f.tool]")
                             td
-                                span(class='badge grade{{data.metrics[f.tool].grades[m.metric]}}') {{data.metrics[f.tool].grades[m.metric]}}
+                                span(class='badge grade{{getVal(data.metrics[f.tool].grades,m.metric)}}') {{getVal(data.metrics[f.tool].grades,m.metric)}}
                             td  {{m.name}}
-                            td  {{format(data.metrics[f.tool].data[m.metric],m.format)}}
+                            td  {{format(getVal(data.metrics[f.tool].data,m.metric),m.format)}}
                 div.col-md-8
                     div(ng-if="f.tool === 'time'")
                         Some explanatory stuff about the timings
