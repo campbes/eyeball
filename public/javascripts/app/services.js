@@ -466,16 +466,18 @@ eyeballApp.factory('fieldConfig',function(){
         ] ,
         dommonster : [
             {tool : 'dommonster', metric : 'COMPOSITE_stats', name : 'Overall'},
-            {tool : 'dommonster', metric : 'elements', name : 'Elements'},
-            {tool : 'dommonster', metric : 'nodes', name : 'Nodes'},
-            {tool : 'dommonster', metric : 'text nodes', name : 'Text nodes'},
-            {tool : 'dommonster', metric : 'text node size', name : 'Text node size'},
-            {tool : 'dommonster', metric : 'content percentage', name : 'Content %'},
-            {tool : 'dommonster', metric : 'average nesting depth', name : 'Nesting'},
-            {tool : 'dommonster', metric : 'serialized DOM size', name : 'DOM size'}
+            {tool : 'dommonster', metric : 'stats.elements', name : 'Elements'},
+            {tool : 'dommonster', metric : 'stats.nodes', name : 'Nodes'},
+            {tool : 'dommonster', metric : 'stats.text nodes', name : 'Text nodes'},
+            {tool : 'dommonster', metric : 'stats.text node size', name : 'Text node size'},
+            {tool : 'dommonster', metric : 'stats.content percentage', name : 'Content %'},
+            {tool : 'dommonster', metric : 'stats.average nesting depth', name : 'Nesting'},
+            {tool : 'dommonster', metric : 'stats.serialized DOM size', name : 'DOM size'}
         ],
         validator : [
-            {tool : 'dommonster', metric : 'COMPOSITE_stats', name : 'Overall'}
+            {tool : 'validator', metric : 'COMPOSITE_info', name : 'Overall'},
+            {tool : 'validator', metric : 'info.errors', name : 'Errors'},
+            {tool : 'validator', metric : 'info.warnings', name : 'Warnings'}
         ],
         history : [
             {tool : 'overview', name : 'Overview'},

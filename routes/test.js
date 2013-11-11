@@ -67,6 +67,10 @@ var grades = (function() {
 
     function getGradeFromData(gradeSet,data) {
         var gr = null;
+        // make string values numbers by removing units
+        if(typeof data === "string") {
+            data = data.replace(/[A-z]|%/g,'');
+        }
         for(gr in gradeSet) {
             if(gradeSet.hasOwnProperty(gr)) {
                 if(data >= gradeSet[gr]) {
@@ -225,6 +229,9 @@ module.exports = function(req,res) {
     };
 
     function commitRecord(record){
+
+        console.log(record);
+
         clearTimeout(record.recordTimer);
         delete record.recordTimer;
 
@@ -257,7 +264,6 @@ module.exports = function(req,res) {
         };
 
         metric.grades = grades.getGradeSet(metric);
-
         record.metrics[property] = metric;
 
         for(var i in tests) {
@@ -486,8 +492,8 @@ module.exports = function(req,res) {
         }
 
         function validate(html) {
-            //var requestW3c = request.defaults({'proxy':'http://cache2.practicallaw.com:8080'});
-            var requestW3c = request.defaults({});
+            var requestW3c = request.defaults({'proxy':'http://cache2.practicallaw.com:8080'});
+            //var requestW3c = request.defaults({});
             requestW3c.post({
                 url : 'http://validator.w3.org/check',
                 form:{
@@ -503,7 +509,22 @@ module.exports = function(req,res) {
                 }
                 if (!err && response.statusCode == 200) {
                     console.log("got validator data");
-                    updateRecord(record,'validator',body);
+                    var errors = 0;
+                    var warnings = 0;
+                    var data = JSON.parse(body);
+                    for (var i=data.messages.length-1; i>=0; i--) {
+                        if(data.messages[i].type === "error") {
+                            errors += 1;
+                        }
+                        if(data.messages[i].subtype === "warning") {
+                            warnings += 1;
+                        }
+                    }
+                    data.info = {
+                        errors : errors,
+                        warnings : warnings
+                    };
+                    updateRecord(record,'validator',data);
                 }
             });
         }

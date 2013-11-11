@@ -164,6 +164,7 @@ eyeballControllers.controller('ReportDommonsterCtrl',['$scope','render','fieldCo
         $scope.setFields(fieldConfig.dommonster);
         $scope.getResults('report/dommonster',$scope.updateTotals);
         $scope.format = render.format;
+        $scope.getVal = render.accessObject;
     }
 ]);
 
@@ -173,5 +174,6 @@ eyeballControllers.controller('ReportValidatorCtrl',['$scope','render','fieldCon
         $scope.setFields(fieldConfig.validator);
         $scope.getResults('report/validator',$scope.updateTotals);
         $scope.format = render.format;
+        $scope.getVal = render.accessObject;
     }
 ]);
