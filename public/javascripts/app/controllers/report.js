@@ -117,7 +117,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
             },500);
         };
 
-        exos.init(popover);
+        exos.popover(popover);
 
     }
 ]);

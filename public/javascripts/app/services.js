@@ -46,7 +46,7 @@ eyeballApp.service('persist',function(){
 
 eyeballApp.factory('exos',function() {
 
-    function init(popover) {
+    function popover(popover) {
         Exos.enable([
             {'td[data-type="grades"]' : {
                 'mouseenter' : {
@@ -64,7 +64,7 @@ eyeballApp.factory('exos',function() {
     }
 
     return {
-        init : init,
+        popover : popover,
         enable : Exos.enable
     }
 
@@ -165,13 +165,6 @@ eyeballApp.factory('tablesort',function($timeout,render,exos) {
             var el = $("#"+id);
             headers = $("th[ng-data-sort]",el);
             setHeaders();
-           /* headers.each(function(i,obj){
-                $(obj).click(function(){
-                    $scope.$apply(function(){
-                        table.sort(obj.getAttribute("ng-data-sort"));
-                    });
-                });
-            }); */
         },100);
 
         exos.enable([{'th[ng-data-sort]' : {
