@@ -173,7 +173,7 @@ eyeballApp.factory('render',function() {
         }
         var i = null;
         for (i=0; i<keysLength; i++) {
-            obj = obj[keys[i]];
+            obj = obj[keys[i]] || obj;
         }
         return obj;
     }

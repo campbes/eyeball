@@ -52,11 +52,11 @@ mixin reportHeaders
     thead
         tr
             th
-            th URL
-            th Date
-            th Build
-            th Tag
-            th(ng-repeat='f in fields').text-center {{f.name}}
+            th(ng-data-sort='url') URL
+            th(ng-data-sort='timestamp') Date
+            th(ng-data-sort='build') Build
+            th(ng-data-sort="tag") Tag
+            th(class="text-center", ng-data-sort="metrics.{{f.tool}}.grades.{{f.metric}}",ng-repeat='f in fields') {{f.name}}
 
 mixin reportFooters
     tfoot
