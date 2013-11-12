@@ -130,9 +130,26 @@ mixin results
                     td(ng-repeat='f in fields',class='text-center grade{{getVal(r.metrics[f.tool].grades,f.metric)}}',data-type='grades',ng-mouseenter='setPopoverContent({grade:getVal(r.metrics[f.tool].grades,f.metric),value:format(getVal(r.metrics[f.tool].data,f.metric),f.format)})',ng-mouseleave='setPopoverContent()')
                         span.badge {{getVal(r.metrics[f.tool].grades,f.metric)}}
             mixin reportFooters
+        mixin reportPager
 
 mixin popover
     div#popoverContent.ng-hide
         ul.list-group
             li(class='list-group-item') {{popoverContent.value}}&nbsp;
                 span(class='badge grade{{popoverContent.grade}}') {{popoverContent.grade}}
+
+mixin reportPager
+    ul.pager
+        li(class="previous{{(resultsTable.page === 1 ? ' disabled' : '')}}")
+            a(ng-click="resultsTable.prev()")
+                span.glyphicon.glyphicon-chevron-left
+                |&nbsp;Previous
+        li Results per page&nbsp;
+            div.btn-group
+                button(class="btn btn-default{{(resultsTable.count === 10 ? ' active' : '')}}",ng-click="resultsTable.setCount(10)") 10
+                button(class="btn btn-default{{(resultsTable.count === 25 ? ' active' : '')}}",ng-click="resultsTable.setCount(25)") 25
+                button(class="btn btn-default{{(resultsTable.count === 50 ? ' active' : '')}}",ng-click="resultsTable.setCount(50)") 50
+                button(class="btn btn-default{{(resultsTable.count === 100 ? ' active' : '')}}",ng-click="resultsTable.setCount(100)") 100
+        li(class="next{{(resultsTable.page === resultsTable.pages.length ? ' disabled' : '')}}")
+            a(ng-click="resultsTable.next()") Next&nbsp;
+                span.glyphicon.glyphicon-chevron-right

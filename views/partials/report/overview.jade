@@ -18,17 +18,7 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                     td(ng-repeat='f in fields',class='text-center grade{{getVal(r.metrics[f.tool].grades,f.metric)}}',data-type='grades',data-value='{{getVal(r.metrics[f.tool].grades,f.metric)}}',ng-mouseenter='setPopoverContent({metrics:r.metrics[f.tool],tool:[f.tool]})',ng-mouseleave='setPopoverContent()')
                         span.badge {{getVal(r.metrics[f.tool].grades,f.metric)}}
             mixin reportFooters
-
-        div.btn-group
-            button(class="btn btn-default{{(resultsTable.count === 10 ? ' active' : '')}}",ng-click="resultsTable.setCount(10)") 10
-            button(class="btn btn-default{{(resultsTable.count === 25 ? ' active' : '')}}",ng-click="resultsTable.setCount(25)") 25
-            button(class="btn btn-default{{(resultsTable.count === 50 ? ' active' : '')}}",ng-click="resultsTable.setCount(50)") 50
-            button(class="btn btn-default{{(resultsTable.count === 100 ? ' active' : '')}}",ng-click="resultsTable.setCount(100)") 100
-        ul.pager
-            li(class="previous{{(resultsTable.page === 1 ? ' disabled' : '')}}")
-                a(ng-click="resultsTable.prev()") Previous
-            li(class="next{{(resultsTable.page === resultsTable.pages.length ? ' disabled' : '')}}")
-                a(ng-click="resultsTable.next()") Next
+        mixin reportPager
 
     div#popoverContent.ng-hide
         ul.list-group
