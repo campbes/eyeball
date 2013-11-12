@@ -40,117 +40,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
             }
         };
 
-
-        function SortableTable(id,data,cfg) {
-
-            cfg = cfg || {};
-            var table = this;
-            var results = [];
-            table.page = 1;
-            table.count = cfg.count || 10;
-            table.pages = [];
-            table.order = {
-                col : '',
-                asc : false
-            };
-            var headers = null;
-
-            function setHeaders(){
-                headers.each(function(i,obj){
-                    obj.className = "header";
-                    if(obj.getAttribute("ng-data-sort") === table.order.col) {
-                        obj.className = (table.order.asc ? "header headerSortUp" : "header headerSortDown");
-                    }
-                });
-            }
-
-            function setResults() {
-                var pageLength = Math.ceil(results.length/table.count);
-                if(table.page > pageLength && pageLength > 0) {
-                    table.page = pageLength;
-                }
-                table.results = results.slice((table.page-1)*table.count,table.page*table.count);
-                table.pages = [];
-                for(var i=0;i<pageLength;i++) {
-                    table.pages.push(i+1);
-                }
-                if(headers) {
-                    setHeaders();
-                }
-            }
-
-            table.setPage = function(p) {
-                table.page = p;
-                setResults();
-            };
-
-            table.setCount = function(c) {
-                table.count = c;
-                setResults();
-            };
-
-            table.next = function() {
-                if(table.page < table.pages.length) {
-                    table.setPage(table.page+1)
-                }
-            };
-
-            table.prev = function() {
-                if(table.page > 1) {
-                    table.setPage(table.page-1)
-                }
-            };
-
-            table.sort = function(col) {
-                if(table.order.col === col) {
-                    table.order.asc = !table.order.asc;
-                } else {
-                    table.order.col = col;
-                    table.order.asc = false;
-                }
-                results.sort(function(a,b) {
-                    a = render.accessObject(a,col);
-                    b = render.accessObject(b,col);
-                    if(table.order.asc) {
-                        if (a < b) {
-                            return 1;
-                        } else if (a > b) {
-                            return -1;
-                        }
-                        return 0;
-                    } else {
-                        if (a < b) {
-                            return -1;
-                        } else if (a > b) {
-                            return 1;
-                        }
-                        return 0;
-                    }
-                });
-                setResults();
-            };
-
-            $timeout(function(){
-                var el = $("#"+id);
-                headers = $("th[ng-data-sort]",el);
-                setHeaders();
-                headers.each(function(i,obj){
-                    $(obj).click(function(){
-                        $scope.$apply(function(){
-                            table.sort(obj.getAttribute("ng-data-sort"));
-                        });
-                    });
-                });
-            },100);
-
-            $scope.$watch(data,function(){
-                results = [].concat($scope[data]);
-                setResults();
-            });
-
-        }
-
-        $scope.resultsTable = new SortableTable('results','results');
+        $scope.resultsTable = new tablesort.SortableTable('results','results',$scope);
 
         $scope.$watch('results',function(){
             console.log("results changed");
@@ -229,15 +119,6 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
 
         exos.init(popover);
 
-        /*$timeout(function(){
-            tablesort.init('table',{
-                headers : {
-                    0 : {
-                        sorter : false
-                    }
-                }
-            });
-        },500);*/
     }
 ]);
 
