@@ -64,12 +64,13 @@ eyeballApp.factory('exos',function() {
     }
 
     return {
-        init : init
+        init : init,
+        enable : Exos.enable
     }
 
 });
 
-eyeballApp.factory('tablesort',function($timeout,render) {
+eyeballApp.factory('tablesort',function($timeout,render,exos) {
 
     function SortableTable(id,data,$scope,cfg) {
 
@@ -164,14 +165,24 @@ eyeballApp.factory('tablesort',function($timeout,render) {
             var el = $("#"+id);
             headers = $("th[ng-data-sort]",el);
             setHeaders();
-            headers.each(function(i,obj){
+           /* headers.each(function(i,obj){
                 $(obj).click(function(){
                     $scope.$apply(function(){
                         table.sort(obj.getAttribute("ng-data-sort"));
                     });
                 });
-            });
+            }); */
         },100);
+
+        exos.enable([{'th[ng-data-sort]' : {
+            click : {
+                fn : function(e,obj) {
+                    $scope.$apply(function(){
+                        table.sort(obj.getAttribute("ng-data-sort"));
+                    });
+                }
+            }
+        }}]);
 
         $scope.$watch(data,function(){
             results = [].concat($scope[data]);
