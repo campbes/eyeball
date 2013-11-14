@@ -18,7 +18,6 @@ eyeballControllers.controller('HarCtrl',['$scope','$routeParams','$http','persis
                 viewer.draw("harContainer");
                 var uncachedViewer = new Harpy.Viewer(JSON.stringify(data.metrics.harUncached.data));
                 uncachedViewer.draw("harUncached");
-                console.log(data);
             });
 
     }

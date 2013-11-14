@@ -83,6 +83,10 @@ table.harpy div.receive {
     background: #5cb85c;
     margin-right: 5px;
 }
+table.harpy td.info {
+    padding: 15px 10px;
+    background: #FFE;
+}
 div.harpyChart {
     width: 24%;
     float: left;

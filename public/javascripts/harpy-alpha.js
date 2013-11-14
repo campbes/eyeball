@@ -59,11 +59,10 @@ var Harpy = function() {
     }
 
     function Viewer(har,options) {
-
+        var viewer = this;
+        var entryCache = {};
         var el = null;
-
         options = options || {};
-
         var output = "";
         har = JSON.parse(har);
 
@@ -115,6 +114,7 @@ var Harpy = function() {
 
         for(var i=0; i<har.log.entries.length; i++) {
             var entry = har.log.entries[i];
+            entryCache[i] = entry;
             var url = entry.request.url;
             var type = getMimetype(entry.response.content.mimeType);
 
@@ -138,7 +138,7 @@ var Harpy = function() {
             if(i>0) {
                 url = url.replace(har.log.entries[0].request.url,"");
             }
-            output += "<tr class='"+type+(entry.response.status === '(cache)' ? ' cache' : '')+"'>";
+            output += "<tr data-id='"+i+"' class='"+type+(entry.response.status === '(cache)' ? ' cache' : '')+"'>";
             output += "<td>"+(i+1)+"</td>"
             output += "<td>"+entry.request.method+"</td>"
             output += "<td title='"+url+"' class='url'>"+url.substr(0,30)+(url.length > 30 ? "..." : "")+"</td>";
@@ -153,7 +153,6 @@ var Harpy = function() {
             }
             output += "<td title='"+format(entry.time,'time')+"'>";
             output += buildTimeline(entry,startTime)+"</td>";
-            //output += "<td><div>"+format(entry.time,'time')+"</div></td>";
             output += "</tr>";
         }
         output += "</tbody><tfoot><tr class='total'>";
@@ -163,24 +162,49 @@ var Harpy = function() {
         //output += "<td title='DOM: "+format(time.onContentLoad || time.onLoad,'time')+", Page: "+format(time.onLoad,'time')+"'>"+format(time.total,'time')+"</td>";
         output += "</tr></tfoot>";
 
-        this.resize = function() {
+        this.showInfo = function(obj) {
+            var id = obj.getAttribute("data-id");
+            var entry = entryCache[id];
+            if(entry.info) {
+                entry.info.style.display = (entry.info.style.display === "none" ? "block" : "none");
+                resize();
+                return;
+            }
+            var infoRow = document.createElement("TR");
+            var info = "<td></td><td class='info' colspan='6'>";
+            info += "<a href='"+entry.request.url+"' target='_blank'><strong>"+entry.request.url+"</strong></a>";
+            info += "<br/>"+entry.response.content.mimeType;
+            info += "<hr/>";
+            info += "<strong>Request headers</strong>";
+            info += "<dl>";
+            for (var i=0; i<entry.request.headers.length; i++){
+                info += "<dt>"+entry.request.headers[i].name+"</dt>";
+                info += "<dd>"+entry.request.headers[i].value+"</dd>";
+            }
+            info += "</dl>";
+            info += "<hr/>";
+            info += "<strong>Response headers</strong>";
+            info += "<dl>";
+            for (var i=0; i<entry.response.headers.length; i++){
+                info += "<dt>"+entry.response.headers[i].name+"</dt>";
+                info += "<dd>"+entry.response.headers[i].value+"</dd>";
+            }
+            info += "</dl>";
+            info += "</td>";
+            infoRow.innerHTML = info;
+
+            $(obj).after(infoRow);
+            entry.info = infoRow;
+            resize();
+        }
+
+        function resize() {
             var timeline = $('#'+el+' th.timeline');
             var unit = timeline.width()/time.total;
             var times = $('#'+el+' table.harpy div');
+            var marker = $('#'+el+' table.harpy div.loadMarker');
+
             times.each(function() {
-                if(this.className === 'loadMarker') {
-                    var left = 0;
-                    var width = 0;
-                    if(this.hasAttribute('data-dom')) {
-                        left = Number(this.getAttribute('data-dom'))*unit;
-                    }
-                    if(this.hasAttribute('data-page')) {
-                        width = Number(this.getAttribute('data-page'))*unit - left;
-                    }
-                    this.style.marginLeft = left + "px";
-                    this.style.width = width + "px";
-                    this.style.height = $('#'+el+' table.harpy>tbody').height() + "px";
-                }
                 if(this.hasAttribute('data-start')) {
                     this.style.marginLeft = Number(this.getAttribute('data-start'))*unit + "px";
                 }
@@ -188,7 +212,23 @@ var Harpy = function() {
                     this.style.width = Number(this.getAttribute('data-time'))*unit + "px";
                 }
             });
-        };
+
+            marker.each(function(){
+                var left = 0;
+                var width = 0;
+                if(this.hasAttribute('data-dom')) {
+                    left = Number(this.getAttribute('data-dom'))*unit;
+                }
+                if(this.hasAttribute('data-page')) {
+                    width = Number(this.getAttribute('data-page'))*unit - left;
+                }
+                this.style.marginLeft = left + "px";
+                this.style.width = width + "px";
+                this.style.height = $('#'+el+' table.harpy>tbody').height() + "px";
+            });
+        }
+
+        this.resize = resize;
 
         function drawCharts() {
 
@@ -257,6 +297,21 @@ var Harpy = function() {
             } else {
                 drawCharts();
             }
+
+            var bhvr = {
+                selector : {
+                    click : {
+                        fn : function(e,obj) {
+                            console.log(viewer);
+                            viewer.showInfo(obj);
+                        }
+                    }
+                }
+            };
+            bhvr["#"+el+" table.harpy>tbody>tr"] = bhvr.selector;
+            delete bhvr.selector;
+            Exos.enable([bhvr]);
+            console.log(Exos.behaviours);
 
             var table = document.createElement("TABLE");
             table.className = "harpy";
