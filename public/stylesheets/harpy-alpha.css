@@ -86,6 +86,17 @@ table.harpy div.receive {
 table.harpy td.info {
     padding: 15px 10px;
     background: #FFE;
+    position: relative;
+}
+table.harpy td.info table {
+    margin-top: 10px;
+    width: 100%;
+}
+table.harpy td.info td:first-child {
+    font-weight: bold;
+}
+table.harpy td.info td:nth-child(2) {
+    white-space: normal;
 }
 div.harpyChart {
     width: 24%;

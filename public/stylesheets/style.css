@@ -95,6 +95,10 @@ table.keyinfo td {
     text-align: left;
     font-size: 75%;
 }
+.harpy td.info table td {
+    font-size : 100%;
+    max-width : none;
+}
 /*.harpy th {
     min-width: 45px;
 } */

@@ -176,20 +176,20 @@ var Harpy = function() {
             info += "<br/>"+entry.response.content.mimeType;
             info += "<hr/>";
             info += "<strong>Request headers</strong>";
-            info += "<dl>";
+            info += "<table>";
             for (var i=0; i<entry.request.headers.length; i++){
-                info += "<dt>"+entry.request.headers[i].name+"</dt>";
-                info += "<dd>"+entry.request.headers[i].value+"</dd>";
+                info += "<tr><td>"+entry.request.headers[i].name+"</td>";
+                info += "<td>"+entry.request.headers[i].value+"</td></tr>";
             }
-            info += "</dl>";
+            info += "</table>";
             info += "<hr/>";
             info += "<strong>Response headers</strong>";
-            info += "<dl>";
+            info += "<table>";
             for (var i=0; i<entry.response.headers.length; i++){
-                info += "<dt>"+entry.response.headers[i].name+"</dt>";
-                info += "<dd>"+entry.response.headers[i].value+"</dd>";
+                info += "<tr><td>"+entry.response.headers[i].name+"</td>";
+                info += "<td>"+entry.response.headers[i].value+"</td></tr>";
             }
-            info += "</dl>";
+            info += "</table>";
             info += "</td>";
             infoRow.innerHTML = info;
 
