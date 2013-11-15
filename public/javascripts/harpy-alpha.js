@@ -166,7 +166,7 @@ var Harpy = function() {
             var id = obj.getAttribute("data-id");
             var entry = entryCache[id];
             if(entry.info) {
-                entry.info.style.display = (entry.info.style.display === "none" ? "block" : "none");
+                entry.info.style.display = (entry.info.style.display === "none" ? "table-row" : "none");
                 resize();
                 return;
             }
