@@ -12,6 +12,9 @@ table.harpy div.loadMarker {
     position: absolute;
     margin-top: 10px;
 }
+table.harpy tr {
+    cursor: pointer;
+}
 table.harpy tr.total {
     background: #EEE;
     font-weight: bold;
@@ -91,6 +94,9 @@ table.harpy td.info {
 table.harpy td.info table {
     margin-top: 10px;
     width: 100%;
+}
+table.harpy tr td.info, table.harpy td.info tr {
+    cursor: auto;
 }
 table.harpy td.info td:first-child {
     font-weight: bold;

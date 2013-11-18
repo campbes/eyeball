@@ -30,6 +30,8 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','persist'
                     $scope.testInfo.message = "Testing...done!";
                     // separate property owned by parent scope
                     $scope.$emit('testComplete');
+                } else {
+                    $scope.testInfo.message = "Testing..." + data.committed+" of "+data.total;
                 }
             });
         }

@@ -27,7 +27,6 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         $scope.busy =  testInfo.testing;
 
         $scope.$on('testComplete',function() {
-            console.log("ok");
             $scope.busy = false;
         });
 
@@ -71,7 +70,6 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
                 method: "GET"
             }).success(function(results) {
                     $scope.results = results;
-                    console.log(results);
                     $scope.busy = false;
                 });
         };
@@ -94,7 +92,6 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         };
 
         $scope.setPopoverContent = function(data) {
-            console.log(data);
             $scope.popoverContent = data;
         };
 

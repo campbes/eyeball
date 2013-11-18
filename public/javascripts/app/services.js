@@ -431,7 +431,6 @@ eyeballApp.factory('chart', ['render', function(render){
 
             var chartType = (results.length > 2 ? "area" : "column");
 
-            console.log(el);
             if(chartType === 'area') {
                 chart = new google.visualization.AreaChart(el);
             } else {

@@ -222,12 +222,10 @@ module.exports = function(req,res) {
         yslow : true, // requires har
         time : true, //requires yslow
         dommonster : true,
-        validator : true
+        validator : false
     };
 
     function commitRecord(record){
-
-        console.log(record);
 
         clearTimeout(record.recordTimer);
         delete record.recordTimer;
@@ -239,9 +237,11 @@ module.exports = function(req,res) {
             if(msg) {
                 console.log(msg);
             }
-            committedRecords++;
+            committedRecords = committedRecords + 1;
             console.log("Emitting...");
             eyeball.io.sockets.emit('commitRecord_'+build,{
+                committed : committedRecords,
+                total : urlsLength,
                 progress : Math.floor((committedRecords/urlsLength) * 100),
                 record : record
             });
@@ -453,7 +453,7 @@ module.exports = function(req,res) {
         record.recordTimer = setTimeout(function(){
             console.log("Gave up waiting for metrics");
             commitRecord(record);
-        },30000);
+        },(tests.validator ? 30000 : 10000));
 
         var harUncached = null;
         var harCached = null;
@@ -589,6 +589,8 @@ module.exports = function(req,res) {
 
     function openPage(ph) {
 
+        console.log("Opening page with "+ph._phantom.pid);
+
         var passes = [];
 
         function createPage(pass,url) {
@@ -622,7 +624,6 @@ module.exports = function(req,res) {
                             page.title = doc.title;
                             page.content = doc.content;
                             page.onContentLoad = new Date(doc.onContentLoad);
-                            console.log(page);
                             page.close();
                             passes[pass] = page;
 
@@ -634,7 +635,6 @@ module.exports = function(req,res) {
                                     openPage(ph);
                                 } else {
                                     ph.exit();
-                                    res.send("OK");
                                 }
                             }
                         });
@@ -646,13 +646,17 @@ module.exports = function(req,res) {
         createPage(0);
     }
 
-    var phantomMax = 10;
+    var phantomMax = 2;
+    var activePhantoms = 0;
 
     function go(data) {
 
-        if(regex && regexReplace) {
-            data = data.replace(new RegExp(regex),regexReplace);
+        if(regex) {
+            regexReplace = regexReplace || "";
+            data = data.replace(new RegExp(regex,"g"),regexReplace);
+
         }
+
         urls = data.split("\r\n");
         if(reps) {
             var urlset = urls;
@@ -667,16 +671,39 @@ module.exports = function(req,res) {
             phantomMax = urlsLength;
         }
 
-        for (var i=1; i<=phantomMax; i++) {
+        function startPhantom() {
             phantom.create(function(err,ph) {
                 if(err) {
                     console.log(err);
                 }
+                ph.onError = function(err,trace) {
+                    console.log("Phantom error: "+err);
+                    if(urls.length > 0) {
+                        activePhantoms = activePhantoms - 1;
+                        startPhantom();
+                    }
+                };
+                ph.on("exit",function(msg) {
+                    console.log("Phantom Exit: "+ph._phantom.pid+ "("+msg+")");
+                    if(urls.length > 0) {
+                        activePhantoms = activePhantoms - 1;
+                        startPhantom();
+                    }
+                });
                 openPage(ph);
+                activePhantoms = activePhantoms + 1;
+                console.log("Active Phantoms: "+activePhantoms);
+                if(activePhantoms < phantomMax && urls.length > 0) {
+                    startPhantom();
+                }
             }, {
                 phantomPath : 'C:/phantomjs-1.9.2-windows/phantomjs-1.9.2-windows/phantomjs'
             });
+
         }
+
+        startPhantom();
+
     }
 
     if (url) {
@@ -699,7 +726,7 @@ module.exports = function(req,res) {
         });
     }
 
-
+    res.send("OK");
 };
 
 
