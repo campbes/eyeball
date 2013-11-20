@@ -1,23 +1,5 @@
 var request = require('request');
-
-function accessObject(obj,str) {
-
-    function getProp(obj,key) {
-        return obj[key];
-    }
-
-    var keys = str.split(".");
-    var keysLength = keys.length;
-    var i = null;
-
-    for (i=0; i<keysLength; i++) {
-        if(!obj) {
-            return null;
-        }
-        obj = getProp(obj,keys[i]);
-    }
-    return obj;
-}
+var cheerio = require('cheerio');
 
 var grades = (function() {
 
@@ -144,60 +126,6 @@ var grades = (function() {
 
 }());
 
-var totals = (function() {
-
-    function getPC(results,tool,measure) {
-        var fails = 0;
-        var count = 0;
-        var i = null;
-        var res = null;
-        var grade = null;
-
-        for (i=results.length-1; i>=0; i--) {
-            if(!results[i].metrics) {
-                continue;
-            }
-            res = results[i].metrics[tool];
-            if(!res || !res.grades) {
-                continue;
-            }
-
-            grade = util.accessObject(res.grades,measure);
-
-            if(!grade) {
-                continue;
-            }
-            count += 1;
-            if(grade !== "A" && grade !== "B") {
-                fails +=1;
-            }
-        }
-        return Math.floor(100 - (fails/(count/100)));
-    }
-
-    function getTotal(results,tool,measure) {
-
-        var pc = getPC(results,tool,measure);
-        var total = {
-            score : pc,
-            grade : ""
-        };
-
-        if(pc > 85) {
-            total.grade = "PASS";
-        } else if (pc <= 85) {
-            total.grade = "FAIL";
-        }
-        return total;
-    }
-
-    return {
-        getTotal : getTotal
-    };
-
-}());
-
-
 module.exports = function(req,res) {
 
     var build = req.body.build;
@@ -230,12 +158,9 @@ module.exports = function(req,res) {
         clearTimeout(record.recordTimer);
         delete record.recordTimer;
 
-        DB.insert(record,function(err,msg){
+        DB.insert(record,function(err){
             if(err) {
                 console.log(err);
-            }
-            if(msg) {
-                console.log(msg);
             }
             committedRecords = committedRecords + 1;
             console.log("Emitting...");
@@ -245,7 +170,6 @@ module.exports = function(req,res) {
                 progress : Math.floor((committedRecords/urlsLength) * 100),
                 record : record
             });
-
         });
     }
 
@@ -278,13 +202,17 @@ module.exports = function(req,res) {
 
     }
 
-    function getDomMonster(page,callback) {
-        jsdom.env(page.content,['../dommonster.js?'+new Date()],function(err,window){
-            setTimeout(function(){
-                callback(window.DM);
-                window.close();
-            },1000);
-        });
+    function getDomMonster(page) {
+        var dm = page.dommonster;
+        for(var i in dm.stats) {
+            if(dm.stats.hasOwnProperty(i)) {
+                // make string values numbers by removing units
+                if(typeof dm.stats[i] === "string") {
+                    dm.stats[i] = dm.stats[i].replace(/[A-z]|%/g,'');
+                }
+            }
+        }
+        return dm;
     }
 
     function createHAR(page,callback) {
@@ -482,18 +410,9 @@ module.exports = function(req,res) {
         }
 
         if(tests.dommonster) {
-            getDomMonster(passes[1],function(dm){
-                console.log('got dommonster result');
-                for(var i in dm.stats) {
-                    if(dm.stats.hasOwnProperty(i)) {
-                        // make string values numbers by removing units
-                        if(typeof dm.stats[i] === "string") {
-                            dm.stats[i] = dm.stats[i].replace(/[A-z]|%/g,'');
-                        }
-                    }
-                }
-                updateRecord(record,'dommonster',dm);
-            });
+            var dm = getDomMonster(passes[1]);
+            console.log('got dommonster result');
+            updateRecord(record,'dommonster',dm);
         }
 
         function validate(html) {
@@ -541,9 +460,37 @@ module.exports = function(req,res) {
 
     function setupPage(page) {
         page.resources = [];
+        page.libraryPath = "../";
+        page.settings = {
+            resourceTimeout : 5
+        };
 
         page.onConsoleMessage = function (msg) {
-            console.log(msg);
+            //console.log(msg);
+        };
+
+        /*page.onLoadStarted = function () {
+            page.startTime = new Date();
+        };*/
+
+        page.onResourceRequested = function (req) {
+            page.resources[req[0].id] = {
+                request: req[0],
+                startReply: null,
+                endReply: null
+            };
+        };
+
+        page.onResourceReceived = function (res) {
+            if(!page.resources[res.id]) {
+                return;
+            }
+            if (res.stage === 'start') {
+                page.resources[res.id].startReply = res;
+            }
+            if (res.stage === 'end') {
+                page.resources[res.id].endReply = res;
+            }
         };
 
         page.setFn('onCallback',function(msg) {
@@ -563,27 +510,6 @@ module.exports = function(req,res) {
             });
         });
 
-        /*page.onLoadStarted = function () {
-            page.startTime = new Date();
-        };*/
-
-        page.onResourceRequested = function (req) {
-            page.resources[req[0].id] = {
-                request: req[0],
-                startReply: null,
-                endReply: null
-            };
-        };
-
-        page.onResourceReceived = function (res) {
-            if (res.stage === 'start') {
-                page.resources[res.id].startReply = res;
-            }
-            if (res.stage === 'end') {
-                page.resources[res.id].endReply = res;
-            }
-        };
-
         return page;
     }
 
@@ -598,14 +524,19 @@ module.exports = function(req,res) {
                 if(err) {
                     console.log(err);
                 }
+
+                page = setupPage(page);
+
                 if(pass === 0){
                     url = urls[0];
                     urls.splice(0,1);
                 }
-                page = setupPage(page);
-                page.address = url;
-                page.startTime = new Date();
-                page.open(page.address, function (err,status) {
+
+                var webpage = {};
+
+                webpage.address = url;
+                webpage.startTime = new Date();
+                page.open(webpage.address, function (err,status) {
                     if(err) {
                         console.log(err);
                     }
@@ -613,31 +544,35 @@ module.exports = function(req,res) {
                         console.log('FAIL to load the address');
                         ph.exit(1);
                     } else {
-                        page.endTime = new Date();
-                        page.evaluate(function () {
-                            return {
-                                title : document.title,
-                                content : document.documentElement.outerHTML,
-                                onContentLoad : window.DOMContentLoaded
-                            };
-                        },function(err,doc){
-                            page.title = doc.title;
-                            page.content = doc.content;
-                            page.onContentLoad = new Date(doc.onContentLoad);
-                            page.close();
-                            passes[pass] = page;
+                        webpage.endTime = new Date();
+                        page.injectJs("dommonster.js");
+                        setTimeout(function(){
+                            page.evaluate(function () {
+                                return {
+                                    title : document.title,
+                                    content : document.documentElement.outerHTML,
+                                    onContentLoad : window.DOMContentLoaded,
+                                    dommonster : window.DM
+                                };
+                            },function(err,doc){
+                                webpage.title = doc.title;
+                                webpage.content = doc.content;
+                                webpage.onContentLoad = new Date(doc.onContentLoad);
+                                webpage.resources = [].concat(page.resources);
+                                webpage.dommonster = doc.dommonster;
+                                page.close();
+                                passes[pass] = webpage;
 
-                            if(pass === 0) {
-                                createPage(1,url);
-                            } else if(pass === 1) {
-                                createRecord(passes);
-                                if(urls.length > 0) {
-                                    openPage(ph);
-                                } else {
-                                    ph.exit();
+                                if(pass === 0) {
+                                    createPage(1,url);
+                                } else if(pass === 1) {
+                                    createRecord(passes);
+                                    if(urls.length > 0) {
+                                        openPage(ph);
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        },1000);
                     }
                 });
             });
@@ -646,8 +581,51 @@ module.exports = function(req,res) {
         createPage(0);
     }
 
-    var phantomMax = 2;
+    var phantomMax = 5;
     var activePhantoms = 0;
+
+    function startPhantom() {
+
+        if(activePhantoms >= phantomMax) {
+            return;
+        }
+
+        phantom.create(function(err,ph) {
+            if(err) {
+                console.log(err);
+            }
+            ph.onError = function(err,trace) {
+                console.log("Phantom error: "+err);
+                ph.exit(1);
+                if(urls.length > 0) {
+                    startPhantom();
+                }
+            };
+            ph.on("error",function(err,trace) {
+                console.log("Phantom error: "+err);
+                ph.exit(1);
+                if(urls.length > 0) {
+                    startPhantom();
+                }
+            });
+            ph.on("exit",function(msg) {
+                console.log("Phantom Exit: "+ph._phantom.pid+ "("+msg+")");
+                activePhantoms = activePhantoms - 1;
+                if(urls.length > 0) {
+                    startPhantom();
+                }
+            });
+            openPage(ph);
+            activePhantoms = activePhantoms + 1;
+            console.log("Active Phantoms: "+activePhantoms);
+            if(urls.length > 0) {
+                startPhantom();
+            }
+        }, {
+            phantomPath : 'C:/phantomjs-1.9.2-windows/phantomjs-1.9.2-windows/phantomjs'
+        });
+    }
+
 
     function go(data) {
 
@@ -669,37 +647,6 @@ module.exports = function(req,res) {
 
         if(urlsLength < phantomMax) {
             phantomMax = urlsLength;
-        }
-
-        function startPhantom() {
-            phantom.create(function(err,ph) {
-                if(err) {
-                    console.log(err);
-                }
-                ph.onError = function(err,trace) {
-                    console.log("Phantom error: "+err);
-                    if(urls.length > 0) {
-                        activePhantoms = activePhantoms - 1;
-                        startPhantom();
-                    }
-                };
-                ph.on("exit",function(msg) {
-                    console.log("Phantom Exit: "+ph._phantom.pid+ "("+msg+")");
-                    if(urls.length > 0) {
-                        activePhantoms = activePhantoms - 1;
-                        startPhantom();
-                    }
-                });
-                openPage(ph);
-                activePhantoms = activePhantoms + 1;
-                console.log("Active Phantoms: "+activePhantoms);
-                if(activePhantoms < phantomMax && urls.length > 0) {
-                    startPhantom();
-                }
-            }, {
-                phantomPath : 'C:/phantomjs-1.9.2-windows/phantomjs-1.9.2-windows/phantomjs'
-            });
-
         }
 
         startPhantom();
