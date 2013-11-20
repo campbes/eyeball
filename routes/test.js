@@ -204,6 +204,9 @@ module.exports = function(req,res) {
 
     function getDomMonster(page) {
         var dm = page.dommonster;
+        if(!dm) {
+            return {};
+        }
         for(var i in dm.stats) {
             if(dm.stats.hasOwnProperty(i)) {
                 // make string values numbers by removing units

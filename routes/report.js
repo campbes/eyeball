@@ -49,9 +49,7 @@ function getDbQuery(req) {
     }
 
     if(queryString.url) {
-        dbQuery.url = {
-            $regex : queryString.url
-        };
+        dbQuery.url = queryString.url;
     }
 
     return dbQuery;
