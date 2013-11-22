@@ -75,15 +75,14 @@ eyeballApp.factory('tablesort',function($timeout,render,exos) {
     function SortableTable(id,data,$scope,cfg) {
 
         cfg = cfg || {};
+
         var table = this;
         var results = [];
         table.page = 1;
-        table.count = cfg.count || 10;
+        table.count = cfg.count || 50;
         table.pages = [];
-        table.order = {
-            col : '',
-            asc : false
-        };
+        table.order = cfg.order || {};
+
         var headers = null;
 
         function setHeaders(){
@@ -133,15 +132,22 @@ eyeballApp.factory('tablesort',function($timeout,render,exos) {
         };
 
         table.sort = function(col) {
+
             if(table.order.col === col) {
                 table.order.asc = !table.order.asc;
-            } else {
+            } else if (col) {
                 table.order.col = col;
                 table.order.asc = false;
             }
+
+            if(!table.order.col) {
+                setResults();
+                return;
+            }
+
             results.sort(function(a,b) {
-                a = render.accessObject(a,col);
-                b = render.accessObject(b,col);
+                a = render.accessObject(a,table.order.col);
+                b = render.accessObject(b,table.order.col);
                 if(table.order.asc) {
                     if (a < b) {
                         return 1;
@@ -179,7 +185,7 @@ eyeballApp.factory('tablesort',function($timeout,render,exos) {
 
         $scope.$watch(data,function(){
             results = [].concat($scope[data]);
-            setResults();
+            table.sort();
         });
 
     }

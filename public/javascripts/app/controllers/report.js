@@ -12,6 +12,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         $scope.popoverContent = null;
         $scope.fields = [];
         $scope.reportView = persist.get('reportView') || 'table';
+
         $scope.chartOptions = [
             {name : "Date", value : "timestamp"},
             {name : "Build", value : "build"}
@@ -39,7 +40,26 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
             }
         };
 
-        $scope.resultsTable = new tablesort.SortableTable('results','results',$scope);
+        $scope.resultsTable = new tablesort.SortableTable('results','results',$scope,{
+            count : persist.get('resultsTable.count'),
+            order : {
+                col : persist.get('resultsTable.order.col'),
+                asc : persist.get('resultsTable.order.asc')
+            }
+        });
+
+        $scope.$watch("resultsTable.count",function(){
+            console.log("results table count changed");
+            persist.set("resultsCount",$scope.resultsTable.count);
+        });
+        $scope.$watch("resultsTable.order.col",function(){
+            console.log("results table order (col) changed");
+            persist.set("resultsTable.order.col",$scope.resultsTable.order.col);
+        });
+        $scope.$watch("resultsTable.order.asc",function(){
+            console.log("results table order (asc) changed");
+            persist.set("resultsTable.order.asc",$scope.resultsTable.order.asc);
+        });
 
         $scope.$watch('results',function(){
             console.log("results changed");

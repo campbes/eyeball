@@ -6,15 +6,19 @@ mixin filter
                     button.close(type="button",data-dismiss="modal",aria-hidden="true")
                     h4.modal-title Filter report
                 div.modal-body
-                    form(role="form").form-horizontal
-                        div.form-group
+                    form(role="form",name="filterForm").form-horizontal
+                        div.form-group(ng-class="(filterForm.url.$dirty ? (filterForm.url.$invalid ? 'has-error' : 'has-success') : '')")
                             label.col-sm-3.control-label(for="url") URL
                             div.col-sm-9
-                                input#url.form-control(name="url",placeholder="Enter a single (full or partial) URL to filter by",ng-model="filterParams.url")
-                        div.form-group
-                            label.col-sm-3.control-label(for="build") Build
+                                input#url.form-control(name="url",type="url",placeholder="Enter a single URL to filter by",ng-model="filterParams.url")
+                        //div.form-group
+                            label.col-sm-3.control-label(for="urlRegex") URL Regex
                             div.col-sm-9
-                                input#build.form-control(name="build",placeholder="Enter a single or comma-separated list of build IDs",ng-model="filterParams.build")
+                                input#build.form-control(name="regex",placeholder="Enter a partial URL to filter by",ng-model="filterParams.urlRegex")
+                        div.form-group
+                            label.col-sm-3.control-label(for="build") Test ID
+                            div.col-sm-9
+                                input#build.form-control(name="build",placeholder="Enter a single or comma-separated list of Test IDs",ng-model="filterParams.build")
                         div.form-group
                             label.col-sm-3.control-label(for="start") Date
                             div.col-sm-4
@@ -28,7 +32,7 @@ mixin filter
                                 input#tag.form-control(name="tag",placeholder="Enter a tag",ng-model="filterParams.tag")
                         div.form-group
                             div.col-sm-offset-3.col-sm-9
-                                button.btn.btn-primary(type="submit",data-dismiss="modal",ng-click="filter()") Go!
+                                button.btn.btn-primary(type="submit",data-dismiss="modal",ng-click="filter()",ng-disabled="filterForm.$invalid") Go!
 
 mixin charts
     div#chartArea(ng-hide="reportView !== 'chart'")
@@ -54,7 +58,7 @@ mixin reportHeaders
             th
             th(ng-data-sort='url') URL
             th(ng-data-sort='timestamp') Date
-            th(ng-data-sort='build') Build
+            th(ng-data-sort='build') Test ID
             th(ng-data-sort="tag") Tag
             th(class="text-center", ng-data-sort="metrics.{{f.tool}}.grades.{{f.metric}}",ng-repeat='f in fields') {{f.name}}
 
