@@ -4,7 +4,9 @@ mixin filter
             div.modal-content
                 div.modal-header
                     button.close(type="button",data-dismiss="modal",aria-hidden="true")
-                    h4.modal-title Filter report
+                    h4.modal-title
+                        span.glyphicon.glyphicon-filter
+                        |&nbsp;Filter report
                 div.modal-body
                     form(role="form",name="filterForm").form-horizontal
                         div.form-group(ng-class="(filterForm.url.$dirty ? (filterForm.url.$invalid ? 'has-error' : 'has-success') : '')")
@@ -67,11 +69,11 @@ mixin reportFooters
         mixin reportTotals
 
 mixin reportTotals
-    tr.warning(data-sort='false')
+    tr.warning(data-sort='false',ng-if="query.url || query.build || query.start || query.end || query.build || query.tag")
         td
         td
-            a(href='#/report?start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}',ng-if='query.url',title='{{query.url}}') {{query.url.substr(0,20)}}
-                span(ng-if='query.url.length > 20') ...
+            a(href='#/report?start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}',ng-if='query.url',title='Show results for all URLs - currently only showing {{query.url}}') {{query.url.substr(0,40)}}
+                span(ng-if='query.url.length > 40') ...
         td
             a(href='#/report?url={{query.url}}&build={{query.build}}&tag={{query.tag}}',ng-if='query.start && query.end && query.start.substr(0,10) !== query.end.substr(0,10)') {{query.start | date:'d MMM yyyy'}} - {{query.end | date:'d MMM yyyy'}}
             a(href='#/report?url={{query.url}}&build={{query.build}}&tag={{query.tag}}',ng-if='query.start && query.end && query.start.substr(0,10) === query.end.substr(0,10)') {{query.start | date:'d MMM yyyy'}}
@@ -85,6 +87,12 @@ mixin reportTotals
                 span(ng-if='query.tag.length > 10') ...
         td(ng-repeat='f in fields').text-center
             span(class="label label-{{totals[f.tool][f.metric].class}}") {{totals[f.tool][f.metric].message}} ({{totals[f.tool][f.metric].score}}%)
+    tr.warning(data-sort='false',ng-if="!query.url && !query.build && !query.start && !query.end && !query.build && !query.tag")
+        td
+        td(colspan="4").text-muted
+            span.glyphicon.glyphicon-filter
+            |&nbsp;Links in this section filter the results
+        td(ng-repeat='f in fields')
 
 mixin reportLoader
     tr(ng-show="busy")
@@ -94,11 +102,11 @@ mixin reportLoader
 
 mixin reportFields
     td
-        a(href='#/detail/:{{r._id}}')
-            button.btn.btn-default(type='button')
-                span.glyphicon.glyphicon-list-alt
+        a(href='#/detail/:{{r._id}}',title="Show detailed statistics for this result")
+            button.btn.btn-primary(type='button')
+                span.glyphicon.glyphicon-th-list
         td
-            a(href='#/report?url={{r.url}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}') {{r.url}}
+            a(href='#/report?url={{r.url}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}',title="Only show results for {{r.url}}") {{r.url}}
         td
             a(href='#/report?url={{query.url}}&start={{r.timestamp | date:"yyyy-MM-dd"}}&end={{r.timestamp | date:"yyyy-MM-dd"}}&build={{query.build}}&tag={{query.tag}}') {{r.timestamp | date:'d MMM yyyy'}}
         td
