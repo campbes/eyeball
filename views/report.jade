@@ -92,7 +92,8 @@ mixin reportTotals
         td(colspan="4").text-muted
             span.glyphicon.glyphicon-filter
             |&nbsp;Links in this section filter the results
-        td(ng-repeat='f in fields')
+        td(ng-repeat='f in fields').text-center
+            span(class="label label-{{totals[f.tool][f.metric].class}}") {{totals[f.tool][f.metric].message}} ({{totals[f.tool][f.metric].score}}%)
 
 mixin reportLoader
     tr(ng-show="busy")
