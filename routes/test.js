@@ -1,5 +1,4 @@
 var request = require('request');
-var cheerio = require('cheerio');
 
 var grades = (function() {
 
@@ -150,7 +149,7 @@ module.exports = function(req,res) {
         yslow : true, // requires har
         time : true, //requires yslow
         dommonster : true,
-        validator : false
+        validator : true
     };
 
     function commitRecord(record){
@@ -457,7 +456,41 @@ module.exports = function(req,res) {
         }
 
         if(tests.validator) {
-            validate(passes[1].content);
+            //validate(passes[1].content);
+            var fs = require('fs');
+            fs.writeFile('validate.html', passes[1].content,function(error){
+                if(error) {
+                    console.log(error);
+                }
+                var vnu = exec('java -jar -Dnu.validator.client.out=json C:/vnu-fast-client.jar validate.html',
+                    function(err,stdout,stderr) {
+                        if(err) {
+                            console.log("VNU client error: "+err);
+                        }
+                        if(stderr) {
+                            console.log("VNU client error: "+stderr);
+                        }
+
+                        console.log("got validator data");
+                        var errors = 0;
+                        var warnings = 0;
+                        var data = JSON.parse(stdout);
+                        for (var i=data.messages.length-1; i>=0; i--) {
+                            if(data.messages[i].type === "error") {
+                                errors += 1;
+                            }
+                            if(data.messages[i].subtype === "warning") {
+                                warnings += 1;
+                            }
+                        }
+                        data.info = {
+                            errors : errors,
+                            warnings : warnings
+                        };
+                        updateRecord(record,'validator',data);
+                    }
+                );
+            });
         }
     }
 
@@ -572,6 +605,8 @@ module.exports = function(req,res) {
                                     createRecord(passes);
                                     if(urls.length > 0) {
                                         openPage(ph);
+                                    } else {
+                                        ph.exit();
                                     }
                                 }
                             });
@@ -586,6 +621,19 @@ module.exports = function(req,res) {
 
     var phantomMax = 5;
     var activePhantoms = 0;
+
+    var exec = require('child_process').exec;
+    var vnuServer = exec('java -cp C:/vnu.jar nu.validator.servlet.Main 8888',
+        function(err,stdout,stderr) {
+            if(err) {
+                console.log("VNU server error: "+err);
+            }
+            if(stderr) {
+                console.log("VNU server error: "+stderr);
+            }
+            console.log("VNU server started: "+stdout);
+        }
+    );
 
     function startPhantom() {
 
