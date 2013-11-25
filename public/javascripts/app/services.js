@@ -301,6 +301,10 @@ eyeballApp.factory('render',function() {
 
     function format(val,type) {
 
+        if(typeof val === "object") {
+            return "";
+        }
+
         switch(type) {
             case "size" :
                 if(val > 1024) {
@@ -601,7 +605,7 @@ eyeballApp.factory('fieldConfig',function(){
             {tool : 'time', metric : 'lt', name: 'Load time', format : 'time'},
             {tool : 'yslow', metric : 'o', name: 'YSlow'},
             {tool : 'dommonster', metric : 'COMPOSITE_stats', name : 'DomMonster'},
-            {tool : 'validator', metric : 'lt', name: 'Validator'}
+            {tool : 'validator', metric : 'COMPOSITE_info', name: 'Validator'}
         ]
     };
 

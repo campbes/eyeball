@@ -15,6 +15,7 @@ eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http','fie
             $scope.tag = data.tag;
             $scope.fields = fieldConfig.overview;
             $scope.fieldConfig = fieldConfig;
+                console.log(data);
         });
 
 
