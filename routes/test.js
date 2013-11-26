@@ -540,6 +540,11 @@ module.exports = function(req,res) {
                 if(pass === 0){
                     url = urls[0];
                     urls.splice(0,1);
+                    page.customHeaders = {
+                        "Cache-Control" : "no-cache, no-store, must-revalidate",
+                        "Pragma" : "no-cache",
+                        "Expires" : 0
+                    }
                 }
 
                 var webpage = {};
