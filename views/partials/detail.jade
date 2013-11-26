@@ -15,7 +15,8 @@ div.container
                 tr
                     td(ng-repeat="f in fields", class='alert grade{{data.metrics[f.tool].grades[f.metric]}}')
                         span(class='badge') {{data.metrics[f.tool].grades[f.metric]}}
-                        |&nbsp;{{f.name}} ({{format(data.metrics[f.tool].data[f.metric],f.format)}})
+                        |&nbsp;{{f.name}}
+                        span(ng-if="data.metrics[f.tool].data[f.metric]") &nbsp;({{format(data.metrics[f.tool].data[f.metric],f.format)}})
 
     div(ng-repeat="f in fields",class='panel panel-default')
         div(class='panel-heading grade{{data.metrics[f.tool].grades[f.metric]}}')
