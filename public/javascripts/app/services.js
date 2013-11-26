@@ -526,7 +526,7 @@ eyeballApp.factory('chart', ['render', function(render){
             /*tooltip : {
                 trigger: 'none'
             } ,*/
-            lineWidth : 4,
+            lineWidth : 2,
             focusTarget : 'category'
         };
 
