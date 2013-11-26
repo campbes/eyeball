@@ -377,7 +377,7 @@ module.exports = function(req,res) {
             if(error) {
                 console.log(error);
             }
-            var vnu = exec('java -jar -Dnu.validator.client.out=json C:/vnu-fast-client.jar validate.html',
+            var vnu = exec('java -jar -Dnu.validator.client.out=json -Dfile.encoding=UTF8 C:/vnu-fast-client.jar validate.html',
                 function(err,stdout,stderr) {
                     if(err && !stdout) {
                         console.log("VNU client error: "+err);
