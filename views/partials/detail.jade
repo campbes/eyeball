@@ -54,10 +54,10 @@ div.container
                                 strong {{i.string}}
                                 p {{i.hint}}
                     table.table.table-striped(ng-if="f.tool === 'validator'")
-                        tr(ng-repeat='i in data.metrics.validator.data.messages',ng-if='i.type!=="info"')
+                        tr(ng-repeat='i in data.metrics.validator.data.messages',ng-if='i.type==="error" || i.subType === "warning"')
                             td
                                 span(class='label label-danger',ng-if='i.type==="error"') Error
-                                span(class='label label-warning',ng-if='i.type==="warning"') Warning
+                                span(class='label label-warning',ng-if='i.subType==="warning"') Warning
                             td
                                 strong {{i.lastLine}}:{{i.lastColumn}} {{i.message}}
                                 //p {{i.explanation}}

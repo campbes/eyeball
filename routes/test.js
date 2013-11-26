@@ -141,8 +141,9 @@ module.exports = function(req,res) {
 
     var YSLOW = require('yslow').YSLOW;
     var jsdom = require('jsdom');
-
     var phantom = require('node-phantom');
+    var fs = require('fs');
+    var exec = require('child_process').exec;
 
     var tests = {
         har : true,
@@ -370,6 +371,49 @@ module.exports = function(req,res) {
         return cachedHar;
     }
 
+    function validate(data,callback) {
+        var htmlFile = (new Date()).getTime().toString() + (Math.random()*10).toString() + '.html';
+        fs.writeFile(htmlFile,data,function(error){
+            if(error) {
+                console.log(error);
+            }
+            var vnu = exec('java -jar -Dnu.validator.client.out=json C:/vnu-fast-client.jar validate.html',
+                function(err,stdout,stderr) {
+                    if(err && !stdout) {
+                        console.log("VNU client error: "+err);
+                        console.log("VNU client error: "+err.code);
+                    }
+                    if(stderr) {
+                        console.log("VNU client error: "+stderr);
+                    }
+
+                    console.log("got validator data");
+                    var errors = 0;
+                    var warnings = 0;
+                    var val = JSON.parse(stdout);
+                    vnu.kill();
+                    fs.unlink(htmlFile,function(){
+                        console.log("Deleting validator file");
+                    });
+
+                    for (var i=val.messages.length-1; i>=0; i--) {
+                        if(val.messages[i].type === "error") {
+                            errors += 1;
+                        }
+                        if(val.messages[i].subType === "warning") {
+                            warnings += 1;
+                        }
+                    }
+                    val.info = {
+                        errors : errors,
+                        warnings : warnings
+                    };
+                    callback(val);
+                }
+            );
+        });
+    }
+
     function createRecord(passes) {
 
         var record = {
@@ -417,79 +461,9 @@ module.exports = function(req,res) {
             updateRecord(record,'dommonster',dm);
         }
 
-        function validate(html) {
-            var requestW3c = request.defaults({'proxy':'http://cache2.practicallaw.com:8080'});
-            //var requestW3c = request.defaults({});
-            requestW3c.post({
-                url : 'http://validator.w3.org/check',
-                form:{
-                    fragment : html,
-                    output : 'json'
-                },
-                headers : {
-                    'User-Agent': 'Eyeball'
-                }
-            },function(err,response,body) {
-                if(err) {
-                    console.log(err);
-                }
-                if (!err && response.statusCode == 200) {
-                    console.log("got validator data");
-                    var errors = 0;
-                    var warnings = 0;
-                    var data = JSON.parse(body);
-                    for (var i=data.messages.length-1; i>=0; i--) {
-                        if(data.messages[i].type === "error") {
-                            errors += 1;
-                        }
-                        if(data.messages[i].subtype === "warning") {
-                            warnings += 1;
-                        }
-                    }
-                    data.info = {
-                        errors : errors,
-                        warnings : warnings
-                    };
-                    updateRecord(record,'validator',data);
-                }
-            });
-        }
-
         if(tests.validator) {
-            //validate(passes[1].content);
-            var fs = require('fs');
-            fs.writeFile('validate.html', passes[1].content,function(error){
-                if(error) {
-                    console.log(error);
-                }
-                var vnu = exec('java -jar -Dnu.validator.client.out=json C:/vnu-fast-client.jar validate.html',
-                    function(err,stdout,stderr) {
-                        if(err) {
-                            console.log("VNU client error: "+err);
-                        }
-                        if(stderr) {
-                            console.log("VNU client error: "+stderr);
-                        }
-
-                        console.log("got validator data");
-                        var errors = 0;
-                        var warnings = 0;
-                        var data = JSON.parse(stdout);
-                        for (var i=data.messages.length-1; i>=0; i--) {
-                            if(data.messages[i].type === "error") {
-                                errors += 1;
-                            }
-                            if(data.messages[i].subtype === "warning") {
-                                warnings += 1;
-                            }
-                        }
-                        data.info = {
-                            errors : errors,
-                            warnings : warnings
-                        };
-                        updateRecord(record,'validator',data);
-                    }
-                );
+            validate(passes[1].content,function(val){
+                updateRecord(record,'validator',val);
             });
         }
     }
@@ -621,19 +595,6 @@ module.exports = function(req,res) {
 
     var phantomMax = 5;
     var activePhantoms = 0;
-
-    var exec = require('child_process').exec;
-    var vnuServer = exec('java -cp C:/vnu.jar nu.validator.servlet.Main 8888',
-        function(err,stdout,stderr) {
-            if(err) {
-                console.log("VNU server error: "+err);
-            }
-            if(stderr) {
-                console.log("VNU server error: "+stderr);
-            }
-            console.log("VNU server started: "+stdout);
-        }
-    );
 
     function startPhantom() {
 
