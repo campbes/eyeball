@@ -70,7 +70,7 @@ eyeballApp.factory('exos',function() {
 
 });
 
-eyeballApp.factory('tablesort',function($timeout,render,exos) {
+eyeballApp.factory('tablesort',function($timeout,render,exos,$filter) {
 
     function SortableTable(id,data,$scope,cfg) {
 
@@ -78,10 +78,12 @@ eyeballApp.factory('tablesort',function($timeout,render,exos) {
 
         var table = this;
         var results = [];
+        var resultsFiltered = [];
         table.page = 1;
         table.count = cfg.count || 50;
         table.pages = [];
         table.order = cfg.order || {};
+        table.filter = cfg.filter || {};
 
         var headers = null;
 
@@ -95,11 +97,12 @@ eyeballApp.factory('tablesort',function($timeout,render,exos) {
         }
 
         function setResults() {
-            var pageLength = Math.ceil(results.length/table.count);
+            resultsFiltered = $filter('filter')(results,table.filter);
+            var pageLength = Math.ceil(resultsFiltered.length/table.count);
             if(table.page > pageLength && pageLength > 0) {
                 table.page = pageLength;
             }
-            table.results = results.slice((table.page-1)*table.count,table.page*table.count);
+            table.results = resultsFiltered.slice((table.page-1)*table.count,table.page*table.count);
             table.pages = [];
             for(var i=0;i<pageLength;i++) {
                 table.pages.push(i+1);
@@ -167,6 +170,8 @@ eyeballApp.factory('tablesort',function($timeout,render,exos) {
             setResults();
         };
 
+        table.setResults = setResults;
+
         $timeout(function(){
             var el = $("#"+id);
             headers = $("th[ng-data-sort]",el);
@@ -187,6 +192,12 @@ eyeballApp.factory('tablesort',function($timeout,render,exos) {
             results = [].concat($scope[data]);
             table.sort();
         });
+
+        table.setFilter = function() {
+            console.log(table.filter);
+
+            setResults();
+        }
 
     }
 

@@ -72,7 +72,17 @@ mixin reportTotals
     tr.warning(data-sort='false')
         td
         td
-            a(href='#/report?start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}',ng-if='query.url',title='Remove filter ({{r.url}})')
+            div.input-group
+                div.input-group-btn
+                    button.btn.btn-default.dropdown-toggle(type="button",data-toggle="dropdown")
+                        span.glyphicon.glyphicon-filter
+                        span.caret
+                    ul.dropdown-menu(role="menu")
+                        li
+                            a Stuff
+                input.form-control(type="text",ng-model="resultsTable.filter.url",ng-change="resultsTable.setFilter()")
+
+            //a(href='#/report?start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}',ng-if='query.url',title='Remove filter ({{r.url}})')
                 span.glyphicon.glyphicon-remove
                 |&nbsp;{{query.url.substr(0,40)}}
                 span(ng-if='query.url.length > 40') ...
