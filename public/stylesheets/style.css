@@ -19,6 +19,11 @@ table.keyinfo {
 table.keyinfo td {
     width: 5%;
 }
+td[data-type='grades'] a {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
 .detail tr>td:first-of-type {
     width: 20px;
 }
