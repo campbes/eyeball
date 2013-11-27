@@ -114,7 +114,7 @@ mixin reportFields
             button.btn.btn-default(type='button')
                 span.glyphicon.glyphicon-eye-open
     td
-        a(href='#/report?url={{r.url}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}',title="Only show results for {{r.url}}") {{r.url}}
+        a(href='#/report?url={{encodeQuery(r.url)}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}',title="Only show results for {{r.url}}") {{r.url}}
     td
         a(href='#/report?url={{query.url}}&start={{r.timestamp | date:"yyyy-MM-dd"}}&end={{r.timestamp | date:"yyyy-MM-dd"}}&build={{query.build}}&tag={{query.tag}}') {{r.timestamp | date:'d MMM yyyy'}}
     td

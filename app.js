@@ -2,6 +2,12 @@
 /**
  * Module dependencies.
  */
+
+require('nodetime').profile({
+    accountKey: '12ebb2588385344195a18a6b67657081112052e8',
+    appName: 'Node.js Application'
+});
+
 var package = require('./package.json');
 
 var express = require('express');
@@ -51,13 +57,26 @@ var partials = function(req,res) {
 
 app.get('/partials/*',partials);
 
-DB = require("mongojs").connect("mongodb://eyeball:eyeball@ds047958.mongolab.com:47958/eyeball", ["urls"])["urls"];
-//DB = require("mongojs").connect("eyeball", ["urls"])["urls"];
+//DB = require("mongojs").connect("mongodb://eyeball:eyeball@ds047958.mongolab.com:47958/eyeball", ["urls"])["urls"];
+DB = require("mongojs").connect("eyeball", ["urls"])["urls"];
 
 var server = http.createServer(app);
 server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+var exec = require('child_process').exec;
+exec('java -cp C:/vnu.jar nu.validator.servlet.Main 8888',
+    function(err,stdout,stderr) {
+        if(err) {
+            console.log("VNU server error: "+err);
+        }
+        if(stderr) {
+            console.log("VNU server error: "+stderr);
+        }
+        console.log("VNU server started: "+stdout);
+    }
+);
 
 eyeball = {
     io : socket.listen(server)

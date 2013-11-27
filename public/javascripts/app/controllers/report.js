@@ -136,6 +136,10 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
 
         exos.popover(popover);
 
+        $scope.encodeQuery = function(val) {
+            return encodeURIComponent(val);
+        }
+
     }
 ]);
 
