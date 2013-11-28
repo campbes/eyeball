@@ -1,4 +1,11 @@
 mixin detailNav(tab)
+    ol.breadcrumb
+        li
+            a(href="#/report") Eyeball
+        li
+            a(href="#/report?{{reportFilter}}") Report
+        li.active {{id}}
+
     ul.nav.nav-tabs
         li(class='#{(tab === "detail" ? "active" : "")}')
             a(href='#/detail/:{{id}}') Detail
@@ -6,9 +13,7 @@ mixin detailNav(tab)
             a(href='#/har/:{{id}}') HAR analysis
         li(class='#{(tab === "history" ? "active" : "")}')
             a(href='#/history/:{{id}}') History
-        a(href="#/report?{{reportFilter}}").btn.btn-default
-            span.glyphicon.glyphicon-list
-            |&nbsp;Return to report
+
     div.well.well-sm
             p
                 a(href="{{url}}",target="_blank").h4 {{url}}

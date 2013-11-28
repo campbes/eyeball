@@ -10,13 +10,16 @@ html(ng-app='eyeballApp',lang='en')
     body
         div.navbar.navbar-default.navbar-fixed-top(role="navigation")
             a.navbar-brand(href='#') Eyeball
-            button.btn.btn-primary.navbar-btn(type="button" data-toggle="modal" data-target="#modalTest")
-                span.glyphicon.glyphicon-cog
-                |&nbsp;Test
-            |&nbsp;
-            button.btn.btn-default.navbar-btn(type="button" data-toggle="modal" data-target="#modalFilter")
-                span.glyphicon.glyphicon-filter
-                |&nbsp;Filter
+            ul.nav.navbar-nav
+                li
+                    button.btn.btn-primary.navbar-btn(type="button" data-toggle="modal" data-target="#modalTest")
+                        span.glyphicon.glyphicon-cog
+                        |&nbsp;Test
+                    |&nbsp;
+            ul.nav.navbar-nav.navbar-right
+                li
+                    a Monitor
+
 
         div(ng-view)
             block content

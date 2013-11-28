@@ -49,7 +49,10 @@ mixin charts
                 div(id="{{ch.tool}}{{ch.metric}}Chart").pivotChart
 
 mixin reportView
-    div.btn-group(data-toggle="buttons")
+    div.btn-group.pull-right(data-toggle="buttons")
+        button.btn.btn-default(type="button" data-toggle="modal" data-target="#modalFilter")
+            span.glyphicon.glyphicon-filter
+            |&nbsp;Filter
         label(class="btn btn-primary{{(reportView === 'table' ? ' active' : '')}}",ng-click="setReportView('table')")
             input(type="radio")
             |Report view
@@ -142,6 +145,10 @@ mixin reportFields
         span(ng-if='r.tag.length > 10') ...
 
 mixin tabs(report)
+    ol.breadcrumb
+        li
+            a(href="#/report") Eyeball
+        li.active Report
     ul.nav.nav-tabs
         li(class="#{report === 'overview' ? 'active' : ''}")
             a(href='#/report?url={{query.url}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}') Overview
