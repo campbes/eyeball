@@ -141,6 +141,7 @@ module.exports = function(req,res) {
 
     var YSLOW = require('yslow').YSLOW;
     var jsdom = require('jsdom');
+    var phantomjs = require('phantomjs');
     var phantom = require('node-phantom');
     var fs = require('fs');
     var exec = require('child_process').exec;
@@ -377,7 +378,7 @@ module.exports = function(req,res) {
             if(error) {
                 console.log(error);
             }
-            var vnu = exec('java -jar -Dnu.validator.client.out=json -Dfile.encoding=UTF8 C:/vnu-fast-client.jar validate.html',
+            var vnu = exec('java -jar -Dnu.validator.client.out=json -Dfile.encoding=UTF8 lib/vnu-fast-client.jar validate.html',
                 function(err,stdout,stderr) {
                     if(err && !stdout) {
                         console.log("VNU client error: "+err);
@@ -639,7 +640,7 @@ module.exports = function(req,res) {
                 startPhantom();
             }
         }, {
-            phantomPath : 'C:/phantomjs-1.9.2-windows/phantomjs-1.9.2-windows/phantomjs'
+            phantomPath : phantomjs.path
         });
     }
 

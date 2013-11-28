@@ -1,6 +1,6 @@
 mixin test
     div(ng-controller='TestCtrl')
-        div.panel.panel-default.ng-hide(ng-show="testInfo.testing")
+        div(class="panel {{(testInfo.progress === 100 ? ' panel-success' : ' panel-default')}}",ng-show="testInfo.testing")
             div.panel-heading
                 img(src="/images/ajax-loader.gif",ng-show='(testInfo.progress < 100)')
                 |&nbsp;{{testInfo.message}}

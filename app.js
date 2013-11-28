@@ -3,10 +3,10 @@
  * Module dependencies.
  */
 
-require('nodetime').profile({
+/*require('nodetime').profile({
     accountKey: '12ebb2588385344195a18a6b67657081112052e8',
     appName: 'Node.js Application'
-});
+});*/
 
 var package = require('./package.json');
 
@@ -66,7 +66,7 @@ server.listen(app.get('port'), function(){
 });
 
 var exec = require('child_process').exec;
-exec('java -cp C:/vnu.jar nu.validator.servlet.Main 8888',
+exec('java -cp lib/vnu.jar nu.validator.servlet.Main 8888',
     function(err,stdout,stderr) {
         if(err) {
             console.log("VNU server error: "+err);
