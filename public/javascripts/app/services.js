@@ -406,7 +406,7 @@ eyeballApp.factory('chart', ['render', function(render){
         function drawChart(results,xAxis,tool,metric) {
 
             results = getPivotData(results,tool,metric,xAxis);
-
+           console.log(results)
             var data = new google.visualization.arrayToDataTable(
                 results
             );
@@ -437,7 +437,7 @@ eyeballApp.factory('chart', ['render', function(render){
                 getColumn('F',6)
             ]);
 
-            var container = tool + "Chart";
+            var container = tool + metric +"Chart";
 
             var el = document.getElementById(container);
 

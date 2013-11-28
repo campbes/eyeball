@@ -46,7 +46,7 @@ mixin charts
                 |&nbsp;
                 select(ng-model="ch.xAxis",ng-options="c.name for c in chartOptions")
             div.panel-body
-                div(id="{{ch.tool}}Chart").pivotChart
+                div(id="{{ch.tool}}{{ch.metric}}Chart").pivotChart
 
 mixin reportView
     div.btn-group(data-toggle="buttons")
@@ -136,7 +136,7 @@ mixin reportFields
         |&nbsp;{{r.build.substr(0,10)}}
         span(ng-if='r.build.length > 10') ...
     td(title='{{r.tag}}')
-        a(href='#/report?url={{query.url}}&urlExact={{query.urlExact}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{r.tag}}',ng-if="{{r.tag}}")
+        a(href='#/report?url={{query.url}}&urlExact={{query.urlExact}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{r.tag}}',ng-show="{{r.tag}}")
             span.glyphicon.glyphicon-filter
         |&nbsp;{{r.tag.substr(0,10)}}
         span(ng-if='r.tag.length > 10') ...
