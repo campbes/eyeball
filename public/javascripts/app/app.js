@@ -30,6 +30,9 @@ eyeballApp.config(['$routeProvider',
             }).when('/history/:id', {
                 templateUrl: '/partials/history',
                 controller : 'HistoryCtrl'
+            }).when('/monitor', {
+                templateUrl: '/partials/monitor',
+                controller : 'MonitorCtrl'
             }).otherwise({
                   redirectTo: '/report'
             });

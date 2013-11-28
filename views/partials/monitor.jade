@@ -1,0 +1,12 @@
+include ../test
+
+mixin test
+
+div.container
+    div.panel.panel-default
+        div.panel-heading Database
+        div.panel-body
+            table.table.table-striped.table-condensed
+                tr(ng-repeat="(key,val) in data")
+                    td {{key}}
+                    td {{val}}

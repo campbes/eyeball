@@ -16,6 +16,7 @@ var user = require('./routes/user');
 var test = require('./routes/test');
 var detail = require('./routes/detail');
 var history = require('./routes/history');
+var monitor = require('./routes/monitor');
 var report = require('./routes/report');
 var http = require('http');
 var path = require('path');
@@ -50,6 +51,7 @@ app.get('/report/dommonster',report.dommonster);
 app.get('/report/validator',report.validator);
 app.get('/detail', detail);
 app.get('/history', history);
+app.get('/monitor', monitor);
 
 var partials = function(req,res) {
     res.render('partials/'+req.params[0]);
