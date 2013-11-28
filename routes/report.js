@@ -48,13 +48,11 @@ function getDbQuery(req) {
         };
     }
 
-    if(queryString.url) {
-        dbQuery.url = queryString.url
-    }
-
-    if(queryString.urlRegex) {
+    if(queryString.urlExact && queryString.url) {
+        dbQuery.url = queryString.url;
+    } else if (queryString.url) {
         dbQuery.url = {
-            $regex : queryString.urlRegex
+            $regex : queryString.url
         };
     }
 

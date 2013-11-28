@@ -11,8 +11,11 @@ mixin filter
                     form(role="form",name="filterForm").form-horizontal
                         div.form-group(ng-class="(filterForm.url.$dirty ? (filterForm.url.$invalid ? 'has-error' : 'has-success') : '')")
                             label.col-sm-3.control-label(for="url") URL
-                            div.col-sm-9
-                                input#url.form-control(name="url",type="url",placeholder="Enter a single URL to filter by",ng-model="filterParams.url")
+                            div.col-sm-9.input-group
+                                input#url.form-control(name="url",type="text",placeholder="Enter a single (full or partial) URL to filter by",ng-model="filterParams.url")
+                                span.input-group-addon
+                                    input(type="checkbox",ng-model="filterParams.urlExact",ng-checked="query.urlExact",title="Exact match",ng-false-value="",ng-true-value="true")
+
                         //div.form-group
                             label.col-sm-3.control-label(for="urlRegex") URL Regex
                             div.col-sm-9
@@ -57,7 +60,6 @@ mixin reportView
 mixin reportHeaders
     thead
         tr
-            th
             th(ng-data-sort='url') URL
             th(ng-data-sort='timestamp') Date
             th(ng-data-sort='build') Test ID
@@ -71,16 +73,18 @@ mixin reportFooters
 mixin reportTotals
     tr.warning(data-sort='false')
         td
-        td
-            div.input-group
-                div.input-group-btn
-                    button.btn.btn-default.dropdown-toggle(type="button",data-toggle="dropdown")
-                        span.glyphicon.glyphicon-filter
-                        span.caret
-                    ul.dropdown-menu(role="menu")
-                        li
-                            a Stuff
-                input.form-control(type="text",ng-model="resultsTable.filter.url",ng-change="resultsTable.setFilter()")
+            form(role="form")
+                div.input-group.input-group-sm
+                    span.input-group-addon(ng-if="query.url")
+                        a(href='#/report?start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}',title='Remove filter ({{r.url}})')
+                            span.glyphicon.glyphicon-remove
+                    input.form-control(type="text",ng-model="filterParams.url")
+                    span.input-group-addon(title="Exact match")
+                        input(type="checkbox",ng-model="filterParams.urlExact",ng-checked="query.urlExact",ng-false-value="",ng-true-value="true")
+                    span.input-group-btn
+                        button.btn.btn-default.btn-sm(ng-click="filter()",type="submit",title="Filter")
+                            span.glyphicon.glyphicon-filter
+
 
             //a(href='#/report?start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}',ng-if='query.url',title='Remove filter ({{r.url}})')
                 span.glyphicon.glyphicon-remove
@@ -120,11 +124,8 @@ mixin reportLoader
 
 mixin reportFields
     td
-        a(href='#/detail/:{{r._id}}',title="Show detailed statistics for this result")
-            button.btn.btn-default(type='button')
-                span.glyphicon.glyphicon-eye-open
-    td
-        a(href='#/report?url={{encodeQuery(r.url)}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}',title="Only show results for {{r.url}}") {{r.url}}
+        //a(href='#/report?url={{encodeQuery(r.url)}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}',title="Only show results for {{r.url}}") {{r.url}}
+        a(href="#/detail/:{{r._id}}",title="View full details for this result") {{r.url}}
     td
         a(href='#/report?url={{query.url}}&start={{r.timestamp | date:"yyyy-MM-dd"}}&end={{r.timestamp | date:"yyyy-MM-dd"}}&build={{query.build}}&tag={{query.tag}}') {{r.timestamp | date:'d MMM yyyy'}}
     td
