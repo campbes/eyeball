@@ -1,15 +1,13 @@
 body {
     padding-top: 70px;
+    font-size: 9pt;
 }
-
-td {
-    max-width: 300px;
+table#results td,th {
+    white-space: nowrap;
+}
+table#results td:first-child {
+    white-space: normal;
     word-wrap: break-word;
-}
-td>a {
-    /*display : inline-block;
-    width: 100%;
-    height: 100%;*/
 }
 table.keyinfo {
     width: 100%;
@@ -19,6 +17,7 @@ table.keyinfo {
 table.keyinfo td {
     width: 5%;
 }
+
 td[data-type='grades'] a {
     display: inline-block;
     width: 100%;

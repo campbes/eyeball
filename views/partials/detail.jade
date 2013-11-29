@@ -32,8 +32,15 @@ div.container
                             td  {{m.name}}
                             td  {{format(getVal(data.metrics[f.tool].data,m.metric),m.format)}}
                 div.col-md-8
-                    div(ng-if="f.tool === 'time'")
-                        Some explanatory stuff about the timings
+                    table.table.table-striped(ng-if="f.tool === 'time'")
+                        tr(ng-repeat="m in fieldConfig[f.tool]")
+                            td
+                                span(class='badge grade{{getVal(data.metrics[f.tool].grades,m.metric)}}') {{getVal(data.metrics[f.tool].grades,m.metric)}}
+                            td
+                                strong {{m.name}} - {{getInfo(data.metrics[f.tool].grades,m.metric).info}}
+                                p {{getInfo(data.metrics[f.tool].grades,m.metric).message}}
+
+
                     table.table.table-striped(ng-if="f.tool === 'yslow'")
                         tr(ng-repeat='i in data.metrics.yslow.data.g',ng-if='i.score < 100')
                             td

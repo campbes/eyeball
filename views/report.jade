@@ -67,7 +67,7 @@ mixin reportHeaders
             th(ng-data-sort='timestamp') Date
             th(ng-data-sort='build') Test ID
             th(ng-data-sort="tag") Tag
-            th(class="text-center", ng-data-sort="metrics.{{f.tool}}.grades.{{f.metric}}",ng-repeat='f in fields') {{f.name}}
+            th(class="text-center", ng-data-sort="metrics.{{f.tool}}.grades.{{f.metric}}",ng-repeat='f in fields',title="{{f.name}}") {{f.label || f.name}}
 
 mixin reportFooters
     tfoot

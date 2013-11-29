@@ -16,8 +16,7 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                 tr(ng-repeat='r in resultsTable.results')
                     mixin reportFields
                     td(ng-repeat='f in fields',class='text-center grade{{getVal(r.metrics[f.tool].grades,f.metric)}}',data-type='grades',data-value='{{getVal(r.metrics[f.tool].grades,f.metric)}}',ng-mouseenter='setPopoverContent({metrics:r.metrics[f.tool],tool:[f.tool]})',ng-mouseleave='setPopoverContent()')
-                        a(href='#/detail/:{{r._id}}',title="Show detailed statistics for this result")
-                             span.badge {{getVal(r.metrics[f.tool].grades,f.metric)}}
+                         span.badge {{getVal(r.metrics[f.tool].grades,f.metric)}}
             mixin reportFooters
         mixin reportPager
 
