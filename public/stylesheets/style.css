@@ -24,6 +24,14 @@ td[data-type='grades'] a {
     width: 100%;
     height: 100%;
 }
+div.logo {
+    display: inline-block;
+    width: 53px;
+    height: 50px;
+    background: url("../images/eyeballSmall.png") no-repeat 0 2px;
+    float: left;
+    margin: 0 -5px 0 10px;
+}
 .detail tr>td:first-of-type {
     width: 20px;
 }
