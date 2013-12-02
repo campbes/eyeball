@@ -164,8 +164,8 @@ module.exports = function(req,res) {
                 console.log(err);
             }
             committedRecords = committedRecords + 1;
-            console.log("Emitting...");
-            eyeball.io.sockets.emit('commitRecord_'+build,{
+            console.log("Emitting..."+build);
+            eyeball.io.sockets.volatile.emit('commitRecord_'+build,{
                 committed : committedRecords,
                 total : urlsLength,
                 progress : Math.floor((committedRecords/urlsLength) * 100),

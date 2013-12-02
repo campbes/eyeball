@@ -14,7 +14,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
 
         $scope.chartOptions = [
             {name : "Date", value : "timestamp"},
-            {name : "Build", value : "build"}
+            {name : "Test ID", value : "build"}
         ];
         $scope.charts = [];
         for(var i in $scope.query) {
@@ -63,6 +63,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         $scope.$watch('results',function(){
             console.log("results changed");
             updateTotals();
+            setupCharts();
         });
 
         function setupChart(i) {
@@ -97,8 +98,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
             $scope.results = $scope.results.concat([result]);
         };
 
-        $scope.setFields = function(fields) {
-            $scope.fields = fields;
+        function setupCharts() {
             for(var i=0; i<$scope.fields.length; i++) {
                 $scope.charts[i] = {
                     tool : $scope.fields[i].tool,
@@ -108,6 +108,11 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
                 };
                 setupChart(i);
             }
+        }
+
+        $scope.setFields = function(fields) {
+            $scope.fields = fields;
+            setupCharts();
         };
 
         $scope.setPopoverContent = function(data) {

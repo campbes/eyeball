@@ -2,6 +2,8 @@ eyeballApp.factory('socket', function ($rootScope) {
 
     function connection() {
         var socket = io.connect();
+        socket.socket.reconnect();
+
         return {
             on: function (eventName, callback) {
                 socket.on(eventName, function () {
@@ -460,8 +462,18 @@ eyeballApp.factory('chart', ['render', function(render){
 
         function drawChart(results,xAxis,tool,metric) {
 
+            function sortByDate(a,b) {
+                if (a.timestamp < b.timestamp)
+                    return -1;
+                if (a.timestamp > b.timestamp)
+                    return 1;
+                return 0;
+            }
+
+            results.sort(sortByDate);
+
             results = getPivotData(results,tool,metric,xAxis);
-           console.log(results)
+
             var data = new google.visualization.arrayToDataTable(
                 results
             );

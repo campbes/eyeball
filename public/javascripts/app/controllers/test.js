@@ -16,8 +16,15 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','persist'
             build : $scope.testCriteria.build
         });
 
+        var conn = null;
+
         if(testInfo.testing === true) {
-            var conn = socket();
+            if (conn) {
+                console.log("old connection left over - killing");
+                conn.disconnect();
+                conn = null;
+            }
+            conn = socket();
             conn.on("commitRecord_"+testInfo.build,function(data) {
                 console.log("listened");
                 $scope.testInfo.progress = data.progress;
