@@ -8,6 +8,8 @@ table#results td,th {
 table#results td:first-child {
     white-space: normal;
     word-wrap: break-word;
+    word-break: break-all;
+    min-width: 300px;
 }
 table.keyinfo {
     width: 100%;

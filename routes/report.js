@@ -78,13 +78,16 @@ exports.overview = function(req,res) {
         "metrics.yslow.grades" : 1,
         "metrics.dommonster.grades" : 1,
         "metrics.validator.grades" : 1
-        },function(err,results) {
+        },{
+            limit : 1000
+        }).sort({timestamp : -1},
+        function(err,results) {
             if(err) {
                 res.send(err);
             }
             //console.log(results.length);
             res.send(JSON.stringify(results));
-    });
+        });
 
 };
 
@@ -98,7 +101,10 @@ exports.yslow = function(req,res) {
         build : 1,
         tag : 1,
         "metrics.yslow" : 1
-    },function(err,results) {
+    },{
+        limit : 1000
+    }).sort({timestamp : -1},
+        function(err,results) {
         if(err) {
             res.send(err);
         }
@@ -116,7 +122,10 @@ exports.time = function(req,res) {
         build : 1,
         tag : 1,
         "metrics.time" : 1
-    },function(err,results) {
+    },{
+        limit : 1000
+    }).sort({timestamp : -1},
+        function(err,results) {
         if(err) {
             res.send(err);
         }
@@ -133,7 +142,10 @@ exports.dommonster = function(req,res) {
         build : 1,
         tag : 1,
         "metrics.dommonster" : 1
-    },function(err,results) {
+    },{
+        limit : 1000
+    }).sort({timestamp : -1},
+        function(err,results) {
         if(err) {
             res.send(err);
         }
@@ -150,7 +162,10 @@ exports.validator = function(req,res) {
         build : 1,
         tag : 1,
         "metrics.validator" : 1
-    },function(err,results) {
+    },{
+        limit : 1000
+    }).sort({timestamp : -1},
+        function(err,results) {
         if(err) {
             res.send(err);
         }
