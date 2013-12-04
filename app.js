@@ -80,8 +80,18 @@ exec('java -cp lib/vnu.jar nu.validator.servlet.Main 8888',
     }
 );
 
+var winston = require('winston');
+winston.add(winston.transports.File,
+    {
+        filename : 'eyeball.log',
+        maxsize : 10485760
+    }
+);
+
 eyeball = {
-    io : socket.listen(server)
+    io : socket.listen(server),
+    logger : winston,
+    handleExceptions : true
 };
 
 app.locals = {
