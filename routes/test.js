@@ -384,78 +384,95 @@ module.exports = function(req,res) {
     }
 
     var activeVnus = [];
+    var maxVnus = 1;
     var validatorFiles = [];
+
+
+    function runValidator() {
+
+        if(activeVnus.length === maxVnus || validatorFiles.length === 0) {
+            return;
+        }
+
+        var item = validatorFiles.splice(0,1)[0];
+        var htmlFile = item.file;
+        var callback = item.cb;
+        var vnuData = "";
+        var vnu = require('child_process').spawn('java',['-jar','-Dnu.validator.client.out=json','-Dfile.encoding=UTF8','lib/vnu-fast-client.jar',htmlFile]);
+        activeVnus.push(vnu);
+        console.log("Active VNUs: "+activeVnus[0])
+
+        setTimeout(function(){
+            vnu.kill();
+        },5000);
+
+        vnu.stdout.on('data',function(data) {
+            vnuData += data;
+        });
+
+        vnu.stdout.on('end',function(code) {
+            var errors = 0;
+            var warnings = 0;
+
+            try {
+                var val = JSON.parse(vnuData);
+            } catch (e) {
+                eyeball.logger.error("Invalid VNU response: "+e);
+                return;
+            }
+
+            for (var i=val.messages.length-1; i>=0; i--) {
+                if(val.messages[i].type === "error") {
+                    errors += 1;
+                }
+                if(val.messages[i].subType === "warning") {
+                    warnings += 1;
+                }
+            }
+            val.info = {
+                errors : errors,
+                warnings : warnings
+            };
+
+            callback(val);
+
+        });
+
+        vnu.stderr.on('data', function (err) {
+            eyeball.logger.error('vnu client error: ' + err);
+        });
+
+        vnu.on('close', function (code) {
+            eyeball.logger.info('vnu child process closed ' + code);
+            fs.unlink(htmlFile,function(err){
+                if(err) {
+                    console.log("error deleting validator file: "+err);
+                }
+                eyeball.logger.info("Deleting validator file");
+            });
+            for(var i=activeVnus.length-1; i>=0; i--) {
+                if(activeVnus[i] === vnu) {
+                    activeVnus.splice(i,1);
+                }
+            }
+
+            if(validatorFiles.length > 0) {
+                runValidator();
+            }
+
+        });
+
+    }
+
 
     function validate(data,callback) {
         var htmlFile = (new Date()).getTime().toString() + (Math.random()*10).toString() + '.html';
-        validatorFiles.push(htmlFile);
         fs.writeFile(htmlFile,data,function(error){
             if(error) {
                 eyeball.logger.info(error);
             }
-
-            var vnuData = "";
-
-            var vnu = require('child_process').spawn('java',['-jar','-Dnu.validator.client.out=json','-Dfile.encoding=UTF8','lib/vnu-fast-client.jar',htmlFile]);
-            activeVnus.push(vnu);
-            console.log("Active VNUs: "+activeVnus[0])
-
-            vnu.stdout.on('data',function(data) {
-                vnuData += data;
-            });
-
-            vnu.stdout.on('end',function(code) {
-                var errors = 0;
-                var warnings = 0;
-
-                try {
-                    var val = JSON.parse(vnuData);
-                } catch (e) {
-                    eyeball.logger.error("Invalid VNU response: "+e);
-                    return;
-                }
-
-                for (var i=val.messages.length-1; i>=0; i--) {
-                    if(val.messages[i].type === "error") {
-                        errors += 1;
-                    }
-                    if(val.messages[i].subType === "warning") {
-                        warnings += 1;
-                    }
-                }
-                val.info = {
-                    errors : errors,
-                    warnings : warnings
-                };
-
-                callback(val);
-
-            });
-
-            vnu.stderr.on('data', function (err) {
-                eyeball.logger.error('vnu client error: ' + err);
-            });
-
-            vnu.on('close', function (code) {
-                eyeball.logger.info('vnu child process closed ' + code);
-                fs.unlink(htmlFile,function(err){
-                    if(err) {
-                        console.log("error deleting validator file: "+err);
-                    }
-                    eyeball.logger.info("Deleting validator file");
-                });
-                for(var i=activeVnus.length-1; i>=0; i--) {
-                    if(activeVnus[i] === vnu) {
-                        activeVnus.splice(i,1);
-                    }
-                }
-                for(var i=validatorFiles.length-1; i>=0; i--) {
-                    if(validatorFiles[i] === htmlFile) {
-                        validatorFiles.splice(i,1);
-                    }
-                }
-            });
-
+            validatorFiles.push({file:htmlFile,cb : callback});
+            runValidator();
         });
     }
 
@@ -480,7 +497,7 @@ module.exports = function(req,res) {
         record.recordTimer = setTimeout(function(){
             console.log("Gave up waiting for metrics");
             commitRecord(record);
-        },10000);
+        },30000);
 
         var harUncached = null;
         var harCached = null;
@@ -675,14 +692,14 @@ module.exports = function(req,res) {
             return;
         }
 
-        for(var i =activePhantoms.length-1; i>=0; i--) {
-            activePhantoms[i].exit();
-        }
-        for(var i =activeVnus.length-1; i>=0; i--) {
-            activeVnus[i].kill();
-        }
-
         setTimeout(function(){
+            validatorFiles = [];
+            for(var i = activePhantoms.length-1; i>=0; i--) {
+                activePhantoms[i].exit();
+            }
+            for(var i = activeVnus.length-1; i>=0; i--) {
+                activeVnus[i].kill();
+            }
             console.log("Forcing test finish");
             eyeball.io.sockets.volatile.emit('commitRecord_'+build,{
                 committed : committedRecords.length,
