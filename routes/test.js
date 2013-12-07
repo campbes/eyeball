@@ -583,7 +583,6 @@ module.exports = function(req,res) {
         });
 
         page.setFn('onInitialized',function(){
-            eyeball.logger.info("Page Initialized...");
             page.evaluate(function() {
                 document.addEventListener('DOMContentLoaded', function() {
                     window.callPhantom('DOMContentLoaded');
@@ -693,20 +692,23 @@ module.exports = function(req,res) {
         }
 
         setTimeout(function(){
-            validatorFiles = [];
+
             for(var i = activePhantoms.length-1; i>=0; i--) {
                 activePhantoms[i].exit();
             }
             for(var i = activeVnus.length-1; i>=0; i--) {
                 activeVnus[i].kill();
             }
-            console.log("Forcing test finish");
-            eyeball.io.sockets.volatile.emit('commitRecord_'+build,{
-                committed : committedRecords.length,
-                total : urlsLength,
-                progress : 100
-            });
-        },10000);
+
+            if(erroredUrls.length > 0) {
+                console.log("Forcing test finish");
+                eyeball.io.sockets.volatile.emit('commitRecord_'+build,{
+                    committed : committedRecords.length,
+                    total : urlsLength,
+                    progress : 100
+                });
+            }
+        },30000);
 
     }
 

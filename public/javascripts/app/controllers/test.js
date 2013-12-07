@@ -45,8 +45,11 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','persist'
 
 
         $scope.test = function() {
-
+            console.log($scope.testCriteria);
             $scope.testCriteria.build =(new Date()).getTime().toString() + (Math.random()*10).toString();
+            if($scope.testCriteria.url && $scope.testCriteria.url.indexOf("://") === -1) {
+                $scope.testCriteria.url = "http://" + $scope.testCriteria.url;
+            }
 
             persist.set('testInfo',{
                 testing : true,
@@ -67,7 +70,16 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','persist'
                         console.log("posted");
                     });
             },500);
-        }
+        };
+
+        $scope.$on("quickTest",function(sc,url) {
+            console.log("heard quicktest")
+            $scope.testCriteria = {
+                url : url,
+                inputType : "url"
+            };
+            $scope.test();
+        });
 
     }
 
