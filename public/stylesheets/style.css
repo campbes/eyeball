@@ -33,6 +33,12 @@ div.logo {
     float: left;
     margin: 0 -5px 0 10px;
 }
+.navbar-form input {
+    min-width: 300px;
+}
+.navbar-form button.btn {
+    margin-left: 5px;
+}
 .detail tr>td:first-of-type {
     width: 20px;
 }

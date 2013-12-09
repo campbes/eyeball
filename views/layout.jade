@@ -8,25 +8,25 @@ html(ng-app='eyeballApp',lang='en')
         link(rel='stylesheet', href='/stylesheets/style.css')
 
     body(ng-controller="GlobalCtrl")
-        div.navbar.navbar-default.navbar-fixed-top(role="navigation")
-            div.logo
-            a.navbar-brand(href='#') Eyeball
+        nav.navbar.navbar-default.navbar-fixed-top(role="navigation")
+            div.navbar-header
+                div.logo
+                a.navbar-brand(href='#') Eyeball
             ul.nav.navbar-nav
                 li
                     button.btn.btn-primary.navbar-btn(type="button" data-toggle="modal" data-target="#modalTest")
                         span.glyphicon.glyphicon-cog
-                        |&nbsp;Start Test
+                        |&nbsp;New Test
                     |&nbsp;
-                li
-                    form.navbar-form
-                        div.form-group
-                            input.form-control(type='text',ng-model="quickUrl")
-                        button.btn.btn-default(ng-click="quickTest()")
-                            span.glyphicon.glyphicon-cog
-                            |&nbsp;Quick Test
-                        button.btn.btn-default(ng-click="quickFind()")
-                            span.glyphicon.glyphicon-search
-                            |&nbsp;Quick Find
+            form.navbar-form.navbar-left(role="form")
+                div.form-group
+                    input.form-control(type='text',ng-model="quickUrl",placeholder="Enter a URL for quick test/find")
+                button.btn.btn-default(ng-click="quickTest()")
+                    span.glyphicon.glyphicon-cog
+                    |&nbsp;Test
+                button.btn.btn-default(ng-click="quickFind()")
+                    span.glyphicon.glyphicon-search
+                    |&nbsp;Find
 
             ul.nav.navbar-nav.navbar-right
                 li

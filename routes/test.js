@@ -699,6 +699,9 @@ module.exports = function(req,res) {
             for(var i = activeVnus.length-1; i>=0; i--) {
                 activeVnus[i].kill();
             }
+            for(var i = validatorFiles.length-1; i>=0; i--) {
+                fs.unlink(validatorFiles[i]);
+            }
 
             if(erroredUrls.length > 0) {
                 console.log("Forcing test finish");
