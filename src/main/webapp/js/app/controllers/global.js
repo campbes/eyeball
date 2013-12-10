@@ -1,6 +1,6 @@
-eyeballControllers.controller('GlobalCtrl',['$scope',
+eyeballControllers.controller('GlobalCtrl',['$scope','$location',
 
-    function GlobalCtrl($scope) {
+    function GlobalCtrl($scope,$location) {
         console.log("GlobalCtrl");
 
         $scope.quickTest = function(url){
@@ -11,7 +11,7 @@ eyeballControllers.controller('GlobalCtrl',['$scope',
         };
 
         $scope.quickFind = function() {
-            $scope.$broadcast("quickFilter",$scope.quickUrl);
+            $location.path('/report').search({url : $scope.quickUrl});
         };
 
     }

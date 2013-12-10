@@ -2,7 +2,7 @@ mixin test
     div(ng-controller='TestCtrl')
         div(class="panel {{(testInfo.progress === 100 ? ' panel-success' : ' panel-info')}}",ng-show="testInfo.testing")
             div.panel-heading
-                div.loader(,ng-show='(testInfo.progress < 100)')
+                div.loader(ng-show='(testInfo.progress < 100)')
                 |&nbsp;{{testInfo.message}}
             div.panel-body
                 div(class="progress progress-striped {{testInfo.status}}")

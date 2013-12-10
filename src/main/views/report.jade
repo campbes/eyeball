@@ -128,7 +128,8 @@ mixin reportLoader
 mixin reportFields
     td
         //a(href='#/report?url={{encodeQuery(r.url)}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}',title="Only show results for {{r.url}}") {{r.url}}
-        a(href="#/detail/:{{r._id}}",title="View full details for this result") {{r.url}}
+        a(href="#/detail/:{{r._id}}",title="View full details for {{r.url}}") {{r.url.substr(0,120)}}
+            span(ng-if='r.url.length > 120')...
     td
         a(href='#/report?url={{query.url}}&urlExact={{query.urlExact}}&start={{r.timestamp | date:"yyyy-MM-dd"}}&end={{r.timestamp | date:"yyyy-MM-dd"}}&build={{query.build}}&tag={{query.tag}}',title="Filter by date")
             span.glyphicon.glyphicon-filter

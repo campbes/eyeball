@@ -633,7 +633,7 @@ module.exports = function(req,res) {
                         erroredUrls.push(url);
                     } else {
                         webpage.endTime = new Date();
-                        page.injectJs("dommonster.js",function(){
+                        page.injectJs("lib/dommonster.js",function(){
                             page.evaluate(function () {
                                 return {
                                     title : document.title,

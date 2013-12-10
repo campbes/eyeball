@@ -8,7 +8,7 @@
     appName: 'Node.js Application'
 });*/
 
-var package = require('./package.json');
+var package = require('./../../package.json');
 
 var express = require('express');
 var routes = require('./routes');
@@ -34,7 +34,7 @@ app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'webapp')));
 
 // development only
 if ('development' == app.get('env')) {
@@ -59,8 +59,8 @@ var partials = function(req,res) {
 
 app.get('/partials/*',partials);
 
-DB = require("mongojs").connect("mongodb://eyeball:eyeball@ds047958.mongolab.com:47958/eyeball", ["urls"])["urls"];
-//DB = require("mongojs").connect("eyeball", ["urls"])["urls"];
+//DB = require("mongojs").connect("mongodb://eyeball:eyeball@ds047958.mongolab.com:47958/eyeball", ["urls"])["urls"];
+DB = require("mongojs").connect("eyeball", ["urls"])["urls"];
 
 var server = http.createServer(app);
 server.listen(app.get('port'), function(){

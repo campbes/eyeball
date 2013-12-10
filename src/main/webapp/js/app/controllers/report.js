@@ -138,13 +138,6 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
             },500);
         };
 
-        $scope.$on("quickFilter",function(sc,url) {
-            $scope.filterParams = {
-                url : url
-            };
-            $scope.filter();
-        });
-
         exos.popover(popover);
 
         $scope.encodeQuery = function(val) {
