@@ -21,10 +21,10 @@ html(ng-app='eyeballApp',lang='en')
             form.navbar-form.navbar-left(role="form")
                 div.form-group
                     input.form-control(type='text',ng-model="quickUrl",placeholder="Enter a URL for quick test/find")
-                button.btn.btn-default(ng-click="quickTest()")
+                button.btn.btn-default(ng-click="quickTest()",ng-disabled="!quickUrl")
                     span.glyphicon.glyphicon-cog
                     |&nbsp;Test
-                button.btn.btn-default(ng-click="quickFind()")
+                button.btn.btn-default(ng-click="quickFind()",ng-disabled="!quickUrl")
                     span.glyphicon.glyphicon-search
                     |&nbsp;Find
 
