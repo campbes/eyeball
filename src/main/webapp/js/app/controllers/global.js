@@ -1,12 +1,13 @@
-eyeballControllers.controller('GlobalCtrl',['$scope','$location',
+/*global angularControllers*/
+"use strict";
 
-    function GlobalCtrl($scope,$location) {
-        console.log("GlobalCtrl");
+eyeballControllers.controller('GlobalCtrl',['$scope','$location','logger',
+
+    function GlobalCtrl($scope,$location,logger) {
+        logger.log("GlobalCtrl");
 
         $scope.quickTest = function(url){
-            console.log(url)
             url = url || $scope.quickUrl;
-            console.log("quicktest: "+url)
             $scope.$broadcast("quickTest",url);
         };
 

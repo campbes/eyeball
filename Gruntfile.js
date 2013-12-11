@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
 
-    var pkg = grunt.file.readJSON('package.json');
+    var pkg = grunt.file.readJSON('src/main/package.json');
 
     grunt.initConfig({
         pkg : pkg,
@@ -28,15 +28,11 @@ module.exports = function(grunt) {
                 }
             }
         },
-        copy : { // copy the node app
+        copy : { // copy everything - so can run in dev mode
             app: {
                 files: [
                     {
-                        src: [
-                            'routes/**',
-                            'views/**',
-                            '*.js'
-                        ],
+                        src: ['**/*.*'],
                         filter : 'isFile',
                         dest: '<%= props.out%>/<%=props.name%>/',
                         expand : true,
@@ -44,30 +40,12 @@ module.exports = function(grunt) {
                     }
                 ]
             },
-            lib: {
+            info: {
                 files: [
                     {
-                        src: [
-                            'lib/**'
-                        ],
+                        src: ['LICENSE','README.md'],
                         filter : 'isFile',
-                        dest: '<%= props.out%>/<%=props.name%>/',
-                        expand : true,
-                        cwd : 'src/'
-                    }
-                ]
-            },
-            webapp: {
-                files: [
-                    {
-                        src: [
-                            'webapp/images/**',
-                            'webapp/lib/**'
-                        ],
-                        filter : 'isFile',
-                        dest: '<%= props.out%>/<%=props.name%>/',
-                        expand : true,
-                        cwd : '<%= props.src%>/'
+                        dest: '<%= props.out%>/<%=props.name%>/'
                     }
                 ]
             }
@@ -75,7 +53,9 @@ module.exports = function(grunt) {
         concat: { // build the webapp
             js: {
                 src: [
-                    '<%= props.src%>/webapp/**/*.js'
+                    '<%= props.src%>/webapp/js/app/app.js',
+                    '<%= props.src%>/webapp/js/app/services.js',
+                    '<%= props.src%>/webapp/js/app/controllers/*.js'
                 ],
                 dest: '<%= props.out%>/<%=props.name%>/webapp/<%=props.name%>.js'
             },
@@ -90,8 +70,10 @@ module.exports = function(grunt) {
             js: {
                 src: ['<%= props.out%>/<%=props.name%>/webapp/<%=props.name%>.js'],
                 dest: '<%= props.out%>/<%=props.name%>/webapp/<%=props.name%>.min.js'
-            },
-            css: {
+            }
+        },
+        cssmin: {
+            minify: {
                 src: ['<%= props.out%>/<%=props.name%>/webapp/<%=props.name%>.css'],
                 dest: '<%= props.out%>/<%=props.name%>/webapp/<%=props.name%>.min.css'
             }
@@ -99,11 +81,12 @@ module.exports = function(grunt) {
         compress : {
             main: {
                 options: {
-                    archive: '<%= props.out%>/<%=props.name%>.zip'
+                    mode : 'tgz',
+                    archive: '<%= props.out%>/<%=props.name%>.tgz'
                 },
                 files: [
                     {
-                        src: ['<%= props.out%>/<%=props.name%>/**','package.json','LICENSE-MIT'],
+                        src: ['<%= props.out%>/<%=props.name%>/**'],
                         flatten : true,
                         expand : true
                     }
@@ -120,7 +103,7 @@ module.exports = function(grunt) {
         }
     }
 
-    grunt.registerTask('compile', ['jslint','copy:app','copy','concat','gcc']);
+    grunt.registerTask('compile', ['jslint','copy:app','copy','concat','gcc','cssmin']);
     grunt.registerTask('package', ['compress']);
     grunt.registerTask('default', ['clean','compile','package']);
 

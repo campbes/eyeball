@@ -1,11 +1,12 @@
+@charset "UTF-8";
 body {
     padding-top: 70px;
     font-size: 9pt;
 }
-table#results td,th {
+#results td,th {
     white-space: nowrap;
 }
-table#results td:first-child {
+#results td:first-child {
     white-space: normal;
     word-wrap: break-word;
     word-break: break-all;

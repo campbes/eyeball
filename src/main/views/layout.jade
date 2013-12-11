@@ -4,8 +4,11 @@ html(ng-app='eyeballApp',lang='en')
         title= title
         meta(name='viewport',content='width=device-width, initial-scale=1.0')
         link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css')
-        link(rel='stylesheet', href='/css/harpy-alpha.css')
-        link(rel='stylesheet', href='/css/style.css')
+        link(rel='stylesheet', href='/lib/harpy-alpha.css')
+        if env === 'development'
+            link(rel='stylesheet', href='/css/style.css')
+        else
+            link(rel='stylesheet', href='/eyeball-#{version}.min.css')
 
     body(ng-controller="GlobalCtrl")
         nav.navbar.navbar-default.navbar-fixed-top(role="navigation")
@@ -57,6 +60,8 @@ html(ng-app='eyeballApp',lang='en')
             script(src='/js/app/controllers/har.js')
             script(src='/js/app/controllers/monitor.js')
             script(src='/js/app/controllers/global.js')
+            script
+                eyeballApp.env = "development";
         else
-            script(src='/javascripts/eyeball-#{version}.js')
+            script(src='/eyeball-#{version}.min.js')
 

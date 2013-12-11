@@ -1,4 +1,4 @@
-eyeballApp.factory('socket', function ($rootScope) {
+eyeballApp.factory('socket', ['$rootScope',function ($rootScope) {
 
     function connection() {
         var socket = io.connect();
@@ -29,7 +29,7 @@ eyeballApp.factory('socket', function ($rootScope) {
         };
     }
     return connection;
-});
+}]);
 
 eyeballApp.service('persist',function(){
 
@@ -41,6 +41,18 @@ eyeballApp.service('persist',function(){
         },
         set : function(key,data) {
             persist[key] = data;
+        }
+    }
+
+});
+
+eyeballApp.service('logger',function(){
+
+    return {
+        log : function(msg) {
+            if(eyeballApp.env === "development") {
+                console.log(msg);
+            }
         }
     }
 
@@ -72,7 +84,7 @@ eyeballApp.factory('exos',function() {
 
 });
 
-eyeballApp.factory('tablesort',function($timeout,render,exos,$filter) {
+eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($timeout,render,exos,$filter) {
 
     function SortableTable(id,data,$scope,cfg) {
 
@@ -214,7 +226,7 @@ eyeballApp.factory('tablesort',function($timeout,render,exos,$filter) {
             });
         }
     }
-});
+}]);
 
 eyeballApp.factory('popover',function(){
     return {
@@ -275,17 +287,17 @@ eyeballApp.factory('render',function() {
                 score : pc,
                 grade : "",
                 message : "",
-                class : ""
+                className : ""
             };
 
             if(pc > 85) {
                 total.grade = "A";
                 total.message = "PASS";
-                total.class = "success";
+                total.className = "success";
             } else if (pc <= 85) {
                 total.grade = "F";
                 total.message = "FAIL";
-                total.class = "danger";
+                total.className = "danger";
             }
             return total;
         }

@@ -8,7 +8,7 @@
     appName: 'Node.js Application'
 });*/
 
-var package = require('./../../package.json');
+var package = require('./package.json');
 
 var express = require('express');
 var routes = require('./routes');

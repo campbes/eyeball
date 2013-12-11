@@ -1,3 +1,6 @@
+/*global angular*/
+"use strict";
+
 var eyeballApp = angular.module('eyeballApp',[
     'ngRoute',
     'eyeballControllers'
