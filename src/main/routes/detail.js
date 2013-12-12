@@ -9,17 +9,20 @@ module.exports = function(req,res) {
         _id : mongojs.ObjectId(queryString.id)
     };
 
-    DB.find(dbQuery,function(err,results) {
+    eyeball.DB.find(dbQuery,function(err,results) {
         if(err) {
             res.send(err);
         }
 
         // do the yslow rule additions bewfore returning
         var data = results[0];
-        for (var i in data.metrics.yslow.data.g) {
-            data.metrics.yslow.data.g[i].rule = YSLOW.doc.rules[i].name;
+        var i;
+        var metrics = data.metrics.yslow.data.g;
+        for (i in metrics) {
+            if(metrics.hasOwnProperty(i)) {
+                data.metrics.yslow.data.g[i].rule = YSLOW.doc.rules[i].name;
+            }
         }
-
         res.send(JSON.stringify(data));
     });
 

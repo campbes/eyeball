@@ -12,12 +12,10 @@ function getDbQuery(req) {
             }
             if(typeof val  === "string") {
                 return val;
-            } else {
-                return {
-                    $in : val
-                }
             }
-
+            return {
+                $in : val
+            };
         }
         return null;
     }
@@ -63,7 +61,7 @@ exports.overview = function(req,res) {
 
     var dbQuery = getDbQuery(req);
 
-    DB.find(dbQuery,{
+    eyeball.DB.find(dbQuery,{
         url : 1,
         timestamp: 1,
         build : 1,
@@ -95,7 +93,7 @@ exports.yslow = function(req,res) {
 
     var dbQuery = getDbQuery(req);
 
-    DB.find(dbQuery,{
+    eyeball.DB.find(dbQuery,{
         url : 1,
         timestamp: 1,
         build : 1,
@@ -116,7 +114,7 @@ exports.yslow = function(req,res) {
 
 exports.time = function(req,res) {
     var dbQuery = getDbQuery(req);
-    DB.find(dbQuery,{
+    eyeball.DB.find(dbQuery,{
         url : 1,
         timestamp: 1,
         build : 1,
@@ -136,7 +134,7 @@ exports.time = function(req,res) {
 
 exports.dommonster = function(req,res) {
     var dbQuery = getDbQuery(req);
-    DB.find(dbQuery,{
+    eyeball.DB.find(dbQuery,{
         url : 1,
         timestamp: 1,
         build : 1,
@@ -156,7 +154,7 @@ exports.dommonster = function(req,res) {
 
 exports.validator = function(req,res) {
     var dbQuery = getDbQuery(req);
-    DB.find(dbQuery,{
+    eyeball.DB.find(dbQuery,{
         url : 1,
         timestamp: 1,
         build : 1,

@@ -8,7 +8,7 @@ module.exports = function(req,res) {
         _id : mongojs.ObjectId(queryString.id)
     };
 
-    DB.find(dbQuery,{url : 1},function(err,results) {
+    eyeball.DB.find(dbQuery,{url : 1},function(err,results) {
         if(err) {
             res.send(err);
         }
@@ -16,7 +16,7 @@ module.exports = function(req,res) {
             url : results[0].url
         };
 
-        DB.find(dbQuery,{
+        eyeball.DB.find(dbQuery,{
             url : 1,
             timestamp: 1,
             build : 1,

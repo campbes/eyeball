@@ -4,7 +4,7 @@ var YSLOW = require('yslow').YSLOW;
 
 module.exports = function(req,res) {
 
-    DB.stats(function(err,data) {
+    eyeball.DB.stats(function(err,data) {
         if(err) {
             res.send(err);
         }

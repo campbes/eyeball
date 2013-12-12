@@ -1,4 +1,12 @@
+/*global window,document*/
+// window and document are used by phantom
+
 var request = require('request');
+var YSLOW = require('yslow').YSLOW;
+var jsdom = require('jsdom');
+var phantomjs = require('phantomjs');
+var phantom = require('node-phantom');
+var fs = require('fs');
 
 var grades = (function() {
 
@@ -98,7 +106,8 @@ var grades = (function() {
 
     function buildGradeSet(data,gradeSet) {
         var grades = {};
-        for(var i in gradeSet) {
+        var i;
+        for(i in gradeSet) {
             if(gradeSet.hasOwnProperty(i)) {
                 if(i.substr(0,10) === "COMPOSITE_") {
                     grades[i] = getCompositeGradeFromData(gradeSet[i.substr(10)],data[i.substr(10)]);
@@ -129,708 +138,10 @@ var grades = (function() {
 
 }());
 
-module.exports = function(req,res) {
-
-    var build = req.body.build;
-    var datafile = req.body.datafile;
-    var url = req.body.url;
-    var reps = req.body.reps;
-    var tag = req.body.tag || '';
-    var regex = req.body.regex;
-    var regexReplace = req.body.regexReplace;
-
-    var urls = null;
-    var urlsLength = 0;
-    var committedRecords = [];
-
-    var YSLOW = require('yslow').YSLOW;
-    var jsdom = require('jsdom');
-    var phantomjs = require('phantomjs');
-    var phantom = require('node-phantom');
-    var fs = require('fs');
-    var exec = require('child_process').exec;
-
-    var tests = {
-        har : true,
-        yslow : true, // requires har
-        time : true, //requires yslow
-        dommonster : true,
-        validator : true
-    };
-
-    function commitRecord(record){
-
-        clearTimeout(record.recordTimer);
-        delete record.recordTimer;
-
-        DB.insert(record,function(err){
-            if(err) {
-                eyeball.logger.info(err);
-            }
-            committedRecords.push(record);
-            eyeball.logger.info("Emitting..."+build);
-            eyeball.io.sockets.volatile.emit('commitRecord_'+build,{
-                committed : committedRecords.length,
-                total : urlsLength,
-                progress : Math.floor((committedRecords.length/urlsLength) * 100),
-                record : record
-            });
-        });
-
-        for(var i=0; i<uncommittedRecords.length; i++) {
-            if(uncommittedRecords[i] === record) {
-                uncommittedRecords.splice(i,1);
-            }
-        }
-
-    }
-
-    function updateRecord(record,property,data) {
-
-        var metric = {
-            url : record.url,
-            timestamp: new Date(),
-            build : build,
-            tag : tag,
-            tool : property,
-            data : data
-        };
-
-        metric.grades = grades.getGradeSet(metric);
-        record.metrics[property] = metric;
-
-        for(var i in tests) {
-            if(tests.hasOwnProperty(i) && tests[i] === true) {
-                if(!record.metrics[i]) {
-                    eyeball.logger.info("No entry for " + i);
-                    return;
-                }
-            }
-        }
-
-        if(record.recordTimer) {
-            commitRecord(record);
-        }
-
-    }
-
-    function getDomMonster(page) {
-        var dm = page.dommonster;
-        if(!dm) {
-            return {};
-        }
-        for(var i in dm.stats) {
-            if(dm.stats.hasOwnProperty(i)) {
-                // make string values numbers by removing units
-                if(typeof dm.stats[i] === "string") {
-                    dm.stats[i] = dm.stats[i].replace(/[A-z]|%/g,'');
-                }
-            }
-        }
-        return dm;
-    }
-
-    function createHAR(page,callback) {
-        var entries = [];
-
-        page.resources.forEach(function (resource) {
-            var request = resource.request,
-                startReply = resource.startReply,
-                endReply = resource.endReply;
-
-            if (!request || !startReply || !endReply) {
-                return;
-            }
-
-            // Exclude Data URI from HAR file because
-            // they aren't included in specification
-            if (request.url.match(/(^data:image\/.*)/i)) {
-                return;
-            }
-
-            var time = new Date(endReply.time).getTime() - new Date(request.time).getTime();
-
-            entries.push({
-                startedDateTime: request.time,
-                time: time,
-                request: {
-                    method: request.method,
-                    url: request.url,
-                    httpVersion: "HTTP/1.1",
-                    cookies: [],
-                    headers: request.headers,
-                    queryString: [],
-                    headersSize: -1,
-                    bodySize: -1
-                },
-                response: {
-                    status: endReply.status,
-                    statusText: endReply.statusText,
-                    httpVersion: "HTTP/1.1",
-                    cookies: [],
-                    headers: endReply.headers,
-                    redirectURL: "",
-                    headersSize: -1,
-                    bodySize: startReply.bodySize,
-                    content: {
-                        size: startReply.bodySize,
-                        mimeType: endReply.contentType
-                    }
-                },
-                cache: {},
-                timings: {
-                    blocked: 0,
-                    dns: -1,
-                    connect: -1,
-                    send: 0,
-                    wait: new Date(startReply.time).getTime() - new Date(request.time).getTime(),
-                    receive: new Date(endReply.time).getTime() - new Date(startReply.time).getTime(),
-                    ssl: -1
-                },
-                pageref: page.address
-            });
-        });
-
-       callback({
-            log: {
-                version: '1.2',
-                creator: {
-                    name: "PhantomJS",
-                    version : "1.9.2"
-                },
-                pages: [{
-                    startedDateTime: page.startTime.toISOString(),
-                    id: page.address,
-                    title: page.title,
-                    pageTimings: {
-                        onLoad: page.endTime - page.startTime,
-                        onContentLoad : page.onContentLoad - page.startTime
-                    }
-                }],
-                entries: entries
-            }
-        });
-    }
-
-    function combineHARs(hars) {
-
-        var har = hars[0];
-        var cachedHar = hars[1];
-
-        function matchEntry(url) {
-            for(var i=cachedHar.log.entries.length-1; i>=0; i--) {
-                if(cachedHar.log.entries[i].request.url === url) {
-                    return cachedHar.log.entries[i];
-                }
-            }
-            return false;
-        }
-
-        cachedHar.log.creator = {
-            name : "Eyeball",
-            version : "0.0.0"
-        };
-
-        for (var i=0; i<har.log.entries.length; i++) {
-            var matched = matchEntry(har.log.entries[i].request.url);
-            if(!matched) {
-                var entry = {
-                    startedDateTime: cachedHar.log.pages[0].startedDateTime,
-                    time: 0,
-                    request: {
-                        method: har.log.entries[i].request.method,
-                        url: har.log.entries[i].request.url,
-                        httpVersion: "HTTP/1.1",
-                        cookies: [],
-                        headers: har.log.entries[i].request.headers,
-                        queryString: [],
-                        headersSize: -1,
-                        bodySize: -1
-                    },
-                    response: {
-                        status: '(cache)',
-                        statusText: '(cache)',
-                        httpVersion: "HTTP/1.1",
-                        cookies: [],
-                        headers: har.log.entries[i].response.headers,
-                        redirectURL: "",
-                        headersSize: -1,
-                        bodySize: 0,
-                        content: {
-                            size: har.log.entries[i].response.bodySize,
-                            mimeType: har.log.entries[i].response.content.mimeType
-                        }
-                    },
-                    cache: {
-                        afterRequest : har.log.entries[i].response.bodySize
-                    },
-                    timings: {
-                        blocked: 0,
-                        dns: 0,
-                        connect: 0,
-                        send: 0,
-                        wait: 0,
-                        receive: 0,
-                        ssl: -1
-                    },
-                    pageref: har.log.entries[i].pageref
-                };
-
-                cachedHar.log.entries.push(entry);
-            }
-        }
-
-        return cachedHar;
-    }
-
-    var activeVnus = [];
-    var maxVnus = 1;
-    var validatorFiles = [];
-
-
-    function runValidator() {
-
-        if(activeVnus.length === maxVnus || validatorFiles.length === 0) {
-            return;
-        }
-
-        var item = validatorFiles.splice(0,1)[0];
-        var htmlFile = item.file;
-        var callback = item.cb;
-        var vnuData = "";
-        var vnu = require('child_process').spawn('java',['-jar','-Dnu.validator.client.out=json','-Dfile.encoding=UTF8','lib/vnu-fast-client.jar',htmlFile]);
-        activeVnus.push(vnu);
-        console.log("Active VNUs: "+activeVnus[0])
-
-        setTimeout(function(){
-            vnu.kill();
-        },5000);
-
-        vnu.stdout.on('data',function(data) {
-            vnuData += data;
-        });
-
-        vnu.stdout.on('end',function(code) {
-            var errors = 0;
-            var warnings = 0;
-
-            try {
-                var val = JSON.parse(vnuData);
-            } catch (e) {
-                eyeball.logger.error("Invalid VNU response: "+e);
-                return;
-            }
-
-            for (var i=val.messages.length-1; i>=0; i--) {
-                if(val.messages[i].type === "error") {
-                    errors += 1;
-                }
-                if(val.messages[i].subType === "warning") {
-                    warnings += 1;
-                }
-            }
-            val.info = {
-                errors : errors,
-                warnings : warnings
-            };
-
-            callback(val);
-
-        });
-
-        vnu.stderr.on('data', function (err) {
-            eyeball.logger.error('vnu client error: ' + err);
-        });
-
-        vnu.on('close', function (code) {
-            eyeball.logger.info('vnu child process closed ' + code);
-            fs.unlink(htmlFile,function(err){
-                if(err) {
-                    console.log("error deleting validator file: "+err);
-                }
-                eyeball.logger.info("Deleting validator file");
-            });
-            for(var i=activeVnus.length-1; i>=0; i--) {
-                if(activeVnus[i] === vnu) {
-                    activeVnus.splice(i,1);
-                }
-            }
-
-            if(validatorFiles.length > 0) {
-                runValidator();
-            }
-
-        });
-
-    }
-
-
-    function validate(data,callback) {
-        var htmlFile = (new Date()).getTime().toString() + (Math.random()*10).toString() + '.html';
-        fs.writeFile(htmlFile,data,function(error){
-            if(error) {
-                eyeball.logger.info(error);
-            }
-            validatorFiles.push({file:htmlFile,cb : callback});
-            runValidator();
-        });
-    }
-
-    var createdRecords = [];
-    var uncommittedRecords = [];
-    var erroredUrls = [];
-
-
-    function createRecord(passes) {
-
-        var record = {
-            url : passes[1].address,
-            timestamp: new Date(),
-            build : build,
-            tag : tag,
-            metrics : {}
-        };
-
-        createdRecords.push(record);
-        uncommittedRecords.push(record);
-
-        record.recordTimer = setTimeout(function(){
-            console.log("Gave up waiting for metrics");
-            commitRecord(record);
-        },30000);
-
-        var harUncached = null;
-        var harCached = null;
-
-        if(tests.har) {
-            createHAR(passes[0],function(har1) {
-                harUncached = har1;
-                createHAR(passes[1],function(har2) {
-                    harCached = combineHARs([har1,har2]);
-                    eyeball.logger.info("created har");
-                    updateRecord(record,'har',harCached);
-                    updateRecord(record,'harUncached',harUncached);
-                    updateRecord(record,'time',{
-                        lt : harCached.log.pages[0].pageTimings.onLoad,
-                        dt :  harCached.log.pages[0].pageTimings.onContentLoad,
-                        lt_u : harUncached.log.pages[0].pageTimings.onLoad,
-                        dt_u :  harUncached.log.pages[0].pageTimings.onContentLoad
-                    });
-                    if(tests.yslow) {
-                        var yslow = yslowOverrideGetResults(YSLOW.harImporter.run(jsdom.jsdom(), harCached, 'ydefault').context, 'grade,stats');
-                        eyeball.logger.info('got yslow result');
-                        updateRecord(record,'yslow',yslow);
-                    }
-                });
-            });
-        }
-
-        if(tests.dommonster) {
-            var dm = getDomMonster(passes[1]);
-            eyeball.logger.info('got dommonster result');
-            updateRecord(record,'dommonster',dm);
-        }
-
-        if(tests.validator) {
-            validate(passes[1].content,function(val){
-                updateRecord(record,'validator',val);
-            });
-        }
-
-    }
-
-    function setupPage(page) {
-        page.resources = [];
-        page.libraryPath = "../";
-        page.settings = {
-            resourceTimeout : 5
-        };
-
-        page.oneyeballMessage = function (msg) {
-            //eyeball.logger.info(msg);
-        };
-
-        /*page.onLoadStarted = function () {
-            page.startTime = new Date();
-        };*/
-
-        page.onResourceRequested = function (req) {
-            page.resources[req[0].id] = {
-                request: req[0],
-                startReply: null,
-                endReply: null
-            };
-        };
-
-        page.onResourceReceived = function (res) {
-            if(!page.resources[res.id]) {
-                return;
-            }
-            if (res.stage === 'start') {
-                page.resources[res.id].startReply = res;
-            }
-            if (res.stage === 'end') {
-                page.resources[res.id].endReply = res;
-            }
-        };
-
-        page.setFn('onCallback',function(msg) {
-            if(msg === "DOMContentLoaded") {
-                page.evaluate(function(){
-                    window.DOMContentLoaded = new Date().getTime();
-                })
-            }
-        });
-
-        page.setFn('onInitialized',function(){
-            page.evaluate(function() {
-                document.addEventListener('DOMContentLoaded', function() {
-                    window.callPhantom('DOMContentLoaded');
-                }, false);
-            });
-        });
-
-        return page;
-    }
-
-    var activeTests = {};
-
-    function openPage(ph) {
-        eyeball.logger.info("Opening page with "+ph._phantom.pid);
-        var passes = [];
-
-        var pageUrl = urls.splice(0,1)[0];
-
-        activeTests[ph._phantom.pid] = pageUrl;
-
-        function createPage(pass,url) {
-            ph.createPage(function(err,page) {
-                if(err) {
-                    eyeball.logger.info(err);
-                }
-
-                page = setupPage(page);
-
-                if(pass === 0){
-                    page.customHeaders = {
-                        "Cache-Control" : "no-cache, no-store, must-revalidate",
-                        "Pragma" : "no-cache",
-                        "Expires" : 0
-                    }
-                }
-
-                var webpage = {};
-
-                webpage.address = url;
-                webpage.startTime = new Date();
-                page.open(webpage.address, function (err,status) {
-                    if(err) {
-                        eyeball.logger.info(err);
-                    }
-                    if (status !== 'success') {
-                        eyeball.logger.info('FAIL to load the address');
-                        ph.exit(1);
-                        erroredUrls.push(url);
-                    } else {
-                        webpage.endTime = new Date();
-                        page.injectJs("lib/dommonster.js",function(){
-                            page.evaluate(function () {
-                                return {
-                                    title : document.title,
-                                    content : document.documentElement.outerHTML,
-                                    onContentLoad : window.DOMContentLoaded,
-                                    dommonster : window.DM
-                                };
-                            },function(err,doc){
-                                if(err) {
-                                    console.log(err);
-                                    erroredUrls.push(url);
-                                }
-
-                                webpage.title = doc.title;
-                                webpage.content = doc.content;
-                                webpage.onContentLoad = new Date(doc.onContentLoad);
-                                webpage.resources = [].concat(page.resources);
-                                webpage.dommonster = doc.dommonster;
-                                page.close();
-                                passes[pass] = webpage;
-
-                                if(pass === 0) {
-                                    createPage(1,url);
-                                } else if(pass === 1) {
-                                    createRecord(passes);
-                                    delete activeTests[ph._phantom.pid];
-                                    if(urls.length > 0) {
-                                        openPage(ph);
-                                    } else {
-                                        ph.exit();
-                                    }
-                                }
-                            });
-                        });
-                    }
-                });
-            });
-        }
-
-        createPage(0,pageUrl);
-    }
-
-    var retriedErrors = false;
-
-    function cleanupRecordsAndEnd() {
-        console.log(activePhantoms.length);
-
-        if(!retriedErrors && erroredUrls.length > 0) {
-            // give the failures one more go
-            console.log("Retrying errored urls...");
-            urls = [].concat(erroredUrls);
-            erroredUrls = [];
-            retriedErrors = true;
-            startPhantom();
-            return;
-        }
-
-        setTimeout(function(){
-
-            for(var i = activePhantoms.length-1; i>=0; i--) {
-                activePhantoms[i].exit();
-            }
-            for(var i = activeVnus.length-1; i>=0; i--) {
-                activeVnus[i].kill();
-            }
-            for(var i = validatorFiles.length-1; i>=0; i--) {
-                fs.unlink(validatorFiles[i]);
-            }
-
-            if(erroredUrls.length > 0) {
-                console.log("Forcing test finish");
-                eyeball.io.sockets.volatile.emit('commitRecord_'+build,{
-                    committed : committedRecords.length,
-                    total : urlsLength,
-                    progress : 100
-                });
-            }
-        },30000);
-
-    }
-
-    var phantomMax = 5;
-    var activePhantoms = [];
-
-    function startPhantom() {
-
-        if(activePhantoms.length >= phantomMax) {
-            return;
-        }
-
-        phantom.create(function(err,ph) {
-            if(err) {
-                eyeball.logger.info(err);
-            }
-            activePhantoms.push(ph);
-            ph.onError = function(err,trace) {
-                eyeball.logger.info("Phantom error: "+err);
-                ph.exit(1);
-                if(urls.length > 0) {
-                    startPhantom();
-                }
-            };
-            ph.on("error",function(err,trace) {
-                eyeball.logger.info("Phantom error: "+err);
-                ph.exit(1);
-                if(urls.length > 0) {
-                    startPhantom();
-                }
-            });
-            ph.on("exit",function(msg) {
-                eyeball.logger.info("Phantom Exit: "+ph._phantom.pid+ "("+msg+")");
-
-                if(activeTests[ph._phantom.pid]) {
-                    console.log(activeTests[ph._phantom.pid]);
-                    if(erroredUrls) {
-                        erroredUrls.push(activeTests[ph._phantom.pid]);
-                    }
-                    delete activeTests[ph._phantom.pid];
-                }
-
-                for(var i=0; i<activePhantoms.length; i++) {
-                    if(activePhantoms[i] === ph) {
-                        activePhantoms.splice(i,1);
-                    }
-                }
-
-                if(urls.length > 0) {
-                    startPhantom();
-                } else if(activePhantoms.length === 0) {
-                    cleanupRecordsAndEnd();
-                }
-
-            });
-            openPage(ph);
-            eyeball.logger.info("Active Phantoms: "+activePhantoms.length);
-            if(urls.length > 0) {
-                startPhantom();
-            }
-        }, {
-            phantomPath : phantomjs.path
-        });
-    }
-
-
-    function go(data) {
-
-        if(regex) {
-            regexReplace = regexReplace || "";
-            data = data.replace(new RegExp(regex,"g"),regexReplace);
-
-        }
-
-        urls = data.split("\r\n");
-        if(reps) {
-            var urlset = urls;
-            for(var i=0; i<reps; i++) {
-                urls = urls.concat(urlset);
-            }
-        }
-
-        urlsLength = urls.length;
-
-        if(urlsLength < phantomMax) {
-            phantomMax = urlsLength;
-        }
-
-        startPhantom();
-
-    }
-
-    if (url) {
-        go(url);
-    } else if(datafile.indexOf("http") > -1) {
-        var http = require('http');
-        var fileData = "";
-        http.get(datafile,function(res) {
-            res.on("data",function(data) {
-                fileData += data.toString();
-            });
-            res.on("end",function() {
-                go(fileData);
-            });
-        });
-    } else if (datafile) {
-        var fs = require("fs");
-        fs.readFile(datafile,'utf8',function(err,data) {
-            go(data)
-        });
-    }
-
-    res.send("OK");
-};
-
 
 function yslowOverrideGetResults(yscontext, info) {
     var i, l, results, url, type, comps, comp, encoded_url, obj, cr,
-        cs, etag, name, len, include_grade, include_comps, include_stats,
+        cs, etag, len, include_grade, include_comps, include_stats,
         result, len2, spaceid,
         reButton = / <button [\s\S]+<\/button>/,
         isArray = YSLOW.util.isArray,
@@ -847,18 +158,17 @@ function yslowOverrideGetResults(yscontext, info) {
         if (info[i] === 'all') {
             include_grade = include_stats = include_comps = true;
             break;
-        } else {
-            switch (info[i]) {
-                case 'grade':
-                    include_grade = true;
-                    break;
-                case 'stats':
-                    include_stats = true;
-                    break;
-                case 'comps':
-                    include_comps = true;
-                    break;
-            }
+        }
+        switch (info[i]) {
+            case 'grade':
+                include_grade = true;
+                break;
+            case 'stats':
+                include_stats = true;
+                break;
+            case 'comps':
+                include_comps = true;
+                break;
         }
     }
 
@@ -980,3 +290,696 @@ function yslowOverrideGetResults(yscontext, info) {
 
     return params;
 }
+
+module.exports = function(req,res) {
+
+    var build = req.body.build;
+    var datafile = req.body.datafile;
+    var url = req.body.url;
+    var reps = req.body.reps;
+    var tag = req.body.tag || '';
+    var regex = req.body.regex;
+    var regexReplace = req.body.regexReplace;
+
+    var urls = null;
+    var urlsLength = 0;
+    var committedRecords = [];
+
+    var createdRecords = [];
+    var uncommittedRecords = [];
+    var erroredUrls = [];
+
+    var tests = {
+        har : true,
+        yslow : true, // requires har
+        time : true, //requires yslow
+        dommonster : true,
+        validator : true
+    };
+
+    function commitRecord(record){
+
+        clearTimeout(record.recordTimer);
+        delete record.recordTimer;
+
+        eyeball.DB.insert(record,function(err){
+            if(err) {
+                eyeball.logger.info(err);
+            }
+            committedRecords.push(record);
+            eyeball.logger.info("Emitting..."+build);
+            eyeball.io.sockets.volatile.emit('commitRecord_'+build,{
+                committed : committedRecords.length,
+                total : urlsLength,
+                progress : Math.floor((committedRecords.length/urlsLength) * 100),
+                record : record
+            });
+        });
+        var i = 0;
+        for(i=0; i<uncommittedRecords.length; i++) {
+            if(uncommittedRecords[i] === record) {
+                uncommittedRecords.splice(i,1);
+            }
+        }
+
+    }
+
+    function updateRecord(record,property,data) {
+
+        var metric = {
+            url : record.url,
+            timestamp: new Date(),
+            build : build,
+            tag : tag,
+            tool : property,
+            data : data
+        };
+
+        metric.grades = grades.getGradeSet(metric);
+        record.metrics[property] = metric;
+
+        var i;
+        for(i in tests) {
+            if(tests.hasOwnProperty(i) && tests[i] === true) {
+                if(!record.metrics[i]) {
+                    eyeball.logger.info("No entry for " + i);
+                    return;
+                }
+            }
+        }
+
+        if(record.recordTimer) {
+            commitRecord(record);
+        }
+
+    }
+
+    function getDomMonster(page) {
+        var dm = page.dommonster;
+        if(!dm) {
+            return {};
+        }
+        var i;
+        for(i in dm.stats) {
+            if(dm.stats.hasOwnProperty(i)) {
+                // make string values numbers by removing units
+                if(typeof dm.stats[i] === "string") {
+                    dm.stats[i] = dm.stats[i].replace(/[A-z]|%/g,'');
+                }
+            }
+        }
+        return dm;
+    }
+
+    function createHAR(page,callback) {
+        var entries = [];
+
+        page.resources.forEach(function (resource) {
+            var request = resource.request,
+                startReply = resource.startReply,
+                endReply = resource.endReply;
+
+            if (!request || !startReply || !endReply) {
+                return;
+            }
+
+            // Exclude Data URI from HAR file because
+            // they aren't included in specification
+            if (request.url.indexOf("data:image") > -1) {
+                return;
+            }
+
+            var time = new Date(endReply.time).getTime() - new Date(request.time).getTime();
+
+            entries.push({
+                startedDateTime: request.time,
+                time: time,
+                request: {
+                    method: request.method,
+                    url: request.url,
+                    httpVersion: "HTTP/1.1",
+                    cookies: [],
+                    headers: request.headers,
+                    queryString: [],
+                    headersSize: -1,
+                    bodySize: -1
+                },
+                response: {
+                    status: endReply.status,
+                    statusText: endReply.statusText,
+                    httpVersion: "HTTP/1.1",
+                    cookies: [],
+                    headers: endReply.headers,
+                    redirectURL: "",
+                    headersSize: -1,
+                    bodySize: startReply.bodySize,
+                    content: {
+                        size: startReply.bodySize,
+                        mimeType: endReply.contentType
+                    }
+                },
+                cache: {},
+                timings: {
+                    blocked: 0,
+                    dns: -1,
+                    connect: -1,
+                    send: 0,
+                    wait: new Date(startReply.time).getTime() - new Date(request.time).getTime(),
+                    receive: new Date(endReply.time).getTime() - new Date(startReply.time).getTime(),
+                    ssl: -1
+                },
+                pageref: page.address
+            });
+        });
+
+       callback({
+            log: {
+                version: '1.2',
+                creator: {
+                    name: "PhantomJS",
+                    version : "1.9.2"
+                },
+                pages: [{
+                    startedDateTime: page.startTime.toISOString(),
+                    id: page.address,
+                    title: page.title,
+                    pageTimings: {
+                        onLoad: page.endTime - page.startTime,
+                        onContentLoad : page.onContentLoad - page.startTime
+                    }
+                }],
+                entries: entries
+            }
+        });
+    }
+
+    function combineHARs(hars) {
+
+        var har = hars[0];
+        var cachedHar = hars[1];
+
+        function matchEntry(url) {
+            var i = 0;
+            for(i=cachedHar.log.entries.length-1; i>=0; i--) {
+                if(cachedHar.log.entries[i].request.url === url) {
+                    return cachedHar.log.entries[i];
+                }
+            }
+            return false;
+        }
+
+        cachedHar.log.creator = {
+            name : "Eyeball",
+            version : "0.0.0"
+        };
+
+        var i =0;
+        var entry;
+        var matched;
+        for (i=0; i<har.log.entries.length; i++) {
+            matched = matchEntry(har.log.entries[i].request.url);
+            if(!matched) {
+                entry = {
+                    startedDateTime: cachedHar.log.pages[0].startedDateTime,
+                    time: 0,
+                    request: {
+                        method: har.log.entries[i].request.method,
+                        url: har.log.entries[i].request.url,
+                        httpVersion: "HTTP/1.1",
+                        cookies: [],
+                        headers: har.log.entries[i].request.headers,
+                        queryString: [],
+                        headersSize: -1,
+                        bodySize: -1
+                    },
+                    response: {
+                        status: '(cache)',
+                        statusText: '(cache)',
+                        httpVersion: "HTTP/1.1",
+                        cookies: [],
+                        headers: har.log.entries[i].response.headers,
+                        redirectURL: "",
+                        headersSize: -1,
+                        bodySize: 0,
+                        content: {
+                            size: har.log.entries[i].response.bodySize,
+                            mimeType: har.log.entries[i].response.content.mimeType
+                        }
+                    },
+                    cache: {
+                        afterRequest : har.log.entries[i].response.bodySize
+                    },
+                    timings: {
+                        blocked: 0,
+                        dns: 0,
+                        connect: 0,
+                        send: 0,
+                        wait: 0,
+                        receive: 0,
+                        ssl: -1
+                    },
+                    pageref: har.log.entries[i].pageref
+                };
+
+                cachedHar.log.entries.push(entry);
+            }
+        }
+
+        return cachedHar;
+    }
+
+    var activeVnus = [];
+    var maxVnus = 1;
+    var validatorFiles = [];
+
+
+    function runValidator() {
+
+        if(activeVnus.length === maxVnus || validatorFiles.length === 0) {
+            return;
+        }
+
+        var item = validatorFiles.splice(0,1)[0];
+        var htmlFile = item.file;
+        var callback = item.cb;
+        var vnuData = "";
+        var vnu = require('child_process').spawn('java',['-jar','-Dnu.validator.client.out=json','-Dfile.encoding=UTF8','lib/vnu-fast-client.jar',htmlFile]);
+        activeVnus.push(vnu);
+        console.log("Active VNUs: "+activeVnus[0]);
+
+        setTimeout(function(){
+            vnu.kill();
+        },5000);
+
+        vnu.stdout.on('data',function(data) {
+            vnuData += data;
+        });
+
+        vnu.stdout.on('end',function(code) {
+            var errors = 0;
+            var warnings = 0;
+            var val;
+
+            try {
+                val = JSON.parse(vnuData);
+            } catch (e) {
+                eyeball.logger.error("Invalid VNU response: "+e);
+                return;
+            }
+            var i = 0;
+            for (i=val.messages.length-1; i>=0; i--) {
+                if(val.messages[i].type === "error") {
+                    errors += 1;
+                }
+                if(val.messages[i].subType === "warning") {
+                    warnings += 1;
+                }
+            }
+            val.info = {
+                errors : errors,
+                warnings : warnings
+            };
+
+            callback(val);
+
+        });
+
+        vnu.stderr.on('data', function (err) {
+            eyeball.logger.error('vnu client error: ' + err);
+        });
+
+        vnu.on('close', function (code) {
+            eyeball.logger.info('vnu child process closed ' + code);
+            fs.unlink(htmlFile,function(err){
+                if(err) {
+                    console.log("error deleting validator file: "+err);
+                }
+                eyeball.logger.info("Deleting validator file");
+            });
+            var i = 0;
+            for(i=activeVnus.length-1; i>=0; i--) {
+                if(activeVnus[i] === vnu) {
+                    activeVnus.splice(i,1);
+                }
+            }
+
+            if(validatorFiles.length > 0) {
+                runValidator();
+            }
+
+        });
+
+    }
+
+
+    function validate(data,callback) {
+        var htmlFile = (new Date()).getTime().toString() + (Math.random()*10).toString() + '.html';
+        fs.writeFile(htmlFile,data,function(error){
+            if(error) {
+                eyeball.logger.info(error);
+            }
+            validatorFiles.push({file:htmlFile,cb : callback});
+            runValidator();
+        });
+    }
+
+    function createRecord(passes) {
+
+        var record = {
+            url : passes[1].address,
+            timestamp: new Date(),
+            build : build,
+            tag : tag,
+            metrics : {}
+        };
+
+        createdRecords.push(record);
+        uncommittedRecords.push(record);
+
+        record.recordTimer = setTimeout(function(){
+            console.log("Gave up waiting for metrics");
+            commitRecord(record);
+        },30000);
+
+        var harUncached = null;
+        var harCached = null;
+
+        if(tests.har) {
+            createHAR(passes[0],function(har1) {
+                harUncached = har1;
+                createHAR(passes[1],function(har2) {
+                    harCached = combineHARs([har1,har2]);
+                    eyeball.logger.info("created har");
+                    updateRecord(record,'har',harCached);
+                    updateRecord(record,'harUncached',harUncached);
+                    updateRecord(record,'time',{
+                        lt : harCached.log.pages[0].pageTimings.onLoad,
+                        dt :  harCached.log.pages[0].pageTimings.onContentLoad,
+                        lt_u : harUncached.log.pages[0].pageTimings.onLoad,
+                        dt_u :  harUncached.log.pages[0].pageTimings.onContentLoad
+                    });
+                    if(tests.yslow) {
+                        var yslow = yslowOverrideGetResults(YSLOW.harImporter.run(jsdom.jsdom(), harCached, 'ydefault').context, 'grade,stats');
+                        eyeball.logger.info('got yslow result');
+                        updateRecord(record,'yslow',yslow);
+                    }
+                });
+            });
+        }
+
+        if(tests.dommonster) {
+            var dm = getDomMonster(passes[1]);
+            eyeball.logger.info('got dommonster result');
+            updateRecord(record,'dommonster',dm);
+        }
+
+        if(tests.validator) {
+            validate(passes[1].content,function(val){
+                updateRecord(record,'validator',val);
+            });
+        }
+
+    }
+
+    function setupPage(page) {
+        page.resources = [];
+        page.libraryPath = "../";
+        page.settings = {
+            resourceTimeout : 5
+        };
+
+        page.onResourceRequested = function (req) {
+            page.resources[req[0].id] = {
+                request: req[0],
+                startReply: null,
+                endReply: null
+            };
+        };
+
+        page.onResourceReceived = function (res) {
+            if(!page.resources[res.id]) {
+                return;
+            }
+            if (res.stage === 'start') {
+                page.resources[res.id].startReply = res;
+            }
+            if (res.stage === 'end') {
+                page.resources[res.id].endReply = res;
+            }
+        };
+
+        page.setFn('onCallback',function(msg) {
+            if(msg === "DOMContentLoaded") {
+                page.evaluate(function(){
+                    window.DOMContentLoaded = new Date().getTime();
+                });
+            }
+        });
+
+        page.setFn('onInitialized',function(){
+            page.evaluate(function() {
+                document.addEventListener('DOMContentLoaded', function() {
+                    window.callPhantom('DOMContentLoaded');
+                }, false);
+            });
+        });
+
+        return page;
+    }
+
+    var activeTests = {};
+
+    function openPage(ph) {
+        eyeball.logger.info("Opening page with "+ph._phantom.pid);
+        var passes = [];
+
+        var pageUrl = urls.splice(0,1)[0];
+
+        activeTests[ph._phantom.pid] = pageUrl;
+
+        function createPage(pass,url) {
+            ph.createPage(function(err,page) {
+                if(err) {
+                    eyeball.logger.info(err);
+                }
+
+                page = setupPage(page);
+
+                if(pass === 0){
+                    page.customHeaders = {
+                        "Cache-Control" : "no-cache, no-store, must-revalidate",
+                        "Pragma" : "no-cache",
+                        "Expires" : 0
+                    };
+                }
+
+                var webpage = {};
+
+                webpage.address = url;
+                webpage.startTime = new Date();
+                page.open(webpage.address, function (err,status) {
+                    if(err) {
+                        eyeball.logger.info(err);
+                    }
+                    if (status !== 'success') {
+                        eyeball.logger.info('FAIL to load the address');
+                        ph.exit(1);
+                        erroredUrls.push(url);
+                    } else {
+                        webpage.endTime = new Date();
+                        page.injectJs("lib/dommonster.js",function(){
+                            page.evaluate(function () {
+                                return {
+                                    title : document.title,
+                                    content : document.documentElement.outerHTML,
+                                    onContentLoad : window.DOMContentLoaded,
+                                    dommonster : window.DM
+                                };
+                            },function(err,doc){
+                                if(err) {
+                                    console.log(err);
+                                    erroredUrls.push(url);
+                                }
+
+                                webpage.title = doc.title;
+                                webpage.content = doc.content;
+                                webpage.onContentLoad = new Date(doc.onContentLoad);
+                                webpage.resources = [].concat(page.resources);
+                                webpage.dommonster = doc.dommonster;
+                                page.close();
+                                passes[pass] = webpage;
+
+                                if(pass === 0) {
+                                    createPage(1,url);
+                                } else if(pass === 1) {
+                                    createRecord(passes);
+                                    delete activeTests[ph._phantom.pid];
+                                    if(urls.length > 0) {
+                                        openPage(ph);
+                                    } else {
+                                        ph.exit();
+                                    }
+                                }
+                            });
+                        });
+                    }
+                });
+            });
+        }
+
+        createPage(0,pageUrl);
+    }
+
+    var retriedErrors = false;
+    var phantomMax = 5;
+    var activePhantoms = [];
+
+    var endTests;
+
+    function startPhantom() {
+
+        if(activePhantoms.length >= phantomMax) {
+            return;
+        }
+
+        phantom.create(function(err,ph) {
+            if(err) {
+                eyeball.logger.info(err);
+            }
+            activePhantoms.push(ph);
+            ph.onError = function(err,trace) {
+                eyeball.logger.info("Phantom error: "+err);
+                ph.exit(1);
+                if(urls.length > 0) {
+                    startPhantom();
+                }
+            };
+            ph.on("error",function(err,trace) {
+                eyeball.logger.info("Phantom error: "+err);
+                ph.exit(1);
+                if(urls.length > 0) {
+                    startPhantom();
+                }
+            });
+            ph.on("exit",function(msg) {
+                eyeball.logger.info("Phantom Exit: "+ph._phantom.pid+ "("+msg+")");
+
+                if(activeTests[ph._phantom.pid]) {
+                    console.log(activeTests[ph._phantom.pid]);
+                    if(erroredUrls) {
+                        erroredUrls.push(activeTests[ph._phantom.pid]);
+                    }
+                    delete activeTests[ph._phantom.pid];
+                }
+                var i = 0;
+                for(i=0; i<activePhantoms.length; i++) {
+                    if(activePhantoms[i] === ph) {
+                        activePhantoms.splice(i,1);
+                    }
+                }
+
+                if(urls.length > 0) {
+                    startPhantom();
+                } else if(activePhantoms.length === 0) {
+                    endTests();
+                }
+
+            });
+            openPage(ph);
+            eyeball.logger.info("Active Phantoms: "+activePhantoms.length);
+            if(urls.length > 0) {
+                startPhantom();
+            }
+        }, {
+            phantomPath : phantomjs.path
+        });
+    }
+
+    function cleanupRecordsAndEnd() {
+        console.log(activePhantoms.length);
+
+        if(!retriedErrors && erroredUrls.length > 0) {
+            // give the failures one more go
+            console.log("Retrying errored urls...");
+            urls = [].concat(erroredUrls);
+            erroredUrls = [];
+            retriedErrors = true;
+            startPhantom();
+            return;
+        }
+
+        setTimeout(function(){
+            var i=0;
+            for(i = activePhantoms.length-1; i>=0; i--) {
+                activePhantoms[i].exit();
+            }
+            for(i = activeVnus.length-1; i>=0; i--) {
+                activeVnus[i].kill();
+            }
+            for(i = validatorFiles.length-1; i>=0; i--) {
+                fs.unlink(validatorFiles[i]);
+            }
+
+            if(erroredUrls.length > 0) {
+                console.log("Forcing test finish");
+                eyeball.io.sockets.volatile.emit('commitRecord_'+build,{
+                    committed : committedRecords.length,
+                    total : urlsLength,
+                    progress : 100
+                });
+            }
+        },30000);
+
+    }
+
+    endTests = cleanupRecordsAndEnd;
+
+    function go(data) {
+
+        if(regex) {
+            regexReplace = regexReplace || "";
+            data = data.replace(new RegExp(regex,"g"),regexReplace);
+
+        }
+
+        urls = data.split("\r\n");
+        if(reps) {
+            var urlset = urls;
+            var i = 0;
+            for(i=0; i<reps; i++) {
+                urls = urls.concat(urlset);
+            }
+        }
+
+        urlsLength = urls.length;
+
+        if(urlsLength < phantomMax) {
+            phantomMax = urlsLength;
+        }
+
+        startPhantom();
+
+    }
+
+    if (url) {
+        go(url);
+    } else if(datafile.indexOf("http") > -1) {
+        var http = require('http');
+        var fileData = "";
+        http.get(datafile,function(res) {
+            res.on("data",function(data) {
+                fileData += data.toString();
+            });
+            res.on("end",function() {
+                go(fileData);
+            });
+        });
+    } else if (datafile) {
+        var fs = require("fs");
+        fs.readFile(datafile,'utf8',function(err,data) {
+            go(data);
+        });
+    }
+
+    res.send("OK");
+};

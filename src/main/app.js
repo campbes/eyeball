@@ -1,18 +1,12 @@
-
-/**
- * Module dependencies.
- */
-
 /*require('nodetime').profile({
     accountKey: '12ebb2588385344195a18a6b67657081112052e8',
     appName: 'Node.js Application'
 });*/
 
-var package = require('./package.json');
+var pkg = require('./package.json');
 
 var express = require('express');
 var routes = require('./routes');
-var user = require('./routes/user');
 var test = require('./routes/test');
 var detail = require('./routes/detail');
 var history = require('./routes/history');
@@ -21,7 +15,7 @@ var report = require('./routes/report');
 var http = require('http');
 var path = require('path');
 var request = require('request');
-socket = require('socket.io');
+var socket = require('socket.io');
 
 var app = express();
 
@@ -37,12 +31,11 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, 'webapp')));
 
 // development only
-if ('development' == app.get('env')) {
+if ('development' === app.get('env')) {
   app.use(express.errorHandler());
 }
 
 app.get('/', routes.index);
-app.get('/users', user.list);
 app.post('/test', test);
 app.get('/report',report.overview);
 app.get('/report/time',report.time);
@@ -59,8 +52,8 @@ var partials = function(req,res) {
 
 app.get('/partials/*',partials);
 
-//DB = require("mongojs").connect("mongodb://eyeball:eyeball@ds047958.mongolab.com:47958/eyeball", ["urls"])["urls"];
-DB = require("mongojs").connect("eyeball", ["urls"])["urls"];
+//var DB = require("mongojs").connect("mongodb://eyeball:eyeball@ds047958.mongolab.com:47958/eyeball", ["urls"])["urls"];
+var DB = require("mongojs").connect("eyeball", ["urls"]).urls;
 
 var server = http.createServer(app);
 server.listen(app.get('port'), function(){
@@ -91,10 +84,11 @@ winston.add(winston.transports.File,
 eyeball = {
     io : socket.listen(server),
     logger : winston,
-    handleExceptions : true
+    handleExceptions : true,
+    DB : DB
 };
 
 app.locals = {
     env : app.settings.env,
-    version : package.version
+    version : pkg.version
 };

@@ -17,8 +17,15 @@ module.exports = function(grunt) {
                     '<%= props.src%>/app.js'
                 ],
                 directives: {
+                    predef : ['eyeball'],
                     node: true,
-                    white : true
+                    white : true,
+                    vars : true,
+                    plusplus : true,
+                    continue : true,
+                    sloppy : true,
+                    nomen: true,
+                    unparam : true
                 },
                 options: {
                     junit: '<%= props.out%>/jslint/jslint-src-app.xml'
