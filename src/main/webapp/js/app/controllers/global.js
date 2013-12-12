@@ -1,5 +1,4 @@
-/*global angularControllers*/
-"use strict";
+/*global eyeballControllers*/
 
 eyeballControllers.controller('GlobalCtrl',['$scope','$location','logger',
 
@@ -18,3 +17,4 @@ eyeballControllers.controller('GlobalCtrl',['$scope','$location','logger',
     }
 
 ]);
+

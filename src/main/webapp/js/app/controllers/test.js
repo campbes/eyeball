@@ -1,7 +1,9 @@
-eyeballControllers.controller('TestCtrl',['$scope','$http','$location','persist','socket','$timeout',
+/*global eyeballControllers*/
 
-    function TestCtrl($scope,$http,$location,persist,socket,$timeout) {
-        console.log("TestCtrl");
+eyeballControllers.controller('TestCtrl',['$scope','$http','$location','persist','socket','$timeout','logger',
+
+    function TestCtrl($scope,$http,$location,persist,socket,$timeout,logger) {
+        logger.log("TestCtrl");
         $scope.testCriteria = {
             inputType : "datafile"
         };
@@ -20,18 +22,18 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','persist'
 
         if(testInfo.testing === true) {
             if (conn) {
-                console.log("old connection left over - killing");
+                logger.log("old connection left over - killing");
                 conn.disconnect();
                 conn = null;
             }
             conn = socket();
             conn.on("commitRecord_"+testInfo.build,function(data) {
-                console.log("listened");
+                logger.log("listened");
                 $scope.testInfo.progress = data.progress;
                 $scope.pushResults(data.record);
                 //$scope.updateTotals();
                 if(data.progress === 100) {
-                    console.log("disconnecting");
+                    logger.log("disconnecting");
                     conn.disconnect();
                     $scope.testInfo.status = "";
                     $scope.testInfo.message = "Testing...done!";
@@ -45,7 +47,7 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','persist'
 
 
         $scope.test = function() {
-            console.log($scope.testCriteria);
+            logger.log($scope.testCriteria);
             $scope.testCriteria.build =(new Date()).getTime().toString() + (Math.random()*10).toString();
             if($scope.testCriteria.url && $scope.testCriteria.url.indexOf("://") === -1) {
                 $scope.testCriteria.url = "http://" + $scope.testCriteria.url;
@@ -67,13 +69,13 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','persist'
                     method: "POST",
                     data : $scope.testCriteria
                 }).success(function() {
-                        console.log("posted");
+                        logger.log("posted");
                     });
             },500);
         };
 
         $scope.$on("quickTest",function(sc,url) {
-            console.log("heard quicktest")
+            logger.log("heard quicktest: "+sc);
             $scope.testCriteria = {
                 url : url,
                 inputType : "url"

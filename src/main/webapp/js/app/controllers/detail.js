@@ -1,3 +1,5 @@
+/*global eyeballControllers*/
+
 eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http','fieldConfig','render','persist',
 
     function DetailCtrl($scope,$routeParams,$http,fieldConfig,render,persist) {
@@ -15,7 +17,6 @@ eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http','fie
             $scope.tag = data.tag;
             $scope.fields = fieldConfig.overview;
             $scope.fieldConfig = fieldConfig;
-                console.log(data);
         });
 
 
@@ -27,3 +28,4 @@ eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http','fie
     }
 
 ]);
+

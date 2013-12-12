@@ -1,7 +1,9 @@
-eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeout','$routeParams','exos','popover','tablesort','render','chart','persist',
+/*global eyeballControllers*/
 
-    function ReportCtrl($scope,$http,$location,$timeout,$routeParams,exos,popover,tablesort,render,chart,persist) {
-        console.log("ReportCtrl");
+eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeout','$routeParams','exos','popover','tablesort','render','chart','persist','logger',
+
+    function ReportCtrl($scope,$http,$location,$timeout,$routeParams,exos,popover,tablesort,render,chart,persist,logger) {
+        logger.log("ReportCtrl");
         $scope.format = render.format;
         $scope.getVal = render.accessObject;
         $scope.results = [];
@@ -17,9 +19,11 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
             {name : "Test ID", value : "build"}
         ];
         $scope.charts = [];
-        for(var i in $scope.query) {
-            if($scope.query.hasOwnProperty(i)) {
-                $scope.filterParams[i] = $scope.query[i];
+
+        var qParam;
+        for(qParam in $scope.query) {
+            if($scope.query.hasOwnProperty(qParam)) {
+                $scope.filterParams[qParam] = $scope.query[qParam];
             }
         }
 
@@ -31,7 +35,8 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         });
 
         var updateTotals = function() {
-            for(var i=0; i<$scope.fields.length; i++) {
+            var i = 0;
+            for(i=0; i<$scope.fields.length; i++) {
                 if(!$scope.totals[$scope.fields[i].tool]) {
                     $scope.totals[$scope.fields[i].tool] = {};
                 }
@@ -47,30 +52,11 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
             }
         });
 
-        $scope.$watch("resultsTable.count",function(){
-            console.log("results table count changed");
-            persist.set("resultsCount",$scope.resultsTable.count);
-        });
-        $scope.$watch("resultsTable.order.col",function(){
-            console.log("results table order (col) changed");
-            persist.set("resultsTable.order.col",$scope.resultsTable.order.col);
-        });
-        $scope.$watch("resultsTable.order.asc",function(){
-            console.log("results table order (asc) changed");
-            persist.set("resultsTable.order.asc",$scope.resultsTable.order.asc);
-        });
-
-        $scope.$watch('results',function(){
-            console.log("results changed");
-            updateTotals();
-            setupCharts();
-        });
-
         function setupChart(i) {
             var ch = $scope.charts[i];
             $scope.$watch('charts['+i+'].xAxis',function(){
                 if($scope.reportView === 'chart') {
-                    console.log(ch.tool+" chart changed");
+                    logger.log(ch.tool+" chart changed");
                     $timeout(function(){
                         chart.drawPivotChart($scope.results,ch.xAxis,ch.tool,ch.metric);
                     },1000);
@@ -99,7 +85,8 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         };
 
         function setupCharts() {
-            for(var i=0; i<$scope.fields.length; i++) {
+            var i = 0;
+            for(i=0; i<$scope.fields.length; i++) {
                 $scope.charts[i] = {
                     tool : $scope.fields[i].tool,
                     metric : $scope.fields[i].metric,
@@ -124,11 +111,13 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
             persist.set('reportView',$scope.reportView);
             if(view === 'chart') {
                 $timeout(function(){
-                    for(var i=0; i<$scope.charts.length; i++) {
-                        var ch = $scope.charts[i];
+                    var i = 0;
+                    var ch;
+                    for(i=0; i<$scope.charts.length; i++) {
+                        ch = $scope.charts[i];
                         chart.drawPivotChart($scope.results,ch.xAxis,ch.tool,ch.metric);
                     }
-                },100)
+                },100);
             }
         };
 
@@ -142,7 +131,26 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
 
         $scope.encodeQuery = function(val) {
             return encodeURIComponent(val);
-        }
+        };
+
+        $scope.$watch("resultsTable.count",function(){
+            logger.log("results table count changed");
+            persist.set("resultsCount",$scope.resultsTable.count);
+        });
+        $scope.$watch("resultsTable.order.col",function(){
+            logger.log("results table order (col) changed");
+            persist.set("resultsTable.order.col",$scope.resultsTable.order.col);
+        });
+        $scope.$watch("resultsTable.order.asc",function(){
+            logger.log("results table order (asc) changed");
+            persist.set("resultsTable.order.asc",$scope.resultsTable.order.asc);
+        });
+
+        $scope.$watch('results',function(){
+            logger.log("results changed");
+            updateTotals();
+            setupCharts();
+        });
 
     }
 ]);

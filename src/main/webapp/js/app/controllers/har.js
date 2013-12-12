@@ -1,3 +1,5 @@
+/*global eyeballControllers,Harpy*/
+
 eyeballControllers.controller('HarCtrl',['$scope','$routeParams','$http','persist',
 
     function HarCtrl($scope,$routeParams,$http,persist) {

@@ -11,17 +11,32 @@ module.exports = function(grunt) {
         },
         clean : ['target'],
         jslint: { // configure the task
+            app: {
+                src: [
+                    '<%= props.src%>/routes/**/*.js',
+                    '<%= props.src%>/app.js'
+                ],
+                directives: {
+                    node: true,
+                    white : true
+                },
+                options: {
+                    junit: '<%= props.out%>/jslint/jslint-src-app.xml'
+                }
+            },
             webapp: {
                 src: [
                     '<%= props.src%>/webapp/js/**/*.js'
                 ],
                 directives: {
                     browser: true,
-                    predef : ['window'],
                     white : true,
                     vars : true,
                     plusplus : true,
-                    continue : true
+                    continue : true,
+                    sloppy : true,
+                    nomen: true,
+                    unparam : true
                 },
                 options: {
                     junit: '<%= props.out%>/jslint/jslint-src-webapp.xml'

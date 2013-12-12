@@ -1,3 +1,5 @@
+/*global eyeballApp,io,console,Exos,$,google*/
+
 eyeballApp.factory('socket', ['$rootScope',function ($rootScope) {
 
     function connection() {
@@ -21,7 +23,7 @@ eyeballApp.factory('socket', ['$rootScope',function ($rootScope) {
                             callback.apply(socket, args);
                         }
                     });
-                })
+                });
             },
             disconnect : function() {
                 socket.disconnect();
@@ -42,7 +44,7 @@ eyeballApp.service('persist',function(){
         set : function(key,data) {
             persist[key] = data;
         }
-    }
+    };
 
 });
 
@@ -54,23 +56,23 @@ eyeballApp.service('logger',function(){
                 console.log(msg);
             }
         }
-    }
+    };
 
 });
 
 eyeballApp.factory('exos',function() {
 
-    function popover(popover) {
+    function popover(pop) {
         Exos.enable([
             {'td[data-type="grades"]' : {
                 'mouseenter' : {
-                    fn : popover.show
+                    fn : pop.show
                 },
                 'mouseleave' : {
-                    fn : popover.hide
+                    fn : pop.hide
                 },
                 'click' : {
-                    fn : popover.hide
+                    fn : pop.hide
                 }
             }}
         ]);
@@ -80,7 +82,7 @@ eyeballApp.factory('exos',function() {
     return {
         popover : popover,
         enable : Exos.enable
-    }
+    };
 
 });
 
@@ -118,7 +120,8 @@ eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($t
             }
             table.results = resultsFiltered.slice((table.page-1)*table.count,table.page*table.count);
             table.pages = [];
-            for(var i=0;i<pageLength;i++) {
+            var i = 0;
+            for(i=0;i<pageLength;i++) {
                 table.pages.push(i+1);
             }
             if(headers) {
@@ -138,13 +141,13 @@ eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($t
 
         table.next = function() {
             if(table.page < table.pages.length) {
-                table.setPage(table.page+1)
+                table.setPage(table.page+1);
             }
         };
 
         table.prev = function() {
             if(table.page > 1) {
-                table.setPage(table.page-1)
+                table.setPage(table.page-1);
             }
         };
 
@@ -168,18 +171,20 @@ eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($t
                 if(table.order.asc) {
                     if (a < b) {
                         return 1;
-                    } else if (a > b) {
-                        return -1;
                     }
-                    return 0;
-                } else {
-                    if (a < b) {
+                    if (a > b) {
                         return -1;
-                    } else if (a > b) {
-                        return 1;
                     }
                     return 0;
                 }
+                if (a < b) {
+                    return -1;
+                }
+                if (a > b) {
+                    return 1;
+                }
+                return 0;
+
             });
             setResults();
         };
@@ -208,10 +213,8 @@ eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($t
         });
 
         table.setFilter = function() {
-            console.log(table.filter);
-
             setResults();
-        }
+        };
 
     }
 
@@ -225,7 +228,7 @@ eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($t
                 noSort.insertBefore($('tbody>tr',tables).first());
             });
         }
-    }
+    };
 }]);
 
 eyeballApp.factory('popover',function(){
@@ -244,10 +247,52 @@ eyeballApp.factory('popover',function(){
         hide : function(e,obj) {
             $(obj).popover('destroy');
         }
-    }
+    };
 });
 
 eyeballApp.factory('render',function() {
+
+    function accessObject(obj,str) {
+        if(!obj){
+            return null;
+        }
+        var keys = str.split(".");
+        var keysLength = keys.length;
+        if(keys.length === 1) {
+            return obj[keys[0]];
+        }
+        var i = null;
+        for (i=0; i<keysLength; i++) {
+            obj = obj[keys[i]] || obj;
+        }
+        return obj;
+    }
+
+    function format(val,type) {
+
+        if(typeof val === "object") {
+            return "";
+        }
+
+        switch(type) {
+            case "size" :
+                if(val > 1024) {
+                    val = val/102.4;
+                    val = Math.round(val);
+                    return val/10+ " KB";
+                }
+                return val+ " B";
+            case "time" :
+                if(val > 1000) {
+                    val = val/10;
+                    val = Math.round(val);
+                    return val/100+ " s";
+                }
+                return val+ " ms";
+            default:
+                return val;
+        }
+    }
 
     var totals = (function() {
 
@@ -308,49 +353,6 @@ eyeballApp.factory('render',function() {
 
     }());
 
-    function accessObject(obj,str) {
-        if(!obj){
-            return null;
-        }
-        var keys = str.split(".");
-        var keysLength = keys.length;
-        if(keys.length === 1) {
-            return obj[keys[0]];
-        }
-        var i = null;
-        for (i=0; i<keysLength; i++) {
-            obj = obj[keys[i]] || obj;
-        }
-        return obj;
-    }
-
-    function format(val,type) {
-
-        if(typeof val === "object") {
-            return "";
-        }
-
-        switch(type) {
-            case "size" :
-                if(val > 1024) {
-                    val = val/102.4;
-                    val = Math.round(val);
-                    return val/10+ " KB";
-                }
-                return val+ " B";
-                break;
-            case "time" :
-                if(val > 1000) {
-                    val = val/10;
-                    val = Math.round(val);
-                    return val/100+ " s";
-                }
-                return val+ " ms";
-            default:
-                return val;
-        }
-    }
-
     function getInfo(obj,str) {
         var val = accessObject(obj,str);
 
@@ -410,7 +412,7 @@ eyeballApp.factory('render',function() {
         accessObject : accessObject,
         format : format,
         getInfo: getInfo
-    }
+    };
 
 });
 
@@ -439,20 +441,31 @@ eyeballApp.factory('chart', ['render', function(render){
                 }
             }
 
-            for (var j=0; j<xValArray.length; j++) {
-                var a = 0;
-                var b = 0;
-                var c = 0;
-                var d = 0;
-                var e = 0;
-                var f = 0;
+            var j = 0;
+            var a = 0;
+            var b = 0;
+            var c = 0;
+            var d = 0;
+            var e = 0;
+            var f = 0;
+            var grades;
+
+            for (j=0; j<xValArray.length; j++) {
+
+                a = 0;
+                b = 0;
+                c = 0;
+                d = 0;
+                e = 0;
+                f = 0;
+
                 for (i=0; i<results.length; i++) {
                     if(results[i].metrics) {
                         res = results[i].metrics[tool];
                         if(res) {
                             xVal = (xAxis ? res[xAxis.value] : res.timestamp);
                             if (xVal === xValArray[j] && res.grades) {
-                                var grades = render.accessObject(res.grades,field);
+                                grades = render.accessObject(res.grades,field);
 
                                 switch(grades) {
                                     case "A": a += 1; break;
@@ -475,10 +488,12 @@ eyeballApp.factory('chart', ['render', function(render){
         function drawChart(results,xAxis,tool,metric) {
 
             function sortByDate(a,b) {
-                if (a.timestamp < b.timestamp)
+                if (a.timestamp < b.timestamp) {
                     return -1;
-                if (a.timestamp > b.timestamp)
+                }
+                if (a.timestamp > b.timestamp) {
                     return 1;
+                }
                 return 0;
             }
 
@@ -493,18 +508,19 @@ eyeballApp.factory('chart', ['render', function(render){
             var view = new google.visualization.DataView(data);
 
             function getColumn(label,index) {
+                var i = 0;
                 return {
                     label : label,
                     type : 'number',
                     calc : function(dt,row) {
                         var total = 0;
                         var val = dt.getValue(row,index);
-                        for(var i=1; i<=6; i++) {
+                        for(i=1; i<=6; i++) {
                             total += dt.getValue(row,i);
                         }
                         return { v: val /total, f : val.toString()};
                     }
-                }
+                };
             }
 
             view.setColumns([0,
@@ -574,8 +590,8 @@ eyeballApp.factory('chart', ['render', function(render){
         }
 
         var chartData = new google.visualization.DataTable();
-
-        for(var i=0; i<cols.length;i++) {
+        var i = 0;
+        for(i=0; i<cols.length;i++) {
             if(cols[i].type) {
                 chartData.addColumn(cols[i]);
             } else {
@@ -649,7 +665,7 @@ eyeballApp.factory('chart', ['render', function(render){
         drawPivotChart : drawChart,
         drawHistoryChart : drawHistoryChart,
         gradeMap : map
-    }
+    };
 
 }]);
 
