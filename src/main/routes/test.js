@@ -609,6 +609,7 @@ module.exports = function(req,res) {
         });
 
         vnu.on('close', function (code) {
+            var fs = require("fs");
             eyeball.logger.info('vnu child process closed ' + code);
             fs.unlink(htmlFile,function(err){
                 if(err) {
@@ -634,6 +635,7 @@ module.exports = function(req,res) {
 
     function validate(data,callback) {
         var htmlFile = (new Date()).getTime().toString() + (Math.random()*10).toString() + '.html';
+        var fs = require("fs");
         fs.writeFile(htmlFile,data,function(error){
             if(error) {
                 eyeball.logger.info(error);
@@ -909,6 +911,7 @@ module.exports = function(req,res) {
         }
 
         setTimeout(function(){
+            var fs = require("fs");
             var i=0;
             for(i = activePhantoms.length-1; i>=0; i--) {
                 activePhantoms[i].exit();
