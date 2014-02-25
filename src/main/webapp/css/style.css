@@ -20,11 +20,16 @@ table.keyinfo {
 table.keyinfo td {
     width: 5%;
 }
-
+#results td[data-type='grades'] {
+    padding: 0;
+}
 td[data-type='grades'] a {
     display: inline-block;
     width: 100%;
     height: 100%;
+}
+td[data-type='grades'] span {
+    margin: 5px;
 }
 div.logo {
     display: inline-block;
@@ -59,11 +64,13 @@ div.loader {
 .pivotChart {
     height: 350px;
 }
-
 .nav-tabs {
     margin-bottom: 20px;
 }
-
+a.panelAnchor {
+    position: absolute;
+    margin-top: -60px;
+}
 .gradeA,
 .gradeB,
 .gradeC,
@@ -122,13 +129,27 @@ div.loader {
 }
 
 /*harpy*/
+table.harpy {
+    width: 100%;
+}
 .harpy td, .harpy th {
     text-align: left;
-    font-size: 75%;
+    font-size: 90%;
+}
+.harpy td.info {
+    word-break: break-all;
+    word-wrap: break-word;
+    white-space: normal;
+    width: 100%;
 }
 .harpy td.info table td {
     font-size : 100%;
-    max-width : none;
+}
+.harpy dl {
+    margin: 10px 0 0;
+}
+.harpy hr {
+    margin: 10px 0;
 }
 /*.harpy th {
     min-width: 45px;
