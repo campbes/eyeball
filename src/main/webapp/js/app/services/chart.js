@@ -185,7 +185,7 @@ eyeballApp.factory('chart', ['render', function(render){
         chartData.addRows(results);
 
         var view = new google.visualization.DataView(chartData);
-        var chart = new google.visualization.LineChart(el);
+        var chart = new google.visualization.AreaChart(el);
 
         var config = {
             vAxis : {
@@ -195,11 +195,19 @@ eyeballApp.factory('chart', ['render', function(render){
                     { v : 4, f : "C" },
                     { v : 3, f : "D" },
                     { v : 2, f : "E" },
-                    { v : 1, f : "F" }
+                    { v : 1, f : "F" },
+                    { v : 0, f : "None"}
                 ],
                 viewWindow : {
-                    min : 1,
-                    max : 6
+                    min : 0,
+                    max : 6.5
+                },
+                minorGridlines : {
+                    count : 1,
+                    color : "#CCC"
+                },
+                gridlines : {
+                    color : "#FFF"
                 }
             },
             hAxis : {
@@ -216,7 +224,8 @@ eyeballApp.factory('chart', ['render', function(render){
              trigger: 'none'
              } ,*/
             lineWidth : 2,
-            focusTarget : 'category'
+            focusTarget : 'category',
+            areaOpacity : 0.2
         };
 
         function selectHandler() {
@@ -233,14 +242,16 @@ eyeballApp.factory('chart', ['render', function(render){
 
     }
 
-    function map(grade) {
+    function map(grade,pos,total) {
+        var offset = (pos+1)/(total+1) - 0.5;
         switch(grade) {
-            case 'A' : return 6;
-            case 'B' : return 5;
-            case 'C' : return 4;
-            case 'D' : return 3;
-            case 'E' : return 2;
-            case 'F' : return 1;
+            case 'A' : return 6 - offset;
+            case 'B' : return 5 - offset;
+            case 'C' : return 4 - offset;
+            case 'D' : return 3 - offset;
+            case 'E' : return 2 - offset;
+            case 'F' : return 1 - offset;
+            default : return 0;
         }
     }
 
