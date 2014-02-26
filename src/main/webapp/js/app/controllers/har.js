@@ -16,10 +16,19 @@ eyeballControllers.controller('HarCtrl',['$scope','$routeParams','$http','persis
                 $scope.timestamp = data.timestamp;
                 $scope.build = data.build;
                 $scope.tag = data.tag;
-                var viewer = new Harpy.Viewer(JSON.stringify(data.metrics.har.data));
-                viewer.draw("harContainer");
-                var uncachedViewer = new Harpy.Viewer(JSON.stringify(data.metrics.harUncached.data));
-                uncachedViewer.draw("harUncached");
+
+                var har = JSON.stringify(data.metrics.har.data);
+                var harUncached = JSON.stringify(data.metrics.harUncached.data);
+                var comparator = new Harpy.Comparator(har,harUncached);
+                comparator.draw("harComparison");
+                setTimeout(function(){
+                    var viewer = new Harpy.Viewer(JSON.stringify(data.metrics.har.data));
+                    viewer.draw("harContainer");
+                },500);
+                setTimeout(function(){
+                    var uncachedViewer = new Harpy.Viewer(JSON.stringify(data.metrics.harUncached.data));
+                    uncachedViewer.draw("harUncached");
+                },500);
             });
 
     }
