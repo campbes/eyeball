@@ -39,7 +39,6 @@ eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','ch
                 f = fieldConfig[tool][j];
                 array.push((data.metrics[f.tool] ? chart.gradeMap(render.accessObject(data.metrics[f.tool].grades,f.metric),j,fieldConfig[tool].length) : 0));
             }
-            console.log(array);
             return array;
         }
 

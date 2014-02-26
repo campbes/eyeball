@@ -101,10 +101,23 @@ module.exports = function(grunt) {
             }
         },
         compress : {
-            main: {
+            tgz: {
                 options: {
                     mode : 'tgz',
                     archive: '<%= props.out%>/<%=props.name%>.tgz'
+                },
+                files: [
+                    {
+                        src: ['<%= props.out%>/<%=props.name%>/**'],
+                        flatten : true,
+                        expand : true
+                    }
+                ]
+            },
+            zip: {
+                options: {
+                    mode : 'zip',
+                    archive: '<%= props.out%>/<%=props.name%>.zip'
                 },
                 files: [
                     {
