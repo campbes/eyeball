@@ -14,6 +14,12 @@ eyeballControllers.controller('GlobalCtrl',['$scope','$location','logger',
             $location.path('/report').search({url : $scope.quickUrl});
         };
 
+        $scope.setPage = function(page) {
+            $scope.page = page;
+        };
+
+        $scope.page = "global";
+
     }
 
 ]);

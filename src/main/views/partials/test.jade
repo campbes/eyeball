@@ -1,0 +1,12 @@
+include ../test
+
+div.container
+    ol.breadcrumb
+        li
+            a(href="#") Eyeball
+        li.active Test
+
+    div.panel.panel-default(ng-controller="TestCtrl")
+        div.panel-heading Test
+        div.panel-body
+            mixin testForm

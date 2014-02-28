@@ -86,3 +86,12 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','persist'
     }
 
 ]);
+
+eyeballControllers.controller('TestMainCtrl',['$scope','logger',
+
+    function TestMainCtrl($scope,logger) {
+        logger.log("TestMainCtrl");
+        $scope.setPage("test");
+    }
+
+]);

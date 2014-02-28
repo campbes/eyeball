@@ -16,11 +16,10 @@ html(ng-app='eyeballApp',lang='en')
                 div.logo
                 a.navbar-brand(href='#') Eyeball
             ul.nav.navbar-nav
-                li
-                    button.btn.btn-primary.navbar-btn(type="button" data-toggle="modal" data-target="#modalTest")
-                        span.glyphicon.glyphicon-cog
-                        |&nbsp;New Test
-                    |&nbsp;
+                li(class="{{(page === 'test' ? 'active' : '')}}")
+                    a(href="#test") Test
+                li(class="{{(page === 'report' ? 'active' : '')}}")
+                    a(href="#report") Analyze
             form.navbar-form.navbar-left(role="form")
                 div.form-group
                     input.form-control(type='text',ng-model="quickUrl",placeholder="Enter a URL for quick test/find")
@@ -32,7 +31,7 @@ html(ng-app='eyeballApp',lang='en')
                     |&nbsp;Find
 
             ul.nav.navbar-nav.navbar-right
-                li
+                li(class="{{(page === 'monitor' ? 'active' : '')}}")
                     a(href="#/monitor") Monitor
 
 

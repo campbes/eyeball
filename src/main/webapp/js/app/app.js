@@ -35,8 +35,11 @@
                 }).when('/monitor', {
                     templateUrl: '/partials/monitor',
                     controller : 'MonitorCtrl'
+                }).when('/test', {
+                    templateUrl: '/partials/test',
+                    controller : 'TestMainCtrl'
                 }).otherwise({
-                      redirectTo: '/report'
+                    redirectTo: '/test'
                 });
         }]);
 

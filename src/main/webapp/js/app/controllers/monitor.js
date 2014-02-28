@@ -4,6 +4,8 @@ eyeballControllers.controller('MonitorCtrl',['$scope','$http',
 
     function MonitorCtrl($scope,$http) {
 
+        $scope.setPage("monitor");
+
         $http({
             url: '/monitor',
             method: "GET"
