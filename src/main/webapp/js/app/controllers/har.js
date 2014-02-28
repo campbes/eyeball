@@ -7,6 +7,14 @@ eyeballControllers.controller('HarCtrl',['$scope','$routeParams','$http','persis
         $scope.id = $routeParams.id.substr(1);
         $scope.reportFilter = persist.get("reportFilter");
 
+        $scope.viewer = null;
+        $scope.uncachedViewer = null;
+
+        $scope.$on("$destroy",function() {
+            $scope.viewer.destroy();
+            $scope.uncachedViewer.destroy();
+        });
+
         $http({
             url: '/detail?id='+$scope.id,
             method: "GET"
@@ -22,12 +30,12 @@ eyeballControllers.controller('HarCtrl',['$scope','$routeParams','$http','persis
                 var comparator = new Harpy.Comparator(har,harUncached);
                 comparator.draw("harComparison");
                 setTimeout(function(){
-                    var viewer = new Harpy.Viewer(JSON.stringify(data.metrics.har.data));
-                    viewer.draw("harContainer");
+                    $scope.viewer = new Harpy.Viewer(JSON.stringify(data.metrics.har.data));
+                    $scope.viewer.draw("harContainer");
                 },500);
                 setTimeout(function(){
-                    var uncachedViewer = new Harpy.Viewer(JSON.stringify(data.metrics.harUncached.data));
-                    uncachedViewer.draw("harUncached");
+                    $scope.uncachedViewer = new Harpy.Viewer(JSON.stringify(data.metrics.harUncached.data));
+                    $scope.uncachedViewer.draw("harUncached");
                 },500);
             });
 
