@@ -31,8 +31,8 @@ mixin testForm
                 input#regexReplace.form-control(type='text',placeholder="Replacement text",ng-model="testCriteria.regexReplace")
         div.form-group
             label.col-sm-3.control-label(for="reps") Repetitions
-            div.col-sm-9
-                input#reps.form-control(type='text',placeholder="Number of times to repeat all tested URLs",ng-model="testCriteria.reps")
+            div.col-sm-1
+                input#reps.form-control(type='text',ng-model="testCriteria.reps",placeholder="0",maxlength="2")
         div.form-group
             div.col-sm-offset-3.col-sm-9
                 button.btn.btn-primary(type="submit",data-dismiss="modal",ng-click="test()",ng-disabled="testForm.$invalid") Go!
