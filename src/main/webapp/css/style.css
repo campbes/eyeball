@@ -3,6 +3,9 @@ body {
     padding-top: 70px;
     font-size: 9pt;
 }
+.label {
+    font-size: 85%;
+}
 #results td,th {
     white-space: nowrap;
 }
