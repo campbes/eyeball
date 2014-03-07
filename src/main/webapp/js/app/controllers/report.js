@@ -14,6 +14,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         $scope.popoverContent = null;
         $scope.fields = [];
         $scope.reportView = persist.get('reportView') || 'table';
+        $scope.path = $location.path();
 
         $scope.chartOptions = [
             {name : "Date", value : "timestamp"},
@@ -124,7 +125,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
 
         $scope.filter = function() {
             $timeout(function(){
-                $location.path('/report').search($scope.filterParams);
+                $location.path($scope.path).search($scope.filterParams);
             },500);
         };
 
