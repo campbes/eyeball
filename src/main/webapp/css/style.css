@@ -176,9 +176,12 @@ table.harpy {
 .harpy hr {
     margin: 10px 0;
 }
-/*.harpy th {
-    min-width: 45px;
-} */
+div.harpyChart {
+    width: 25%;
+}
+div.harpyBarChart {
+    width: 33%;
+}
 
 table.table th.header {
     background:  url("../images/bg.gif") no-repeat center right;

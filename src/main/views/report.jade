@@ -111,8 +111,7 @@ mixin reportTotals
         td
             a(href='#{{path}}?url={{r.url}}&start={{query.start}}&end={{query.end}}&tag={{query.tag}}',ng-if='query.build',title='{{query.build}}')
                 span.glyphicon.glyphicon-remove
-                |&nbsp;{{query.build.substr(0,10)}}
-                span(ng-if='query.build.length > 10') ...
+                |&nbsp;{{query.build.substr(0,4)}}...
         td
             a(href='#{{path}}?url={{r.url}}&start={{query.start}}&end={{query.end}}&build={{query.build}}',ng-if='query.tag',title='{{query.tag}}')
                 span.glyphicon.glyphicon-remove
