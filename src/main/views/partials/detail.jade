@@ -19,6 +19,7 @@ div.container
                         span(ng-if="data.metrics[f.tool].data[f.metric]") &nbsp;({{format(data.metrics[f.tool].data[f.metric],f.format)}})
 
     div(ng-repeat="f in fields",class='panel panel-default')
+        a.panelAnchor(id="panel_{{f.metric}}",name="panel_{{f.metric}}")
         div(class='panel-heading grade{{data.metrics[f.tool].grades[f.metric]}}')
             span.badge {{data.metrics[f.tool].grades[f.metric]}}
             |&nbsp;{{f.name}}

@@ -17,8 +17,12 @@ eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http','fie
             $scope.tag = data.tag;
             $scope.fields = fieldConfig.overview;
             $scope.fieldConfig = fieldConfig;
+            setTimeout(function(){
+                $('body').animate({
+                    scrollTop : $('#panel_'+$routeParams.anchor).offset().top
+                });
+            },1);
         });
-
 
         $scope.format = render.format;
         $scope.reportFilter = persist.get("reportFilter");

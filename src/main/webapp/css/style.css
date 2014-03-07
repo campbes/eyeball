@@ -44,6 +44,9 @@ td[data-type='grades'] a {
     width: 100%;
     height: 100%;
 }
+td:hover[data-type='grades'] {
+    background: #FFF !important;
+}
 td[data-type='grades'] span {
     margin: 5px;
 }
