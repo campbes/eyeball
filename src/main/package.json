@@ -26,6 +26,7 @@
         "grunt-gcc" : "0.2.2",
         "grunt-jslint" : "1.1.1",
         "grunt-jstestdriver" : "2.2.0",
-        "grunt-curl" : "1.1.1"
+        "grunt-curl" : "1.1.1",
+        "grunt-plato" : "1.0.0"
     }
 }

@@ -100,6 +100,15 @@ module.exports = function(grunt) {
                 dest: '<%= props.out%>/<%=props.name%>/webapp/<%=props.name%>.min.css'
             }
         },
+        plato: {
+            your_task: {
+                files: {
+                    '<%= props.out%>/analysis': ['<%= props.src%>/*.js',
+                        '<%= props.src%>/routes/**/*.js',
+                        '<%= props.src%>/webapp/js/**/*.js']
+                }
+            }
+        },
         compress : {
             tgz: {
                 options: {
@@ -140,6 +149,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('compile', ['jslint','copy:app','copy','concat','gcc','cssmin']);
     grunt.registerTask('package', ['compress']);
+    grunt.registerTask('analyse', ['plato']);
     grunt.registerTask('default', ['clean','compile','package']);
 
 };
