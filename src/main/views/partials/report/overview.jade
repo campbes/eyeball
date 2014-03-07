@@ -9,29 +9,7 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
 
     div(ng-hide="reportView === 'chart'")
 
-        div.alert.alert-info(ng-show="query.url || query.start || query.end || query.build || query.tag")
-            ul.list-inline
-                li Showing only results for
-                li(ng-show="query.url")
-                    a(href="#/report?start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}")
-                        span.label.label-primary
-                            span.glyphicon.glyphicon-remove
-                            |&nbsp;URL: {{query.url}}
-                li(ng-show="query.start || query.end")
-                    a(href="#/report?url={{query.url}}&build={{query.build}}&tag={{query.tag}}")
-                        span.label.label-primary
-                            span.glyphicon.glyphicon-remove
-                            |&nbsp;Date: {{query.start}} - {{query.end}}
-                li(ng-show="query.build")
-                    a(href="#/report?url={{query.url}}&start={{query.start}}&end={{query.end}}&tag={{query.tag}}")
-                        span.label.label-primary
-                            span.glyphicon.glyphicon-remove
-                            |&nbsp;Test ID: {{query.build}}
-                li(ng-show="query.tag")
-                    a(href="#/report?url={{query.url}}&start={{query.start}}&end={{query.end}}&build={{query.build}}")
-                        span.label.label-primary
-                            span.glyphicon.glyphicon-remove
-                            |&nbsp;Tag: {{query.tag}}
+        mixin filterInfo
 
         table#results.table.table-striped.table-condensed
             mixin reportHeaders

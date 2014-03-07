@@ -139,8 +139,7 @@ mixin reportFields
     td(title='{{r.build}}')
         a(href='#/report?url={{query.url}}&urlExact={{query.urlExact}}&start={{query.start}}&end={{query.end}}&build={{r.build}}&tag={{query.tag}}')
             span.glyphicon.glyphicon-filter
-        |&nbsp;{{r.build.substr(0,10)}}
-        span(ng-if='r.build.length > 10') ...
+        |&nbsp;{{r.build.substr(0,4)}}...
     td(title='{{r.tag}}')
         a(href='#/report?url={{query.url}}&urlExact={{query.urlExact}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{r.tag}}',ng-show="{{r.tag.length}}")
             span.glyphicon.glyphicon-filter
@@ -168,6 +167,8 @@ mixin tabs(report)
 
 mixin results
     div(ng-hide="reportView === 'chart'")
+        mixin filterInfo
+
         table#results.table.table-striped.table-condensed
             mixin reportHeaders
             tbody
@@ -201,3 +202,28 @@ mixin reportPager
         li(class="next{{(resultsTable.page === resultsTable.pages.length ? ' disabled' : '')}}")
             a(ng-click="resultsTable.next()") Next&nbsp;
                 span.glyphicon.glyphicon-chevron-right
+
+mixin filterInfo
+    div.alert.alert-info(ng-show="query.url || query.start || query.end || query.build || query.tag")
+        ul.list-inline
+            li Showing only results for
+            li(ng-show="query.url")
+                a(href="#/report?start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}")
+                    span.label.label-primary
+                        span.glyphicon.glyphicon-remove
+                        |&nbsp;URL: {{query.url}}
+            li(ng-show="query.start || query.end")
+                a(href="#/report?url={{query.url}}&build={{query.build}}&tag={{query.tag}}")
+                    span.label.label-primary
+                        span.glyphicon.glyphicon-remove
+                        |&nbsp;Date: {{query.start}} - {{query.end}}
+            li(ng-show="query.build")
+                a(href="#/report?url={{query.url}}&start={{query.start}}&end={{query.end}}&tag={{query.tag}}")
+                    span.label.label-primary
+                        span.glyphicon.glyphicon-remove
+                        |&nbsp;Test ID: {{query.build}}
+            li(ng-show="query.tag")
+                a(href="#/report?url={{query.url}}&start={{query.start}}&end={{query.end}}&build={{query.build}}")
+                    span.label.label-primary
+                        span.glyphicon.glyphicon-remove
+                        |&nbsp;Tag: {{query.tag}}
