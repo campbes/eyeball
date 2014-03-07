@@ -4,19 +4,17 @@ include ../detail
 mixin test
 
 
-div.container
+div#detail.container
 
     mixin detailNav('detail')
 
     div(class='panel panel-default')
         div.panel-heading Overview
-        div.panel-body
-            table.keyinfo
-                tr
-                    td(ng-repeat="f in fields", class='alert grade{{data.metrics[f.tool].grades[f.metric]}}')
-                        span(class='badge') {{data.metrics[f.tool].grades[f.metric]}}
-                        |&nbsp;{{f.name}}
-                        span(ng-if="data.metrics[f.tool].data[f.metric]") &nbsp;({{format(data.metrics[f.tool].data[f.metric],f.format)}})
+        div.panel-body.keyInfo
+            button(ng-repeat="f in fields", class='alert grade{{data.metrics[f.tool].grades[f.metric]}}',data-anchor="panel_{{f.metric}}")
+                span(class='badge') {{data.metrics[f.tool].grades[f.metric]}}
+                |&nbsp;{{f.name}}
+                span(ng-if="data.metrics[f.tool].data[f.metric]") &nbsp;({{format(data.metrics[f.tool].data[f.metric],f.format)}})
 
     div(ng-repeat="f in fields",class='panel panel-default')
         a.panelAnchor(id="panel_{{f.metric}}",name="panel_{{f.metric}}")

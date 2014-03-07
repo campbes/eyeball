@@ -1,8 +1,8 @@
 /*global eyeballControllers*/
 
-eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeout','$routeParams','exos','popover','tablesort','render','chart','persist','logger',
+eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeout','$routeParams','utils','popover','tablesort','render','chart','persist','logger',
 
-    function ReportCtrl($scope,$http,$location,$timeout,$routeParams,exos,popover,tablesort,render,chart,persist,logger) {
+    function ReportCtrl($scope,$http,$location,$timeout,$routeParams,utils,popover,tablesort,render,chart,persist,logger) {
         logger.log("ReportCtrl");
         $scope.setPage("report");
         $scope.format = render.format;
@@ -129,7 +129,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
             },500);
         };
 
-        exos.popover(popover);
+        utils.popover(popover);
 
         $scope.encodeQuery = function(val) {
             return encodeURIComponent(val);

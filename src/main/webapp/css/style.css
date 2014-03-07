@@ -28,16 +28,17 @@ body {
     word-wrap: break-word;
     word-break: break-all;
 }
-table.keyinfo {
-    width: 100%;
-    border-spacing: 5px;
-    border-collapse: separate;
-}
-table.keyinfo td {
-    width: 5%;
-}
 #results td[data-type='grades'] {
     padding: 0;
+}
+#detail td {
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+.keyInfo button {
+    width: 23%;
+    margin: 0 1% 0;
 }
 td[data-type='grades'] a {
     display: inline-block;
@@ -145,11 +146,13 @@ a.panelAnchor {
 .gradeF .badge {
     color : #d9534f !important;
 }
-
 #chartArea {
     margin-top: 30px;
 }
-
+button[data-anchor] {
+    background: none;
+    border: 0 solid;
+}
 /*harpy*/
 table.harpy {
     width: 100%;

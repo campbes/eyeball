@@ -1,8 +1,8 @@
 /*global eyeballControllers*/
 
-eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http','fieldConfig','render','persist',
+eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http','fieldConfig','render','persist','utils',
 
-    function DetailCtrl($scope,$routeParams,$http,fieldConfig,render,persist) {
+    function DetailCtrl($scope,$routeParams,$http,fieldConfig,render,persist,utils) {
 
         $scope.id = $routeParams.id.substr(1);
 
@@ -17,11 +17,11 @@ eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http','fie
             $scope.tag = data.tag;
             $scope.fields = fieldConfig.overview;
             $scope.fieldConfig = fieldConfig;
-            setTimeout(function(){
-                $('body').animate({
-                    scrollTop : $('#panel_'+$routeParams.anchor).offset().top
-                });
-            },1);
+            if($routeParams.anchor) {
+                setTimeout(function(){
+                    utils.scrollTo("panel_"+$routeParams.anchor)
+                },1);
+            }
         });
 
         $scope.format = render.format;
