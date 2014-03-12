@@ -8,7 +8,7 @@
  * see https://github.com/emwendelin/javascript-stacktrace
  * for license information
  */
-var DM = {
+var EYEBALLTEST = {
     messages : {
         info:[], tip:[], warn:[]
     },
@@ -190,7 +190,7 @@ var DM = {
         JR._lines[type].push(
             '<div style="'+JR.reset+'text-transform:uppercase;font-size:10px;border:1px solid #'+color+';width:32px;color:#'+color+';-webkit-border-radius:5px;padding:1px;float:left;text-align:center;margin:-2px 4px 0px 0px">'+type+'</div> '+
                 '<strong style="'+JR.reset+'font-weight:bold">'+string+'</strong> '+hint);
-        DM.messages[type].push({string: string, hint: hint});
+        EYEBALLTEST.messages[type].push({string: string, hint: hint});
     };
     JR.tip = function(string, hint){ JR.log(string,hint,'tip'); };
     JR.info = function(string, hint){ JR.log(string,hint,'info'); };
@@ -647,7 +647,7 @@ var DM = {
             '<div style="'+JR.reset+'margin:0;margin-left:5px;padding:0;margin-bottom:4px;height:auto"><div style="'+JR.reset+';float:left;width:13px;height:13px;margin-right:2px;background:#'+color[type||'low']+'"> </div>'+
                 '<strong>'+value+'</strong> '+stat+
                 '</div>'
-        DM.stats[stat] = value;
+        EYEBALLTEST.stats[stat] = value;
     };
 
     JR.globals = function(){

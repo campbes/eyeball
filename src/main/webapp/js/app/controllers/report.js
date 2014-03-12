@@ -1,10 +1,11 @@
 /*global eyeballControllers*/
 
-eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeout','$routeParams','utils','popover','tablesort','render','chart','persist','logger',
+eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeout','$routeParams','utils','popover','tablesort','render','chart','persist','logger','fieldConfig',
 
-    function ReportCtrl($scope,$http,$location,$timeout,$routeParams,utils,popover,tablesort,render,chart,persist,logger) {
+    function ReportCtrl($scope,$http,$location,$timeout,$routeParams,utils,popover,tablesort,render,chart,persist,logger,fieldConfig) {
         logger.log("ReportCtrl");
         $scope.setPage("report");
+        $scope.report = "";
         $scope.format = render.format;
         $scope.getVal = render.accessObject;
         $scope.results = [];
@@ -15,6 +16,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         $scope.fields = [];
         $scope.reportView = persist.get('reportView') || 'table';
         $scope.path = $location.path();
+        $scope.fieldConfig = fieldConfig;
 
         $scope.chartOptions = [
             {name : "Date", value : "timestamp"},
@@ -160,8 +162,8 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
 eyeballControllers.controller('ReportOverviewCtrl',['$scope','persist','fieldConfig',
 
     function ReportOverviewCtrl($scope,persist,fieldConfig) {
+        $scope.report = 'overview';
         $scope.setFields(fieldConfig.overview);
-        $scope.fieldConfig = fieldConfig;
         var testInfo = persist.get('testInfo') || {};
         if(!testInfo.testing) {
             $scope.getResults('report',$scope.updateTotals);
@@ -173,6 +175,7 @@ eyeballControllers.controller('ReportOverviewCtrl',['$scope','persist','fieldCon
 eyeballControllers.controller('ReportYslowCtrl',['$scope','render','fieldConfig',
 
     function ReportYslowCtrl($scope,render,fieldConfig) {
+        $scope.report = 'yslow';
         $scope.setFields(fieldConfig.yslow);
         $scope.getResults('report/yslow',$scope.updateTotals);
     }
@@ -181,6 +184,7 @@ eyeballControllers.controller('ReportYslowCtrl',['$scope','render','fieldConfig'
 eyeballControllers.controller('ReportTimeCtrl',['$scope','render','fieldConfig',
 
     function ReportTimeCtrl($scope,render,fieldConfig) {
+        $scope.report = 'time';
         $scope.setFields(fieldConfig.time);
         $scope.getResults('report/time',$scope.updateTotals);
     }
@@ -189,6 +193,7 @@ eyeballControllers.controller('ReportTimeCtrl',['$scope','render','fieldConfig',
 eyeballControllers.controller('ReportDommonsterCtrl',['$scope','render','fieldConfig',
 
     function ReportDommonsterCtrl($scope,render,fieldConfig) {
+        $scope.report = 'dommonster';
         $scope.setFields(fieldConfig.dommonster);
         $scope.getResults('report/dommonster',$scope.updateTotals);
     }
@@ -197,6 +202,7 @@ eyeballControllers.controller('ReportDommonsterCtrl',['$scope','render','fieldCo
 eyeballControllers.controller('ReportValidatorCtrl',['$scope','render','fieldConfig',
 
     function ReportValidatorCtrl($scope,render,fieldConfig) {
+        $scope.report = 'validator';
         $scope.setFields(fieldConfig.validator);
         $scope.getResults('report/validator',$scope.updateTotals);
     }

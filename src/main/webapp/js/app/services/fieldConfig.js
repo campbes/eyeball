@@ -43,6 +43,13 @@ eyeballApp.factory('fieldConfig',function(){
             {tool : 'yslow', metric : 'o', name: 'YSlow'},
             {tool : 'dommonster', metric : 'COMPOSITE_stats', name : 'DomMonster'},
             {tool : 'validator', metric : 'COMPOSITE_info', name: 'Validator'}
+        ],
+        report : [
+            {tool : 'overview', name : 'Overview'},
+            {tool : 'time', metric : 'lt', name: 'Load time', format : 'time'},
+            {tool : 'yslow', metric : 'o', name: 'YSlow'},
+            {tool : 'dommonster', metric : 'COMPOSITE_stats', name : 'DomMonster'},
+            {tool : 'validator', metric : 'COMPOSITE_info', name: 'Validator'}
         ]
     };
 
