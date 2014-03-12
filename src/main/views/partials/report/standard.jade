@@ -1,0 +1,11 @@
+include ../../test
+include ../../report
+
+div.container.table-responsive(ng-controller='ReportStandardCtrl')
+    mixin test
+    mixin tabs('{{report}}')
+    mixin charts
+    mixin results
+    mixin popover
+    mixin filter
+

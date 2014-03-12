@@ -171,3 +171,43 @@ exports.validator = function(req,res) {
         res.send(JSON.stringify(results));
     });
 };
+
+exports.myCustomTest = function(req,res) {
+    var dbQuery = getDbQuery(req);
+    eyeball.DB.find(dbQuery,{
+        url : 1,
+        timestamp: 1,
+        build : 1,
+        tag : 1,
+        "metrics.myCustomTest" : 1
+    },{
+        limit : 1000
+    }).sort({timestamp : -1},
+        function(err,results) {
+            if(err) {
+                res.send(err);
+            }
+            //console.log(results.length);
+            res.send(JSON.stringify(results));
+        });
+};
+
+/*exports.myCustomTest = function(req,res) {
+    var dbQuery = getDbQuery(req);
+    eyeball.DB.find(dbQuery,{
+        url : 1,
+        timestamp: 1,
+        build : 1,
+        tag : 1,
+        "metrics.myCustomTest" : 1
+    },{
+        limit : 1000
+    }).sort({timestamp : -1},
+        function(err,results) {
+            if(err) {
+                res.send(err);
+            }
+            //console.log(results.length);
+            res.send(JSON.stringify(results));
+        });
+};*/

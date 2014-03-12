@@ -4,7 +4,7 @@ include ../../report
 div.container.table-responsive(ng-controller='ReportOverviewCtrl')
 
     mixin test
-    mixin tabs('overview')
+    mixin tabs('{{report}}')
     mixin charts
 
     div(ng-hide="reportView === 'chart'")

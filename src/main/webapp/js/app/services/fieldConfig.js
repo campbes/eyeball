@@ -8,6 +8,7 @@ eyeballApp.factory('fieldConfig',function(){
             {tool : 'yslow', metric : 'o', name: 'YSlow'},
             {tool : 'dommonster', metric : 'COMPOSITE_stats', name : 'DomMonster'},
             {tool : 'validator', metric : 'COMPOSITE_info', name: 'Validator'}
+            //,{tool : 'myCustomTest', metric : {}, name : 'My Custom Test'}
         ],
         time : [
             {tool : 'time', metric : 'lt', name: 'Load time', format : 'time'},
@@ -44,12 +45,14 @@ eyeballApp.factory('fieldConfig',function(){
             {tool : 'dommonster', metric : 'COMPOSITE_stats', name : 'DomMonster'},
             {tool : 'validator', metric : 'COMPOSITE_info', name: 'Validator'}
         ],
+        //myCustomTest : [],
         report : [
             {tool : 'overview', name : 'Overview'},
-            {tool : 'time', metric : 'lt', name: 'Load time', format : 'time'},
-            {tool : 'yslow', metric : 'o', name: 'YSlow'},
-            {tool : 'dommonster', metric : 'COMPOSITE_stats', name : 'DomMonster'},
-            {tool : 'validator', metric : 'COMPOSITE_info', name: 'Validator'}
+            {tool : 'time', name: 'Load time'},
+            {tool : 'yslow', name: 'YSlow'},
+            {tool : 'dommonster', name : 'DomMonster'},
+            {tool : 'validator',  name: 'Validator'}
+            //,{tool : 'myCustomTest',  name: 'My Custom Test'}
         ]
     };
 

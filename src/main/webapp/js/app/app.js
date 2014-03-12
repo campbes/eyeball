@@ -13,17 +13,8 @@ eyeballApp.config(['$routeProvider',
             }).when('/report/overview', {
                 templateUrl: '/partials/report/overview',
                 controller : 'ReportCtrl'
-            }).when('/report/time', {
-                templateUrl: '/partials/report/time',
-                controller : 'ReportCtrl'
-            }).when('/report/yslow', {
-                templateUrl: '/partials/report/yslow',
-                controller : 'ReportCtrl'
-            }).when('/report/dommonster', {
-                templateUrl: '/partials/report/dommonster',
-                controller : 'ReportCtrl'
-            }).when('/report/validator', {
-                templateUrl: '/partials/report/validator',
+            }).when('/report/:report', {
+                templateUrl: '/partials/report/standard',
                 controller : 'ReportCtrl'
             }).when('/detail/:id', {
                 templateUrl: '/partials/detail',

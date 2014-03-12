@@ -35,16 +35,24 @@ if ('development' === app.get('env')) {
   app.use(express.errorHandler());
 }
 
+var reports = [
+    "time",
+    "yslow",
+    "dommonster",
+    "validator",
+    "myCustomTest"
+];
+
 app.get('/', routes.index);
 app.post('/test', test);
 app.get('/report',report.overview);
-app.get('/report/time',report.time);
-app.get('/report/yslow',report.yslow);
-app.get('/report/dommonster',report.dommonster);
-app.get('/report/validator',report.validator);
 app.get('/detail', detail);
 app.get('/history', history);
 app.get('/monitor', monitor);
+
+for(var i=reports.length-1; i>=0; i--) {
+    app.get('/report/'+reports[i],report[reports[i]]);
+}
 
 var partials = function(req,res) {
     res.render('partials/'+req.params[0]);
