@@ -71,24 +71,10 @@ module.exports = function(req,res) {
 
         var i, test;
 
-        for(i=0; i<TestCtrl.tests.browser.length; i++) {
-            test = TestCtrl.tests.browser[i];
-            if(!record.metrics[test.name]) {
-                eyeball.logger.info("No entry for " + test.name);
-                return;
-            }
-        }
+        var tests = [].concat(TestCtrl.tests.browser).concat(TestCtrl.tests.har).concat(TestCtrl.tests.markup);
 
-        for(i=0; i<TestCtrl.tests.har.length; i++) {
-            test = TestCtrl.tests.har[i];
-            if(!record.metrics[test.name]) {
-                eyeball.logger.info("No entry for " + test.name);
-                return;
-            }
-        }
-
-        for(i=0; i<TestCtrl.tests.markup.length; i++) {
-            test = TestCtrl.tests.markup[i];
+        for(i=0; i<tests.length; i++) {
+            test = tests[i];
             if(!record.metrics[test.name]) {
                 eyeball.logger.info("No entry for " + test.name);
                 return;
