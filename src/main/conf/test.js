@@ -21,12 +21,16 @@ module.exports = function(testers){
         points : {F : 32,E : 16,D : 8,C : 4,B : 2,A : 1},
         time : {
             lt : { F : 6000,E : 5000,D : 4000,C : 3000,B : 2000,A : 0},
-            dt : { F : 5000,E : 4000,D : 3000,C : 2000,B : 1000,A : 0}
+            lt_u : { F : 6000,E : 5000,D : 4000,C : 3000,B : 2000,A : 0},
+            dt : { F : 5000,E : 4000,D : 3000,C : 2000,B : 1000,A : 0},
+            dt_u : { F : 5000,E : 4000,D : 3000,C : 2000,B : 1000,A : 0}
         },
         yslow : {
             o : { A : 90,B : 80,C : 70,D : 60,E : 50, F : 0},
             w : { F : 1000000,E : 750000,D : 500000,C : 250000,B : 125000,A : 0},
+            w_c : { F : 1000000,E : 750000,D : 500000,C : 250000,B : 125000,A : 0},
             r : {F : 60,E : 50,D : 40,C : 30,B : 20,A : 0},
+            r_c : {F : 60,E : 50,D : 40,C : 30,B : 20,A : 0},
             lt : { F : 6000,E : 5000,D : 4000,C : 3000,B : 2000,A : 0},
             g : {
                 yminify : {
@@ -55,10 +59,7 @@ module.exports = function(testers){
             }
         }
     };
-    grades.time.lt_u = grades.time.lt;
-    grades.time.dt_u = grades.time.dt;
-    grades.yslow.w_c = grades.yslow.w;
-    grades.yslow.r_c = grades.yslow.r;
+
 
     // add tests and grade mappings here
 
