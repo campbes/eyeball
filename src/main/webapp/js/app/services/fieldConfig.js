@@ -53,7 +53,7 @@ eyeballApp.factory('fieldConfig',function(){
     };
 
     // add custom fields here
-    fields.elementCounter = {
+    /*fields.elementCounter = {
         name : 'Element Count',
         metric : 'total',
         items : [
@@ -62,12 +62,12 @@ eyeballApp.factory('fieldConfig',function(){
             {metric : 'A', name : 'A'},
             {metric : 'P', name : 'P'}
         ]
-    };
+    };*/
 
     //include any custom fields in here if you want them on the overview screens
     fields.overview = {
         name : 'Overview',
-        items : ['time','yslow','dommonster','validator','elementCounter']
+        items : ['time','yslow','dommonster','validator'/*,'elementCounter'*/]
     };
 
     // process the fields for backwards compat with current usage. Maybe simplify at some point

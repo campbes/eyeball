@@ -5,7 +5,7 @@ module.exports = {
         "time",
         "yslow",
         "dommonster",
-        "validator",
-        "elementCounter"
+        "validator"/*,
+        "elementCounter"*/
     ]
 };
