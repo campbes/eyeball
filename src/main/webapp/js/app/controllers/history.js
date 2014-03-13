@@ -9,7 +9,7 @@ eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','ch
         $scope.query = $routeParams;
         $scope.url = 'Getting url...';
         $scope.timestamp = 'Getting timestamp...';
-        $scope.fields = fieldConfig.history;
+        $scope.fields = fieldConfig.display;
         $scope.reportFilter = persist.get("reportFilter");
 
         function relocate(obj) {
@@ -35,9 +35,9 @@ eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','ch
 
             var j = 0;
             var f = null;
-            for(j =0; j<fieldConfig[tool].length; j++) {
-                f = fieldConfig[tool][j];
-                array.push((data.metrics[f.tool] ? chart.gradeMap(render.accessObject(data.metrics[f.tool].grades,f.metric),j,fieldConfig[tool].length) : 0));
+            for(j =0; j<fieldConfig[tool].items.length; j++) {
+                f = fieldConfig[tool].items[j];
+                array.push((data.metrics[f.tool] ? chart.gradeMap(render.accessObject(data.metrics[f.tool].grades,f.metric),j,fieldConfig[tool].items.length) : 0));
             }
             return array;
         }
@@ -65,8 +65,8 @@ eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','ch
                     for(i=0; i<data.length; i++) {
                         array.push(generateArray(data[i],cols,$scope.fields[n].tool));
                     }
-                    for(j =0; j<fieldConfig[$scope.fields[n].tool].length; j++) {
-                        cols.push(['number',fieldConfig[$scope.fields[n].tool][j].name]);
+                    for(j =0; j<fieldConfig[$scope.fields[n].tool].items.length; j++) {
+                        cols.push(['number',fieldConfig[$scope.fields[n].tool].items[j].name]);
                     }
                     chart.drawHistoryChart(array,cols,$scope.fields[n].tool+'History',relocate);
                 }

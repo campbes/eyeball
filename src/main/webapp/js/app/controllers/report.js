@@ -18,7 +18,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         $scope.path = $location.path();
         $scope.fieldConfig = fieldConfig;
         $scope.report = $scope.path.substr($scope.path.lastIndexOf('/')+1);
-        $scope.fields = fieldConfig[$scope.report];
+        $scope.fields = fieldConfig[$scope.report].items;
 
         $scope.chartOptions = [
             {name : "Date", value : "timestamp"},

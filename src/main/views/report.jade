@@ -151,7 +151,7 @@ mixin tabs(report)
             a(href="#") Eyeball
         li.active Analyze
     ul.nav.nav-tabs
-        li(ng-repeat="f in fieldConfig.report", ng-class="report === f.tool ? 'active' : ''")
+        li(ng-repeat="f in fieldConfig.display", ng-class="report === f.tool ? 'active' : ''")
             a(href='#/report/{{f.tool}}?url={{query.url}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}') {{f.name}}
         mixin reportView
 
