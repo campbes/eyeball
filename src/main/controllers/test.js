@@ -1,6 +1,7 @@
 var YSLOW = require('yslow').YSLOW;
 var jsdom = require('jsdom');
 
+
 function yslowOverrideGetResults(yscontext, info) {
     var i, l, results, url, type, comps, comp, encoded_url, obj, cr,
         cs, etag, len, include_grade, include_comps, include_stats,
@@ -400,12 +401,16 @@ module.exports = function() {
         });
     }
 
+    var testers = {
+        dommonster : getDomMonster,
+        yslow : runYslow,
+        validator : validate
+    };
+
+    var testCfg = require('../conf/test')(testers);
+
     return {
-        testers : {
-            dommonster : getDomMonster,
-            yslow : runYslow,
-            validator : validate
-        },
+        tests : testCfg.tests,
         grades : grades,
         validatorFiles : validatorFiles,
         activeVnus : activeVnus

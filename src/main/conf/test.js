@@ -1,18 +1,18 @@
-module.exports = function(TestCtrl){
+module.exports = function(testers){
 
     var tests = {
         browser : [{
             name : 'dommonster',
             src: 'lib/dommonster.js',
-            extractor : TestCtrl.testers.dommonster
+            extractor : testers.dommonster
         }],
         har : [{
             name : 'yslow',
-            extractor : TestCtrl.testers.yslow
+            extractor : testers.yslow
         }],
         markup : [{
             name : 'validator',
-            extractor : TestCtrl.testers.validator
+            extractor : testers.validator
         }]
     };
 

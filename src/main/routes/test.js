@@ -8,7 +8,6 @@ var phantom = require('node-phantom');
 var fs = require('fs');
 
 var TestCtrl = require('../controllers/test')();
-var tests = require('../conf/test')(TestCtrl);
 
 module.exports = function(req,res) {
 
@@ -80,24 +79,24 @@ module.exports = function(req,res) {
             }
         } */
 
-        for(i=0; i<tests.browser.length; i++) {
-            var test = tests.browser[i];
+        for(i=0; i<TestCtrl.tests.browser.length; i++) {
+            var test = TestCtrl.tests.browser[i];
             if(!record.metrics[test.name]) {
                 eyeball.logger.info("No entry for " + test.name);
                 return;
             }
         }
 
-        for(i=0; i<tests.har.length; i++) {
-            var test = tests.har[i];
+        for(i=0; i<TestCtrl.tests.har.length; i++) {
+            var test = TestCtrl.tests.har[i];
             if(!record.metrics[test.name]) {
                 eyeball.logger.info("No entry for " + test.name);
                 return;
             }
         }
 
-        for(i=0; i<tests.markup.length; i++) {
-            var test = tests.markup[i];
+        for(i=0; i<TestCtrl.tests.markup.length; i++) {
+            var test = TestCtrl.tests.markup[i];
             if(!record.metrics[test.name]) {
                 eyeball.logger.info("No entry for " + test.name);
                 return;
@@ -314,13 +313,13 @@ module.exports = function(req,res) {
                     lt_u : harUncached.log.pages[0].pageTimings.onLoad,
                     dt_u :  harUncached.log.pages[0].pageTimings.onContentLoad
                 });
-                runTestSet(tests.har,harUncached);
+                runTestSet(TestCtrl.tests.har,harUncached);
             });
         });
 
 
-        runTestSet(tests.browser,passes[1]);
-        runTestSet(tests.markup,passes[1]);
+        runTestSet(TestCtrl.tests.browser,passes[1]);
+        runTestSet(TestCtrl.tests.markup,passes[1]);
 
     }
 
@@ -377,7 +376,7 @@ module.exports = function(req,res) {
     function runInPageTests(webpage,page,callback) {
         webpage.inPageTestTimer = setTimeout(callback,30000);
         webpage.inPageTests = {};
-        runInPageTest(webpage,page,[].concat(tests.browser),callback);
+        runInPageTest(webpage,page,[].concat(TestCtrl.tests.browser),callback);
     }
 
     function runInPageTest(webpage,page,tests,callback) {

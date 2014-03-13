@@ -16,6 +16,7 @@ var http = require('http');
 var path = require('path');
 var request = require('request');
 var socket = require('socket.io');
+var reportCfg = require('./conf/report');
 
 var app = express();
 
@@ -35,13 +36,6 @@ if ('development' === app.get('env')) {
   app.use(express.errorHandler());
 }
 
-var reports = [
-    "time",
-    "yslow",
-    "dommonster",
-    "validator",
-    "myCustomTest"
-];
 
 app.get('/', routes.index);
 app.post('/test', test);
@@ -56,8 +50,8 @@ function setReportRoute(name) {
     });
 }
 
-for(var i=reports.length-1; i>=0; i--) {
-    setReportRoute(reports[i]);
+for(var i=reportCfg.reports.length-1; i>=0; i--) {
+    setReportRoute(reportCfg.reports[i]);
 }
 
 var partials = function(req,res) {
