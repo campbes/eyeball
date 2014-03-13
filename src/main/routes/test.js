@@ -28,7 +28,7 @@ module.exports = function(req,res) {
     var erroredUrls = [];
 
     function commitRecord(record){
-        console.log(record)
+
         clearTimeout(record.recordTimer);
         delete record.recordTimer;
 
@@ -69,18 +69,10 @@ module.exports = function(req,res) {
         metric.grades = TestCtrl.grades.getGradeSet(metric);
         record.metrics[property] = metric;
 
-        var i;
-        /*for(i in tests) {
-            if(tests.hasOwnProperty(i) && tests[i] === true) {
-                if(!record.metrics[i]) {
-                    eyeball.logger.info("No entry for " + i);
-                    return;
-                }
-            }
-        } */
+        var i, test;
 
         for(i=0; i<TestCtrl.tests.browser.length; i++) {
-            var test = TestCtrl.tests.browser[i];
+            test = TestCtrl.tests.browser[i];
             if(!record.metrics[test.name]) {
                 eyeball.logger.info("No entry for " + test.name);
                 return;
@@ -88,7 +80,7 @@ module.exports = function(req,res) {
         }
 
         for(i=0; i<TestCtrl.tests.har.length; i++) {
-            var test = TestCtrl.tests.har[i];
+            test = TestCtrl.tests.har[i];
             if(!record.metrics[test.name]) {
                 eyeball.logger.info("No entry for " + test.name);
                 return;
@@ -96,7 +88,7 @@ module.exports = function(req,res) {
         }
 
         for(i=0; i<TestCtrl.tests.markup.length; i++) {
-            var test = TestCtrl.tests.markup[i];
+            test = TestCtrl.tests.markup[i];
             if(!record.metrics[test.name]) {
                 eyeball.logger.info("No entry for " + test.name);
                 return;
@@ -291,11 +283,15 @@ module.exports = function(req,res) {
         var harCached = null;
 
         function runTestSet(testSet,data) {
-            for(var i=0; i<testSet.length; i++) {
-                var test = testSet[i];
-                var result = test.extractor(data,function(res){
-                    updateRecord(record,test.name,res);
-                });
+            var i= 0, test;
+            var cbMaker = function(name) {
+                return function(res) {
+                    updateRecord(record,name,res);
+                };
+            };
+            for(i=0; i<testSet.length; i++) {
+                test = testSet[i];
+                test.extractor(data,cbMaker(test.name));
                 eyeball.logger.info('got '+test.name+' result');
             }
         }
@@ -373,20 +369,14 @@ module.exports = function(req,res) {
 
     var activeTests = {};
 
-    function runInPageTests(webpage,page,callback) {
-        webpage.inPageTestTimer = setTimeout(callback,30000);
-        webpage.EYEBALLTEST = {};
-        runInPageTest(webpage,page,[].concat(TestCtrl.tests.browser),callback);
-    }
-
     function runInPageTest(webpage,page,tests,callback) {
         var test = tests[0];
 
         page.injectJs(test.src,function(){
             page.evaluate(function() {
-               return {
-                   EYEBALLTEST : window.EYEBALLTEST
-               };
+                return {
+                    EYEBALLTEST : window.EYEBALLTEST
+                };
             },function(err,doc){
                 if(err) {
                     erroredUrls.push(url);
@@ -403,6 +393,13 @@ module.exports = function(req,res) {
             });
         });
     }
+
+    function runInPageTests(webpage,page,callback) {
+        webpage.inPageTestTimer = setTimeout(callback,30000);
+        webpage.EYEBALLTEST = {};
+        runInPageTest(webpage,page,[].concat(TestCtrl.tests.browser),callback);
+    }
+
 
 
     function openPage(ph) {

@@ -69,14 +69,14 @@ eyeballApp.factory('fieldConfig',function(){
         name : 'Overview',
         items : ['time','yslow','dommonster','validator'/*,'elementCounter'*/]
     };
-
+    var f, items, i=0;
     // process the fields for backwards compat with current usage. Maybe simplify at some point
-    for (var f in fields) {
+    for (f in fields) {
         if(fields.hasOwnProperty(f)) {
             fields[f].tool = f;
             if(fields[f].items) {
-                var items = fields[f].items;
-                for(var i=items.length-1;i>=0;i--) {
+                items = fields[f].items;
+                for(i=items.length-1;i>=0;i--) {
                     if(typeof items[i] === "string") {
                         items[i] = fields[items[i]];
                     } else if (typeof items[i] === "object") {

@@ -68,8 +68,10 @@ exports.overview = function(req,res) {
         tag : 1
     };
 
-    for(var i=reportCfg.reports.length-1; i>=0; i--) {
-        var rep = reportCfg.reports[i];
+    var i= 0,rep;
+
+    for(i=reportCfg.reports.length-1; i>=0; i--) {
+        rep = reportCfg.reports[i];
         cfg["metrics."+rep+".tool"] = 1;
         cfg["metrics."+rep+".grades"] = 1;
     }

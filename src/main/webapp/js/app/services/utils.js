@@ -1,3 +1,5 @@
+/*global eyeballApp,$*/
+
 eyeballApp.factory('utils',['exos',
     function(exos) {
 
@@ -32,6 +34,6 @@ eyeballApp.factory('utils',['exos',
         return {
             popover : popover,
             scrollTo : scrollTo
-        }
+        };
     }
 ]);

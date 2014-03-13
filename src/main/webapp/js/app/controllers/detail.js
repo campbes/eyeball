@@ -1,4 +1,4 @@
-/*global eyeballControllers*/
+/*global eyeballControllers,$*/
 
 eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http','fieldConfig','render','persist','utils',
 
@@ -19,7 +19,7 @@ eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http','fie
             $scope.fieldConfig = fieldConfig;
             if($routeParams.anchor) {
                 setTimeout(function(){
-                    utils.scrollTo("panel_"+$routeParams.anchor)
+                    utils.scrollTo("panel_"+$routeParams.anchor);
                 },1);
             }
         });

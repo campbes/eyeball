@@ -9,7 +9,7 @@ module.exports = function() {
     var activeVnus = [];
     var maxVnus = 1;
 
-    var grades = (function() {
+    var grader = (function() {
 
         function getGradeFromData(gradeSet,data) {
             var gr = null;
@@ -156,7 +156,7 @@ module.exports = function() {
                     }
 
                     // JAMTROUSERS - set grades on individual items
-                    obj.grade = grades.getGrades(obj.score);
+                    obj.grade = grader.getGrades(obj.score);
                 }
                 comps = result.components;
                 if (isArray(comps)) {
@@ -368,9 +368,9 @@ module.exports = function() {
 
     return {
         tests : testCfg.tests,
-        grades : grades,
+        grades : grader,
         validatorFiles : validatorFiles,
         activeVnus : activeVnus
-    }
+    };
 
 };

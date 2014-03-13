@@ -14,6 +14,8 @@ module.exports = function(grunt) {
             app: {
                 src: [
                     '<%= props.src%>/routes/**/*.js',
+                    '<%= props.src%>/controllers/**/*.js',
+                    '<%= props.src%>/conf/**/*.js',
                     '<%= props.src%>/app.js'
                 ],
                 directives: {
@@ -76,7 +78,8 @@ module.exports = function(grunt) {
             js: {
                 src: [
                     '<%= props.src%>/webapp/js/app/app.js',
-                    '<%= props.src%>/webapp/js/app/services.js',
+                    '<%= props.src%>/webapp/js/app/conf/*.js',
+                    '<%= props.src%>/webapp/js/app/services/*.js',
                     '<%= props.src%>/webapp/js/app/controllers/*.js'
                 ],
                 dest: '<%= props.out%>/<%=props.name%>/webapp/<%=props.name%>.js'
@@ -105,6 +108,8 @@ module.exports = function(grunt) {
                 files: {
                     '<%= props.out%>/analysis': ['<%= props.src%>/*.js',
                         '<%= props.src%>/routes/**/*.js',
+                        '<%= props.src%>/conf/**/*.js',
+                        '<%= props.src%>/controllers/**/*.js',
                         '<%= props.src%>/webapp/js/**/*.js']
                 }
             }

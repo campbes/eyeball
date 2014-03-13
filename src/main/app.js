@@ -50,7 +50,9 @@ function setReportRoute(name) {
     });
 }
 
-for(var i=reportCfg.reports.length-1; i>=0; i--) {
+var i=0;
+
+for(i=reportCfg.reports.length-1; i>=0; i--) {
     setReportRoute(reportCfg.reports[i]);
 }
 
