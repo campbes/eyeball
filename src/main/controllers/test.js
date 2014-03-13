@@ -248,7 +248,7 @@ module.exports = function() {
     }
 
     function getDomMonster(page,cb) {
-        var dm = page.inPageTests.dommonster;
+        var dm = page.EYEBALLTEST.dommonster;
 
         var i;
         for(i in dm.stats) {

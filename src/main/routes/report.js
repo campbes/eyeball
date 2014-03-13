@@ -1,4 +1,5 @@
 var url = require('url');
+var reportCfg = require('../conf/report');
 
 function getDbQuery(req) {
     var queryString = url.parse(req.url, true).query || {};
@@ -60,23 +61,19 @@ function getDbQuery(req) {
 exports.overview = function(req,res) {
 
     var dbQuery = getDbQuery(req);
-
-    eyeball.DB.find(dbQuery,{
+    var cfg = {
         url : 1,
         timestamp: 1,
         build : 1,
-        tag : 1,
-        "metrics.yslow.tool" : 1,
-        "metrics.dommonster.tool" : 1,
-        "metrics.validator.tool" : 1,
-        //"metrics.yslow.data.lt" : 1,
-        "metrics.time.tool" : 1,
-        "metrics.time.data" : 1,
-        "metrics.time.grades" : 1,
-        "metrics.yslow.grades" : 1,
-        "metrics.dommonster.grades" : 1,
-        "metrics.validator.grades" : 1
-        },{
+        tag : 1
+    };
+
+    for(var i=reportCfg.reports.length-1; i>=0; i--) {
+        var rep = reportCfg.reports[i];
+        cfg["metrics."+rep+".tool"] = 1;
+        cfg["metrics."+rep+".grades"] = 1;
+    }
+    eyeball.DB.find(dbQuery,cfg,{
             limit : 1000
         }).sort({timestamp : -1},
         function(err,results) {
@@ -95,7 +92,7 @@ exports.standard = function(req,res,name) {
         url : 1,
         timestamp: 1,
         build : 1,
-        tag : 1,
+        tag : 1
     };
     cfg["metrics."+name] = 1;
     eyeball.DB.find(dbQuery,cfg,{

@@ -3,10 +3,8 @@
 eyeballApp.factory('fieldConfig',function(){
 
     var fields = {
-        overview : {
-            name : 'Overview',
-            items : ['time','yslow','dommonster','validator']
-        },
+        display : {}, //reserved
+        overview : {}, //reserved
         time :{
             name : 'Load time',
             metric : 'lt',
@@ -54,13 +52,23 @@ eyeballApp.factory('fieldConfig',function(){
         }
     };
 
-    fields.display = [
-        fields.overview,
-        fields.time,
-        fields.yslow,
-        fields.dommonster,
-        fields.validator
-    ];
+    // add custom fields here
+    fields.elementCounter = {
+        name : 'Element Count',
+        metric : 'total',
+        items : [
+            {metric : 'total', name : 'Total'},
+            {metric : 'DIV', name : 'DIV'},
+            {metric : 'A', name : 'A'},
+            {metric : 'P', name : 'P'}
+        ]
+    };
+
+    //include any custom fields in here if you want them on the overview screens
+    fields.overview = {
+        name : 'Overview',
+        items : ['time','yslow','dommonster','validator','elementCounter']
+    };
 
     // process the fields for backwards compat with current usage. Maybe simplify at some point
     for (var f in fields) {
@@ -78,6 +86,9 @@ eyeballApp.factory('fieldConfig',function(){
             }
         }
     }
+
+
+    fields.display = [fields.overview].concat(fields.overview.items);
 
     return fields;
 

@@ -3,6 +3,7 @@
 eyeballApp.factory('render',function() {
 
     function accessObject(obj,str) {
+
         if(!obj){
             return null;
         }

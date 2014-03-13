@@ -152,6 +152,7 @@ a.panelAnchor {
 button[data-anchor] {
     background: none;
     border: 0 solid;
+    margin-bottom: 10px;
 }
 /*harpy*/
 table.harpy {

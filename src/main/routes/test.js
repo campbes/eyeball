@@ -28,7 +28,7 @@ module.exports = function(req,res) {
     var erroredUrls = [];
 
     function commitRecord(record){
-
+        console.log(record)
         clearTimeout(record.recordTimer);
         delete record.recordTimer;
 
@@ -375,7 +375,7 @@ module.exports = function(req,res) {
 
     function runInPageTests(webpage,page,callback) {
         webpage.inPageTestTimer = setTimeout(callback,30000);
-        webpage.inPageTests = {};
+        webpage.EYEBALLTEST = {};
         runInPageTest(webpage,page,[].concat(TestCtrl.tests.browser),callback);
     }
 
@@ -385,13 +385,13 @@ module.exports = function(req,res) {
         page.injectJs(test.src,function(){
             page.evaluate(function() {
                return {
-                   inPageTest : window.EYEBALLTEST
+                   EYEBALLTEST : window.EYEBALLTEST
                };
             },function(err,doc){
                 if(err) {
                     erroredUrls.push(url);
                 }
-                webpage.inPageTests[test.name] = doc.inPageTest;
+                webpage.EYEBALLTEST[test.name] = doc.EYEBALLTEST;
 
                 tests.splice(0,1);
                 if(tests.length > 0) {
@@ -459,7 +459,7 @@ module.exports = function(req,res) {
                             webpage.onContentLoad = new Date(doc.onContentLoad);
                             webpage.resources = [].concat(page.resources);
 
-                            webpage.inPageTests = {};
+                            webpage.EYEBALLTEST = {};
 
                             runInPageTests(webpage,page,function() {
                                 page.close();

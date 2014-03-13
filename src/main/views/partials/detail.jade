@@ -41,8 +41,6 @@ div#detail.container
                                 td
                                     strong {{m.name}} - {{getInfo(data.metrics[f.tool].grades,m.metric).info}}
                                     p {{getInfo(data.metrics[f.tool].grades,m.metric).message}}
-
-
                         table.table.table-striped(ng-if="f.tool === 'yslow'")
                             tr(ng-repeat='i in data.metrics.yslow.data.g',ng-if='i.score < 100')
                                 td

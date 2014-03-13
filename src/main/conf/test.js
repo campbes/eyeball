@@ -62,6 +62,20 @@ module.exports = function(testers){
 
 
     // add tests and grade mappings here
+    tests.browser[tests.browser.length] = {
+        name : 'elementCounter',
+        src: 'lib/customTests/elementCounter.js',
+        extractor : function(page,cb) {
+            cb(page.EYEBALLTEST.elementCounter);
+        }
+    };
+
+    grades.elementCounter = {
+        total : {F : 1500, E: 1125,D : 1000,C : 875,B : 750,A :0},
+        DIV : {F : 1500, E: 1125,D : 1000,C : 875,B : 750,A :0},
+        P : {F : 1500, E: 1125,D : 1000,C : 875,B : 750,A :0},
+        A : {F : 1500, E: 1125,D : 1000,C : 875,B : 750,A :0}
+    };
 
     return {
         tests : tests,
