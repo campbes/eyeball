@@ -1,5 +1,12 @@
 var EYEBALLTEST = {
-    total : 0
+    total : 0,
+    messages : [
+        {
+            grade : 'A',
+            title : 'Fewer than loads',
+            content : "There aren't many of these"
+        }
+    ]
 };
 
 (function(){
