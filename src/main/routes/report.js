@@ -89,98 +89,16 @@ exports.overview = function(req,res) {
 
 };
 
-exports.yslow = function(req,res) {
-
+exports.standard = function(req,res,name) {
     var dbQuery = getDbQuery(req);
-
-    eyeball.DB.find(dbQuery,{
+    var cfg = {
         url : 1,
         timestamp: 1,
         build : 1,
         tag : 1,
-        "metrics.yslow" : 1
-    },{
-        limit : 1000
-    }).sort({timestamp : -1},
-        function(err,results) {
-        if(err) {
-            res.send(err);
-        }
-        //console.log(results.length);
-        res.send(JSON.stringify(results));
-    });
-
-};
-
-exports.time = function(req,res) {
-    var dbQuery = getDbQuery(req);
-    eyeball.DB.find(dbQuery,{
-        url : 1,
-        timestamp: 1,
-        build : 1,
-        tag : 1,
-        "metrics.time" : 1
-    },{
-        limit : 1000
-    }).sort({timestamp : -1},
-        function(err,results) {
-        if(err) {
-            res.send(err);
-        }
-        //console.log(results.length);
-        res.send(JSON.stringify(results));
-    });
-};
-
-exports.dommonster = function(req,res) {
-    var dbQuery = getDbQuery(req);
-    eyeball.DB.find(dbQuery,{
-        url : 1,
-        timestamp: 1,
-        build : 1,
-        tag : 1,
-        "metrics.dommonster" : 1
-    },{
-        limit : 1000
-    }).sort({timestamp : -1},
-        function(err,results) {
-        if(err) {
-            res.send(err);
-        }
-        //console.log(results.length);
-        res.send(JSON.stringify(results));
-    });
-};
-
-exports.validator = function(req,res) {
-    var dbQuery = getDbQuery(req);
-    eyeball.DB.find(dbQuery,{
-        url : 1,
-        timestamp: 1,
-        build : 1,
-        tag : 1,
-        "metrics.validator" : 1
-    },{
-        limit : 1000
-    }).sort({timestamp : -1},
-        function(err,results) {
-        if(err) {
-            res.send(err);
-        }
-        //console.log(results.length);
-        res.send(JSON.stringify(results));
-    });
-};
-
-exports.myCustomTest = function(req,res) {
-    var dbQuery = getDbQuery(req);
-    eyeball.DB.find(dbQuery,{
-        url : 1,
-        timestamp: 1,
-        build : 1,
-        tag : 1,
-        "metrics.myCustomTest" : 1
-    },{
+    };
+    cfg["metrics."+name] = 1;
+    eyeball.DB.find(dbQuery,cfg,{
         limit : 1000
     }).sort({timestamp : -1},
         function(err,results) {
@@ -191,23 +109,3 @@ exports.myCustomTest = function(req,res) {
             res.send(JSON.stringify(results));
         });
 };
-
-/*exports.myCustomTest = function(req,res) {
-    var dbQuery = getDbQuery(req);
-    eyeball.DB.find(dbQuery,{
-        url : 1,
-        timestamp: 1,
-        build : 1,
-        tag : 1,
-        "metrics.myCustomTest" : 1
-    },{
-        limit : 1000
-    }).sort({timestamp : -1},
-        function(err,results) {
-            if(err) {
-                res.send(err);
-            }
-            //console.log(results.length);
-            res.send(JSON.stringify(results));
-        });
-};*/

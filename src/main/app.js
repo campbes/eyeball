@@ -50,8 +50,14 @@ app.get('/detail', detail);
 app.get('/history', history);
 app.get('/monitor', monitor);
 
+function setReportRoute(name) {
+    app.get('/report/'+name,function(req,res) {
+        report.standard(req,res,name);
+    });
+}
+
 for(var i=reports.length-1; i>=0; i--) {
-    app.get('/report/'+reports[i],report[reports[i]]);
+    setReportRoute(reports[i]);
 }
 
 var partials = function(req,res) {
