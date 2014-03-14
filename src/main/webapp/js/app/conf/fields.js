@@ -1,5 +1,27 @@
 /*global eyeballApp*/
 
+function processFields(fields) {
+    var f, items, i=0;
+    // process the fields for backwards compat with current usage. Maybe simplify at some point
+    for (f in fields) {
+        if(fields.hasOwnProperty(f)) {
+            fields[f].tool = f;
+            if(fields[f].items) {
+                items = fields[f].items;
+                for(i=items.length-1;i>=0;i--) {
+                    if(typeof items[i] === "string") {
+                        items[i] = fields[items[i]];
+                    } else if (typeof items[i] === "object") {
+                        items[i].tool = f;
+                    }
+                }
+            }
+        }
+    }
+    return fields;
+}
+
+
 eyeballApp.factory('fieldConfig',function(){
 
     var fields = {
@@ -69,24 +91,7 @@ eyeballApp.factory('fieldConfig',function(){
         name : 'Overview',
         items : ['time','yslow','dommonster','validator'/*,'elementCounter'*/]
     };
-    var f, items, i=0;
-    // process the fields for backwards compat with current usage. Maybe simplify at some point
-    for (f in fields) {
-        if(fields.hasOwnProperty(f)) {
-            fields[f].tool = f;
-            if(fields[f].items) {
-                items = fields[f].items;
-                for(i=items.length-1;i>=0;i--) {
-                    if(typeof items[i] === "string") {
-                        items[i] = fields[items[i]];
-                    } else if (typeof items[i] === "object") {
-                        items[i].tool = f;
-                    }
-                }
-            }
-        }
-    }
-
+    fields = processFields(fields);
 
     fields.display = [fields.overview].concat(fields.overview.items);
 
