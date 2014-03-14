@@ -11,7 +11,7 @@ eyeballApp.factory('chart', ['render', function(render){
         var xVal = null;
 
         for (i=0; i<results.length; i++) {
-            if(results[i].metrics) {
+            if(results[i].metrics && results[i].metrics[tool]) {
                 results[i].metrics[tool].timestamp = new Date(results[i].timestamp).toDateString();
                 results[i].metrics[tool].build = String(results[i].build);
                 res = results[i].metrics[tool];
