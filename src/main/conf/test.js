@@ -60,8 +60,54 @@ module.exports = function(testers){
         }
     };
 
+    var eyeballScoring= {
+        eyeball : {
+            metrics: {
+                yslow : {
+                    metric : 'o',
+                    influence : 0.8
+                },
+                dommonster : {
+                    metric : 'COMPOSITE_stats',
+                    influence : 0.6
+                },
+                validator : {
+                    metric : 'COMPOSITE_info',
+                    influence : 0.5
+                },
+                time : {
+                    metric : 'lt',
+                    influence : 1
+                }
+            }
+        },
+        dom : {
+            metrics : {
+                dommonster : {
+                    metric : 'COMPOSITE_stats',
+                    influence : 0.9
+                },
+                validator : {
+                    metric : 'COMPOSITE_info',
+                    influence : 1
+                }
+            }
+        },
+        performance : {
+            metrics : {
+                yslow : {
+                    metric : 'o',
+                    influence : 1
+                },
+                time : {
+                    metric : 'lt',
+                    influence : 1
+                }
+            }
+        }
+    };
 
-    // add tests and grade mappings here
+    // add tests and grade mappings here. Also add to overall eyeball calculation if you want to
     /*tests.browser[tests.browser.length] = {
         name : 'elementCounter',
         src: 'lib/customTests/elementCounter.js',
@@ -75,11 +121,17 @@ module.exports = function(testers){
         DIV : {F : 1500, E: 1125,D : 1000,C : 875,B : 750,A :0},
         P : {F : 1500, E: 1125,D : 1000,C : 875,B : 750,A :0},
         A : {F : 1500, E: 1125,D : 1000,C : 875,B : 750,A :0}
-    }; */
+    };
+
+    eyeballScoring.dom.metrics.elementCounter = {
+        metric : 'total',
+        influence : 0.7
+    };*/
 
     return {
         tests : tests,
-        grades : grades
+        grades : grades,
+        eyeballScoring : eyeballScoring
     };
 
 };

@@ -12,17 +12,17 @@ div#detail.container
     div(ng-repeat="f in fields",class='panel panel-default')
         a.panelAnchor(id="panel_{{f.metric}}",name="panel_{{f.metric}}")
 
-        div.panel-heading(ng-if="f.tool === 'overview'") {{f.name}}
-        div.panel-body.keyInfo(ng-if="f.tool === 'overview'")
-            button(ng-repeat="f in fields",ng-if="f.tool !== 'overview'", class='alert grade{{data.metrics[f.tool].grades[f.metric]}}',data-anchor="panel_{{f.metric}}")
+        div.panel-heading(ng-if="!f.metric") {{f.name}}
+        div.panel-body.keyInfo(ng-if="!f.metric")
+            button(ng-repeat="f in fields",ng-if="f.metric", class='alert grade{{data.metrics[f.tool].grades[f.metric]}}',data-anchor="panel_{{f.metric}}")
                 span(class='badge') {{data.metrics[f.tool].grades[f.metric]}}
                 |&nbsp;{{f.name}}
                 span(ng-if="data.metrics[f.tool].data[f.metric]") &nbsp;({{format(data.metrics[f.tool].data[f.metric],f.format)}})
 
-        div(class='panel-heading grade{{data.metrics[f.tool].grades[f.metric]}}',ng-if="f.tool !== 'overview'")
+        div(class='panel-heading grade{{data.metrics[f.tool].grades[f.metric]}}',ng-if="f.metric")
             span.badge {{data.metrics[f.tool].grades[f.metric]}}
             |&nbsp;{{f.name}}
-        div.panel-body.detail(ng-if="f.tool !== 'overview'")
+        div.panel-body.detail(ng-if="f.metric")
             div.row
                 div.col-md-4
                     table.table.table-striped
@@ -32,13 +32,20 @@ div#detail.container
                             td  {{m.name}}
                             td  {{format(getVal(data.metrics[f.tool].data,m.metric),m.format)}}
                 div.col-md-8(ng-switch="f.tool")
+                    table.table.table-striped(ng-switch-when="eyeball")
+                        tr(ng-repeat="m in fieldConfig[f.tool].items")
+                            td
+                                span(class='label label-{{getInfo(data.metrics[f.tool].grades,f.tool,m.metric).type}}') {{getInfo(data.metrics[f.tool].grades,f.tool,m.metric).type}}
+                            td
+                                strong {{m.name}} - {{getInfo(data.metrics[f.tool].grades,f.tool,m.metric).info}}
+                                p {{getInfo(data.metrics[f.tool].grades,f.tool,m.metric).message}}
                     table.table.table-striped(ng-switch-when="time")
                         tr(ng-repeat="m in fieldConfig[f.tool].items")
                             td
                                 span(class='badge grade{{getVal(data.metrics[f.tool].grades,m.metric)}}') {{getVal(data.metrics[f.tool].grades,m.metric)}}
                             td
-                                strong {{m.name}} - {{getInfo(data.metrics[f.tool].grades,m.metric).info}}
-                                p {{getInfo(data.metrics[f.tool].grades,m.metric).message}}
+                                strong {{m.name}} - {{getInfo(data.metrics[f.tool].grades,f.tool,m.metric).info}}
+                                p {{getInfo(data.metrics[f.tool].grades,f.tool,m.metric).message}}
                     table.table.table-striped(ng-switch-when="yslow")
                         tr(ng-repeat='i in data.metrics.yslow.data.g',ng-if='i.score < 100')
                             td

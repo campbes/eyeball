@@ -88,9 +88,17 @@ module.exports = function() {
             return getGradeFromData(testCfg.grades[type],data);
         }
 
+        function getValue(grade,type) {
+            if(!grade || !type || !testCfg.grades[type]) {
+                return null;
+            }
+            return testCfg.grades[type][grade];
+        }
+
         return {
             getGradeSet : getGradeSet,
-            getGrades : getGrade
+            getGrades : getGrade,
+            getValue : getValue
         };
 
     }());
@@ -369,6 +377,7 @@ module.exports = function() {
     return {
         tests : testCfg.tests,
         grades : grader,
+        eyeballScoring : testCfg.eyeballScoring,
         validatorFiles : validatorFiles,
         activeVnus : activeVnus
     };

@@ -15,7 +15,7 @@ eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http','fie
             $scope.timestamp = data.timestamp;
             $scope.build = data.build;
             $scope.tag = data.tag;
-            $scope.fields = fieldConfig.display;
+            $scope.fields = fieldConfig.display.items;
             $scope.fieldConfig = fieldConfig;
             if($routeParams.anchor) {
                 setTimeout(function(){

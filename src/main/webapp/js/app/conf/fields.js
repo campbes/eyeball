@@ -27,6 +27,15 @@ eyeballApp.factory('fieldConfig',function(){
     var fields = {
         display : {}, //reserved
         overview : {}, //reserved
+        eyeball : {
+            name : 'Eyeball',
+            metric : 'eyeball',
+            items : [
+                {metric : 'eyeball', name : 'Overall'},
+                {metric : 'dom', name : 'DOM Quality'},
+                {metric : 'performance', name : 'Performance'}
+            ]
+        },
         time :{
             name : 'Load time',
             metric : 'lt',
@@ -91,9 +100,14 @@ eyeballApp.factory('fieldConfig',function(){
         name : 'Overview',
         items : ['time','yslow','dommonster','validator'/*,'elementCounter'*/]
     };
-    fields = processFields(fields);
 
-    fields.display = [fields.overview].concat(fields.overview.items);
+    // determine which items to sho as individual reports, charts etc - default is everything
+    // thats on the overview screen (including an overview)
+    fields.display = {
+        items : [fields.overview].concat(fields.overview.items)
+    };
+
+    fields = processFields(fields);
 
     return fields;
 

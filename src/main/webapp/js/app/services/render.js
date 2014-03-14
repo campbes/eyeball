@@ -104,57 +104,47 @@ eyeballApp.factory('render',function() {
 
     }());
 
-    function getInfo(obj,str) {
+    function getInfo(obj,tool,str) {
         var val = accessObject(obj,str);
 
         var info = {
-            lt : {
-                A : "less than 2 seconds",
-                B : "less than 3 seconds",
-                C : "less than 4 seconds",
-                D : "less than 5 seconds",
-                E : "less than 6 seconds",
-                F : "more than 6 seconds"
+            time : {
+                lt : {
+                    A : {info : "less than 2 seconds",message : "User perceives page as loading almost immediately."},
+                    B : {info : "less than 3 seconds",message : "User may notice a delay in page loading, but the overall experience is not affected."},
+                    C : {info : "less than 4 seconds",message : "User notices a delay which may spoil the experience."},
+                    D : {info : "less than 5 seconds",message : "User notices a significant delay which may discourage further usage."},
+                    E : {info : "less than 6 seconds",message : "User notices a significant delay and will likely become frustrated and may give up."},
+                    F : {info : "more than 6 seconds",message : "User will become very frustrated, give up, and likely not return"}
+                },
+                dt : {
+                    A : {info : "less than 1 second",message : "User perceives page as loading almost immediately."},
+                    B : {info : "less than 2 seconds",message : "User may notice a delay in page loading, but the overall experience is not affected."},
+                    C : {info : "less than 3 seconds",message : "User notices a delay which may spoil the experience."},
+                    D : {info : "less than 4 seconds",message : "User notices a significant delay which may discourage further usage."},
+                    E : {info : "less than 5 seconds",message : "User notices a significant delay and will likely become frustrated and may give up."},
+                    F : {info : "more than 5 seconds",message : "User will become very frustrated, give up, and likely not return"}
+                }
             },
-            dt : {
-                A : "less than 1 second",
-                B : "less than 2 seconds",
-                C : "less than 3 seconds",
-                D : "less than 4 seconds",
-                E : "less than 5 seconds",
-                F : "more than 5 seconds"
+            eyeball : {
+                eyeball : {
+                    A : {info : "Excellent!",message:"Your page is awesome!",type:'success'},
+                    C : {info : "Okay",message:"There are some problems with your page - you could make it better.",type:'warning'},
+                    E : {info : "Awful!",message:"There are serious problems with your page - you need to fix them.",type:'danger'}
+                }
             }
         };
 
-        info.lt_u = info.lt;
-        info.dt_u = info.dt;
+        info.eyeball.eyeball.B = info.eyeball.eyeball.A;
+        info.eyeball.eyeball.D = info.eyeball.eyeball.C;
+        info.eyeball.eyeball.F = info.eyeball.eyeball.E;
+        info.eyeball.dom = info.eyeball.eyeball;
+        info.eyeball.performance = info.eyeball.eyeball;
 
-        var ret = {
-            info : info[str][val]
-        };
+        info.time.lt_u = info.time.lt;
+        info.time.dt_u = info.time.dt;
 
-        switch(val) {
-            case 'A':
-                ret.message = "User perceives page as loading almost immediately.";
-                break;
-            case 'B':
-                ret.message = "User may notice a delay in page loading, but the overall experience is not affected.";
-                break;
-            case 'C':
-                ret.message = "User notices a delay which may spoil the experience.";
-                break;
-            case 'D':
-                ret.message = "User notices a significant delay which may discourage further usage.";
-                break;
-            case 'E':
-                ret.message = "User notices a significant delay and will likely become frustrated and may give up.";
-                break;
-            case 'F':
-                ret.message = "User will become very frustrated, give up, and likely not return";
-                break;
-        }
-
-        return ret;
+        return info[tool][str][val];
 
     }
 

@@ -9,7 +9,7 @@ eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','ch
         $scope.query = $routeParams;
         $scope.url = 'Getting url...';
         $scope.timestamp = 'Getting timestamp...';
-        $scope.fields = fieldConfig.display;
+        $scope.fields = fieldConfig.display.items;
         $scope.reportFilter = persist.get("reportFilter");
 
         function relocate(obj) {
@@ -49,7 +49,6 @@ eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','ch
             method: "GET"
         }).success(function(data) {
                 $scope.data = data;
-
                 var n = 0, i = 0, j = 0;
                 var array = null;
                 var cols = null;

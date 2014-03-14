@@ -27,11 +27,50 @@ module.exports = function(req,res) {
     var uncommittedRecords = [];
     var erroredUrls = [];
 
+    function addEyeballMetrics(record) {
+        record.metrics.eyeball = {
+            url : record.url,
+            timestamp: new Date(),
+            build : build,
+            tag : tag,
+            data : {},
+            grades : {},
+            tool : 'eyeball'
+        };
+
+        var eyeballScore = 0, score, eyeballMetrics, metrics, metric, grade, eyeballGrade;
+
+        for(score in TestCtrl.eyeballScoring) {
+            if(TestCtrl.eyeballScoring.hasOwnProperty(score)) {
+                eyeballScore = 0;
+                metrics = 0;
+                eyeballMetrics = TestCtrl.eyeballScoring[score].metrics;
+                for(metric in eyeballMetrics) {
+                    if(eyeballMetrics.hasOwnProperty(metric) && record.metrics.hasOwnProperty(metric)) {
+                        grade = record.metrics[metric].grades[eyeballMetrics[metric].metric];
+                        if(TestCtrl.grades.getValue(grade,'points')) {
+                            eyeballScore += TestCtrl.grades.getValue(grade,'points');
+                            metrics += eyeballMetrics[metric].influence;
+                        }
+                    }
+                }
+
+                eyeballScore = Math.floor(eyeballScore/metrics);
+                eyeballGrade = TestCtrl.grades.getGrades(eyeballScore,'points');
+                record.metrics.eyeball.data[score] = eyeballScore;
+                record.metrics.eyeball.grades[score] = eyeballGrade;
+            }
+
+        }
+        return record;
+    }
+
     function commitRecord(record){
 
         clearTimeout(record.recordTimer);
         delete record.recordTimer;
 
+        record = addEyeballMetrics(record);
 
         eyeball.DB.insert(record,function(err){
             if(err) {
