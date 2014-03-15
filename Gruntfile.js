@@ -122,8 +122,8 @@ module.exports = function(grunt) {
                 },
                 files: [
                     {
-                        src: ['<%= props.out%>/<%=props.name%>/**'],
-                        flatten : true,
+                        src: ['<%=props.name%>/**/*'],
+                        cwd : '<%= props.out%>/',
                         expand : true
                     }
                 ]
@@ -135,8 +135,8 @@ module.exports = function(grunt) {
                 },
                 files: [
                     {
-                        src: ['<%= props.out%>/<%=props.name%>/**'],
-                        flatten : true,
+                        src: ['<%=props.name%>/**/*'],
+                        cwd : '<%= props.out%>/',
                         expand : true
                     }
                 ]
