@@ -7,7 +7,8 @@ module.exports = function(grunt) {
         props : {
             out : 'target',
             src : 'src/main',
-            name : '<%=pkg.name%>-<%=pkg.version%>'
+            name : '<%=pkg.name%>-<%=pkg.version%>',
+            test : 'src/test'
         },
         clean : ['target'],
         jslint: { // configure the task
@@ -103,6 +104,29 @@ module.exports = function(grunt) {
                 dest: '<%= props.out%>/<%=props.name%>/webapp/<%=props.name%>.min.css'
             }
         },
+        jasmine: {
+            src: [
+                '<%= props.src%>/conf/**/*.js',
+                '<%= props.src%>/controllers/*/*.js',
+                '<%= props.src%>/routes/**/*.js',
+                '<%= props.src%>/webapp/js/**/*.js'
+            ],
+            options: {
+                specs: ['<%= props.test%>/**/*Spec.js'],
+                helpers: ['<%= props.test%>/**/*Helper.js'],
+                template: require('grunt-template-jasmine-istanbul'),
+                templateOptions: {
+                    coverage: '<%= props.out%>/coverage/coverage.json',
+                    report: '<%= props.out%>/coverage',
+                    thresholds: {
+                        lines: 70,
+                        statements: 70,
+                        branches: 70,
+                        functions: 70
+                    }
+                }
+            }
+        },
         plato: {
             your_task: {
                 files: {
@@ -153,8 +177,9 @@ module.exports = function(grunt) {
     }
 
     grunt.registerTask('compile', ['jslint','copy:app','copy','concat','gcc','cssmin']);
+    grunt.registerTask('test', ['jasmine']);
     grunt.registerTask('package', ['compress']);
     grunt.registerTask('analyse', ['plato']);
-    grunt.registerTask('default', ['clean','compile','package']);
+    grunt.registerTask('default', ['clean','compile','test','package']);
 
 };

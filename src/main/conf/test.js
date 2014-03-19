@@ -1,18 +1,17 @@
-module.exports = function(testers){
+var testCfg =  function(){
+
+    //var testers = require('../controllers/test/testers');
 
     var tests = {
         browser : [{
             name : 'dommonster',
-            src: 'lib/dommonster.js',
-            extractor : testers.dommonster
+            src: 'lib/dommonster.js'
         }],
         har : [{
-            name : 'yslow',
-            extractor : testers.yslow
+            name : 'yslow'
         }],
         markup : [{
-            name : 'validator',
-            extractor : testers.validator
+            name : 'validator'
         }]
     };
 
@@ -135,3 +134,5 @@ module.exports = function(testers){
     };
 
 };
+
+module.exports = testCfg();

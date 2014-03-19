@@ -7,9 +7,7 @@ var phantomjs = require('phantomjs');
 var phantom = require('node-phantom');
 var fs = require('fs');
 
-var TestCtrl = require('../controllers/test')();
-
-module.exports = function(req,res) {
+var testRoute = function(req,res) {
 
     var build = req.body.build;
     var datafile = req.body.datafile;
@@ -21,411 +19,12 @@ module.exports = function(req,res) {
 
     var urls = null;
     var urlsLength = 0;
-    var committedRecords = [];
 
-    var createdRecords = [];
-    var uncommittedRecords = [];
     var erroredUrls = [];
 
-    function addEyeballMetrics(record) {
-        record.metrics.eyeball = {
-            url : record.url,
-            timestamp: new Date(),
-            build : build,
-            tag : tag,
-            data : {},
-            grades : {},
-            tool : 'eyeball'
-        };
-
-        var eyeballScore = 0, score, eyeballMetrics, metrics, metric, grade, eyeballGrade;
-
-        for(score in TestCtrl.eyeballScoring) {
-            if(TestCtrl.eyeballScoring.hasOwnProperty(score)) {
-                eyeballScore = 0;
-                metrics = 0;
-                eyeballMetrics = TestCtrl.eyeballScoring[score].metrics;
-                for(metric in eyeballMetrics) {
-                    if(eyeballMetrics.hasOwnProperty(metric) && record.metrics.hasOwnProperty(metric)) {
-                        grade = record.metrics[metric].grades[eyeballMetrics[metric].metric];
-                        if(TestCtrl.grades.getValue(grade,'points')) {
-                            eyeballScore += TestCtrl.grades.getValue(grade,'points');
-                            metrics += eyeballMetrics[metric].influence;
-                        }
-                    }
-                }
-
-                eyeballScore = Math.floor(eyeballScore/metrics);
-                eyeballGrade = TestCtrl.grades.getGrades(eyeballScore,'points');
-                record.metrics.eyeball.data[score] = eyeballScore;
-                record.metrics.eyeball.grades[score] = eyeballGrade;
-            }
-
-        }
-        return record;
-    }
-
-    function commitRecord(record){
-
-        clearTimeout(record.recordTimer);
-        delete record.recordTimer;
-
-        record = addEyeballMetrics(record);
-
-        eyeball.DB.insert(record,function(err){
-            if(err) {
-                eyeball.logger.info(err);
-            }
-            committedRecords.push(record);
-            eyeball.logger.info("Emitting..."+build);
-            eyeball.io.sockets.volatile.emit('commitRecord_'+build,{
-                committed : committedRecords.length,
-                total : urlsLength,
-                progress : Math.floor((committedRecords.length/urlsLength) * 100),
-                record : record
-            });
-        });
-        var i = 0;
-        for(i=0; i<uncommittedRecords.length; i++) {
-            if(uncommittedRecords[i] === record) {
-                uncommittedRecords.splice(i,1);
-            }
-        }
-
-    }
-
-    function updateRecord(record,property,data) {
-
-        var metric = {
-            url : record.url,
-            timestamp: new Date(),
-            build : build,
-            tag : tag,
-            tool : property,
-            data : data
-        };
-
-        metric.grades = TestCtrl.grades.getGradeSet(metric);
-        record.metrics[property] = metric;
-
-        var i, test;
-
-        var tests = [].concat(TestCtrl.tests.browser).concat(TestCtrl.tests.har).concat(TestCtrl.tests.markup);
-
-        for(i=0; i<tests.length; i++) {
-            test = tests[i];
-            if(!record.metrics[test.name]) {
-                eyeball.logger.info("No entry for " + test.name);
-                return;
-            }
-        }
-
-        if(record.recordTimer) {
-            commitRecord(record);
-        }
-
-    }
-
-
-
-    function createHAR(page,callback) {
-        var entries = [];
-
-        page.resources.forEach(function (resource) {
-            var request = resource.request,
-                startReply = resource.startReply,
-                endReply = resource.endReply;
-
-            if (!request || !startReply || !endReply) {
-                return;
-            }
-
-            // Exclude Data URI from HAR file because
-            // they aren't included in specification
-            if (request.url.indexOf("data:image") > -1) {
-                return;
-            }
-
-            var time = new Date(endReply.time).getTime() - new Date(request.time).getTime();
-
-            entries.push({
-                startedDateTime: request.time,
-                time: time,
-                request: {
-                    method: request.method,
-                    url: request.url,
-                    httpVersion: "HTTP/1.1",
-                    cookies: [],
-                    headers: request.headers,
-                    queryString: [],
-                    headersSize: -1,
-                    bodySize: -1
-                },
-                response: {
-                    status: endReply.status,
-                    statusText: endReply.statusText,
-                    httpVersion: "HTTP/1.1",
-                    cookies: [],
-                    headers: endReply.headers,
-                    redirectURL: "",
-                    headersSize: -1,
-                    bodySize: startReply.bodySize,
-                    content: {
-                        size: startReply.bodySize,
-                        mimeType: endReply.contentType
-                    }
-                },
-                cache: {},
-                timings: {
-                    blocked: 0,
-                    dns: -1,
-                    connect: -1,
-                    send: 0,
-                    wait: new Date(startReply.time).getTime() - new Date(request.time).getTime(),
-                    receive: new Date(endReply.time).getTime() - new Date(startReply.time).getTime(),
-                    ssl: -1
-                },
-                pageref: page.address
-            });
-        });
-
-       callback({
-            log: {
-                version: '1.2',
-                creator: {
-                    name: "PhantomJS",
-                    version : "1.9.2"
-                },
-                pages: [{
-                    startedDateTime: page.startTime.toISOString(),
-                    id: page.address,
-                    title: page.title,
-                    pageTimings: {
-                        onLoad: page.endTime - page.startTime,
-                        onContentLoad : page.onContentLoad - page.startTime
-                    }
-                }],
-                entries: entries
-            }
-        });
-    }
-
-    function combineHARs(hars) {
-
-        var har = hars[0];
-        var cachedHar = hars[1];
-
-        function matchEntry(url) {
-            var i = 0;
-            for(i=cachedHar.log.entries.length-1; i>=0; i--) {
-                if(cachedHar.log.entries[i].request.url === url) {
-                    return cachedHar.log.entries[i];
-                }
-            }
-            return false;
-        }
-
-        cachedHar.log.creator = {
-            name : "Eyeball",
-            version : "0.0.0"
-        };
-
-        var i =0;
-        var entry;
-        var matched;
-        for (i=0; i<har.log.entries.length; i++) {
-            matched = matchEntry(har.log.entries[i].request.url);
-            if(!matched) {
-                entry = {
-                    startedDateTime: cachedHar.log.pages[0].startedDateTime,
-                    time: 0,
-                    request: {
-                        method: har.log.entries[i].request.method,
-                        url: har.log.entries[i].request.url,
-                        httpVersion: "HTTP/1.1",
-                        cookies: [],
-                        headers: har.log.entries[i].request.headers,
-                        queryString: [],
-                        headersSize: -1,
-                        bodySize: -1
-                    },
-                    response: {
-                        status: '(cache)',
-                        statusText: '(cache)',
-                        httpVersion: "HTTP/1.1",
-                        cookies: [],
-                        headers: har.log.entries[i].response.headers,
-                        redirectURL: "",
-                        headersSize: -1,
-                        bodySize: 0,
-                        content: {
-                            size: har.log.entries[i].response.bodySize,
-                            mimeType: har.log.entries[i].response.content.mimeType
-                        }
-                    },
-                    cache: {
-                        afterRequest : har.log.entries[i].response.bodySize
-                    },
-                    timings: {
-                        blocked: 0,
-                        dns: 0,
-                        connect: 0,
-                        send: 0,
-                        wait: 0,
-                        receive: 0,
-                        ssl: -1
-                    },
-                    pageref: har.log.entries[i].pageref
-                };
-
-                cachedHar.log.entries.push(entry);
-            }
-        }
-
-        return cachedHar;
-    }
-
-
-    function createRecord(passes) {
-
-        var record = {
-            url : passes[1].address,
-            timestamp: new Date(),
-            build : build,
-            tag : tag,
-            metrics : {}
-        };
-
-        createdRecords.push(record);
-        uncommittedRecords.push(record);
-
-        record.recordTimer = setTimeout(function(){
-            console.log("Gave up waiting for metrics");
-            commitRecord(record);
-        },30000);
-
-        var harUncached = null;
-        var harCached = null;
-
-        function runTestSet(testSet,data) {
-            var i= 0, test;
-            var cbMaker = function(name) {
-                return function(res) {
-                    updateRecord(record,name,res);
-                };
-            };
-            for(i=0; i<testSet.length; i++) {
-                test = testSet[i];
-                test.extractor(data,cbMaker(test.name));
-                eyeball.logger.info('got '+test.name+' result');
-            }
-        }
-
-        createHAR(passes[0],function(har1) {
-            harUncached = har1;
-            createHAR(passes[1],function(har2) {
-                harCached = combineHARs([har1,har2]);
-                eyeball.logger.info("created har");
-                updateRecord(record,'har',harCached);
-                updateRecord(record,'harUncached',harUncached);
-                updateRecord(record,'time',{
-                    lt : harCached.log.pages[0].pageTimings.onLoad,
-                    dt :  harCached.log.pages[0].pageTimings.onContentLoad,
-                    lt_u : harUncached.log.pages[0].pageTimings.onLoad,
-                    dt_u :  harUncached.log.pages[0].pageTimings.onContentLoad
-                });
-                runTestSet(TestCtrl.tests.har,harUncached);
-            });
-        });
-
-
-        runTestSet(TestCtrl.tests.browser,passes[1]);
-        runTestSet(TestCtrl.tests.markup,passes[1]);
-
-    }
-
-
-
-    function setupPage(page) {
-        page.resources = [];
-        page.libraryPath = "../";
-        page.settings = {
-            resourceTimeout : 5
-        };
-
-        page.onResourceRequested = function (req) {
-            page.resources[req[0].id] = {
-                request: req[0],
-                startReply: null,
-                endReply: null
-            };
-        };
-
-        page.onResourceReceived = function (res) {
-            if(!page.resources[res.id]) {
-                return;
-            }
-            if (res.stage === 'start') {
-                page.resources[res.id].startReply = res;
-            }
-            if (res.stage === 'end') {
-                page.resources[res.id].endReply = res;
-            }
-        };
-
-        page.setFn('onCallback',function(msg) {
-            if(msg === "DOMContentLoaded") {
-                page.evaluate(function(){
-                    window.DOMContentLoaded = new Date().getTime();
-                });
-            }
-        });
-
-        page.setFn('onInitialized',function(){
-            page.evaluate(function() {
-                document.addEventListener('DOMContentLoaded', function() {
-                    window.callPhantom('DOMContentLoaded');
-                }, false);
-            });
-        });
-
-        return page;
-    }
+    var TestCtrl;
 
     var activeTests = {};
-
-    function runInPageTest(webpage,page,tests,callback) {
-        var test = tests[0];
-
-        page.injectJs(test.src,function(){
-            page.evaluate(function() {
-                return {
-                    EYEBALLTEST : window.EYEBALLTEST
-                };
-            },function(err,doc){
-                if(err) {
-                    erroredUrls.push(url);
-                }
-                webpage.EYEBALLTEST[test.name] = doc.EYEBALLTEST;
-
-                tests.splice(0,1);
-                if(tests.length > 0) {
-                    runInPageTest(webpage,page,tests,callback);
-                } else {
-                    clearTimeout(webpage.inPageTestTimer);
-                    callback();
-                }
-            });
-        });
-    }
-
-    function runInPageTests(webpage,page,callback) {
-        webpage.inPageTestTimer = setTimeout(callback,30000);
-        webpage.EYEBALLTEST = {};
-        runInPageTest(webpage,page,[].concat(TestCtrl.tests.browser),callback);
-    }
-
-
 
     function openPage(ph) {
         eyeball.logger.info("Opening page with "+ph._phantom.pid);
@@ -441,7 +40,7 @@ module.exports = function(req,res) {
                     eyeball.logger.info(err);
                 }
 
-                page = setupPage(page);
+                page = TestCtrl.page.setup(page);
 
                 if(pass === 0){
                     page.customHeaders = {
@@ -483,13 +82,13 @@ module.exports = function(req,res) {
 
                             webpage.EYEBALLTEST = {};
 
-                            runInPageTests(webpage,page,function() {
+                            TestCtrl.runInPageTests(webpage,page,function() {
                                 page.close();
                                 passes[pass] = webpage;
                                 if(pass === 0) {
                                     createPage(1,url);
                                 } else if(pass === 1) {
-                                    createRecord(passes);
+                                    TestCtrl.record.create(passes);
                                     delete activeTests[ph._phantom.pid];
                                     if(urls.length > 0) {
                                         openPage(ph);
@@ -593,17 +192,17 @@ module.exports = function(req,res) {
             for(i = activePhantoms.length-1; i>=0; i--) {
                 activePhantoms[i].exit();
             }
-            for(i = TestCtrl.activeVnus.length-1; i>=0; i--) {
-                TestCtrl.activeVnus[i].kill();
+            for(i = TestCtrl.testers.internal.activeVnus.length-1; i>=0; i--) {
+                TestCtrl.testers.internal.activeVnus[i].kill();
             }
-            for(i = TestCtrl.validatorFiles.length-1; i>=0; i--) {
-                fs.unlink(TestCtrl.validatorFiles[i]);
+            for(i = TestCtrl.testers.internal.validatorFiles.length-1; i>=0; i--) {
+                fs.unlink(TestCtrl.testers.internal.validatorFiles[i]);
             }
 
             if(erroredUrls.length > 0) {
                 console.log("Forcing test finish");
                 eyeball.io.sockets.volatile.emit('commitRecord_'+build,{
-                    committed : committedRecords.length,
+                    committed : TestCtrl.record.committedRecords.length,
                     total : urlsLength,
                     progress : 100
                 });
@@ -632,6 +231,12 @@ module.exports = function(req,res) {
         }
 
         urlsLength = urls.length;
+
+        TestCtrl = require('../controllers/test/test')({
+            build : build,
+            tag : tag,
+            urlsLength : urlsLength
+        });
 
         if(urlsLength < phantomMax) {
             phantomMax = urlsLength;
@@ -663,3 +268,5 @@ module.exports = function(req,res) {
 
     res.send("OK");
 };
+
+module.exports = testRoute;
