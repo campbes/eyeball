@@ -1,3 +1,5 @@
+/*global window, document*/
+
 var testControllerPage = function() {
 
     function setupPage(page) {
@@ -48,7 +50,7 @@ var testControllerPage = function() {
 
     return {
         setup : setupPage
-    }
+    };
 
 };
 

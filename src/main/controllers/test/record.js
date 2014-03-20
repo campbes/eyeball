@@ -138,7 +138,7 @@ var testControllerRecord = function(build,tag,urlsLength) {
         update : updateRecord,
         commit : commitRecord,
         committedRecords : committedRecords
-    }
+    };
 
 };
 

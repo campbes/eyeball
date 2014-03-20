@@ -179,7 +179,7 @@ var testControllerTesters = function() {
         yslow : runYslow,
         validator : validate,
         internal : internal
-    }
+    };
 
 };
 

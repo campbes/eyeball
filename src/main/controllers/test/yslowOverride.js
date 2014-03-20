@@ -1,6 +1,7 @@
 var testControllerYslowOverride = function() {
 
     var grader = require('./grader');
+    var YSLOW = require('yslow').YSLOW;
 
     function yslowOverrideGetResults(yscontext, info) {
         var i, l, results, url, type, comps, comp, encoded_url, obj, cr,

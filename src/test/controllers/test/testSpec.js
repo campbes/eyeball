@@ -8,7 +8,7 @@ describe("tests the test controller",function() {
     });
 
     it("checks that the test controller initialises correctly",function() {
-        expect(controller.grades).toBeDefined();
+        expect(controller.startTests).toBeDefined();
     });
 
 });

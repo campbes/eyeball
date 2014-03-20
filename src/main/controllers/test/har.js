@@ -164,7 +164,7 @@ var testControllerHar = function() {
     return {
         create : createHAR,
         combine : combineHARs
-    }
+    };
 
 };
 
