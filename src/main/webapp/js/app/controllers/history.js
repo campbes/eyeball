@@ -1,15 +1,15 @@
 /*global eyeballControllers*/
 
-eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','chart','$location','fieldConfig','persist','render',
+eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','chart','$location','config','persist','render',
 
-    function HistoryCtrl($scope,$routeParams,$http,chart,$location,fieldConfig,persist,render) {
+    function HistoryCtrl($scope,$routeParams,$http,chart,$location,config,persist,render) {
 
         $scope.data = [];
         $scope.id = $routeParams.id.substr(1);
         $scope.query = $routeParams;
         $scope.url = 'Getting url...';
         $scope.timestamp = 'Getting timestamp...';
-        $scope.fields = fieldConfig.display.items;
+        $scope.fields = config.fields.display.items;
         $scope.reportFilter = persist.get("reportFilter");
 
         function relocate(obj) {
@@ -35,9 +35,9 @@ eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','ch
 
             var j = 0;
             var f = null;
-            for(j =0; j<fieldConfig[tool].items.length; j++) {
-                f = fieldConfig[tool].items[j];
-                array.push((data.metrics[f.tool] ? chart.gradeMap(render.accessObject(data.metrics[f.tool].grades,f.metric),j,fieldConfig[tool].items.length) : 0));
+            for(j =0; j<config.fields[tool].items.length; j++) {
+                f = config.fields[tool].items[j];
+                array.push((data.metrics[f.tool] ? chart.gradeMap(render.accessObject(data.metrics[f.tool].grades,f.metric),j,config.fields[tool].items.length) : 0));
             }
             return array;
         }
@@ -64,8 +64,8 @@ eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','ch
                     for(i=0; i<data.length; i++) {
                         array.push(generateArray(data[i],cols,$scope.fields[n].tool));
                     }
-                    for(j =0; j<fieldConfig[$scope.fields[n].tool].items.length; j++) {
-                        cols.push(['number',fieldConfig[$scope.fields[n].tool].items[j].name]);
+                    for(j =0; j<config.fields[$scope.fields[n].tool].items.length; j++) {
+                        cols.push(['number',config.fields[$scope.fields[n].tool].items[j].name]);
                     }
                     chart.drawHistoryChart(array,cols,$scope.fields[n].tool+'History',relocate);
                 }

@@ -96,6 +96,10 @@ module.exports = function(grunt) {
             js: {
                 src: ['<%= props.out%>/<%=props.name%>/webapp/<%=props.name%>.js'],
                 dest: '<%= props.out%>/<%=props.name%>/webapp/<%=props.name%>.min.js'
+            },
+            config: {
+                src: ['<%= props.src%>/webapp/js/app/conf/**/*.js'],
+                dest: '<%= props.out%>/<%=props.name%>/webapp/<%=props.name%>-config.min.js'
             }
         },
         cssmin: {

@@ -1,28 +1,6 @@
 /*global eyeballApp*/
 
-function processFields(fields) {
-    var f, items, i=0;
-    // process the fields for backwards compat with current usage. Maybe simplify at some point
-    for (f in fields) {
-        if(fields.hasOwnProperty(f)) {
-            fields[f].tool = f;
-            if(fields[f].items) {
-                items = fields[f].items;
-                for(i=items.length-1;i>=0;i--) {
-                    if(typeof items[i] === "string") {
-                        items[i] = fields[items[i]];
-                    } else if (typeof items[i] === "object") {
-                        items[i].tool = f;
-                    }
-                }
-            }
-        }
-    }
-    return fields;
-}
-
-
-eyeballApp.factory('fieldConfig',function(){
+var eyeballAppConfig = (function(){
 
     var fields = {
         display : {}, //reserved
@@ -85,15 +63,15 @@ eyeballApp.factory('fieldConfig',function(){
 
     // add custom fields here
     /*fields.elementCounter = {
-        name : 'Element Count',
-        metric : 'total',
-        items : [
-            {metric : 'total', name : 'Total'},
-            {metric : 'DIV', name : 'DIV'},
-            {metric : 'A', name : 'A'},
-            {metric : 'P', name : 'P'}
-        ]
-    };*/
+     name : 'Element Count',
+     metric : 'total',
+     items : [
+     {metric : 'total', name : 'Total'},
+     {metric : 'DIV', name : 'DIV'},
+     {metric : 'A', name : 'A'},
+     {metric : 'P', name : 'P'}
+     ]
+     };*/
 
     //include any custom fields in here if you want them on the overview screens
     fields.overview = {
@@ -107,8 +85,12 @@ eyeballApp.factory('fieldConfig',function(){
         items : [fields.overview].concat(fields.overview.items)
     };
 
-    fields = processFields(fields);
-
     return fields;
 
-});
+}());
+
+
+
+
+
+

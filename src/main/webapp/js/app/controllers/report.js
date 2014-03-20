@@ -1,8 +1,8 @@
 /*global eyeballControllers*/
 
-eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeout','$routeParams','utils','popover','tablesort','render','chart','persist','logger','fieldConfig',
+eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeout','$routeParams','utils','popover','tablesort','render','chart','persist','logger','config',
 
-    function ReportCtrl($scope,$http,$location,$timeout,$routeParams,utils,popover,tablesort,render,chart,persist,logger,fieldConfig) {
+    function ReportCtrl($scope,$http,$location,$timeout,$routeParams,utils,popover,tablesort,render,chart,persist,logger,config) {
         logger.log("ReportCtrl");
         $scope.setPage("report");
 
@@ -16,9 +16,9 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         $scope.fields = [];
         $scope.reportView = persist.get('reportView') || 'table';
         $scope.path = $location.path();
-        $scope.fieldConfig = fieldConfig;
+        $scope.fieldConfig = config.fields;
         $scope.report = $scope.path.substr($scope.path.lastIndexOf('/')+1);
-        $scope.fields = fieldConfig[$scope.report].items;
+        $scope.fields = config.fields[$scope.report].items;
 
         $scope.chartOptions = [
             {name : "Date", value : "timestamp"},
