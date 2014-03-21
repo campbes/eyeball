@@ -87,7 +87,7 @@ var reportCfg = function() {
     return {
         fields : fields,
         reports : fields.display.items
-    }
+    };
 
 };
 

@@ -3,6 +3,8 @@ var fs = require('fs');
 
 var testRoute = function(req,res) {
 
+    res.setHeader("Access-Control-Allow-Origin","*");
+
     var build = req.body.build;
     var datafile = req.body.datafile;
     var url = req.body.url;
