@@ -1,8 +1,8 @@
 /*global eyeballControllers,$*/
 
-eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http','fieldConfig','render','persist','utils',
+eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http','config','render','persist','utils',
 
-    function DetailCtrl($scope,$routeParams,$http,fieldConfig,render,persist,utils) {
+    function DetailCtrl($scope,$routeParams,$http,config,render,persist,utils) {
 
         $scope.id = $routeParams.id.substr(1);
 
@@ -15,8 +15,8 @@ eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http','fie
             $scope.timestamp = data.timestamp;
             $scope.build = data.build;
             $scope.tag = data.tag;
-            $scope.fields = fieldConfig.display.items;
-            $scope.fieldConfig = fieldConfig;
+            $scope.fields = config.fields.display.items;
+            $scope.fieldConfig = config.fields;
             if($routeParams.anchor) {
                 setTimeout(function(){
                     utils.scrollTo("panel_"+$routeParams.anchor);

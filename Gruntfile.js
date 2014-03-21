@@ -109,6 +109,10 @@ module.exports = function(grunt) {
             bookmarklet: {
                 src: ['<%= props.out%>/<%=props.name%>/webapp/<%=props.name%>-bookmarklet.js'],
                 dest: '<%= props.out%>/<%=props.name%>/webapp/<%=props.name%>-bookmarklet.min.js'
+            },
+            config: {
+                src: ['<%= props.src%>/webapp/js/app/conf/**/*.js'],
+                dest: '<%= props.out%>/<%=props.name%>/webapp/<%=props.name%>-config.min.js'
             }
         },
         cssmin: {
@@ -189,45 +193,7 @@ module.exports = function(grunt) {
         }
     }
 
-    grunt.registerMultiTask('bookmarklet', 'Combine the bookmarklet files', function() {
-        var str2js = function(str) {
-            return str.replace(/'/g, "\\'").replace(/\s{2,}/g," ").replace(/\t/g," ").replace(/\r\n|\r|\n/g, "");
-        };
-
-        var namespace = this.target;
-
-        var str = "(function(){";
-        str += 'var ' + namespace + ' = ' + namespace + ' || { css : [], html : []};\n';
-
-        var css= 0, html = 0;
-        // Loop over destination files
-        for (var fname in this.data) {
-            // Loop over source files
-            this.data[fname].forEach(function(f,i) {
-                if (!grunt.file.exists(f)) {
-                    grunt.log.warn('Source file "' + f + '" not found.');
-                    return false;
-                }
-                if(f.substr(f.length-2,2) === "js") {
-                    str += grunt.file.read(f);
-                } else if (f.substr(f.length-3,3) === "css") {
-                    str += namespace + '.css[' + css + '] = ';
-                    str += "'" + str2js(grunt.file.read(f), '') + "';";
-                    css += 1;
-                } else {
-                    str += namespace + '.html[' + html + '] = ';
-                    str += "'" + str2js(grunt.file.read(f), '') + "';";
-                    html += 1;
-                }
-            });
-            str += "}())";
-            grunt.file.write(grunt.config.process(fname), str);
-        }
-
-    });
-
-
-    grunt.registerTask('compile', ['jslint','copy:app','copy','concat','bookmarklet','gcc','cssmin']);
+    grunt.registerTask('compile', ['jslint','copy:app','copy','concat','gcc','cssmin']);
     grunt.registerTask('test', ['jasmine']);
     grunt.registerTask('package', ['compress']);
     grunt.registerTask('analyse', ['plato']);
