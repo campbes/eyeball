@@ -31,6 +31,8 @@ html(ng-app='eyeballApp',lang='en')
                     |&nbsp;Find
 
             ul.nav.navbar-nav.navbar-right
+                li
+                    a(href="javascript:(function(){var script=document.createElement('script');script.src='http://localhost:3000/js/bookmarklet/bookmarklet.js?'+new Date().getTime().toString();document.body.appendChild(script);})()") [Bookmarklet]
                 li(class="{{(page === 'monitor' ? 'active' : '')}}")
                     a(href="#/monitor") Monitor
 
