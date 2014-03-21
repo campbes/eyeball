@@ -7,24 +7,35 @@ var eyeballApp = angular.module('eyeballApp',[
 
 eyeballApp.config(['$routeProvider',
     function($routeProvider) {
+
+        var resolve = {
+            config : function(configResolver) {
+                return configResolver;
+            }
+        };
+
         $routeProvider.
             when('/report', {
                 redirectTo: '/report/overview'
             }).when('/report/overview', {
                 templateUrl: '/partials/report/overview',
-                controller : 'ReportCtrl'
+                controller : 'ReportCtrl',
+                resolve : resolve
             }).when('/report/:report', {
                 templateUrl: '/partials/report/standard',
-                controller : 'ReportCtrl'
+                controller : 'ReportCtrl',
+                resolve : resolve
             }).when('/detail/:id', {
                 templateUrl: '/partials/detail',
-                controller : 'DetailCtrl'
+                controller : 'DetailCtrl',
+                resolve : resolve
             }).when('/har/:id', {
                 templateUrl: '/partials/har',
                 controller : 'HarCtrl'
             }).when('/history/:id', {
                 templateUrl: '/partials/history',
-                controller : 'HistoryCtrl'
+                controller : 'HistoryCtrl',
+                resolve : resolve
             }).when('/monitor', {
                 templateUrl: '/partials/monitor',
                 controller : 'MonitorCtrl'

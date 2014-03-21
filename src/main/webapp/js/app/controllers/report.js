@@ -5,6 +5,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
     function ReportCtrl($scope,$http,$location,$timeout,$routeParams,utils,popover,tablesort,render,chart,persist,logger,config) {
         logger.log("ReportCtrl");
         $scope.setPage("report");
+        config = config.data.report;
 
         $scope.format = render.format;
         $scope.getVal = render.accessObject;

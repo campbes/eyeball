@@ -3,7 +3,7 @@
 eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','chart','$location','config','persist','render',
 
     function HistoryCtrl($scope,$routeParams,$http,chart,$location,config,persist,render) {
-
+        config = config.data.report;
         $scope.data = [];
         $scope.id = $routeParams.id.substr(1);
         $scope.query = $routeParams;

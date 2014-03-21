@@ -4,6 +4,7 @@ eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http','con
 
     function DetailCtrl($scope,$routeParams,$http,config,render,persist,utils) {
 
+        config = config.data.report;
         $scope.id = $routeParams.id.substr(1);
 
         $http({

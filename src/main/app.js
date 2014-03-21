@@ -12,6 +12,7 @@ var detail = require('./routes/detail');
 var history = require('./routes/history');
 var monitor = require('./routes/monitor');
 var report = require('./routes/report');
+var config = require('./routes/config');
 var http = require('http');
 var path = require('path');
 var request = require('request');
@@ -43,6 +44,7 @@ app.get('/report',report.overview);
 app.get('/detail', detail);
 app.get('/history', history);
 app.get('/monitor', monitor);
+app.get('/config', config);
 
 function setReportRoute(name) {
     app.get('/report/'+name,function(req,res) {
