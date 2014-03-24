@@ -102,5 +102,6 @@ eyeball = {
 
 app.locals = {
     env : app.settings.env,
-    version : pkg.version
+    version : pkg.version,
+    host : "http://localhost:3000"
 };

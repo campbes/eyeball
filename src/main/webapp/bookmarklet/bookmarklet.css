@@ -9,14 +9,15 @@
     font-size: 12px;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif !important;
     box-shadow: 10px 10px 5px #888888;
+    min-width: 150px;
 }
 #eyeballBookmarklet * {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif !important;
     text-transform: none;
 }
 #eyeballBookmarklet h1 {
-    background: url("http://localhost:3000/images/eyeballSmall.png") no-repeat;
-    padding: 10px 10px 20px 50px;
+    margin: 0;
+    font-size: 18px;
 }
 #eyeballBookmarklet img {
     margin-right: 5px;
@@ -35,6 +36,7 @@
     font-weight: bold;
     padding: 5px 10px 5px 5px;
     color: #000;
+    border: 1px solid #FFF;
 }
 #eyeballBookmarklet .eyeballA {
     background : #5cb85c;
@@ -64,4 +66,12 @@
 #eyeballBookmarklet a {
     font-weight: bold;
     color : #2a6496;
+}
+#eyeballBookmarklet button {
+    background : #d9534f;
+    border: 1px solid #FFF;
+    color: #FFF;
+    float: right;
+    border-radius: 4px;
+    font-size: 12px;
 }

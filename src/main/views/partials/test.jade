@@ -6,7 +6,13 @@ div.container
             a(href="#") Eyeball
         li.active Test
 
+    div.alert.alert-info
+        |Drag&nbsp;
+        a.bookmarklet(href="javascript:(function(){var script=document.createElement('script');script.id='eyeballScript';script.src='#{host}/eyeball-bookmarklet.js?'+new Date().getTime().toString();document.body.appendChild(script);})()") Eyeball
+        |&nbsp;to your bookmarks bar to run on any web page
+
     div.panel.panel-default(ng-controller="TestCtrl")
         div.panel-heading Test
         div.panel-body
             mixin testForm
+

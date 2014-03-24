@@ -37,17 +37,22 @@
 
     function run() {
         container = $("#"+id);
+        var status =  $('#eyeballStatus');
+        $("#"+id+">button").click(function(){container.remove();container = null;});
         var build = new Date().getTime().toString() + Math.random();
-        var socket = io.connect(host);
-        socket.on('commitRecord_'+build, function (data) {
-            socket.disconnect();
-            document.getElementById('eyeballStatus').innerHTML = "Success!";
-            metrics = $("#eyeballBookmarklet>ul");
-            config.report.fields.overview.items.forEach(function(obj){
-                metrics.append(getMetric(data,obj));
+
+        function startSocket() {
+            var socket = io.connect(host);
+            socket.on('commitRecord_'+build, function (data) {
+                socket.disconnect();
+                status.html("Success!");
+                metrics = $("#eyeballBookmarklet>ul");
+                config.report.fields.overview.items.forEach(function(obj){
+                    metrics.append(getMetric(data,obj));
+                });
+                container.append('<a href="'+host+'/#/detail/:'+data.record._id+'">View full details in Eyeball</a>');
             });
-            container.append('<a href="'+host+'/#/detail/:'+data.record._id+'">View full details in Eyeball</a>');
-        });
+        }
 
         $.ajax(host+'/config').done(function(data){
             config = data;
@@ -60,9 +65,12 @@
                 },
                 method : 'post'
             }).done(function(res){
-                    if(res !== "OK!") {
-                        //output an error heer
+                    if(res !== "OK") {
+                        status.html("Problem connecting to Eyeball");
+                        return;
                     }
+                    startSocket();
+                    status.html("Eyeballing...");
                 });
         });
     }
