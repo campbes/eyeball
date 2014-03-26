@@ -36,7 +36,8 @@ module.exports = function(grunt) {
             },
             webapp: {
                 src: [
-                    '<%= props.src%>/webapp/js/**/*.js'
+                    '<%= props.src%>/webapp/js/**/*.js',
+                    '<%= props.src%>/webapp/bookmarklet/**/*.js'
                 ],
                 directives: {
                     browser: true,
@@ -147,7 +148,8 @@ module.exports = function(grunt) {
                         '<%= props.src%>/routes/**/*.js',
                         '<%= props.src%>/conf/**/*.js',
                         '<%= props.src%>/controllers/**/*.js',
-                        '<%= props.src%>/webapp/js/**/*.js']
+                        '<%= props.src%>/webapp/js/**/*.js',
+                        '<%= props.src%>/webapp/bookmarklet/**/*.js']
                 }
             }
         },

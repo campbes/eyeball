@@ -1,4 +1,4 @@
-/*global Eyeball*/
+/*global Eyeball,$,io */
 
     var eyeballScript = document.getElementById("eyeballScript");
     var host = eyeballScript.src.split("://")[0] + "://" + eyeballScript.src.split("://")[1].split("/")[0];

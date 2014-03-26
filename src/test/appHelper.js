@@ -96,6 +96,15 @@ var helpers = {
         return function(args) {
             return args || {};
         }
+    },
+    res : {
+        headers : {},
+        setHeader : function(name,value) {
+            this.headers[name] = value;
+        },
+        send : function(output) {
+            this.output = output;
+        }
     }
 };
 
