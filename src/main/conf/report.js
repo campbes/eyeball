@@ -1,4 +1,4 @@
-var reportCfg = function() {
+var configReport = function() {
 
     var fields = {
         display : {}, //reserved
@@ -91,4 +91,4 @@ var reportCfg = function() {
 
 };
 
-module.exports = reportCfg();
+module.exports = configReport();

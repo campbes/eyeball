@@ -1,4 +1,4 @@
-var testCfg =  function(){
+var configTest =  function(){
 
     //var testers = require('../controllers/test/testers');
 
@@ -135,4 +135,4 @@ var testCfg =  function(){
 
 };
 
-module.exports = testCfg();
+module.exports = configTest();

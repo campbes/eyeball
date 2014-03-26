@@ -2,6 +2,15 @@ var eyeball = {
     logger : {
         error : function(){},
         info : function(){}
+    },
+    DB : {
+        find : function() {
+            return {
+                sort : function() {
+
+                }
+            }
+        }
     }
 };
 
@@ -12,7 +21,6 @@ var exports = function () {
 var module = {};
 
 var spies = {};
-
 
 var helpers = {
     require : function(name) {
@@ -69,7 +77,9 @@ var helpers = {
                 jsdom : function() {}
             }
         } else if (name.indexOf('/conf/test') !== -1){
-            return returnIfExists("testCfg");
+            return returnIfExists("configTest");
+        } else if (name.indexOf('/conf/report') !== -1){
+            return returnIfExists("configReport");
         } else if (name === './grader'){
             return returnIfExists("testControllerGrader");
         } else if (name === './yslowOverride'){
@@ -88,6 +98,14 @@ var helpers = {
                         on : on,
                         stdout : stdout,
                         stderr : stderr
+                    }
+                }
+            }
+        } else if(name === "url") {
+            return {
+                parse : function(str) {
+                    return {
+                        query : {}
                     }
                 }
             }

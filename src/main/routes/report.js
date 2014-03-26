@@ -1,7 +1,5 @@
-var url = require('url');
-var reportCfg = require('../conf/report');
-
 function getDbQuery(req) {
+    var url = require('url');
     var queryString = url.parse(req.url, true).query || {};
     var dbQuery = {};
 
@@ -58,7 +56,7 @@ function getDbQuery(req) {
     return dbQuery;
 }
 
-exports.overview = function(req,res) {
+var routeReportOverview = function(req,res) {
 
     var dbQuery = getDbQuery(req);
     var cfg = {
@@ -69,6 +67,7 @@ exports.overview = function(req,res) {
     };
 
     var i= 0,rep;
+    var reportCfg = require('../conf/report');
 
     for(i=reportCfg.reports.length-1; i>=0; i--) {
         rep = reportCfg.reports[i];
@@ -86,9 +85,11 @@ exports.overview = function(req,res) {
             res.send(JSON.stringify(results));
         });
 
+    return res;
+
 };
 
-exports.standard = function(req,res,name) {
+var routeReportStandard = function(req,res,name) {
     var dbQuery = getDbQuery(req);
     var cfg = {
         url : 1,
@@ -108,3 +109,6 @@ exports.standard = function(req,res,name) {
             res.send(JSON.stringify(results));
         });
 };
+
+exports.overview = routeReportOverview;
+exports.standard = routeReportStandard;
