@@ -2,10 +2,10 @@ describe("tests the (express) routes",function() {
 
     describe("tests the config route", function(){
         it("tests that the correct response headers are set",function() {
-            var response = routeConfig(null,helpers.res);
-            expect(response.headers["Content-type"]).toBe("text/json");
-            expect(response.headers["Access-Control-Allow-Origin"]).toBe("*");
-            expect(response.headers["Access-Control-Allow-Methods"]).toBe("POST");
+            routeConfig(null,helpers.res);
+            expect(helpers.res.headers["Content-type"]).toBe("text/json");
+            expect(helpers.res.headers["Access-Control-Allow-Origin"]).toBe("*");
+            expect(helpers.res.headers["Access-Control-Allow-Methods"]).toBe("GET");
         });
         it("tests that the response is a json string of the report and test configs",function(){
             var response = routeConfig(null,helpers.res);
@@ -43,6 +43,37 @@ describe("tests the (express) routes",function() {
             },helpers.res,"yslow");
             expect(eyeballTestData.cfg["metrics.yslow"]).toBe(1);
         });
+    });
+
+    describe("tests the test route", function(){
+        it("tests that the correct response headers are set",function() {
+            routeTest({
+                body : {
+                    datafile : ""
+                }
+            },helpers.res);
+            expect(helpers.res.headers["Access-Control-Allow-Origin"]).toBe("*");
+            expect(helpers.res.headers["Access-Control-Allow-Methods"]).toBe("POST");
+        });
+        it("tests the go method when a url is passed in",function() {
+            var testRoute = routeTest({
+                body : {
+                    datafile : ""
+                }
+            },helpers.res);
+            var cfg = testRoute.go("http://test.com");
+            expect(cfg.urls[0]).toBe("http://test.com");
+        });
+        it("tests the go method when a datafile is passed in",function() {
+            var testRoute = routeTest({
+                body : {
+                    datafile : "test.com\r\ngoogle.com"
+                }
+            },helpers.res);
+            var cfg = testRoute.go("test.com\r\ngoogle.com");
+            expect(cfg.urls[1]).toBe("google.com");
+        });
+
     });
 
 });

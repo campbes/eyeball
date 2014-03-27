@@ -97,7 +97,7 @@ var routeReportStandard = function(req,res,name) {
     };
     cfg["metrics."+name] = 1;
 
-    return eyeball.DB.find(dbQuery,cfg,{
+    eyeball.DB.find(dbQuery,cfg,{
         limit : 1000
     }).sort({timestamp : -1},
         function(err,results) {

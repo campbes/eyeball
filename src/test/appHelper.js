@@ -45,6 +45,7 @@ var helpers = {
                 writeFile : function(file,data,cb) {
                     return cb();
                 },
+                readFile: function() {},
                 unlink : function(){}
             };
             spies.writeFile = spyOn(obj,"writeFile");
@@ -91,6 +92,8 @@ var helpers = {
             return returnIfExists("testControllerGrader");
         } else if (name === './yslowOverride'){
            return returnIfExists("testControllerYslowOverride");
+        } else if (name.indexOf('controllers/test/test') !== -1){
+            return testController;
         } else if(name === "child_process") {
             var on = function(evt,cb){
                 return cb();
@@ -116,6 +119,10 @@ var helpers = {
                 parse : function() {
                     return eyeballTestData;
                 }
+            }
+        } else if (name === "node-phantom") {
+            return {
+                create : function(){}
             }
         }
 

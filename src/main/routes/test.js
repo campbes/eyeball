@@ -1,7 +1,7 @@
-var request = require('request');
-var fs = require('fs');
+var routeTest = function(req,res) {
 
-var testRoute = function(req,res) {
+    var request = require('request');
+    var fs = require('fs');
 
     res.setHeader("Access-Control-Allow-Origin","*");
     res.setHeader("Access-Control-Allow-Methods","POST");
@@ -31,14 +31,15 @@ var testRoute = function(req,res) {
                 urls = urls.concat(urlset);
             }
         }
-        TestCtrl = require('../controllers/test/test')({
+        var cfg = {
             build : build,
             tag : tag,
             url : url,
             urls : urls
-        });
-
+        };
+        TestCtrl = require('../controllers/test/test')(cfg);
         TestCtrl.startTests();
+        return cfg;
     }
 
     if (url) {
@@ -62,6 +63,10 @@ var testRoute = function(req,res) {
     }
 
     res.send("OK");
+
+    return {
+        go : go
+    }
 };
 
-module.exports = testRoute;
+module.exports = routeTest;
