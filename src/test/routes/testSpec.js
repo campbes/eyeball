@@ -93,5 +93,16 @@ describe("tests the (express) routes",function() {
             expect(detail.metrics.yslow.data.g.myMadeUpRule.rule).toBe("Test rule");
         });
     });
+    describe("tests the history route",function(){
+        it("tests the history report route",function(){
+            eyeballTestData = [{
+                url :  "test.com"
+            }];
+            var historyRoute = routeHistory({
+                url : "test.com"
+            },helpers.res);
+            expect(historyRoute["metrics.overview.grades"]).toBe(1);
+        });
+    });
 
 });

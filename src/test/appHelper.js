@@ -6,14 +6,16 @@ var eyeball = {
         info : function(){}
     },
     DB : {
-        find : function(dbQuery,cfg,dbCfg) {
-            if(typeof cfg === "function") {
-                return cfg(null,eyeballTestData);
+        find : function(one,two,three) {
+            if(typeof two === "function") {
+                return two(null,eyeballTestData);
+            } else if(typeof three === "function") {
+                return three(null,eyeballTestData);
             }
             eyeballTestData = {
-                dbQuery : dbQuery,
-                cfg : cfg,
-                dbCfg : dbCfg
+                dbQuery : one,
+                cfg : two,
+                dbCfg : three
             };
             return {
                 sort : function(cfg,cb) {

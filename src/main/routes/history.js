@@ -1,15 +1,15 @@
-var url = require('url');
-var mongojs = require('mongojs');
-var reportCfg = require('../conf/report');
+var routeHistory = function(req,res) {
 
-module.exports = function(req,res) {
+    var url = require('url');
+    var mongojs = require('mongojs');
+    var reportCfg = require('../conf/report');
 
     var queryString = url.parse(req.url, true).query || {};
     var dbQuery = {
         _id : mongojs.ObjectId(queryString.id)
     };
 
-    eyeball.DB.find(dbQuery,{url : 1},function(err,results) {
+    return eyeball.DB.find(dbQuery,{url : 1},function(err,results) {
         if(err) {
             res.send(err);
         }
@@ -36,6 +36,10 @@ module.exports = function(req,res) {
             }
             res.send(JSON.stringify(data));
         });
+
+        return cfg;
     });
 
 };
+
+module.exports = routeHistory;
