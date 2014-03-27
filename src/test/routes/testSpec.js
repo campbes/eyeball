@@ -75,5 +75,23 @@ describe("tests the (express) routes",function() {
         });
 
     });
+    describe("tests the detail route", function(){
+        it("tests that the yslow rules are added to results",function() {
+            eyeballTestData = [{
+                metrics : {
+                    yslow : {
+                        data : {
+                            g : {
+                                "myMadeUpRule" : {}
+                            }
+                        }
+                    }
+                }
+            }];
+
+            var detail = routeDetail({},helpers.res);
+            expect(detail.metrics.yslow.data.g.myMadeUpRule.rule).toBe("Test rule");
+        });
+    });
 
 });

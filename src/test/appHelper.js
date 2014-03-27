@@ -7,6 +7,9 @@ var eyeball = {
     },
     DB : {
         find : function(dbQuery,cfg,dbCfg) {
+            if(typeof cfg === "function") {
+                return cfg(null,eyeballTestData);
+            }
             eyeballTestData = {
                 dbQuery : dbQuery,
                 cfg : cfg,
@@ -77,6 +80,13 @@ var helpers = {
                     util : {
                         isArray : function(){},
                         getPageSpaceid : function(){}
+                    },
+                    doc : {
+                        rules : {
+                            myMadeUpRule : {
+                                name : "Test rule"
+                            }
+                        }
                     }
                 }
             }
@@ -123,6 +133,10 @@ var helpers = {
         } else if (name === "node-phantom") {
             return {
                 create : function(){}
+            }
+        } else if (name === "mongojs") {
+            return {
+                ObjectId : function(){}
             }
         }
 

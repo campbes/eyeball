@@ -75,7 +75,7 @@ var configReport = function() {
     fields.overview = {
         name : 'Overview',
         tool : 'overview',
-        items : ['time','yslow','dommonster','validator'/*,'elementCounter'*/]
+        items : ['eyeball','time','yslow','dommonster','validator'/*,'elementCounter'*/]
     };
 
     // determine which items to sho as individual reports, charts etc - default is everything
