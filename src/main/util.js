@@ -76,7 +76,7 @@ var util = function() {
 
     return {
         getDbQuery : getDbQuery
-    }
+    };
 
 };
 
