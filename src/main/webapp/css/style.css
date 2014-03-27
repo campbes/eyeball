@@ -37,7 +37,7 @@ body {
     word-break: break-all;
 }
 .keyInfo button {
-    width: 23%;
+    width: 18%;
     margin: 0 1% 0;
 }
 td[data-type='grades'] a {
