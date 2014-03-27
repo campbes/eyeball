@@ -4,6 +4,7 @@ var fs = require('fs');
 var testRoute = function(req,res) {
 
     res.setHeader("Access-Control-Allow-Origin","*");
+    res.setHeader("Access-Control-Allow-Methods","POST");
 
     var build = req.body.build;
     var datafile = req.body.datafile;

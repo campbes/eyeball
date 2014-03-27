@@ -2,7 +2,7 @@ var routeConfig = function(req,res) {
 
     res.setHeader("Content-type","text/json");
     res.setHeader("Access-Control-Allow-Origin","*");
-    res.setHeader("Access-Control-Allow-Methods","POST");
+    res.setHeader("Access-Control-Allow-Methods","GET");
 
     var config = {
         report : require('../conf/report'),
