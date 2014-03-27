@@ -17,7 +17,7 @@ module.exports = function(grunt) {
                     '<%= props.src%>/routes/**/*.js',
                     '<%= props.src%>/controllers/**/*.js',
                     '<%= props.src%>/conf/**/*.js',
-                    '<%= props.src%>/app.js'
+                    '<%= props.src%>/*.js'
                 ],
                 directives: {
                     predef : ['eyeball'],
@@ -80,6 +80,7 @@ module.exports = function(grunt) {
             js: {
                 src: [
                     '<%= props.src%>/webapp/js/app/app.js',
+                    '<%= props.src%>/webapp/js/app/util.js',
                     '<%= props.src%>/webapp/js/app/conf/*.js',
                     '<%= props.src%>/webapp/js/app/services/*.js',
                     '<%= props.src%>/webapp/js/app/controllers/*.js'
@@ -120,6 +121,7 @@ module.exports = function(grunt) {
         },
         jasmine: {
             src: [
+                '<%= props.src%>/util.js',
                 '<%= props.src%>/conf/**/*.js',
                 '<%= props.src%>/controllers/*/*.js',
                 '<%= props.src%>/routes/**/*.js',

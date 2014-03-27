@@ -140,6 +140,8 @@ var helpers = {
             return {
                 ObjectId : function(){}
             }
+        } else if (name.indexOf("/util") !== -1) {
+            return util();
         }
 
         return function(args) {

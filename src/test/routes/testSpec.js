@@ -16,21 +16,6 @@ describe("tests the (express) routes",function() {
     });
 
     describe("tests the report route",function(){
-        it("tests that getDbQuery returns the proper query object",function(){
-            require('url').init({
-                query : {
-                    build : "jeff,smith",
-                    tag : "badgers",
-                    start : "010101",
-                    url : "test.com"
-                }
-            });
-            var query = getDbQuery({});
-            expect(query.build.$in[1]).toBe("smith");
-            expect(query.tag).toBe("badgers");
-            expect(query.timestamp.$gte.getTime()).toBe(256589596800000);
-            expect(query.url.$regex).toBe("test.com");
-        });
         it("tests the overview report route",function(){
             routeReportOverview({
                 url : "test.com"
@@ -88,6 +73,9 @@ describe("tests the (express) routes",function() {
                     }
                 }
             }];
+            eyeballTestData.query = {
+                id : "1234"
+            };
 
             var detail = routeDetail({},helpers.res);
             expect(detail.metrics.yslow.data.g.myMadeUpRule.rule).toBe("Test rule");

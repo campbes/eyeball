@@ -3,11 +3,9 @@ var routeDetail = function(req,res) {
     var url = require('url');
     var mongojs = require('mongojs');
     var YSLOW = require('yslow').YSLOW;
+    var util = require('../util');
 
-    var queryString = url.parse(req.url, true).query || {};
-    var dbQuery = {
-        _id : mongojs.ObjectId(queryString.id)
-    };
+    var dbQuery = util.getDbQuery(req);
 
     return eyeball.DB.find(dbQuery,function(err,results) {
         if(err) {
