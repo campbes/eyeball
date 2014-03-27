@@ -1,13 +1,20 @@
+var eyeballTestData = {};
+
 var eyeball = {
     logger : {
         error : function(){},
         info : function(){}
     },
     DB : {
-        find : function() {
+        find : function(dbQuery,cfg,dbCfg) {
+            eyeballTestData = {
+                dbQuery : dbQuery,
+                cfg : cfg,
+                dbCfg : dbCfg
+            };
             return {
-                sort : function() {
-
+                sort : function(cfg,cb) {
+                    cb();
                 }
             }
         }
@@ -103,10 +110,11 @@ var helpers = {
             }
         } else if(name === "url") {
             return {
-                parse : function(str) {
-                    return {
-                        query : {}
-                    }
+                init : function(data) {
+                    eyeballTestData = data;
+                },
+                parse : function() {
+                    return eyeballTestData;
                 }
             }
         }

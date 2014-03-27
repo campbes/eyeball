@@ -85,8 +85,6 @@ var routeReportOverview = function(req,res) {
             res.send(JSON.stringify(results));
         });
 
-    return res;
-
 };
 
 var routeReportStandard = function(req,res,name) {
@@ -98,7 +96,8 @@ var routeReportStandard = function(req,res,name) {
         tag : 1
     };
     cfg["metrics."+name] = 1;
-    eyeball.DB.find(dbQuery,cfg,{
+
+    return eyeball.DB.find(dbQuery,cfg,{
         limit : 1000
     }).sort({timestamp : -1},
         function(err,results) {

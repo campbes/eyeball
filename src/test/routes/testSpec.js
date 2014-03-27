@@ -16,11 +16,32 @@ describe("tests the (express) routes",function() {
     });
 
     describe("tests the report route",function(){
+        it("tests that getDbQuery returns the proper query object",function(){
+            require('url').init({
+                query : {
+                    build : "jeff,smith",
+                    tag : "badgers",
+                    start : "010101",
+                    url : "test.com"
+                }
+            });
+            var query = getDbQuery({});
+            expect(query.build.$in[1]).toBe("smith");
+            expect(query.tag).toBe("badgers");
+            expect(query.timestamp.$gte.getTime()).toBe(256589596800000);
+            expect(query.url.$regex).toBe("test.com");
+        });
         it("tests the overview report route",function(){
-
-            //spyOn(eyeball.DB,"find");
-            var response = routeReportOverview({});
-            //expect(eyeball.DB.find).toHaveBeenCalled();
+            routeReportOverview({
+                url : "test.com"
+            },helpers.res);
+            expect(eyeballTestData.cfg["metrics.overview.grades"]).toBe(1);
+        });
+        it("tests the standard report route",function(){
+            routeReportStandard({
+                url : "test.com"
+            },helpers.res,"yslow");
+            expect(eyeballTestData.cfg["metrics.yslow"]).toBe(1);
         });
     });
 
