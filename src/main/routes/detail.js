@@ -1,7 +1,5 @@
 var routeDetail = function(req,res) {
 
-    var url = require('url');
-    var mongojs = require('mongojs');
     var YSLOW = require('yslow').YSLOW;
     var util = require('../util');
 

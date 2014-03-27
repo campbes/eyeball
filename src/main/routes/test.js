@@ -1,8 +1,5 @@
 var routeTest = function(req,res) {
 
-    var request = require('request');
-    var fs = require('fs');
-
     res.setHeader("Access-Control-Allow-Origin","*");
     res.setHeader("Access-Control-Allow-Methods","POST");
 
@@ -66,7 +63,7 @@ var routeTest = function(req,res) {
 
     return {
         go : go
-    }
+    };
 };
 
 module.exports = routeTest;
