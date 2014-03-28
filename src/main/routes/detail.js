@@ -1,4 +1,4 @@
-var routeDetail = function(req,res) {
+var EyeballRoutesDetail = function(req,res) {
 
     var YSLOW = require('yslow').YSLOW;
     var util = require('../util');
@@ -25,4 +25,4 @@ var routeDetail = function(req,res) {
 
 };
 
-module.exports = routeDetail;
+module.exports = EyeballRoutesDetail;

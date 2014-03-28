@@ -4,7 +4,7 @@ describe("tests the testers module of testController",function() {
 
     beforeEach(function() {
         require = helpers.require;
-        testers = testControllerTesters();
+        testers = EyeballControllersTestTesters();
     });
     afterEach(function() {
         testers = null;

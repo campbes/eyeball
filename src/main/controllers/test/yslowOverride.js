@@ -1,4 +1,4 @@
-var testControllerYslowOverride = function() {
+var EyeballControllersTestYslowOverride = function() {
 
     var grader = require('./grader');
     var YSLOW = require('yslow').YSLOW;
@@ -160,4 +160,4 @@ var testControllerYslowOverride = function() {
 
 };
 
-module.exports = testControllerYslowOverride();
+module.exports = EyeballControllersTestYslowOverride();

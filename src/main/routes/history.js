@@ -1,4 +1,4 @@
-var routeHistory = function(req,res) {
+var EyeballRoutesHistory = function(req,res) {
 
     var url = require('url');
     var mongojs = require('mongojs');
@@ -42,4 +42,4 @@ var routeHistory = function(req,res) {
 
 };
 
-module.exports = routeHistory;
+module.exports = EyeballRoutesHistory;

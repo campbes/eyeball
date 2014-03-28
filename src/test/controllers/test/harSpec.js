@@ -3,7 +3,7 @@ describe("tests the HAR module of testController",function() {
     var har;
 
     beforeEach(function() {
-        har = testControllerHar();
+        har = EyeballControllersTestHar();
     });
 
     it("tests that create returns a har",function() {

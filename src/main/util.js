@@ -1,4 +1,4 @@
-var util = function() {
+var EyeballUtil = function() {
 
     function getDbQuery(req) {
         var url = require('url');
@@ -80,4 +80,4 @@ var util = function() {
 
 };
 
-module.exports = util();
+module.exports = EyeballUtil();

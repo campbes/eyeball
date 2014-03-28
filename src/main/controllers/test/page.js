@@ -1,6 +1,6 @@
 /*global window, document*/
 
-var testControllerPage = function() {
+var EyeballControllersTestPage = function() {
 
     function setupPage(page) {
         page.resources = [];
@@ -54,4 +54,4 @@ var testControllerPage = function() {
 
 };
 
-module.exports = testControllerPage();
+module.exports = EyeballControllersTestPage();

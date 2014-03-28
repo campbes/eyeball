@@ -1,4 +1,4 @@
-var testControllerGrader = function() {
+var EyeballControllersTestGrader = function() {
 
     var testCfg = require('../../conf/test');
 
@@ -94,4 +94,4 @@ var testControllerGrader = function() {
 
 };
 
-module.exports = testControllerGrader();
+module.exports = EyeballControllersTestGrader();

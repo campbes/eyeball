@@ -1,4 +1,4 @@
-var routeTest = function(req,res) {
+var EyeballRoutesTest = function(req,res) {
 
     res.setHeader("Access-Control-Allow-Origin","*");
     res.setHeader("Access-Control-Allow-Methods","POST");
@@ -66,4 +66,4 @@ var routeTest = function(req,res) {
     };
 };
 
-module.exports = routeTest;
+module.exports = EyeballRoutesTest;

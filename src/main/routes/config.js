@@ -1,4 +1,4 @@
-var routeConfig = function(req,res) {
+var EyeballRoutesConfig = function(req,res) {
 
     res.setHeader("Content-type","text/json");
     res.setHeader("Access-Control-Allow-Origin","*");
@@ -13,4 +13,4 @@ var routeConfig = function(req,res) {
     return res;
 };
 
-module.exports = routeConfig;
+module.exports = EyeballRoutesConfig;

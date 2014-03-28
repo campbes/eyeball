@@ -1,4 +1,4 @@
-var routeReportOverview = function(req,res) {
+var EyeballRoutesReportOverview = function(req,res) {
 
     var dbQuery = require('../util').getDbQuery(req);
     var cfg = {
@@ -29,7 +29,7 @@ var routeReportOverview = function(req,res) {
 
 };
 
-var routeReportStandard = function(req,res,name) {
+var EyeballRoutesReportStandard = function(req,res,name) {
     var dbQuery = require('../util').getDbQuery(req);
     var cfg = {
         url : 1,
@@ -51,5 +51,5 @@ var routeReportStandard = function(req,res,name) {
         });
 };
 
-exports.overview = routeReportOverview;
-exports.standard = routeReportStandard;
+exports.overview = EyeballRoutesReportOverview;
+exports.standard = EyeballRoutesReportStandard;

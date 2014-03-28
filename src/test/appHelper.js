@@ -101,11 +101,11 @@ var helpers = {
         } else if (name.indexOf('/conf/report') !== -1){
             return returnIfExists("configReport");
         } else if (name === './grader'){
-            return returnIfExists("testControllerGrader");
+            return returnIfExists("EyeballControllersTestGrader");
         } else if (name === './yslowOverride'){
-           return returnIfExists("testControllerYslowOverride");
+           return returnIfExists("EyeballControllersTestYslowOverride");
         } else if (name.indexOf('controllers/test/test') !== -1){
-            return testController;
+            return EyeballControllersTestTest;
         } else if(name === "child_process") {
             var on = function(evt,cb){
                 return cb();
@@ -141,7 +141,7 @@ var helpers = {
                 ObjectId : function(){}
             }
         } else if (name.indexOf("/util") !== -1) {
-            return util();
+            return EyeballUtil();
         }
 
         return function(args) {

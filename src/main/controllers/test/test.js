@@ -1,6 +1,6 @@
 /*global window, document*/
 
-var testController = function(params) {
+var EyeballControllersTestTest = function(params) {
 
     params = params || {};
     var url = params.url;
@@ -251,4 +251,4 @@ var testController = function(params) {
 
 };
 
-module.exports = testController;
+module.exports = EyeballControllersTestTest;

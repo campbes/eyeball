@@ -4,7 +4,7 @@ describe("tests the testsers module of testController",function() {
 
     beforeEach(function() {
         require = helpers.require;
-        grader = testControllerGrader();
+        grader = EyeballControllersTestGrader();
     });
 
     it("tests that getValue returns a value for a grade",function() {

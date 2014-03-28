@@ -28,7 +28,8 @@ module.exports = function(grunt) {
                     continue : true,
                     sloppy : true,
                     nomen: true,
-                    unparam : true
+                    unparam : true,
+                    newcap : true
                 },
                 options: {
                     junit: '<%= props.out%>/jslint/jslint-src-app.xml'

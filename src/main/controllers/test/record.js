@@ -1,4 +1,4 @@
-var testControllerRecord = function(build,tag,urlsLength) {
+var EyeballControllersTestRecord = function(build,tag,urlsLength) {
 
     var testers = require('./testers');
     var grader = require('./grader');
@@ -142,4 +142,4 @@ var testControllerRecord = function(build,tag,urlsLength) {
 
 };
 
-module.exports = testControllerRecord;
+module.exports = EyeballControllersTestRecord;

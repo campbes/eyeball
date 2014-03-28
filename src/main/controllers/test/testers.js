@@ -1,4 +1,4 @@
-var testControllerTesters = function() {
+var EyeballControllersTestTesters = function() {
 
     var YSLOW = require('yslow').YSLOW;
     var jsdom = require('jsdom');
@@ -183,4 +183,4 @@ var testControllerTesters = function() {
 
 };
 
-module.exports = testControllerTesters();
+module.exports = EyeballControllersTestTesters();

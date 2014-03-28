@@ -1,4 +1,4 @@
-var testControllerHar = function() {
+var EyeballControllersTestHar = function() {
 
     function createHAR(page,callback) {
         var entries = [];
@@ -168,4 +168,4 @@ var testControllerHar = function() {
 
 };
 
-module.exports = testControllerHar();
+module.exports = EyeballControllersTestHar();
