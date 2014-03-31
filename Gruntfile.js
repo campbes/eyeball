@@ -130,7 +130,10 @@ module.exports = function(grunt) {
             ],
             options: {
                 specs: ['<%= props.test%>/**/*Spec.js'],
-                helpers: ['<%= props.test%>/**/*Helper.js'],
+                helpers: ['<%= props.test%>/**/*Helper.js',
+                    '<%= props.test%>/lib/angular.min.js',
+                    '<%= props.test%>/lib/angular-mocks.js'
+                ],
                 template: require('grunt-template-jasmine-istanbul'),
                 templateOptions: {
                     coverage: '<%= props.out%>/coverage/coverage.json',
