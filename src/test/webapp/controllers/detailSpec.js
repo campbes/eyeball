@@ -1,4 +1,4 @@
-describe('test the detail controller', function() {
+describe('DetailCtrl', function() {
 
     var scope;
     var httpBackend;

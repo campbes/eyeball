@@ -1,4 +1,4 @@
-describe("tests the util methods",function() {
+describe("EyeballUtil",function() {
 
      it("tests that getDbQuery returns the proper query object",function(){
          require('url').init({

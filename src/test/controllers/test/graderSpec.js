@@ -1,4 +1,4 @@
-describe("tests the testsers module of testController",function() {
+describe("EyeballControllersTestGrader",function() {
 
     var grader;
 

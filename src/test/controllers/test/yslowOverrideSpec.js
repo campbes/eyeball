@@ -1,4 +1,4 @@
-describe("tests the test controller yslowOverride module",function() {
+describe("EyeballControllersTestYslowOverride",function() {
 
     var controller;
 

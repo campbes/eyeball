@@ -1,6 +1,6 @@
-describe("tests the (express) routes",function() {
+describe("Tests the Express routes",function() {
 
-    describe("tests the config route", function(){
+    describe("EyeballRoutesConfig", function(){
         it("tests that the correct response headers are set",function() {
             EyeballRoutesConfig(null,helpers.res);
             expect(helpers.res.headers["Content-type"]).toBe("text/json");
@@ -15,7 +15,7 @@ describe("tests the (express) routes",function() {
         });
     });
 
-    describe("tests the report route",function(){
+    describe("EyeballRoutesReport",function(){
         it("tests the overview report route",function(){
             EyeballRoutesReportOverview({
                 url : "test.com"
@@ -30,7 +30,7 @@ describe("tests the (express) routes",function() {
         });
     });
 
-    describe("tests the test route", function(){
+    describe("EyeballRoutesTest", function(){
         it("tests that the correct response headers are set",function() {
             EyeballRoutesTest({
                 body : {
@@ -60,7 +60,7 @@ describe("tests the (express) routes",function() {
         });
 
     });
-    describe("tests the detail route", function(){
+    describe("EyeballRoutesDetail", function(){
         it("tests that the yslow rules are added to results",function() {
             eyeballTestData = [{
                 metrics : {
@@ -81,7 +81,7 @@ describe("tests the (express) routes",function() {
             expect(detail.metrics.yslow.data.g.myMadeUpRule.rule).toBe("Test rule");
         });
     });
-    describe("tests the history route",function(){
+    describe("EyeballRoutesHistory",function(){
         it("tests the history report route",function(){
             eyeballTestData = [{
                 url :  "test.com"
