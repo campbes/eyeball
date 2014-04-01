@@ -3,8 +3,21 @@ describe('HarCtrl', function() {
     var scope;
 
     beforeEach(module('eyeballControllers'));
-    beforeEach(inject(function($rootScope, $controller) {
+    beforeEach(inject(function($rootScope, $controller, $httpBackend) {
+
         scope = $rootScope.$new();
+        httpBackend = $httpBackend;
+        httpBackend.when("GET", "/detail?id=est").respond({
+            url : "test.com",
+            metrics : {
+                har : {
+                    data : {}
+                },
+                harUncached : {
+                    data : {}
+                }
+            }
+        });
         $controller("HarCtrl", {$scope: scope,
             $routeParams : {
                 id : "test"
@@ -22,5 +35,9 @@ describe('HarCtrl', function() {
         expect(scope.reportFilter).toBe("badgers");
     });
 
+    it("tests that scope data is set from response",function(){
+        httpBackend.flush();
+        expect(scope.url).toBe("test.com");
+    });
 
 });
