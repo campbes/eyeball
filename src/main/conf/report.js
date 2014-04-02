@@ -4,7 +4,7 @@ var configReport = function() {
         display : {}, //reserved
         overview : {}, //reserved
         eyeball : {
-            name : 'Eyeball',
+            name : 'EyeScore',
             metric : 'eyeball',
             items : [
                 {metric : 'eyeball', name : 'Overall'},
