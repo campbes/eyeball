@@ -114,7 +114,7 @@ eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($t
 
         table.expandLock = function() {
             var expanded = (element.attr("data-expanded-locked") !== "true");
-            element.attr("data-expanded-locked",expanded)
+            element.attr("data-expanded-locked",expanded);
             table.expanded = expanded;
         };
 
