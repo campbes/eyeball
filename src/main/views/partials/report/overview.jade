@@ -7,7 +7,7 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
     mixin tabs('{{report}}')
 
     mixin filterInfo
-    table#results.table.table-striped.table-condensed
+    table#results.table.table-striped.table-condensed(data-expanded-locked="{{resultsTable.expanded}}")
         mixin reportHeaders
         tbody(ng-hide="reportView === 'chart'")
             mixin reportTotals

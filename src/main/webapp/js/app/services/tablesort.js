@@ -9,11 +9,13 @@ eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($t
         var table = this;
         var results = [];
         var resultsFiltered = [];
+        var element;
         table.page = 1;
         table.count = cfg.count || 50;
         table.pages = [];
         table.order = cfg.order || {};
         table.filter = cfg.filter || {};
+        table.expanded = cfg.expanded;
 
         var headers = null;
 
@@ -106,11 +108,23 @@ eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($t
 
         table.setResults = setResults;
 
+        table.expand = function(expand) {
+            element.attr("data-expanded",expand);
+        };
+
+        table.expandLock = function() {
+            var expanded = (element.attr("data-expanded-locked") !== "true");
+            element.attr("data-expanded-locked",expanded)
+            table.expanded = expanded;
+        };
+
         $timeout(function(){
-            var el = $("#"+id);
-            headers = $("th[ng-data-sort]",el);
+            element = $("#"+id);
+            headers = $("th[ng-data-sort]",element);
             setHeaders();
         },100);
+
+
 
         exos.enable([{'th[ng-data-sort]' : {
             click : {
@@ -120,7 +134,56 @@ eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($t
                     });
                 }
             }
-        }}]);
+        }},
+            {'th[data-expand],td[data-expand]' : {
+                mouseenter : {
+                    fn : function(e,obj) {
+                        $scope.$apply(function(){
+                            table.expand(true);
+                        });
+                    }
+                },
+                mouseleave : {
+                    fn : function(e,obj) {
+                        $scope.$apply(function(){
+                            table.expand(false);
+                        });
+                    }
+                },
+                click : {
+                    fn : function(e,obj) {
+                        $scope.$apply(function(){
+                            table.expandLock();
+                        });
+                    }
+                }
+            }},
+            {'th[data-expandable],td[data-expandable]' : {
+                mouseenter : {
+                    fn : function(e,obj) {
+                        $scope.$apply(function(){
+                            table.expand(true);
+                        });
+                    }
+                },
+                mouseleave : {
+                    fn : function(e,obj) {
+                        $scope.$apply(function(){
+                            table.expand(false);
+                        });
+                    }
+                },
+                click : {
+                    fn : function(e,obj) {
+                        $scope.$apply(function(){
+                            if(e.target === obj) {
+                                table.expandLock();
+                            }
+                        });
+                    }
+                }
+            }}
+        ]);
 
         $scope.$watch(data,function(){
             results = [].concat($scope[data]);

@@ -64,9 +64,11 @@ mixin reportHeaders
     thead
         tr
             th(ng-data-sort='url',ng-data-label='URL') URL
-            th(ng-data-sort='timestamp',ng-data-label='Date') Date
-            th(ng-data-sort='build',ng-data-label='Test ID') Test ID
-            th(ng-data-sort="tag",ng-data-label='Tag') Tag
+            th(data-expand="true",title="Click to lock on/off")
+            th(ng-data-sort='timestamp',ng-data-label='Date',data-expandable='true') Date
+            th(ng-data-sort='build',ng-data-label='Test ID',data-expandable='true') Test ID
+            th(ng-data-sort="tag",ng-data-label='Tag',data-expandable='true') Tag
+            th
             th(class="text-center", ng-data-sort="metrics.{{f.tool}}.grades.{{f.metric}}",ng-repeat='f in fields',title="{{f.name}}",ng-data-label='{{f.label || f.name}}') {{f.label || f.name}}
 
 mixin reportFooters
@@ -87,13 +89,8 @@ mixin reportTotals
                     span.input-group-btn
                         button.btn.btn-default.btn-sm(ng-click="filter()",type="submit",title="Filter")
                             span.glyphicon.glyphicon-filter
-
-
-            //a(href='#{{path}}?start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}',ng-if='query.url',title='Remove filter ({{r.url}})')
-                span.glyphicon.glyphicon-remove
-                |&nbsp;{{query.url.substr(0,40)}}
-                span(ng-if='query.url.length > 40') ...
-        td
+        td(data-expand="true")
+        td(data-expandable='true')
             a(href='#{{path}}?url={{query.url}}&build={{query.build}}&tag={{query.tag}}',ng-if='query.start && query.end && query.start.substr(0,10) !== query.end.substr(0,10)')
                 span.glyphicon.glyphicon-remove
                 |&nbsp;{{query.start | date:'d MMM yyyy'}} - {{query.end | date:'d MMM yyyy'}}
@@ -106,21 +103,22 @@ mixin reportTotals
             a(href='#{{path}}?url={{query.url}}&build={{query.build}}&tag={{query.tag}}',ng-if='!query.start && query.end')
                 span.glyphicon.glyphicon-remove
                 |&nbsp;{{query.end | date:'d MMM yyyy'}}
-        td
+        td(data-expandable='true')
             a(href='#{{path}}?url={{r.url}}&start={{query.start}}&end={{query.end}}&tag={{query.tag}}',ng-if='query.build',title='{{query.build}}')
                 span.glyphicon.glyphicon-remove
                 |&nbsp;{{query.build.substr(0,4)}}...
-        td
+        td(data-expandable='true')
             a(href='#{{path}}?url={{r.url}}&start={{query.start}}&end={{query.end}}&build={{query.build}}',ng-if='query.tag',title='{{query.tag}}')
                 span.glyphicon.glyphicon-remove
                 |&nbsp;{{query.tag.substr(0,10)}}
                 span(ng-if='query.tag.length > 10') ...
+        td(data-expand="true")
         td(ng-repeat='f in fields').text-center
             span(class="label label-{{totals[f.tool][f.metric].className}}") {{totals[f.tool][f.metric].message}} ({{totals[f.tool][f.metric].score}}%)
 
 mixin reportLoader
     tr(ng-show="busy")
-        td(colspan="7")
+        td(colspan="8")
             div.loader
             |&nbsp; Updating results...
 
@@ -129,19 +127,21 @@ mixin reportFields
         //a(href='#/report?url={{encodeQuery(r.url)}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}',title="Only show results for {{r.url}}") {{r.url}}
         a(href="#/detail/:{{r._id}}",title="View full details for {{r.url}}") {{r.url.substr(0,120)}}
             span(ng-if='r.url.length > 120') ...
-    td
+    td(data-expand="true",title="Click to lock on/off")
+    td(data-expandable='true')
         a(href='#{{path}}?url={{query.url}}&urlExact={{query.urlExact}}&start={{r.timestamp | date:"yyyy-MM-dd"}}&end={{r.timestamp | date:"yyyy-MM-dd"}}&build={{query.build}}&tag={{query.tag}}',title="Filter by date")
             span.glyphicon.glyphicon-filter
         |&nbsp;{{r.timestamp | date:'d MMM yyyy'}}
-    td(title='{{r.build}}')
+    td(title='{{r.build}}',data-expandable='true')
         a(href='#{{path}}?url={{query.url}}&urlExact={{query.urlExact}}&start={{query.start}}&end={{query.end}}&build={{r.build}}&tag={{query.tag}}')
             span.glyphicon.glyphicon-filter
         |&nbsp;{{r.build.substr(0,4)}}...
-    td(title='{{r.tag}}')
+    td(title='{{r.tag}}',data-expandable='true')
         a(href='#{{path}}?url={{query.url}}&urlExact={{query.urlExact}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{r.tag}}',ng-show="{{r.tag.length}}")
             span.glyphicon.glyphicon-filter
         |&nbsp;{{r.tag.substr(0,10)}}
         span(ng-if='r.tag.length > 10') ...
+    td(data-expand="true",title="Click to lock on/off")
 
 mixin tabs(report)
     ol.breadcrumb
@@ -155,7 +155,7 @@ mixin tabs(report)
 
 mixin results
     mixin filterInfo
-    table#results.table.table-striped.table-condensed
+    table#results.table.table-striped.table-condensed(data-expanded-locked="{{resultsTable.expanded}}")
         mixin reportHeaders
         tbody(ng-hide="reportView === 'chart'")
             mixin reportTotals

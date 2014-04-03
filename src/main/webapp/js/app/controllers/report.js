@@ -53,7 +53,8 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
                 col : persist.get('resultsTable.order.col') || "timestamp",
                 asc : persist.get('resultsTable.order.asc') || true,
                 label : persist.get('resultsTable.order.label') || "Date"
-            }
+            },
+            expanded : persist.get('resultsTable.expanded')
         });
 
         function setupChart(i) {
@@ -139,6 +140,11 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
             logger.log("results table order (asc) changed");
             persist.set("resultsTable.order.asc",$scope.resultsTable.order.asc);
             setupCharts();
+        });
+
+        $scope.$watch("resultsTable.expanded",function(){
+            logger.log("results table expanded");
+            persist.set("resultsTable.expanded",$scope.resultsTable.expanded);
         });
 
         $scope.$watch('results',function(){
