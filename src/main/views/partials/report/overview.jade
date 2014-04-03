@@ -5,24 +5,21 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
 
     mixin test
     mixin tabs('{{report}}')
+
+    mixin filterInfo
+    table#results.table.table-striped.table-condensed
+        mixin reportHeaders
+        tbody(ng-hide="reportView === 'chart'")
+            mixin reportTotals
+            mixin reportLoader
+            tr(ng-repeat='r in resultsTable.results')
+                mixin reportFields
+                td(ng-repeat='f in fields',class='text-center grade{{getVal(r.metrics[f.tool].grades,f.metric)}}',data-type='grades',data-value='{{getVal(r.metrics[f.tool].grades,f.metric)}}',ng-mouseenter='setPopoverContent({metrics:r.metrics[f.tool],tool:f.tool})',ng-mouseleave='setPopoverContent()')
+                    a(href="#/detail/:{{r._id}}?anchor={{f.metric}}")
+                        span.badge {{getVal(r.metrics[f.tool].grades,f.metric)}}
+        mixin reportFooters
     mixin charts
-
-    div(ng-hide="reportView === 'chart'")
-
-        mixin filterInfo
-
-        table#results.table.table-striped.table-condensed
-            mixin reportHeaders
-            tbody
-                mixin reportTotals
-                mixin reportLoader
-                tr(ng-repeat='r in resultsTable.results')
-                    mixin reportFields
-                    td(ng-repeat='f in fields',class='text-center grade{{getVal(r.metrics[f.tool].grades,f.metric)}}',data-type='grades',data-value='{{getVal(r.metrics[f.tool].grades,f.metric)}}',ng-mouseenter='setPopoverContent({metrics:r.metrics[f.tool],tool:f.tool})',ng-mouseleave='setPopoverContent()')
-                        a(href="#/detail/:{{r._id}}?anchor={{f.metric}}")
-                            span.badge {{getVal(r.metrics[f.tool].grades,f.metric)}}
-            mixin reportFooters
-        mixin reportPager
+    mixin reportPager
 
     div#popoverContent.ng-hide
         ul.list-group

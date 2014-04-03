@@ -43,8 +43,6 @@ mixin charts
     div#chartArea(ng-hide="reportView !== 'chart'")
         div.panel.panel-default(ng-repeat="ch in charts")
             div.panel-heading {{ch.name}}
-                |&nbsp;
-                select(ng-model="ch.xAxis",ng-options="c.name for c in chartOptions")
             div.panel-body
                 div(id="{{ch.tool}}{{ch.metric}}Chart").pivotChart
 
@@ -65,11 +63,11 @@ mixin reportView
 mixin reportHeaders
     thead
         tr
-            th(ng-data-sort='url') URL
-            th(ng-data-sort='timestamp') Date
-            th(ng-data-sort='build') Test ID
-            th(ng-data-sort="tag") Tag
-            th(class="text-center", ng-data-sort="metrics.{{f.tool}}.grades.{{f.metric}}",ng-repeat='f in fields',title="{{f.name}}") {{f.label || f.name}}
+            th(ng-data-sort='url',ng-data-label='URL') URL
+            th(ng-data-sort='timestamp',ng-data-label='Date') Date
+            th(ng-data-sort='build',ng-data-label='Test ID') Test ID
+            th(ng-data-sort="tag",ng-data-label='Tag') Tag
+            th(class="text-center", ng-data-sort="metrics.{{f.tool}}.grades.{{f.metric}}",ng-repeat='f in fields',title="{{f.name}}",ng-data-label='{{f.label || f.name}}') {{f.label || f.name}}
 
 mixin reportFooters
     tfoot
@@ -156,20 +154,19 @@ mixin tabs(report)
         mixin reportView
 
 mixin results
-    div(ng-hide="reportView === 'chart'")
-        mixin filterInfo
-
-        table#results.table.table-striped.table-condensed
-            mixin reportHeaders
-            tbody
-                mixin reportTotals
-                mixin reportLoader
-                tr(ng-repeat='r in resultsTable.results')
-                    mixin reportFields
-                    td(ng-repeat='f in fields',class='text-center grade{{getVal(r.metrics[f.tool].grades,f.metric)}}',data-type='grades',ng-mouseenter='setPopoverContent({grade:getVal(r.metrics[f.tool].grades,f.metric),value:format(getVal(r.metrics[f.tool].data,f.metric),f.format)})',ng-mouseleave='setPopoverContent()')
-                        span.badge {{getVal(r.metrics[f.tool].grades,f.metric)}}
-            mixin reportFooters
-        mixin reportPager
+    mixin filterInfo
+    table#results.table.table-striped.table-condensed
+        mixin reportHeaders
+        tbody(ng-hide="reportView === 'chart'")
+            mixin reportTotals
+            mixin reportLoader
+            tr(ng-repeat='r in resultsTable.results')
+                mixin reportFields
+                td(ng-repeat='f in fields',class='text-center grade{{getVal(r.metrics[f.tool].grades,f.metric)}}',data-type='grades',ng-mouseenter='setPopoverContent({grade:getVal(r.metrics[f.tool].grades,f.metric),value:format(getVal(r.metrics[f.tool].data,f.metric),f.format)})',ng-mouseleave='setPopoverContent()')
+                    span.badge {{getVal(r.metrics[f.tool].grades,f.metric)}}
+        mixin reportFooters
+    mixin charts
+    mixin reportPager
 
 mixin popover
     div#popoverContent.ng-hide
@@ -178,7 +175,7 @@ mixin popover
                 span(class='badge grade{{popoverContent.grade}}') {{popoverContent.grade}}
 
 mixin reportPager
-    ul.pager
+    ul(ng-if="reportView !== 'chart'").pager
         li(class="previous{{(resultsTable.page === 1 ? ' disabled' : '')}}")
             a(ng-click="resultsTable.prev()")
                 span.glyphicon.glyphicon-chevron-left

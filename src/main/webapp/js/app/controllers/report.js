@@ -21,10 +21,6 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         $scope.report = $scope.path.substr($scope.path.lastIndexOf('/')+1);
         $scope.fields = config.fields[$scope.report].items;
 
-        $scope.chartOptions = [
-            {name : "Date", value : "timestamp"},
-            {name : "Test ID", value : "build"}
-        ];
         $scope.charts = [];
 
         var qParam;
@@ -54,21 +50,18 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         $scope.resultsTable = new tablesort.SortableTable('results','results',$scope,{
             count : persist.get('resultsTable.count'),
             order : {
-                col : persist.get('resultsTable.order.col'),
-                asc : persist.get('resultsTable.order.asc')
+                col : persist.get('resultsTable.order.col') || "timestamp",
+                asc : persist.get('resultsTable.order.asc') || true,
+                label : persist.get('resultsTable.order.label') || "Date"
             }
         });
 
         function setupChart(i) {
             var ch = $scope.charts[i];
-            $scope.$watch('charts['+i+'].xAxis',function(){
-                if($scope.reportView === 'chart') {
-                    logger.log(ch.tool+" chart changed");
-                    $timeout(function(){
-                        chart.drawPivotChart($scope.results,ch.xAxis,ch.tool,ch.metric);
-                    },1000);
-                }
-            });
+            logger.log(ch.tool+" chart changed");
+            $timeout(function(){
+                chart.drawPivotChart($scope.results,$scope.resultsTable.order,ch.tool,ch.metric);
+            },500);
         }
 
         var queryString = ($location.url().indexOf("?") > -1 ? $location.url().split("?")[1] : "");
@@ -92,13 +85,17 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         };
 
         function setupCharts() {
+            if($scope.reportView !== "chart") {
+                return;
+            }
             var i = 0;
             for(i=0; i<$scope.fields.length; i++) {
                 $scope.charts[i] = {
                     tool : $scope.fields[i].tool,
                     metric : $scope.fields[i].metric,
                     name : $scope.fields[i].name,
-                    xAxis : $scope.chartOptions[0]
+                    xAxis : $scope.resultsTable.order.col,
+                    asc : $scope.resultsTable.order.asc
                 };
                 setupChart(i);
             }
@@ -112,14 +109,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
             $scope.reportView = view;
             persist.set('reportView',$scope.reportView);
             if(view === 'chart') {
-                $timeout(function(){
-                    var i = 0;
-                    var ch;
-                    for(i=0; i<$scope.charts.length; i++) {
-                        ch = $scope.charts[i];
-                        chart.drawPivotChart($scope.results,ch.xAxis,ch.tool,ch.metric);
-                    }
-                },100);
+                setupCharts();
             }
         };
 
@@ -138,14 +128,17 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         $scope.$watch("resultsTable.count",function(){
             logger.log("results table count changed");
             persist.set("resultsCount",$scope.resultsTable.count);
+            setupCharts();
         });
         $scope.$watch("resultsTable.order.col",function(){
             logger.log("results table order (col) changed");
             persist.set("resultsTable.order.col",$scope.resultsTable.order.col);
+            setupCharts();
         });
         $scope.$watch("resultsTable.order.asc",function(){
             logger.log("results table order (asc) changed");
             persist.set("resultsTable.order.asc",$scope.resultsTable.order.asc);
+            setupCharts();
         });
 
         $scope.$watch('results',function(){

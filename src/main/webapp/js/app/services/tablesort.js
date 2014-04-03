@@ -65,13 +65,14 @@ eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($t
             }
         };
 
-        table.sort = function(col) {
+        table.sort = function(col,label) {
 
             if(table.order.col === col) {
                 table.order.asc = !table.order.asc;
             } else if (col) {
                 table.order.col = col;
                 table.order.asc = false;
+                table.order.label = label;
             }
 
             if(!table.order.col) {
@@ -115,7 +116,7 @@ eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($t
             click : {
                 fn : function(e,obj) {
                     $scope.$apply(function(){
-                        table.sort(obj.getAttribute("ng-data-sort"));
+                        table.sort(obj.getAttribute("ng-data-sort"),obj.getAttribute("ng-data-label"));
                     });
                 }
             }

@@ -9,14 +9,15 @@ eyeballApp.factory('chart', ['render', function(render){
         var i =null;
         var res = null;
         var xVal = null;
+        xAxis = xAxis || "timestamp";
 
         for (i=0; i<results.length; i++) {
             if(results[i].metrics && results[i].metrics[tool]) {
-                results[i].metrics[tool].timestamp = new Date(results[i].timestamp).toDateString();
-                results[i].metrics[tool].build = String(results[i].build);
                 res = results[i].metrics[tool];
+                results[i].timestamp = new Date(results[i].timestamp).toDateString();
+
                 if(res) {
-                    xVal = (xAxis ? res[xAxis.value] : res.timestamp);
+                    xVal = render.accessObject(results[i],xAxis);
                     if(xValArray.indexOf(xVal) === -1) {
                         xValArray[xValArray.length] = xVal;
                     }
@@ -46,7 +47,7 @@ eyeballApp.factory('chart', ['render', function(render){
                 if(results[i].metrics) {
                     res = results[i].metrics[tool];
                     if(res) {
-                        xVal = (xAxis ? res[xAxis.value] : res.timestamp);
+                        xVal = render.accessObject(results[i],xAxis);
                         if (xVal === xValArray[j] && res.grades) {
                             grades = render.accessObject(res.grades,field);
 
@@ -68,21 +69,25 @@ eyeballApp.factory('chart', ['render', function(render){
         return pivot;
     }
 
-    function drawChart(results,xAxis,tool,metric) {
+    function drawChart(results,order,tool,metric) {
 
-        function sortByDate(a,b) {
-            if (a.timestamp < b.timestamp) {
-                return -1;
+        function sorter(a,b) {
+
+            var aVal = render.accessObject(a,order.col);
+            var bVal = render.accessObject(b,order.col);
+
+            if (aVal < bVal) {
+                return (order.asc ? 1 : -1);
             }
-            if (a.timestamp > b.timestamp) {
-                return 1;
+            if (aVal > bVal) {
+                return (order.asc ? -1 : 1);
             }
             return 0;
         }
 
-        results.sort(sortByDate);
+        results.sort(sorter);
 
-        results = getPivotData(results,tool,metric,xAxis);
+        results = getPivotData(results,tool,metric,order.col);
 
         var data = new google.visualization.arrayToDataTable(
             results
@@ -140,6 +145,9 @@ eyeballApp.factory('chart', ['render', function(render){
             vAxis : {
                 format : '#.##%'
             },
+            hAxis : {
+                title : order.label
+            },
             areaOpacity: 1,
             series : [
                 {color: '#5cb85c'},
@@ -150,7 +158,7 @@ eyeballApp.factory('chart', ['render', function(render){
                 {color: '#d9534f'}
             ],
             chartArea : {
-                height : 300
+                height : 350
             },
             isStacked: true,
             backgroundColor: {fill:'transparent'},
