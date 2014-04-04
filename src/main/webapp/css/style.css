@@ -32,20 +32,36 @@ body {
     padding: 0;
 }
 
-/* EXPANDABLE TABLE CELLS
-
-#results td[data-expand='true'] {
+td[data-expand='true'] {
     width: 12px;
-    cursor: pointer;
     background:
         linear-gradient(45deg, #ddd 5px, transparent 0) 0 5px,
         linear-gradient(135deg, #ddd 5px, #fff 0) 0 5px;
     background-color: #ddd;
-    background-position: right top;
+    background-position: left top;
     background-repeat: repeat-y;
     background-size: 10px 10px;
 }
-#results td[data-expand='true']:nth-child(2) {
+tr:nth-child(odd) td[data-expand='true'] {
+     background:
+         linear-gradient(45deg, #ddd 5px, transparent 0) 0 5px,
+         linear-gradient(135deg, #ddd 5px, #f9f9f9 0) 0 5px;
+     background-color: #f9f9f9;
+     background-position: left top;
+     background-repeat: repeat-y;
+     background-size: 10px 10px;
+}
+tr.warning td[data-expand='true'] {
+    background:
+        linear-gradient(45deg, #ddd 5px, transparent 0) 0 5px,
+        linear-gradient(135deg, #ddd 5px, #fcf8e3 0) 0 5px;
+    background-color: #fcf8e3;
+    background-position: left top;
+    background-repeat: repeat-y;
+    background-size: 10px 10px;
+}
+
+td[data-expand='true']:nth-child(2) {
     background:
         linear-gradient(-45deg, #ddd 5px, transparent 0) 0 5px,
         linear-gradient(-135deg, #ddd 5px, #fff 0) 0 5px;
@@ -54,6 +70,27 @@ body {
     background-repeat: repeat-y;
     background-size: 10px 10px;
 }
+
+tr:nth-child(odd) td[data-expand='true']:nth-child(2) {
+    background:
+        linear-gradient(-45deg, #ddd 5px, transparent 0) 0 5px,
+        linear-gradient(-135deg, #ddd 5px, #f9f9f9 0) 0 5px;
+    background-color: #ddd;
+    background-position: left top;
+    background-repeat: repeat-y;
+    background-size: 10px 10px;
+}
+
+tr.warning td[data-expand='true']:nth-child(2) {
+    background:
+        linear-gradient(-45deg, #ddd 5px, transparent 0) 0 5px,
+        linear-gradient(-135deg, #ddd 5px, #fcf8e3 0) 0 5px;
+    background-color: #ddd;
+    background-position: left top;
+    background-repeat: repeat-y;
+    background-size: 10px 10px;
+}
+
 
 [data-expandable='true'] {
     display: none;
@@ -66,14 +103,12 @@ body {
     display: table-cell;
     opacity: 1;
 }
-#results[data-expanded='true'] th[data-expand='true'] {
+[data-expanded='true'] th[data-expand='true'] {
     background: url("../images/padlock-open.png") no-repeat center center;
 }
-#results[data-expanded-locked='true'] th[data-expand='true'] {
+[data-expanded-locked='true'] th[data-expand='true'] {
     background: url("../images/padlock-closed.png") no-repeat center center;
 }
-
-*/
 
 #detail td {
     white-space: normal;
