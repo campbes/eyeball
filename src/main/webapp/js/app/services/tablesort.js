@@ -112,7 +112,10 @@ eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($t
             element.attr("data-expanded",expand);
         };
 
-        table.expandLock = function() {
+        table.expandLock = function(e,obj) {
+            if(e.target !== obj) {
+                return;
+            }
             var expanded = (element.attr("data-expanded-locked") !== "true");
             element.attr("data-expanded-locked",expanded);
             table.expanded = expanded;
@@ -122,68 +125,44 @@ eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($t
             element = $("#"+id);
             headers = $("th[ng-data-sort]",element);
             setHeaders();
+            exos.enable([
+                {'th[ng-data-sort]' : {
+                    click : {
+                        fn : function(e,obj) {
+                            $scope.$apply(function(){
+                                table.sort(obj.getAttribute("ng-data-sort"),obj.getAttribute("ng-data-label"));
+                            });
+                        }
+                    }
+                }},
+                {'th[data-expand],td[data-expand],th[data-expandable],td[data-expandable]' : {
+                    mouseenter : {
+                        fn : function() {
+                            $scope.$apply(function(){
+                                table.expand(true);
+                            });
+                        }
+                    },
+                    mouseleave : {
+                        fn : function() {
+                            $scope.$apply(function(){
+                                table.expand(false);
+                            });
+                        }
+                    }
+                }},
+                {'th[data-expand],td[data-expand],td[data-expandable]' : {
+                    click : {
+                        fn : function(e,obj) {
+                            $scope.$apply(function(){
+                                table.expandLock(e,obj);
+                            });
+                        }
+                    }
+                }}
+            ]);
+
         },100);
-
-
-
-        exos.enable([{'th[ng-data-sort]' : {
-            click : {
-                fn : function(e,obj) {
-                    $scope.$apply(function(){
-                        table.sort(obj.getAttribute("ng-data-sort"),obj.getAttribute("ng-data-label"));
-                    });
-                }
-            }
-        }},
-            {'th[data-expand],td[data-expand]' : {
-                mouseenter : {
-                    fn : function(e,obj) {
-                        $scope.$apply(function(){
-                            table.expand(true);
-                        });
-                    }
-                },
-                mouseleave : {
-                    fn : function(e,obj) {
-                        $scope.$apply(function(){
-                            table.expand(false);
-                        });
-                    }
-                },
-                click : {
-                    fn : function(e,obj) {
-                        $scope.$apply(function(){
-                            table.expandLock();
-                        });
-                    }
-                }
-            }},
-            {'th[data-expandable],td[data-expandable]' : {
-                mouseenter : {
-                    fn : function(e,obj) {
-                        $scope.$apply(function(){
-                            table.expand(true);
-                        });
-                    }
-                },
-                mouseleave : {
-                    fn : function(e,obj) {
-                        $scope.$apply(function(){
-                            table.expand(false);
-                        });
-                    }
-                },
-                click : {
-                    fn : function(e,obj) {
-                        $scope.$apply(function(){
-                            if(e.target === obj) {
-                                table.expandLock();
-                            }
-                        });
-                    }
-                }
-            }}
-        ]);
 
         $scope.$watch(data,function(){
             results = [].concat($scope[data]);
