@@ -112,12 +112,12 @@ eyeballApp.factory('chart', ['render', function(render){
         }
 
         view.setColumns([0,
-            getColumn('A',1),
-            getColumn('B',2),
-            getColumn('C',3),
-            getColumn('D',4),
+            getColumn('F',6),
             getColumn('E',5),
-            getColumn('F',6)
+            getColumn('D',4),
+            getColumn('C',3),
+            getColumn('B',2),
+            getColumn('A',1)
         ]);
 
         var container = tool + metric +"Chart";
@@ -150,12 +150,12 @@ eyeballApp.factory('chart', ['render', function(render){
             },
             areaOpacity: 1,
             series : [
-                {color: '#5cb85c'},
-                {color: '#99CC99'},
-                {color: '#FFCC66'},
-                {color: '#FF9966'},
+                {color: '#d9534f'},
                 {color: '#FF6633'},
-                {color: '#d9534f'}
+                {color: '#FF9966'},
+                {color: '#FFCC66'},
+                {color: '#99CC99'},
+                {color: '#5cb85c'}
             ],
             chartArea : {
                 height : 350
