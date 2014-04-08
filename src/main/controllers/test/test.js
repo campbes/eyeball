@@ -3,7 +3,6 @@
 var EyeballControllersTestTest = function(params) {
 
     params = params || {};
-    var url = params.url;
     var urls = params.urls;
     var urlsLength = (urls ? urls.length : 0);
     var build = params.build;
@@ -13,6 +12,12 @@ var EyeballControllersTestTest = function(params) {
     var phantomMax = 5;
     var activePhantoms = [];
     var endTests;
+
+    function throwTestError(err,test,ph) {
+        eyeball.logger.error(err);
+        erroredUrls.push(test.url);
+        ph.exit(1);
+    }
 
     var TestCfg = require('../../conf/test');
     var Page = require('./page');
@@ -24,226 +29,223 @@ var EyeballControllersTestTest = function(params) {
     var Testers = require('./testers');
     var phantomjs = require('phantomjs');
     var phantom = require('node-phantom');
+    var Webpage = require('./webpage');
 
-    function runInPageTest(webpage,page,tests,callback) {
+    function Test() {
+        this.passes = [];
+        this.pageUrl = "";
+        this.page = null;
+        this.webpage = {};
+        return this;
+    }
+
+    var completePage;
+
+    function runInPageTest(testObj,tests,callback) {
+
         var test = tests[0];
 
-        page.injectJs(test.src,function(){
-            page.evaluate(function() {
-                return {
-                    EYEBALLTEST : window.EYEBALLTEST
-                };
-            },function(err,doc){
-                if(err) {
-                    erroredUrls.push(url);
-                }
-                webpage.EYEBALLTEST[test.name] = doc.EYEBALLTEST;
+        function processInPageTest(err,doc){
+            if(err) {
+                throwTestError(err);
+            }
+            testObj.webpage.EYEBALLTEST[test.name] = doc.EYEBALLTEST;
+            tests.splice(0,1);
+            if(tests.length > 0) {
+                runInPageTest(testObj,tests,callback);
+            } else {
+                clearTimeout(testObj.inPageTestTimer);
+                callback();
+            }
+        }
 
-                tests.splice(0,1);
-                if(tests.length > 0) {
-                    runInPageTest(webpage,page,tests,callback);
-                } else {
-                    clearTimeout(webpage.inPageTestTimer);
-                    callback();
-                }
-            });
+        testObj.page.injectJs(test.src,function(){
+            testObj.page.evaluate(Webpage.getTestData,processInPageTest);
         });
     }
 
-    function runInPageTests(webpage,page,callback) {
-        webpage.inPageTestTimer = setTimeout(callback,30000);
-        webpage.EYEBALLTEST = {};
-        runInPageTest(webpage,page,[].concat(TestCfg.tests.browser),callback);
+    function runInPageTests(test,callback) {
+        test.inPageTestTimer = setTimeout(callback,30000);
+        runInPageTest(test,[].concat(TestCfg.tests.browser),callback);
+    }
+
+    function addWebpageDetails(err,doc,test,ph){
+        if(err) {
+            throwTestError(err,test,ph);
+        }
+        test = Webpage.augment(test,doc);
+        runInPageTests(test,function(){
+            completePage(test,ph);
+        });
+    }
+
+    function buildWebpage(err,status,test,ph) {
+        if(err) {
+            throwTestError(err,test,ph);
+        }
+        if (status !== 'success') {
+            throwTestError("Failed to load url",test,ph);
+        } else {
+            test.webpage = Webpage.create(test);
+            test.page.evaluate(Webpage.details,function(err,doc){
+                addWebpageDetails(err,doc,test,ph);
+            });
+        }
+    }
+
+    function testPage(err,page,test,ph) {
+        if(err) {
+            throwTestError(err,test,ph);
+        }
+        test.page = Page.setup(page);
+
+        if(test.passes.length === 0){
+            test.page.customHeaders = {
+                "Cache-Control" : "no-cache, no-store, must-revalidate",
+                "Pragma" : "no-cache",
+                "Expires" : 0
+            };
+        }
+        test.start = new Date();
+        page.open(test.pageUrl,function(err,status) {
+            buildWebpage(err,status,test,ph);
+        });
+    }
+
+    function createPage(test,ph) {
+        ph.createPage(function(err,page) {
+            testPage(err,page,test,ph);
+        });
     }
 
     function openPage(ph) {
         eyeball.logger.info("Opening page with "+ph._phantom.pid);
-        var passes = [];
-        var pageUrl = urls.splice(0,1)[0];
-        activeTests[ph._phantom.pid] = pageUrl;
-
-        function createPage(pass,url) {
-            ph.createPage(function(err,page) {
-                if(err) {
-                    eyeball.logger.info(err);
-                }
-
-                page = Page.setup(page);
-
-                if(pass === 0){
-                    page.customHeaders = {
-                        "Cache-Control" : "no-cache, no-store, must-revalidate",
-                        "Pragma" : "no-cache",
-                        "Expires" : 0
-                    };
-                }
-
-                var webpage = {};
-                webpage.address = url;
-                webpage.startTime = new Date();
-
-                function completeWebpage() {
-                    page.close();
-                    passes[pass] = webpage;
-                    if(pass === 0) {
-                        createPage(1,url);
-                    } else if(pass === 1) {
-                        Record.create(passes);
-                        delete activeTests[ph._phantom.pid];
-                        if(urls.length > 0) {
-                            openPage(ph);
-                        } else {
-                            ph.exit();
-                        }
-                    }
-                }
-
-                function getWebpageDetails() {
-                    return {
-                        title : document.title,
-                        content : document.documentElement.outerHTML,
-                        onContentLoad : window.DOMContentLoaded
-                    };
-                }
-
-                function addWebpageDetails(err,doc){
-                    if(err) {
-                        console.log(err);
-                        erroredUrls.push(url);
-                    }
-                    webpage.title = doc.title;
-                    webpage.content = doc.content;
-                    webpage.onContentLoad = new Date(doc.onContentLoad);
-                    webpage.resources = [].concat(page.resources);
-                    webpage.EYEBALLTEST = {};
-
-                    runInPageTests(webpage,page,completeWebpage);
-                }
-
-                function buildWebpage(err,status) {
-                    if(err) {
-                        eyeball.logger.info(err);
-                    }
-                    if (status !== 'success') {
-                        eyeball.logger.info('FAIL to load the address');
-                        ph.exit(1);
-                        erroredUrls.push(url);
-                    } else {
-                        webpage.endTime = new Date();
-                        page.evaluate(getWebpageDetails,addWebpageDetails);
-
-                    }
-                }
-
-                page.open(webpage.address,buildWebpage);
-            });
-        }
-
-        createPage(0,pageUrl);
+        var test = new Test();
+        test.pageUrl = urls.splice(0,1)[0];
+        activeTests[ph._phantom.pid] = test.pageUrl;
+        createPage(test,ph);
     }
 
-
-
-    function startPhantom() {
-
-        if(urlsLength < phantomMax) {
-            phantomMax = urlsLength;
+    completePage = function(test,ph) {
+        test.page.close();
+        test.passes[test.passes.length] = test.webpage;
+        if(test.passes.length === 1) {
+            createPage(test,ph);
+            return;
         }
+        Record.create(test.passes);
+        delete activeTests[ph._phantom.pid];
+        if(urls.length > 0) {
+            openPage(ph);
+        } else {
+            ph.exit();
+        }
+    };
 
-        if(activePhantoms.length >= phantomMax) {
+    var startPhantom;
+
+    function phantomExit(msg,ph) {
+        var pid = ph._phantom.pid;
+        eyeball.logger.info("Phantom Exit: "+pid+ "("+msg+")");
+        if(activeTests[pid]) {
+            erroredUrls.push(activeTests[pid]);
+            delete activeTests[pid];
+        }
+        var i = 0;
+        for(i=activePhantoms.length-1; i>=0; i--) {
+            if(activePhantoms[i] === ph) {
+                activePhantoms.splice(i,1);
+            }
+        }
+        if(urls.length > 0) {
+            startPhantom();
+            return;
+        }
+        if(activePhantoms.length === 0) {
+            endTests();
+        }
+    }
+
+    function phantomError(err,ph) {
+        eyeball.logger.info("Phantom error: "+err);
+        ph.exit(1);
+        if(urls.length > 0) {
+            startPhantom();
+        }
+    }
+
+    function createPhantom(err,ph) {
+        if(err) {
+            eyeball.logger.error(err);
             return;
         }
 
-        phantom.create(function(err,ph) {
-            if(err) {
-                eyeball.logger.info(err);
-            }
+        function error(err) {
+            phantomError(err,ph);
+        }
 
-            function handlePhantomError(err) {
-                eyeball.logger.info("Phantom error: "+err);
-                ph.exit(1);
-                if(urls.length > 0) {
-                    startPhantom();
-                }
-            }
-
-            function phantomExit(msg) {
-                eyeball.logger.info("Phantom Exit: "+ph._phantom.pid+ "("+msg+")");
-                if(activeTests[ph._phantom.pid]) {
-                    console.log(activeTests[ph._phantom.pid]);
-                    if(erroredUrls) {
-                        erroredUrls.push(activeTests[ph._phantom.pid]);
-                    }
-                    delete activeTests[ph._phantom.pid];
-                }
-                var i = 0;
-                for(i=0; i<activePhantoms.length; i++) {
-                    if(activePhantoms[i] === ph) {
-                        activePhantoms.splice(i,1);
-                    }
-                }
-
-                if(urls.length > 0) {
-                    startPhantom();
-                } else if(activePhantoms.length === 0) {
-                    endTests();
-                }
-
-            }
-
-            activePhantoms.push(ph);
-            ph.onError = handlePhantomError;
-            ph.on("error",handlePhantomError);
-            ph.on("exit",phantomExit);
-            openPage(ph);
-            eyeball.logger.info("Active Phantoms: "+activePhantoms.length);
-            if(urls.length > 0) {
-                startPhantom();
-            }
-        }, {
-            phantomPath : phantomjs.path
+        ph.onError = error;
+        ph.on("error",error);
+        ph.on("exit",function(msg) {
+            phantomExit(msg,ph);
         });
+
+        activePhantoms.push(ph);
+        eyeball.logger.info("Active Phantoms: "+activePhantoms.length);
+        openPage(ph);
+
+        if(urls.length > 0) {
+            startPhantom();
+        }
     }
 
-    function cleanupRecordsAndEnd() {
-        console.log(activePhantoms.length);
+    startPhantom = function() {
+        if(urlsLength < phantomMax) {
+            phantomMax = urlsLength;
+        }
+        if(activePhantoms.length >= phantomMax) {
+            return;
+        }
+        phantom.create(createPhantom, {
+            phantomPath : phantomjs.path
+        });
+    };
 
+    function closeTests(){
+        var fs = require("fs");
+        var i=0;
+        for(i = activePhantoms.length-1; i>=0; i--) {
+            activePhantoms[i].exit();
+        }
+        for(i = Testers.internal.activeVnus.length-1; i>=0; i--) {
+            Testers.internal.activeVnus[i].kill();
+        }
+        for(i = Testers.internal.validatorFiles.length-1; i>=0; i--) {
+            fs.unlink(Testers.internal.validatorFiles[i]);
+        }
+
+        if(erroredUrls.length > 0) {
+            eyeball.logger.info("Forcing test finish");
+            eyeball.io.sockets.volatile.emit('commitRecord_'+build,{
+                committed : Record.committedRecords.length,
+                total : urlsLength,
+                progress : 100
+            });
+        }
+    }
+
+    endTests = function() {
         if(!retriedErrors && erroredUrls.length > 0) {
             // give the failures one more go
-            console.log("Retrying errored urls...");
+            eyeball.logger.info("Retrying errored urls...");
             urls = [].concat(erroredUrls);
             erroredUrls = [];
             retriedErrors = true;
             startPhantom();
             return;
         }
-
-        setTimeout(function(){
-            var fs = require("fs");
-            var i=0;
-            for(i = activePhantoms.length-1; i>=0; i--) {
-                activePhantoms[i].exit();
-            }
-            for(i = Testers.internal.activeVnus.length-1; i>=0; i--) {
-                Testers.internal.activeVnus[i].kill();
-            }
-            for(i = Testers.internal.validatorFiles.length-1; i>=0; i--) {
-                fs.unlink(Testers.internal.validatorFiles[i]);
-            }
-
-            if(erroredUrls.length > 0) {
-                console.log("Forcing test finish");
-                eyeball.io.sockets.volatile.emit('commitRecord_'+build,{
-                    committed : Record.committedRecords.length,
-                    total : urlsLength,
-                    progress : 100
-                });
-            }
-        },30000);
-
-    }
-
-    endTests = cleanupRecordsAndEnd;
+        setTimeout(closeTests,30000);
+    };
 
     return {
         startTests : startPhantom
