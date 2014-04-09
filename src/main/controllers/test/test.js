@@ -4,13 +4,11 @@ var EyeballControllersTestTest = function(params) {
 
     params = params || {};
     var urls = params.urls;
-    var urlsLength = (urls ? urls.length : 0);
+    var urlsLength = (urls ? urls.length : 1);
     var build = params.build;
     var erroredUrls = [];
     var activeTests = {};
     var retriedErrors = false;
-    var phantomMax = 5;
-    var activePhantoms = [];
     var endTests;
 
     function throwTestError(err,test,ph) {
@@ -27,9 +25,8 @@ var EyeballControllersTestTest = function(params) {
         urlsLength
     );
     var Testers = require('./testers');
-    var phantomjs = require('phantomjs');
-    var phantom = require('node-phantom');
     var Webpage = require('./webpage');
+    var Phantom = require('./phantom');
 
     function Test() {
         this.passes = [];
@@ -142,88 +139,16 @@ var EyeballControllersTestTest = function(params) {
         }
     };
 
-    var startPhantom;
-
-    function phantomExit(msg,ph) {
-        var pid = ph._phantom.pid;
-        eyeball.logger.info("Phantom Exit: "+pid+ "("+msg+")");
-        if(activeTests[pid]) {
-            erroredUrls.push(activeTests[pid]);
-            delete activeTests[pid];
-        }
-        var i = 0;
-        for(i=activePhantoms.length-1; i>=0; i--) {
-            if(activePhantoms[i] === ph) {
-                activePhantoms.splice(i,1);
-            }
-        }
-        if(urls.length > 0) {
-            startPhantom();
-            return;
-        }
-        if(activePhantoms.length === 0) {
-            endTests();
-        }
-    }
-
-    function phantomError(err,ph) {
-        eyeball.logger.info("Phantom error: "+err);
-        ph.exit(1);
-        if(urls.length > 0) {
-            startPhantom();
-        }
-    }
-
-    function createPhantom(err,ph) {
-        if(err) {
-            eyeball.logger.error(err);
-            return;
-        }
-
-        function error(err) {
-            phantomError(err,ph);
-        }
-
-        ph.onError = error;
-        ph.on("error",error);
-        ph.on("exit",function(msg) {
-            phantomExit(msg,ph);
-        });
-
-        activePhantoms.push(ph);
-        eyeball.logger.info("Active Phantoms: "+activePhantoms.length);
-        openPage(ph);
-
-        if(urls.length > 0) {
-            startPhantom();
-        }
-    }
-
-    startPhantom = function() {
-        if(urlsLength < phantomMax) {
-            phantomMax = urlsLength;
-        }
-        if(activePhantoms.length >= phantomMax) {
-            return;
-        }
-        phantom.create(createPhantom, {
-            phantomPath : phantomjs.path
-        });
-    };
-
     function closeTests(){
         var fs = require("fs");
         var i=0;
-        for(i = activePhantoms.length-1; i>=0; i--) {
-            activePhantoms[i].exit();
-        }
+        Phantom.end();
         for(i = Testers.internal.activeVnus.length-1; i>=0; i--) {
             Testers.internal.activeVnus[i].kill();
         }
         for(i = Testers.internal.validatorFiles.length-1; i>=0; i--) {
             fs.unlink(Testers.internal.validatorFiles[i]);
         }
-
         if(erroredUrls.length > 0) {
             eyeball.logger.info("Forcing test finish");
             eyeball.io.sockets.volatile.emit('commitRecord_'+build,{
@@ -241,14 +166,38 @@ var EyeballControllersTestTest = function(params) {
             urls = [].concat(erroredUrls);
             erroredUrls = [];
             retriedErrors = true;
-            startPhantom();
+            Phantom.request();
             return;
         }
         setTimeout(closeTests,30000);
     };
 
+    var startTests;
+
+    function createPhantom(ph) {
+        openPage(ph);
+        startTests();
+    }
+
+    function phantomExit(pid) {
+        if(activeTests[pid]) {
+            erroredUrls.push(activeTests[pid]);
+            delete activeTests[pid];
+        }
+        startTests();
+    }
+
+    startTests = function() {
+        if(urls.length > 0) {
+            Phantom.request(createPhantom,phantomExit);
+            return true;
+        }
+        endTests();
+        return false;
+    };
+
     return {
-        startTests : startPhantom
+        startTests : startTests
     };
 
 };
