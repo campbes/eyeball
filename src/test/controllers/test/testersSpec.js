@@ -43,18 +43,20 @@ describe("EyeballControllersTestTesters",function() {
     it("tests that the validator tester creates a new item and adds it to the validatorFiles array, then calls writeFile",function() {
         var data ="<div>some stuff</div>";
         var cb = function(){};
-        var val = testers.validator(data,cb);
+        var validator = EyeballControllersTestValidator();
+        var val = validator.validate(data,cb);
         expect(val.file).toContain(".html");
         expect(val.cb).toBe(cb);
         expect(spies.writeFile).toHaveBeenCalled();
-        expect(testers.internal.validatorFiles.length).toBe(1);
-        expect(testers.internal.validatorFiles[0]).toBe(val);
+        expect(validator.internal.validatorFiles.length).toBe(1);
+        expect(validator.internal.validatorFiles[0]).toBe(val);
     });
 
     it("tests that runValidator takes an item off the validatorFiles array and fires up a vnu",function() {
         var data ="<div>some stuff</div>";
         var cb = function(){};
-        var val = testers.validator(data,cb);
+        var validator = EyeballControllersTestValidator();
+        validator.validate(data,cb);
 
         //disable vnu.on so that we can test the internals
         require = function(name){
@@ -76,10 +78,10 @@ describe("EyeballControllersTestTesters",function() {
             }
         };
 
-        var result = testers.internal.runValidator();
-        expect(result[0]).toBe(testers.internal.validatorFiles[0]);
-        expect(testers.internal.validatorFiles.length).toBe(0);
-        expect(testers.internal.activeVnus.length).toBe(1);
+        var result = validator.internal.runValidator();
+        expect(result[0]).toBe(validator.internal.validatorFiles[0]);
+        expect(validator.internal.validatorFiles.length).toBe(0);
+        expect(validator.internal.activeVnus.length).toBe(1);
     });
 
     it("tests that the yslow tester function adds the grading and message information",function() {
@@ -102,9 +104,10 @@ describe("EyeballControllersTestTesters",function() {
     it("tests that when the vnu stream closes it removes an active vnu",function() {
         var data ="<div>some stuff</div>";
         var cb = function(){};
-        var val = testers.validator(data,cb);
-        var result = testers.internal.runValidator();
-        expect(testers.internal.activeVnus.length).toBe(0);
+        var validator = EyeballControllersTestValidator();
+        var val = validator.validate(data,cb);
+        var result = validator.internal.runValidator();
+        expect(validator.internal.activeVnus.length).toBe(0);
     });
 
 });

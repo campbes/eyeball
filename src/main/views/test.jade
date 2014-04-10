@@ -18,7 +18,7 @@ mixin testForm
         div.form-group(ng-if="testCriteria.inputType === 'url'")
             label.col-sm-3.control-label(for='url') URL
             div.col-sm-9
-                input#url.form-control(type='url',placeholder='URL to test',ng-model="testCriteria.url",ng-required="testCriteria.inputType === 'url'")
+                input#url.form-control(type='text',placeholder='URL to test',ng-model="testCriteria.url",ng-required="testCriteria.inputType === 'url'")
         div.form-group
             label.col-sm-3.control-label(for='tag') Tag
             div.col-sm-9

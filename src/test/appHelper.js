@@ -106,6 +106,8 @@ var helpers = {
            return returnIfExists("EyeballControllersTestYslowOverride");
         } else if (name === './phantom'){
             return returnIfExists("EyeballControllersTestPhantom");
+        } else if (name === './validator'){
+            return returnIfExists("EyeballControllersTestValidator");
         } else if (name.indexOf('controllers/test/test') !== -1){
             return EyeballControllersTestTest;
         } else if(name === "child_process") {

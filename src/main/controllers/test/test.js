@@ -24,9 +24,10 @@ var EyeballControllersTestTest = function(params) {
         params.tag,
         urlsLength
     );
-    var Testers = require('./testers');
+
     var Webpage = require('./webpage');
     var Phantom = require('./phantom');
+    var Validator = require('./validator');
 
     function Test() {
         this.passes = [];
@@ -140,15 +141,8 @@ var EyeballControllersTestTest = function(params) {
     };
 
     function closeTests(){
-        var fs = require("fs");
-        var i=0;
         Phantom.end();
-        for(i = Testers.internal.activeVnus.length-1; i>=0; i--) {
-            Testers.internal.activeVnus[i].kill();
-        }
-        for(i = Testers.internal.validatorFiles.length-1; i>=0; i--) {
-            fs.unlink(Testers.internal.validatorFiles[i]);
-        }
+        Validator.end();
         if(erroredUrls.length > 0) {
             eyeball.logger.info("Forcing test finish");
             eyeball.io.sockets.volatile.emit('commitRecord_'+build,{
