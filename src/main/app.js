@@ -46,6 +46,17 @@ app.get('/history', history);
 app.get('/monitor', monitor);
 app.get('/config', config);
 
+
+// new rest api
+// results
+app.get('/v*/results', require('./routes/results'));
+// record history
+app.get('/v*/results/*/history', require('./routes/historyNew'));
+// record
+app.get('/v*/results/*', require('./routes/record').get);
+app.delete('/v*/results/*', require('./routes/record').delete);
+
+
 function setReportRoute(name) {
     app.get('/report/'+name,function(req,res) {
         report.standard(req,res,name);
