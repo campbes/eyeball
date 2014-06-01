@@ -54,7 +54,7 @@ var EyeballRoutesRecord = (function(){
         recordGet : recordGet,
         recordDelete : recordDelete,
         getDbQuery : getDbQuery
-    }
+    };
 
 }());
 

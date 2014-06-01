@@ -1,7 +1,6 @@
 var EyeballRoutesHistory = function(req,res) {
 
     var url = require('url');
-    var path = require('path');
     var mongojs = require('mongojs');
     var reportCfg = require('../conf/report');
 
