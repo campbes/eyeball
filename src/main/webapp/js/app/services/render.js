@@ -88,13 +88,18 @@ eyeballApp.factory('render',function() {
 
             if(pc > 85) {
                 total.grade = "A";
-                total.message = "PASS";
+                total.status = "PASS";
                 total.className = "success";
+                total.message = pc + "% >= B";
             } else if (pc <= 85) {
                 total.grade = "F";
-                total.message = "FAIL";
+                total.status = "FAIL";
                 total.className = "danger";
+                total.message = (100-pc) + "% < B";
             }
+
+            total.tooltip = "Pass mark is 85% of tests >= B";
+
             return total;
         }
 

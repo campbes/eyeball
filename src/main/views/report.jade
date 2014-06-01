@@ -114,7 +114,7 @@ mixin reportTotals
                 span(ng-if='query.tag.length > 10') ...
         td(data-expand="true")
         td(ng-repeat='f in fields').text-center
-            span(class="label label-{{totals[f.tool][f.metric].className}}") {{totals[f.tool][f.metric].message}} ({{totals[f.tool][f.metric].score}}%)
+            span(class="label label-{{totals[f.tool][f.metric].className}}",title="{{totals[f.tool][f.metric].tooltip}}") {{totals[f.tool][f.metric].status}} ({{totals[f.tool][f.metric].message}})
 
 mixin reportLoader
     tr(ng-show="busy")
