@@ -92,7 +92,7 @@ var EyeballControllersTestValidator = function() {
         var item = {file:htmlFile,cb : cb};
         validatorFiles.push(item);
 
-        fs.writeFile(htmlFile,data,function(error){
+        fs.writeFile(htmlFile,data.content,function(error){
             if(error) {
                 eyeball.logger.info(error);
             }

@@ -18,9 +18,19 @@ var EyeballControllersTestWebpage = function() {
     }
 
     function details() {
+        var node = document.doctype;
+        var doctype = "";
+        if(node) {
+            doctype = "<!DOCTYPE ";
+            doctype += node.name;
+            doctype += (node.publicId ? ' PUBLIC "' + node.publicId + '"' : '');
+            doctype += (!node.publicId && node.systemId ? ' SYSTEM' : '');
+            doctype += (node.systemId ? ' "' + node.systemId + '"' : '');
+            doctype += '>';
+        }
         return {
             title : document.title,
-            content : document.documentElement.outerHTML,
+            content : doctype + document.documentElement.outerHTML,
             onContentLoad : window.DOMContentLoaded
         };
     }
