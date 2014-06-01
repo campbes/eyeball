@@ -75,6 +75,14 @@ module.exports = function(grunt) {
                         dest: '<%= props.out%>/<%=props.name%>/'
                     }
                 ]
+            },
+            dependencies : {
+                files : [
+                    {
+                        src : ['node_modules/jsdom/**/*.*'],
+                        dest: '<%= props.out%>/<%=props.name%>/'
+                    }
+                ]
             }
         },
         concat: { // build the webapp
