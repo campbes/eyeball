@@ -48,30 +48,28 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','persist'
 
         $scope.test = function() {
             logger.log($scope.testCriteria);
-            $scope.testCriteria.build =(new Date()).getTime().toString() + (Math.random()*10).toString();
+
             if($scope.testCriteria.url && $scope.testCriteria.url.indexOf("://") === -1) {
                 $scope.testCriteria.url = "http://" + $scope.testCriteria.url;
             }
 
-            persist.set('testInfo',{
-                testing : true,
-                progress : 0,
-                status : "active",
-                message : "Testing...",
-                build : $scope.testCriteria.build
+            $http({
+                url: '/test',
+                method: "POST",
+                data : $scope.testCriteria
+            }).success(function(data) {
+                logger.log("Testing build id: "+data.build);
+                $scope.testCriteria.build = data.build;
+                persist.set('testInfo',{
+                    testing : true,
+                    progress : 0,
+                    status : "active",
+                    message : "Testing...",
+                    build : $scope.testCriteria.build
+                });
+                $location.path('/report').search({build : $scope.testCriteria.build});
             });
 
-            $timeout(function(){
-                $location.path('/report').search({build : $scope.testCriteria.build});
-
-                $http({
-                    url: '/test',
-                    method: "POST",
-                    data : $scope.testCriteria
-                }).success(function() {
-                        logger.log("posted");
-                    });
-            },500);
         };
 
         $scope.$on("quickTest",function(sc,url) {

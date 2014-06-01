@@ -55,6 +55,8 @@ app.get('/v*/results/*/history', require('./routes/historyNew'));
 // record
 app.get('/v*/results/*', require('./routes/record').get);
 app.delete('/v*/results/*', require('./routes/record').delete);
+// test
+app.post('/v*/test', require('./routes/test'));
 
 
 function setReportRoute(name) {
@@ -75,8 +77,8 @@ var partials = function(req,res) {
 
 app.get('/partials/*',partials);
 
-//var DB = require("mongojs").connect("mongodb://eyeball:eyeball@ds047958.mongolab.com:47958/eyeball", ["urls"])["urls"];
-var DB = require("mongojs").connect("eyeball", ["urls"]).urls;
+var DB = require("mongojs").connect("mongodb://eyeball:eyeball@ds047958.mongolab.com:47958/eyeball", ["urls"])["urls"];
+//var DB = require("mongojs").connect("eyeball", ["urls"]).urls;
 
 var server = http.createServer(app);
 server.listen(app.get('port'), function(){

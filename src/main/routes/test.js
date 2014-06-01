@@ -3,7 +3,9 @@ var EyeballRoutesTest = function(req,res) {
     res.setHeader("Access-Control-Allow-Origin","*");
     res.setHeader("Access-Control-Allow-Methods","POST");
 
-    var build = req.body.build;
+    var build = (new Date()).getTime().toString() + (Math.random()*10).toString();
+    res.send({build : build});
+
     var datafile = req.body.datafile;
     var url = req.body.url;
     var reps = req.body.reps;
@@ -58,8 +60,6 @@ var EyeballRoutesTest = function(req,res) {
             go(data);
         });
     }
-
-    res.send("OK");
 
     return {
         go : go

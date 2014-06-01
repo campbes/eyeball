@@ -6,6 +6,7 @@
     var container = document.getElementById(id);
     var config;
     var metrics;
+    var build;
 
     if(container) {
         container.parentNode.removeChild(container);
@@ -39,7 +40,6 @@
         container = $("#"+id);
         var status =  $('#eyeballStatus');
         $("#"+id+">button").click(function(){container.remove();container = null;});
-        var build = new Date().getTime().toString() + Math.random();
 
         function startSocket() {
             var socket = io.connect(host);
@@ -60,15 +60,15 @@
             $.ajax(host+'/test',{
                 data : {
                     url : location.href,
-                    inputType : 'url',
-                    build : build
+                    inputType : 'url'
                 },
                 method : 'post'
             }).done(function(res){
-                    if(res !== "OK") {
+                    if(res.error) {
                         status.html("Problem connecting to Eyeball");
                         return;
                     }
+                    build = res.build;
                     startSocket();
                     status.html("Eyeballing...");
                 });
