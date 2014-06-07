@@ -76,10 +76,11 @@ var EyeballControllersTestTesters = function() {
             var warnings = 0;
             var errors = 0;
             var val = AriaLinter.getReport('json');
+            val = val.replace(/\r?\n|\r/g,'').replace(/\t/g,'');
             val = val.replace(/<(.*?)>/g, function(v) {
                 return v.replace(/"/g,'\\"');
             });
-            val = val.replace(/<script>(.*?)>/g, function(v) {
+            val = val.replace(/>(.*?)</g, function(v) {
                 return v.replace(/"/g,'\\"');
             });
             val = JSON.parse(val);
