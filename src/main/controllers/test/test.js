@@ -118,6 +118,10 @@ var EyeballControllersTestTest = function(params) {
 
     function openPage(ph) {
         eyeball.logger.info("Opening page with "+ph._phantom.pid);
+        if(urls.length === 0 ) {
+            ph.exit();
+            return;
+        }
         var test = new Test();
         test.pageUrl = urls.splice(0,1)[0];
         activeTests[ph._phantom.pid] = test.pageUrl;
