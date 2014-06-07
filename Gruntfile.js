@@ -146,13 +146,7 @@ module.exports = function(grunt) {
                 template: require('grunt-template-jasmine-istanbul'),
                 templateOptions: {
                     coverage: '<%= props.out%>/coverage/coverage.json',
-                    report: '<%= props.out%>/coverage',
-                    thresholds: {
-                        lines: 70,
-                        statements: 70,
-                        branches: 70,
-                        functions: 70
-                    }
+                    report: '<%= props.out%>/coverage'
                 }
             }
         },
