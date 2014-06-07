@@ -40,48 +40,13 @@ describe("EyeballControllersTestTesters",function() {
         expect(cb).toHaveBeenCalledWith(page.EYEBALLTEST.dommonster);
     });
 
-    it("tests that the validator tester creates a new item and adds it to the validatorFiles array, then calls writeFile",function() {
+    it("tests that the validator tester creates a new item and adds it to the validatorFiles array",function() {
         var data ="<div>some stuff</div>";
         var cb = function(){};
         var validator = EyeballControllersTestValidator();
         var val = validator.validate(data,cb);
-        expect(val.file).toContain(".html");
+        expect(val.file).toContain("<div>some stuff</div>");
         expect(val.cb).toBe(cb);
-        expect(spies.writeFile).toHaveBeenCalled();
-        expect(validator.internal.validatorFiles.length).toBe(1);
-        expect(validator.internal.validatorFiles[0]).toBe(val);
-    });
-
-    it("tests that runValidator takes an item off the validatorFiles array and fires up a vnu",function() {
-        var data ="<div>some stuff</div>";
-        var cb = function(){};
-        var validator = EyeballControllersTestValidator();
-        validator.validate(data,cb);
-
-        //disable vnu.on so that we can test the internals
-        require = function(name){
-            if(name === "child_process") {
-                var on = function(evt,cb){};
-                var stdout = {
-                    on : on
-                };
-                var stderr = stdout;
-                return {
-                    spawn : function(){
-                        return {
-                            on : on,
-                            stdout : stdout,
-                            stderr : stderr
-                        }
-                    }
-                }
-            }
-        };
-
-        var result = validator.internal.runValidator();
-        expect(result[0]).toBe(validator.internal.validatorFiles[0]);
-        expect(validator.internal.validatorFiles.length).toBe(0);
-        expect(validator.internal.activeVnus.length).toBe(1);
     });
 
     it("tests that the yslow tester function adds the grading and message information",function() {

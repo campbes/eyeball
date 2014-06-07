@@ -133,6 +133,11 @@ var helpers = {
                     eyeballTestData = data;
                 },
                 parse : function() {
+                    eyeballTestData.path = {
+                        match : function() {
+                            return eyeballTestData;
+                        }
+                    };
                     return eyeballTestData;
                 }
             }
