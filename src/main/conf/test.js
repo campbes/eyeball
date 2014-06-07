@@ -83,6 +83,10 @@ var configTest =  function(){
                     metric : 'COMPOSITE_info',
                     influence : 0.5
                 },
+                aria : {
+                    metric : 'COMPOSITE_info',
+                    influence : 0.3
+                },
                 time : {
                     metric : 'lt',
                     influence : 1
@@ -98,6 +102,10 @@ var configTest =  function(){
                 validator : {
                     metric : 'COMPOSITE_info',
                     influence : 1
+                },
+                aria : {
+                    metric : 'COMPOSITE_info',
+                    influence : 0.7
                 }
             }
         },
