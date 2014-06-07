@@ -10,11 +10,11 @@ div#detail.container
 
 
     div(ng-repeat="f in fields",class='panel panel-default')
-        a.panelAnchor(id="panel_{{f.metric}}",name="panel_{{f.metric}}")
+        a.panelAnchor(id="panel_{{f.tool}}",name="panel_{{f.tool}}")
 
         div.panel-heading(ng-if="!f.metric") {{f.name}}
         div.panel-body.keyInfo(ng-if="!f.metric")
-            button(ng-repeat="f in fields",ng-if="f.metric", class='alert grade{{data.metrics[f.tool].grades[f.metric]}}',data-anchor="panel_{{f.metric}}")
+            button(ng-repeat="f in fields",ng-if="f.metric", class='alert grade{{data.metrics[f.tool].grades[f.metric]}}',data-anchor="panel_{{f.tool}}")
                 span(class='badge') {{data.metrics[f.tool].grades[f.metric]}}
                 |&nbsp;{{f.name}}
                 span(ng-if="data.metrics[f.tool].data[f.metric]") &nbsp;({{format(data.metrics[f.tool].data[f.metric],f.format)}})
