@@ -4,6 +4,7 @@ var EyeballControllersTestRecord = function(build,tag,urlsLength) {
     var grader = require('./grader');
     var har = require('./har');
     var testCfg = require('../../conf/test');
+    var fs = require("fs");
 
     var committedRecords = [];
     var createdRecords = [];
@@ -34,6 +35,15 @@ var EyeballControllersTestRecord = function(build,tag,urlsLength) {
             if(uncommittedRecords[i] === record) {
                 uncommittedRecords.splice(i,1);
             }
+        }
+
+        if(record.markupTestFile) {
+            fs.unlink(record.markupTestFile,function(err){
+                if(err) {
+                    console.log("error deleting validator file: "+err);
+                }
+                eyeball.logger.info("Deleting validator file");
+            });
         }
 
     }
@@ -129,7 +139,15 @@ var EyeballControllersTestRecord = function(build,tag,urlsLength) {
 
 
         runTestSet(testCfg.tests.browser,passes[1]);
-        runTestSet(testCfg.tests.markup,passes[1]);
+
+        record.markupTestFile = (new Date()).getTime().toString() + (Math.random()*10).toString() + '.html';
+
+        fs.writeFile(record.markupTestFile,passes[1].content,function(error){
+            if(error) {
+                eyeball.logger.info(error);
+            }
+            runTestSet(testCfg.tests.markup,record.markupTestFile);
+        });
 
     }
 

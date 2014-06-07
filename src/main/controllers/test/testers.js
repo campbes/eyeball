@@ -68,11 +68,44 @@ var EyeballControllersTestTesters = function() {
         validator.validate(data,cb);
     }
 
+    function aria(file,cb) {
+        var AriaLinter = require('arialinter');
+
+        AriaLinter.initialize(file, function() {
+            AriaLinter.evaluate();
+            var warnings = 0;
+            var errors = 0;
+            var val = AriaLinter.getReport('json');
+            val = val.replace(/<(.*?)>/g, function(v) {
+                return v.replace(/"/g,'\\"');
+            });
+            val = val.replace(/<script>(.*?)>/g, function(v) {
+                return v.replace(/"/g,'\\"');
+            });
+            val = JSON.parse(val);
+
+            var i = 0;
+            for (i=val.errors.length-1; i>=0; i--) {
+                if(val.errors[i].type === "Error") {
+                    errors += 1;
+                } else if(val.errors[i].type === "Info") {
+                    warnings += 1;
+                }
+            }
+            val.info = {
+                errors : errors,
+                warnings : warnings
+            };
+            cb(val);
+        });
+    }
+
     return {
         eyeball : addEyeballMetrics,
         dommonster : getDomMonster,
         yslow : runYslow,
-        validator : runValidator
+        validator : runValidator,
+        aria : aria
     };
 
 };

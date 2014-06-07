@@ -50,7 +50,6 @@ var EyeballControllersTestValidator = function() {
                 errors : errors,
                 warnings : warnings
             };
-
             callback(val);
 
         });
@@ -60,14 +59,7 @@ var EyeballControllersTestValidator = function() {
         });
 
         vnu.on('close', function (code) {
-            var fs = require("fs");
             eyeball.logger.info('vnu child process closed ' + code);
-            fs.unlink(htmlFile,function(err){
-                if(err) {
-                    console.log("error deleting validator file: "+err);
-                }
-                eyeball.logger.info("Deleting validator file");
-            });
             var i = 0;
             for(i=activeVnus.length-1; i>=0; i--) {
                 if(activeVnus[i] === vnu) {
@@ -85,32 +77,17 @@ var EyeballControllersTestValidator = function() {
 
     }
 
-    function validate(data,cb) {
-        var htmlFile = (new Date()).getTime().toString() + (Math.random()*10).toString() + '.html';
-        var fs = require("fs");
-
-        var item = {file:htmlFile,cb : cb};
+    function validate(file,cb) {
+        var item = {file:file,cb : cb};
         validatorFiles.push(item);
-
-        fs.writeFile(htmlFile,data.content,function(error){
-            if(error) {
-                eyeball.logger.info(error);
-            }
-            runValidator();
-        });
-
+        runValidator();
         return item;
-
     }
 
     function end() {
-        var fs = require("fs");
         var i =0;
         for(i = activeVnus.length-1; i>=0; i--) {
             activeVnus[i].kill();
-        }
-        for(i = validatorFiles.length-1; i>=0; i--) {
-            fs.unlink(validatorFiles[i]);
         }
     }
 

@@ -74,6 +74,15 @@ div#detail.container
                             td
                                 strong {{i.lastLine}}:{{i.lastColumn}} {{i.message}}
                                 //p {{i.explanation}}
+                    table.table.table-striped(ng-switch-when="aria")
+                        tr(ng-repeat='i in data.metrics.aria.data.errors')
+                            td
+                                span(class='label label-danger',ng-if='i.type==="Error"') Error
+                                span(class='label label-warning',ng-if='i.type==="Warning"') Warning
+                            td
+                                strong {{i.rule}}
+                                p {{i.message}}
+                                p(ng-if="i.element !== 'undefined'") {{i.element}}
                     table.table.table-striped(ng-switch-default)
                         tr(ng-repeat="i in data.metrics[f.tool].data.messages")
                             td

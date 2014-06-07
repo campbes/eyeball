@@ -14,7 +14,8 @@
         "phantomjs" : "*",
         "socket.io" : "0.9.16",
         "winston" : "*",
-        "yslow" : "*"
+        "yslow" : "*",
+        "arialinter" : "0.3.1"
     },
     "bundledDependencies" : {
         "jsdom" : "0.8.6"

@@ -56,6 +56,15 @@ var configReport = function() {
                 {metric : 'info.errors', name : 'Errors'},
                 {metric : 'info.warnings', name : 'Warnings'}
             ]
+        },
+        aria : {
+            name : 'Accessibility',
+            metric : 'COMPOSITE_info',
+            items : [
+                {metric : 'COMPOSITE_info', name : 'Overall'},
+                {metric : 'info.errors', name : 'Errors'},
+                {metric : 'info.warnings', name : 'Warnings'}
+            ]
         }
     };
 
@@ -75,7 +84,7 @@ var configReport = function() {
     fields.overview = {
         name : 'Overview',
         tool : 'overview',
-        items : ['eyeball','time','yslow','dommonster','validator'/*,'elementCounter'*/]
+        items : ['eyeball','time','yslow','dommonster','validator','aria'/*,'elementCounter'*/]
     };
 
     // determine which items to sho as individual reports, charts etc - default is everything
