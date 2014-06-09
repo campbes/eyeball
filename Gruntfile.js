@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
 
-    var pkg = grunt.file.readJSON('src/main/package.json');
+    var pkg = grunt.file.readJSON('package.json');
 
     grunt.initConfig({
         pkg : pkg,
@@ -73,14 +73,6 @@ module.exports = function(grunt) {
                     {
                         src: ['LICENSE','README.md'],
                         filter : 'isFile',
-                        dest: '<%= props.out%>/<%=props.name%>/'
-                    }
-                ]
-            },
-            dependencies : {
-                files : [
-                    {
-                        src : ['node_modules/jsdom/**/*.*'],
                         dest: '<%= props.out%>/<%=props.name%>/'
                     }
                 ]
@@ -237,7 +229,7 @@ module.exports = function(grunt) {
         }
     }
 
-    grunt.registerTask('compile', ['jslint','copy:app','copy','concat','bookmarklet','gcc','cssmin']);
+    grunt.registerTask('compile', ['jslint','copy','concat','bookmarklet','gcc','cssmin']);
     grunt.registerTask('test', ['jasmine']);
     grunt.registerTask('package', ['compress']);
     grunt.registerTask('analyse', ['plato']);
