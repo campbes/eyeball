@@ -71,7 +71,7 @@ module.exports = function(grunt) {
             info: {
                 files: [
                     {
-                        src: ['LICENSE','README.md'],
+                        src: ['LICENSE','README.md','package.json'],
                         filter : 'isFile',
                         dest: '<%= props.out%>/<%=props.name%>/'
                     }
