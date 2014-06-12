@@ -9,6 +9,8 @@ eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($t
         var table = this;
         var results = [];
         var resultsFiltered = [];
+        var groupedResults = [];
+        var group;
         var element;
         table.page = 1;
         table.count = cfg.count || 50;
@@ -28,13 +30,51 @@ eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($t
             });
         }
 
+        function sorter(a,b) {
+              a = render.accessObject(a,table.order.col);
+              b = render.accessObject(b,table.order.col);
+              if(table.order.asc) {
+                  if (a < b) {
+                      return 1;
+                  }
+                  if (a > b) {
+                      return -1;
+                  }
+                  return 0;
+              }
+              if (a < b) {
+                  return -1;
+              }
+              if (a > b) {
+                  return 1;
+              }
+              return 0;
+
+          }
+
         function setResults() {
             resultsFiltered = $filter('filter')(results,table.filter);
             var pageLength = Math.ceil(resultsFiltered.length/table.count);
             if(table.page > pageLength && pageLength > 0) {
                 table.page = pageLength;
             }
-            table.results = resultsFiltered.slice((table.page-1)*table.count,table.page*table.count);
+            resultsFiltered = resultsFiltered.slice((table.page-1)*table.count,table.page*table.count);
+            resultsFiltered = _.groupBy(resultsFiltered,"url");
+            groupedResults = [];
+
+            for(group in resultsFiltered) {
+                if (resultsFiltered.hasOwnProperty(group)) {
+                    groupedResults.push({
+                        data : resultsFiltered[group].splice(0,1)[0],
+                        results : resultsFiltered[group]
+                    });
+                }
+            }
+
+            groupedResults.sort(sorter);
+
+            table.results = groupedResults;
+
             table.pages = [];
             var i = 0;
             for(i=0;i<pageLength;i++) {
@@ -82,27 +122,7 @@ eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($t
                 return;
             }
 
-            results.sort(function(a,b) {
-                a = render.accessObject(a,table.order.col);
-                b = render.accessObject(b,table.order.col);
-                if(table.order.asc) {
-                    if (a < b) {
-                        return 1;
-                    }
-                    if (a > b) {
-                        return -1;
-                    }
-                    return 0;
-                }
-                if (a < b) {
-                    return -1;
-                }
-                if (a > b) {
-                    return 1;
-                }
-                return 0;
-
-            });
+            results.sort(sorter);
             setResults();
         };
 

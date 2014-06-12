@@ -12,7 +12,13 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
         tbody(ng-hide="reportView === 'chart'")
             mixin reportTotals
             mixin reportLoader
-            tr(ng-repeat='r in resultsTable.results')
+        tbody(ng-repeat = 'resGroup in resultsTable.results', ng-hide="reportView === 'chart'")
+            tr(ng-init='r = resGroup.data')
+                mixin reportFields(true)
+                td(ng-repeat='f in fields',class='text-center grade{{getVal(r.metrics[f.tool].grades,f.metric)}}',data-type='grades',data-value='{{getVal(r.metrics[f.tool].grades,f.metric)}}',ng-mouseenter='setPopoverContent({metrics:r.metrics[f.tool],tool:f.tool})',ng-mouseleave='setPopoverContent()')
+                    a(href="#/detail/:{{r._id}}?anchor={{f.tool}}")
+                        span.badge {{getVal(r.metrics[f.tool].grades,f.metric)}}
+            tr(ng-repeat='r in resGroup.results',ng-if='$index > 0')
                 mixin reportFields
                 td(ng-repeat='f in fields',class='text-center grade{{getVal(r.metrics[f.tool].grades,f.metric)}}',data-type='grades',data-value='{{getVal(r.metrics[f.tool].grades,f.metric)}}',ng-mouseenter='setPopoverContent({metrics:r.metrics[f.tool],tool:f.tool})',ng-mouseleave='setPopoverContent()')
                     a(href="#/detail/:{{r._id}}?anchor={{f.tool}}")

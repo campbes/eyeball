@@ -49,7 +49,8 @@ app.get('/config', config);
 
 // new rest api
 // results
-app.get('/v*/results', require('./routes/results'));
+app.get('/v*/results', require('./routes/results').results);
+app.get('/v*/results/latest', require('./routes/results').latest);
 // record history
 app.get('/v*/results/*/history', require('./routes/historyNew'));
 // record
@@ -77,8 +78,8 @@ var partials = function(req,res) {
 
 app.get('/partials/*',partials);
 
-var DB = require("mongojs").connect("mongodb://eyeball:eyeball@ds047958.mongolab.com:47958/eyeball", ["urls"]).urls;
-//var DB = require("mongojs").connect("eyeball", ["urls"]).urls;
+//var DB = require("mongojs").connect("mongodb://eyeball:eyeball@ds047958.mongolab.com:47958/eyeball", ["urls"]).urls;
+var DB = require("mongojs").connect("eyeball", ["urls"]).urls;
 
 var server = http.createServer(app);
 server.listen(app.get('port'), function(){
