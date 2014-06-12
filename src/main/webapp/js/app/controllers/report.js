@@ -23,6 +23,8 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
 
         $scope.charts = [];
 
+        var expandedUrls = [];
+
         var qParam;
         for(qParam in $scope.query) {
             if($scope.query.hasOwnProperty(qParam)) {
@@ -76,9 +78,13 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
                 url: url + '?'+queryString,
                 method: "GET"
             }).success(function(results) {
-                    $scope.results = results;
-                    $scope.busy = false;
+                $scope.results = results;
+                var expanded = persist.get("expandedUrls") || [];
+                expanded.forEach(function(obj,i) {
+                    $scope.expandResultsGroup({url : obj});
                 });
+                $scope.busy = false;
+            });
         };
 
         $scope.pushResults = function(result) {
@@ -153,6 +159,37 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
             setupCharts();
         });
 
+        $scope.expandResultsGroup = function(obj) {
+            var url = '/v1/results';
+            //$scope.busy = true;
+            function urlMatch(o) {
+                return o.url === obj.url || o === obj.url;
+            }
+
+            var expanded = _.find(expandedUrls,urlMatch);
+
+            if(expanded) {
+                _.remove($scope.results,urlMatch);
+                url = '/v1/results/latest';
+            }
+            url += '?url='+obj.url + '&' + queryString.replace(/&url(\=[^&]*)?(?=&|$)|^url(\=[^&]*)?(&|$)/,'');
+
+            $http({
+                url: url,
+                method: "GET"
+            }).success(function(results) {
+                if(expanded) {
+                    _.remove(expandedUrls,urlMatch);
+                } else {
+                    expandedUrls.push(obj.url);
+                }
+                persist.set("expandedUrls",expandedUrls);
+
+                $scope.results = $scope.results.concat(results);
+                //$scope.busy = false;
+            });
+        };
+
     }
 ]);
 
@@ -161,7 +198,7 @@ eyeballControllers.controller('ReportOverviewCtrl',['$scope','persist',
     function ReportOverviewCtrl($scope,persist) {
         var testInfo = persist.get('testInfo') || {};
         if(!testInfo.testing) {
-            $scope.getResults('report',$scope.updateTotals);
+            $scope.getResults('/v1/results/latest',$scope.updateTotals);
         }
     }
 

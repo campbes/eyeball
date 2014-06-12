@@ -122,10 +122,13 @@ mixin reportLoader
             div.loader
             |&nbsp; Updating results...
 
-mixin reportFields
-    td
+mixin reportFields(isGroup)
+    td(ng-init='isGroup = #{isGroup}')
+        button(ng-if='isGroup', ng-click='expandResultsGroup(r)') load
         //a(href='#/report?url={{encodeQuery(r.url)}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}',title="Only show results for {{r.url}}") {{r.url}}
-        a(href="#/detail/:{{r._id}}",title="View full details for {{r.url}}") {{r.url.substr(0,120)}}
+        a(ng-if='isGroup',href="#/detail/:{{r._id}}",title="View full details for {{r.url}}") {{r.url.substr(0,120)}}
+            span(ng-if='r.url.length > 120') ...
+        a(ng-if='!isGroup',href="#/detail/:{{r._id}}",title="View full details for {{r.url}}") - {{r.timestamp | date:"yyyy-MM-dd H:mm:ss"}}
             span(ng-if='r.url.length > 120') ...
     td(data-expand="true",title="Click to lock on/off")
     td(data-expandable='true')
