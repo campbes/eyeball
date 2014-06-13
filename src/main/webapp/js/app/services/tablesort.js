@@ -52,27 +52,39 @@ eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($t
 
           }
 
+        function groupAndSort(arr) {
+            arr = _.groupBy(arr,"url");
+            var grouped = [];
+
+            for(group in arr) {
+                if (arr.hasOwnProperty(group)) {
+                    grouped.push({
+                        data : arr[group][0],
+                        results : arr[group]
+                    });
+                }
+            }
+            grouped.sort(sorter);
+            return grouped;
+        }
+
         function setResults() {
             resultsFiltered = $filter('filter')(results,table.filter);
             var pageLength = Math.ceil(resultsFiltered.length/table.count);
             if(table.page > pageLength && pageLength > 0) {
                 table.page = pageLength;
             }
-            resultsFiltered = resultsFiltered.slice((table.page-1)*table.count,table.page*table.count);
-            resultsFiltered = _.groupBy(resultsFiltered,"url");
-            groupedResults = [];
-
-            for(group in resultsFiltered) {
-                if (resultsFiltered.hasOwnProperty(group)) {
-                    groupedResults.push({
-                        data : resultsFiltered[group].splice(0,1)[0],
-                        results : resultsFiltered[group]
-                    });
-                }
-            }
-
-            groupedResults.sort(sorter);
-
+            // do the initial group and sort to get correct mix of url sort and actual sort
+            groupedResults = groupAndSort(resultsFiltered);
+            // flatten the groups so that we have one array with the right ordering
+            var ungroupedResults = [];
+            groupedResults.forEach(function(obj){
+                ungroupedResults = ungroupedResults.concat(obj.results);
+            });
+            // trim this array to the correct resultsetsize
+            ungroupedResults = ungroupedResults.slice((table.page-1)*table.count,table.page*table.count);
+            // re-group and sort the flattened array
+            groupedResults = groupAndSort(ungroupedResults);
             table.results = groupedResults;
 
             table.pages = [];

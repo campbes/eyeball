@@ -25,6 +25,10 @@ body {
     white-space: normal;
     word-wrap: break-word;
     word-break: break-all;
+    padding-left: 25px;
+}
+#results tr.resultGroup td:first-child {
+    padding-left: 0;
 }
 #results td[data-type='grades'] {
     padding: 0;
