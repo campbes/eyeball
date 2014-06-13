@@ -23,7 +23,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
 
         $scope.charts = [];
 
-        var expandedUrls = [];
+        $scope.expandedUrls = [];
 
         var qParam;
         for(qParam in $scope.query) {
@@ -161,16 +161,15 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
 
         $scope.expandResultsGroup = function(obj) {
             var url = '/v1/results';
-            //$scope.busy = true;
             function urlMatch(o) {
                 return o.url === obj.url || o === obj.url;
             }
 
-            var expanded = _.find(expandedUrls,urlMatch);
-
+            var expanded = _.find($scope.expandedUrls,urlMatch);
             if(expanded) {
-                _.remove($scope.results,urlMatch);
                 url = '/v1/results/latest';
+            } else {
+                obj.busy = true;
             }
             url += '?url='+obj.url + '&' + queryString.replace(/&url(\=[^&]*)?(?=&|$)|^url(\=[^&]*)?(&|$)/,'');
 
@@ -178,15 +177,15 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
                 url: url,
                 method: "GET"
             }).success(function(results) {
+                _.remove($scope.results,urlMatch);
                 if(expanded) {
-                    _.remove(expandedUrls,urlMatch);
+                    _.remove($scope.expandedUrls,urlMatch);
                 } else {
-                    expandedUrls.push(obj.url);
+                    $scope.expandedUrls.push(obj.url);
                 }
-                persist.set("expandedUrls",expandedUrls);
-
+                persist.set("expandedUrls",$scope.expandedUrls);
                 $scope.results = $scope.results.concat(results);
-                //$scope.busy = false;
+                obj.busy = false;
             });
         };
 
