@@ -75,7 +75,7 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         $scope.getResults = function(url) {
             $scope.busy = true;
             $http({
-                url: url + '?'+queryString,
+                url: url + (url.indexOf('?') === -1 ? '?' : '&')+queryString,
                 method: "GET"
             }).success(function(results) {
                 $scope.results = results;
@@ -206,6 +206,6 @@ eyeballControllers.controller('ReportOverviewCtrl',['$scope','persist',
 eyeballControllers.controller('ReportStandardCtrl',['$scope',
 
     function ReportStandardCtrl($scope) {
-        $scope.getResults('report/'+$scope.report,$scope.updateTotals);
+        $scope.getResults('/v1/results/latest?fields=metrics.'+$scope.report,$scope.updateTotals);
     }
 ]);
