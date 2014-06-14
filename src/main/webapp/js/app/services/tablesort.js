@@ -31,6 +31,12 @@ eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($t
         }
 
         function sorter(a,b) {
+            // when sorting a group, we need to use the data object or the accessObject call
+            // could find any item in the results array
+              if(a.data && b.data) {
+                a = a.data;
+                b = b.data;
+              }
               a = render.accessObject(a,table.order.col);
               b = render.accessObject(b,table.order.col);
               if(table.order.asc) {
@@ -74,6 +80,7 @@ eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($t
             if(table.page > pageLength && pageLength > 0) {
                 table.page = pageLength;
             }
+
             // do the initial group and sort to get correct mix of url sort and actual sort
             groupedResults = groupAndSort(resultsFiltered);
             // flatten the groups so that we have one array with the right ordering
