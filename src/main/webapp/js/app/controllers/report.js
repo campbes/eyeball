@@ -189,6 +189,18 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
             });
         };
 
+        $scope.starredRecords = persist.get("starredRecords") || [];
+
+        $scope.starRecord = function(id) {
+            if($scope.starredRecords.indexOf(id) === -1) {
+                $scope.starredRecords.push(id);
+            } else {
+                $scope.starredRecords.splice($scope.starredRecords.indexOf(id),1);
+            }
+            persist.set("starredRecords",$scope.starredRecords);
+        };
+
+
     }
 ]);
 
