@@ -127,10 +127,11 @@ mixin reportFields(isGroup)
         button.btn.btn-xs.btn-default(ng-if='isGroup', ng-click='expandResultsGroup(r)')
             span.glyphicon.glyphicon-chevron-down(ng-if='expandedUrls.indexOf(r.url) === -1')
             span.glyphicon.glyphicon-chevron-up(ng-if='expandedUrls.indexOf(r.url) !== -1')
-        |&nbsp;
-        a(ng-if='isGroup',href="#/detail/:{{r._id}}",title="View full details for {{r.url}}") {{r.url.substr(0,120)}}
+        a(ng-if='isGroup',href="#/detail/:{{r._id}}",title="View full details for {{r.url}}") &nbsp;{{r.url.substr(0,120)}}
             span(ng-if='r.url.length > 120') ...
-        a(ng-if='!isGroup',href="#/detail/:{{r._id}}",title="View full details for {{r.url}}") - {{r.timestamp | date:" EEE d MMM yyyy 'at' H:mm:ss"}}
+        button(ng-class='"btn btn-xs "+(starredRecords.indexOf(r._id) === -1 ? "btn-default" : "btn-primary")',ng-if='!isGroup',ng-click='starRecord(r._id)')
+            span.glyphicon.glyphicon-star
+        a(ng-if='!isGroup',href="#/detail/:{{r._id}}",title="View full details for {{r.url}}") {{r.timestamp | date:" EEE d MMM yyyy 'at' H:mm:ss"}}
             span(ng-if='r.url.length > 120') ...
     td(data-expand="true",title="Click to lock on/off")
     td(data-expandable='true')
@@ -174,7 +175,7 @@ mixin results
                 td(colspan="8")
                     div.loader
                     |&nbsp; Updating results...
-            tr(ng-repeat='r in resGroup.results',ng-if='expandedUrls.indexOf(r.url) !== -1')
+            tr(ng-repeat='r in resGroup.results',ng-if='expandedUrls.indexOf(r.url) !== -1',ng-class='(starredRecords.indexOf(r._id) !== -1 ? "starred" : "")')
                 mixin reportFields
                 td(ng-repeat='f in fields',class='text-center grade{{getVal(r.metrics[f.tool].grades,f.metric)}}',data-type='grades',ng-mouseenter='setPopoverContent({grade:getVal(r.metrics[f.tool].grades,f.metric),value:format(getVal(r.metrics[f.tool].data,f.metric),f.format)})',ng-mouseleave='setPopoverContent()')
                     span.badge {{getVal(r.metrics[f.tool].grades,f.metric)}}

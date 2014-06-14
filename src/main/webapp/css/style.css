@@ -25,13 +25,24 @@ body {
     white-space: normal;
     word-wrap: break-word;
     word-break: break-all;
-    padding-left: 25px;
-}
-#results tr.resultGroup td:first-child {
-    padding-left: 0;
+    padding-left :32px;
 }
 #results td[data-type='grades'] {
     padding: 0;
+}
+#results tr.resultGroup td:first-child {
+    padding-left: 5px;
+}
+#results tr.starred {
+    font-weight: bold;
+    border-top: 2px solid #428bca;
+    border-bottom: 2px solid #428bca;
+}
+#results tr.starred td {
+    background: #E0F0FF;;
+}
+#results tr:nth-child(odd).starred td {
+    background: #C2E0FF;
 }
 td[data-type='grades'] a {
     display: inline-block;
@@ -84,6 +95,38 @@ tr.warning td[data-expand='true']:nth-child(2) {
         linear-gradient(-135deg, #ddd 5px, #fcf8e3 0);
     background-color: #fcf8e3;
 }
+
+
+#results tr.starred td[data-expand='true'] {
+    width: 12px;
+    background-image:
+        linear-gradient(45deg, #ddd 5px, transparent 0),
+        linear-gradient(135deg, #ddd 5px, #E0F0FF 0);
+    background-color: #E0F0FF;
+    background-position: left top;
+    background-repeat: repeat-y;
+    background-size: 10px 10px;
+}
+#results tr.starred:nth-child(odd) td[data-expand='true'] {
+    background-image:
+        linear-gradient(45deg, #ddd 5px, transparent 0),
+        linear-gradient(135deg, #ddd 5px, #C2E0FF 0);
+    background-color: #ddd;
+}
+#results tr.starred td[data-expand='true']:nth-child(2) {
+    background-image:
+        linear-gradient(-45deg, #ddd 5px, transparent 0),
+        linear-gradient(-135deg, #ddd 5px, #E0F0FF 0);
+    background-position: right -5px;
+}
+#results tr.starred:nth-child(odd) td[data-expand='true']:nth-child(2) {
+    background-image:
+        linear-gradient(-45deg, #ddd 5px, transparent 0),
+        linear-gradient(-135deg, #ddd 5px, #C2E0FF 0);
+    background-color: #C2E0FF;
+}
+
+
 [data-expandable='true'] {
     display: none;
 }
@@ -155,7 +198,8 @@ a.panelAnchor {
 .gradeC,
 .gradeD,
 .gradeE,
-.gradeF {
+.gradeF,
+tr.starred .badge {
     color: #FFF;
 }
 .gradeA .badge,
@@ -164,43 +208,67 @@ a.panelAnchor {
 .gradeD .badge,
 .gradeE .badge,
 .gradeF .badge {
-    background : #FFF !important;
+    background : #FFF;
 }
-.gradeA {
-    background : #5cb85c !important;
+.gradeA,
+.panel-heading.gradeA,
+button[data-anchor].gradeA,
+#results td.gradeA,
+tr.starred .gradeA .badge {
+    background : #5cb85c;
 }
 .gradeA .badge {
-    color : #5cb85c !important;
+    color : #5cb85c;
 }
-.gradeB {
-    background : #9C9 !important;
+.gradeB,
+.panel-heading.gradeB,
+button[data-anchor].gradeB,
+#results td.gradeB,
+tr.starred .gradeB .badge {
+    background : #9C9;
 }
 .gradeB .badge {
-    color : #9C9 !important;
+    color : #9C9;
 }
-.gradeC {
-    background : #FC6 !important;
+.gradeC,
+.panel-heading.gradeC,
+button[data-anchor].gradeC,
+#results td.gradeC,
+tr.starred .gradeC .badge {
+    background : #FC6;
 }
 .gradeC .badge {
-    color : #FC6 !important;
+    color : #FC6;
 }
-.gradeD {
-    background : #F96 !important;
+.gradeD,
+.panel-heading.gradeD,
+button[data-anchor].gradeD,
+#results td.gradeD,
+tr.starred .gradeD .badge {
+    background : #F96;
 }
 .gradeD .badge {
-    color : #F96 !important;
+    color : #F96;
 }
-.gradeE {
-    background : #F63 !important;
+.gradeE,
+.panel-heading.gradeE,
+button[data-anchor].gradeE,
+#results td.gradeE,
+tr.starred .gradeE .badge {
+    background : #F63;
 }
 .gradeE .badge {
-    color : #F63 !important;
+    color : #F63;
 }
-.gradeF {
-    background : #d9534f !important;
+.gradeF,
+.panel-heading.gradeF,
+button[data-anchor].gradeF,
+#results td.gradeF,
+tr.starred .gradeF .badge {
+    background : #d9534f;
 }
 .gradeF .badge {
-    color : #d9534f !important;
+    color : #d9534f;
 }
 #chartArea {
     margin-top: 30px;
