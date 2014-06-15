@@ -3,7 +3,7 @@ var EyeballRoutesResults = (function() {
 var _ = require('lodash');
 var resultsType = "results";
 
-function results(req,res) {
+function getResults(req,res,resultsType) {
     var url = require('url');
     var queryString = url.parse(req.url, true).query || {};
     var fields = queryString.fields;
@@ -54,9 +54,12 @@ function results(req,res) {
 
     }
 
+    function results(req,res) {
+        getResults(req,res,"results");
+    }
+
     function latest(req,res) {
-        resultsType = "latest";
-        results(req,res);
+        getResults(req,res,"latest");
     }
 
     return {
