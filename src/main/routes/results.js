@@ -53,14 +53,11 @@ function results(req,res,resultsType) {
                 res.send(304);
             }
         });
-    }
 
-    function results(req,res) {
-        getResults(req,res);
-    }
+    };
 
     function latest(req,res) {
-        getResults(req,res,"latest");
+        results(req,res,"latest");
     }
 
     return {
