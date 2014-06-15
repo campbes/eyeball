@@ -1,7 +1,6 @@
 var EyeballRoutesResults = (function() {
 
 var _ = require('lodash');
-var resultsType = "results";
 
 function getResults(req,res,resultsType) {
     var url = require('url');
