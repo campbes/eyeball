@@ -1,6 +1,8 @@
 module.exports = function(grunt) {
 
     var pkg = grunt.file.readJSON('package.json');
+    require('time-grunt')(grunt);
+    require('jit-grunt')(grunt);
 
     grunt.initConfig({
         pkg : pkg,
@@ -49,7 +51,8 @@ module.exports = function(grunt) {
                     continue : true,
                     sloppy : true,
                     nomen: true,
-                    unparam : true
+                    unparam : true,
+                    regexp : true
                 },
                 options: {
                     junit: '<%= props.out%>/jslint/jslint-src-webapp.xml'
@@ -105,14 +108,22 @@ module.exports = function(grunt) {
                 ]
             }
         },
-        gcc: {
+        closurecompiler: {
             js: {
-                src: ['<%= props.out%>/<%=props.name%>/webapp/<%=props.name%>.js'],
-                dest: '<%= props.out%>/<%=props.name%>/webapp/<%=props.name%>.min.js'
+                files : {
+                    '<%= props.out%>/<%=props.name%>/webapp/<%=props.name%>.min.js' : ['<%= props.out%>/<%=props.name%>/webapp/<%=props.name%>.js']
+                },
+                options : {
+                    "compilation_level" : "SIMPLE_OPTIMIZATIONS"
+                }
             },
             bookmarklet: {
-                src: ['<%= props.out%>/<%=props.name%>/webapp/<%=pkg.name%>-bookmarklet.js'],
-                dest: '<%= props.out%>/<%=props.name%>/webapp/<%=pkg.name%>-bookmarklet.min.js'
+                files : {
+                    '<%= props.out%>/<%=props.name%>/webapp/<%=pkg.name%>-bookmarklet.min.js' : ['<%= props.out%>/<%=props.name%>/webapp/<%=pkg.name%>-bookmarklet.js']
+                },
+                options : {
+                    "compilation_level" : "SIMPLE_OPTIMIZATIONS"
+                }
             }
         },
         cssmin: {
@@ -221,15 +232,8 @@ module.exports = function(grunt) {
 
     });
 
-    grunt.loadNpmTasks('grunt-install-dependencies');
 
-    for(var i in pkg.devDependencies) {
-        if(pkg.devDependencies.hasOwnProperty(i)) {
-            grunt.loadNpmTasks(i);
-        }
-    }
-
-    grunt.registerTask('compile', ['jslint','copy','concat','bookmarklet','gcc','cssmin']);
+    grunt.registerTask('compile', ['jslint','copy','concat','bookmarklet','closurecompiler','cssmin']);
     grunt.registerTask('test', ['jasmine']);
     grunt.registerTask('package', ['compress']);
     grunt.registerTask('analyse', ['plato']);
