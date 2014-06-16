@@ -1,4 +1,4 @@
-/*global eyeballApp, $*/
+/*global eyeballApp, $, _*/
 
 eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($timeout,render,exos,$filter) {
 
@@ -10,7 +10,6 @@ eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($t
         var results = [];
         var resultsFiltered = [];
         var groupedResults = [];
-        var group;
         var element;
         table.page = 1;
         table.count = cfg.count || 50;
@@ -61,6 +60,7 @@ eyeballApp.factory('tablesort',['$timeout','render','exos','$filter',function($t
         function groupAndSort(arr) {
             arr = _.groupBy(arr,"url");
             var grouped = [];
+            var group;
 
             for(group in arr) {
                 if (arr.hasOwnProperty(group)) {

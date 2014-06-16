@@ -1,4 +1,4 @@
-/*global eyeballControllers*/
+/*global eyeballControllers, _*/
 
 eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeout','$routeParams','utils','popover','tablesort','render','chart','persist','logger','config',
 
