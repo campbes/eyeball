@@ -85,6 +85,8 @@ var EyeballControllersTestTesters = function() {
             });
             val = JSON.parse(val);
 
+            //console.log(AriaLinter.getReport('text'))
+
             var i = 0;
             for (i=val.errors.length-1; i>=0; i--) {
                 if(val.errors[i].type === "Error") {
