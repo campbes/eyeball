@@ -76,14 +76,16 @@ var EyeballControllersTestTesters = function() {
             var warnings = 0;
             var errors = 0;
             var val = AriaLinter.getReport('json');
-            val = val.replace(/\r?\n|\r/g,'').replace(/\t/g,'');
-            val = val.replace(/<(.*?)>/g, function(v) {
-                return v.replace(/"/g,'\\"');
-            });
-            val = val.replace(/>(.*?)</g, function(v) {
-                return v.replace(/"/g,'\\"');
+            val = val.replace(/\\/g,'').replace(/\r?\n|\r/g,'').replace(/\t/g,'');
+            val = val.replace(/\"element\"\:\s"(.*?)\"\s\}/g,function(v,$1) {
+                if($1.length > 500) {
+                    $1 = $1.substring(0,500) + '...';
+                }
+                return '"element":"'+$1.replace(/"/g,'\\"') + '" }';
             });
             val = JSON.parse(val);
+
+            //console.log(AriaLinter.getReport('text'))
 
             var i = 0;
             for (i=val.errors.length-1; i>=0; i--) {
