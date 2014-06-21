@@ -25,12 +25,14 @@ var EyeballControllersTestGrader = function() {
         var count = 0;
         var mt = null;
         var grade = null;
+        var influence = 1;
 
         for (mt in gradeSet) {
             if(gradeSet.hasOwnProperty(mt)) {
                 grade = getGradeFromData(gradeSet[mt],data[mt]);
+                influence = gradeSet[mt].influence || 1;
                 if(grade) {
-                    points += testCfg.grades.points[grade];
+                    points += testCfg.grades.points[grade]*influence;
                     count += 1;
                 }
             }

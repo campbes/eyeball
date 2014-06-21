@@ -55,14 +55,14 @@ var configTest =  function(){
         validator : {
             COMPOSITE_info : { A : 90,B : 80,C : 70,D : 60,E : 50, F : 0},
             info : {
-                errors : {F : 5, E: 4,D : 3,C : 2,B : 1,A :0},
+                errors : {F : 5, E: 4,D : 3,C : 2,B : 1,A :0, influence : 2},
                 warnings : {F : 25, E: 20,D : 15,C : 10,B : 5,A :0}
             }
         },
         aria : {
             COMPOSITE_info : { A : 90,B : 80,C : 70,D : 60,E : 50, F : 0},
             info : {
-                errors : {F : 5, E: 4,D : 3,C : 2,B : 1,A :0},
+                errors : {F : 5, E: 4,D : 3,C : 2,B : 1,A :0, influence : 2},
                 warnings : {F : 25, E: 20,D : 15,C : 10,B : 5,A :0}
             }
         }
