@@ -1,0 +1,15 @@
+<div class="ui ignored icon direction buttons">
+    <button class="ui button" data-animation="flip" data-direction="left" title="Flip Left"><i class="left long arrow icon"></i></button>
+    <button class="ui button" data-animation="flip" data-direction="up" title="Flip Up"><i class="up long arrow icon"></i></button>
+    <button class="ui icon button" data-animation="flip" data-direction="down" title="Flip Down"><i class="down long arrow icon"></i></button>
+    <button class="ui icon button" data-animation="flip" data-direction="right" title="Flip Right"><i class="right long arrow icon"></i></button>
+</div>
+<div class="ui shape rectangle">
+    <div class="sides">
+        {{#each charts}}
+        <div class="{{#if @first}}active {{/if}}side">
+            <div class="content" id="chart-{{this}}" data-height="300"></div>
+        </div>
+        {{/each}}
+    </div>
+</div>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        body {
+            background: #ccc;
+            height: 1000px;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="http://localhost:3000/bookmarklet/bookmarklet.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost:3000/lib/semantic/css/semantic.css"/>
+</head>
+<body>
+    <div id="eyeballBookmarklet">
+        <h1 class="ui header">Eyeball</h1>
+        <button class="mini ui red button">X</button>
+        <h2 id="eyeballStatus">Sending info to Eyeball...</h2>
+        <div class="ui segment">
+            <div class="ui accordion">
+                <div class="title">
+                    <div class="ui label gradeA">A</div> EyeScore
+                </div>
+                <div class="content">
+                    <div class="ui top attached segment">
+                        <div class="ui left red label">A</div> Overall
+                    </div>
+                    <div class="ui attached segment">
+                        <div class="ui left red label">A</div> Performance
+                    </div>
+                    <div class="ui bottom attached segment">
+                        <div class="ui left red label">A</div> DOM Quality
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="eyeballCharts" class="ui segment">
+            <div class="ui ignored icon direction buttons">
+                <button class="ui button" data-animation="flip" data-direction="left" title="Flip Left"><i class="left long arrow icon"></i></button>
+                <button class="ui button" data-animation="flip" data-direction="up" title="Flip Up"><i class="up long arrow icon"></i></button>
+                <button class="ui icon button" data-animation="flip" data-direction="down" title="Flip Down"><i class="down long arrow icon"></i></button>
+                <button class="ui icon button" data-animation="flip" data-direction="right" title="Flip Right"><i class="right long arrow icon"></i></button>
+            </div>
+            <div class="ui shape rectangle">
+                <div class="sides">
+                    <div class="active side">
+                        <div class="content" id="chart1" data-height="300"></div>
+                    </div>
+                    <div class="side">
+                        <div class="content" id="chart2" data-height="300"></div>
+                    </div>
+                    <div class="side">
+                        <div class="content" id="chart3" data-height="300"></div>
+                    </div>
+                    <div class="side">
+                        <div class="content" id="chart4" data-height="300"></div>
+                    </div>
+                    <div class="side">
+                        <div class="content" id="chart5" data-height="300"></div>
+                    </div>
+                    <div class="side">
+                        <div class="content" id="chart6" data-height="300"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="http://localhost:3000/lib/handlebars.runtime-v1.3.0.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://www.google.com/jsapi"></script>
+    <script src="http://localhost:3000/lib/semantic/javascript/semantic.js"></script>
+    <script src="http://localhost:3000/lib/harpy-0.0.1.min.js"></script>
+    <script type="text/javascript">
+        google.load("visualization", "1", {packages:["corechart"]});
+
+        $.ajax('http://localhost:3000/v1/results/53a8507a40de8a0b0028b479').success(function(data) {
+            var comparator = new Harpy.Comparator(JSON.stringify(data.metrics.har.data),JSON.stringify(data.metrics.harUncached.data));
+            comparator.draw('chart1','time');
+            comparator.draw('chart2','uncached');
+            comparator.draw('chart3','size');
+            comparator.draw('chart4','timings');
+            comparator.draw('chart5','requests');
+            comparator.draw('chart6','download');
+        });
+        $('.ui.accordion').accordion();
+        //$('.shape').shape();
+        $('.button').click(function(){
+            $('.shape').shape('flip '+$(this).attr('data-direction'))
+        });
+
+    </script>
+</body>
+</html>

@@ -96,11 +96,29 @@ module.exports = function(grunt) {
                 dest: '<%= props.out%>/<%=props.name%>/webapp/<%=props.name%>.css'
             }
         },
+        handlebars : {
+            compile : {
+                options : {
+                    namespace : 'Eyeball.Templates',
+                    partialsUseNamespace : true,
+                    processName : function(path) {
+                        path = path.replace(".tmpl","");
+                        return path.substr(path.lastIndexOf("/")+1);
+                    }
+                },
+                files : {
+                    '<%= props.out%>/handlebars/bookmarklet.js' : ['<%= props.src%>/webapp/bookmarklet/handlebars/*.tmpl'],
+                    '<%= props.test%>/resources/bookmarklet-templates.js' : ['<%= props.src%>/webapp/bookmarklet/handlebars/*.tmpl']
+                }
+            }
+        },
         bookmarklet : {
             Eyeball : {
                 '<%= props.out%>/<%=props.name%>/webapp/<%=pkg.name%>-bookmarklet.js' : [
                     '<%= props.src%>/webapp/bookmarklet/bookmarklet.css',
-                    '<%= props.src%>/webapp/bookmarklet/bookmarklet.html',
+                    '<%= props.src%>/webapp/lib/handlebars.runtime-v1.3.0.js',
+                    '<%= props.src%>/webapp/lib/harpy-0.0.1.min.js',
+                    '<%= props.out%>/handlebars/bookmarklet.js',
                     '<%= props.src%>/webapp/bookmarklet/bookmarklet.js'
                 ]
             }
@@ -191,10 +209,9 @@ module.exports = function(grunt) {
 
         var namespace = this.target;
 
-        var str = "(function(){";
-        str += 'var ' + namespace + ' = ' + namespace + ' || { css : [], html : []};\n';
+        var str = 'var ' + namespace + ' = ' + namespace + ' || { css : []};\n';
 
-        var css= 0, html = 0;
+        var css= 0;
         // Loop over destination files
         for (var fname in this.data) {
             // Loop over source files
@@ -209,13 +226,8 @@ module.exports = function(grunt) {
                     str += namespace + '.css[' + css + '] = ';
                     str += "'" + str2js(grunt.file.read(f), '') + "';";
                     css += 1;
-                } else {
-                    str += namespace + '.html[' + html + '] = ';
-                    str += "'" + str2js(grunt.file.read(f), '') + "';";
-                    html += 1;
                 }
             });
-            str += "}())";
             grunt.file.write(grunt.config.process(fname), str);
         }
 
@@ -229,7 +241,7 @@ module.exports = function(grunt) {
         }
     }
 
-    grunt.registerTask('compile', ['jslint','copy','concat','bookmarklet','gcc','cssmin']);
+    grunt.registerTask('compile', ['jslint','copy','concat','handlebars','bookmarklet','gcc','cssmin']);
     grunt.registerTask('test', ['jasmine']);
     grunt.registerTask('package', ['compress']);
     grunt.registerTask('analyse', ['plato']);

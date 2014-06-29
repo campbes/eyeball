@@ -1,0 +1,14 @@
+<div class="ui accordion">
+    {{#each metrics}}
+    <div class="title">
+        <div class="ui label grade{{grade}}">{{grade}}</div> {{name}}
+    </div>
+    <div class="content">
+        {{#each items}}
+        <div class="ui segment attached{{#if @first}} top{{/if}}{{#if @last}} bottom{{/if}}">
+            <div class="ui left red label">{{grade}}</div> {{name}}
+        </div>
+        {{/each}}
+    </div>
+    {{/each}}
+</div>

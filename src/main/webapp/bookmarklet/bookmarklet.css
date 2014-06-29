@@ -1,77 +1,38 @@
 #eyeballBookmarklet {
-    position: absolute;
+    position: fixed;
     top : 0;
     left :0;
-    margin : 50px;
-    background: #FFF;
-    padding: 10px;
-    border: 1px solid #CCC;
-    font-size: 12px;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif !important;
-    box-shadow: 10px 10px 5px #888888;
-    min-width: 150px;
+    height: 100%;
+    background: rgba(255,255,255,0.5);
+    padding: 0 10px 20px 10px;
+    font-family: Verdana, Helvetica,Arial,sans-serif !important;
+    width: 350px;
+    overflow-y : auto;
+    font-size: 11px;
 }
-#eyeballBookmarklet * {
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif !important;
-    text-transform: none;
-}
-#eyeballBookmarklet h1 {
-    margin: 0;
-    font-size: 18px;
-}
-#eyeballBookmarklet img {
-    margin-right: 5px;
-}
-#eyeballBookmarklet h2 {
-    font-size: 90%;
-    font-weight: bold;
-}
-#eyeballBookmarklet ul {
-    margin:  0 0 10px 0;
-    padding: 0;
-    font-size: 90%;
-}
-#eyeballBookmarklet li {
-    list-style-type: none;
-    font-weight: bold;
-    padding: 5px 10px 5px 5px;
-    color: #000;
-    border: 1px solid #FFF;
-}
-#eyeballBookmarklet .eyeballA {
-    background : #5cb85c;
-}
-#eyeballBookmarklet .eyeballB {
-    background : #9C9;
-}
-#eyeballBookmarklet .eyeballC {
-    background : #FC6;
-}
-#eyeballBookmarklet .eyeballD {
-    background : #F96;
-}
-#eyeballBookmarklet .eyeballE {
-    background : #F63;
-}
-#eyeballBookmarklet .eyeballF {
-    background : #d9534f;
-}
-#eyeballBookmarklet span {
-    background: #FFF;
-    border-radius: 10px;
-    display: inline-block;
-    padding: 0 10px;
-    margin: 0 10px 0 0;
-}
-#eyeballBookmarklet a {
-    font-weight: bold;
-    color : #2a6496;
-}
-#eyeballBookmarklet button {
-    background : #d9534f;
-    border: 1px solid #FFF;
-    color: #FFF;
+#eyeballClose {
     float: right;
-    border-radius: 4px;
+}
+#eyeballCharts {
+    text-align: center;
+    min-height: 100px;
+}
+#eyeballCharts .shape .content {
+    margin-top: 20px;
+}
+#eyeballCharts .harpyChart {
+    width: 310px;
+    overflow: hidden;
+}
+#eyeballGrades {
+    min-height: 100px;
+}
+#eyeballBookmarklet .ui.header {
     font-size: 12px;
+}
+#eyeballBookmarklet .ui.accordion {
+    font-size: 11px;
+}
+#eyeballBookmarklet .ui.header .sub.header {
+    font-size: 11px;
 }
