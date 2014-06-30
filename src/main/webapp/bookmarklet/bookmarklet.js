@@ -8,6 +8,8 @@
     var build;
     var status;
     var progress;
+    var gradesEl;
+    var chartsEl;
 
     if(container) {
         container.parentNode.removeChild(container);
@@ -45,18 +47,22 @@
                 status.html("Rendering....");
                 progress.width("75%");
                 $.ajax(host+'/v1/results/'+data.record._id+'?view=bookmarklet').success(function(data) {
-                    $('#eyeballGrades').html(Eyeball.Templates.grades(data));
-                    $('#eyeballGrades .ui.accordion').accordion();
+                    gradesEl = $('#eyeballGrades');
+                    gradesEl.html(Eyeball.Templates.grades(data));
+                    gradesEl.find('.ui.accordion').accordion();
+                    gradesEl.find('.ui.segment.attached.bottom').html('<a href="'+host+'/#/detail/:'+data.record._id+'">View full detailed results in Eyeball</a>');
                     var charts = ['time','uncached','size','timings','requests','download'];
-                    $('#eyeballCharts').html(Eyeball.Templates.charts({charts : charts}));
+                    chartsEl = $('#eyeballCharts');
+                    chartsEl.html(Eyeball.Templates.charts({charts : charts}));
                     var comparator = new Harpy.Comparator(JSON.stringify(data.har.data),JSON.stringify(data.harUncached.data));
                     charts.forEach(function(chart) {
                         comparator.draw('chart-'+chart,chart);
                     });
-                    $('#eyeballCharts').height(320);
-                    $('.button').click(function(){
-                        $('.shape').shape('flip '+$(this).attr('data-direction'));
+                    chartsEl.height(320);
+                    chartsEl.find('.button').click(function(){
+                        chartsEl.find('.shape').shape('flip '+$(this).attr('data-direction'));
                     });
+                    chartsEl.find('.ui.segment.attached.bottom').html('<a href="'+host+'/#/har/:'+data.record._id+'">View full HTTP analysis in Eyeball</a>');
                     status.html("Complete!");
                     progress.width("100%");
                     progress.parent().removeClass("active");
