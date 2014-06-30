@@ -1,11 +1,13 @@
 /*global Eyeball,$,io,Harpy,google */
 
+(function() {
     var eyeballScript = document.getElementById("eyeballScript");
     var host = eyeballScript.src.split("://")[0] + "://" + eyeballScript.src.split("://")[1].split("/")[0];
     var id = "eyeballBookmarklet";
     var container = document.getElementById(id);
-    var config;
     var build;
+    var status;
+    var progress;
 
     if(container) {
         container.parentNode.removeChild(container);
@@ -33,8 +35,7 @@
     function run() {
         container = $("#"+id);
         $("#eyeballClose").click(function(){container.remove();container = null;});
-        var status = $('#eyeballStatus');
-        var progress = $('#eyeballProgress');
+
         function startSocket() {
             status.html("Eyeballing...");
             progress.width("50%");
@@ -79,49 +80,40 @@
 
     }
 
-    function loadScript(src,$def) {
+    function loadScript(src,cb) {
         var script = document.createElement("script");
         script.src = src;
-        script.onload = function() {
-            $def.resolve();
-        };
-        document.body.appendChild(script);
+        script.onload = cb;
+        container.appendChild(script);
     }
 
     function loadDeps() {
-        $('#eyeballStatus').html("Loading...");
-        $('#eyeballProgress').width("25%");
+        status = $('#eyeballStatus');
+        status.html("Loading...");
+        progress = $('#eyeballProgress');
+        progress.width("25%");
         var $googleLoaded = new $.Deferred();
         if(window.google) {
             $googleLoaded.resolve();
         } else {
-            var script = document.createElement("script");
-            script.src = 'https://www.google.com/jsapi';
-            script.onload = function() {
+            loadScript('https://www.google.com/jsapi',function() {
                 google.load("visualization", "1", {callback : function(){$googleLoaded.resolve();}, packages:["corechart"]});
-            };
-            document.body.appendChild(script);
+            });
         }
         var $socketLoaded = new $.Deferred();
         if(window.io) {
             $socketLoaded.resolve();
         } else {
-            loadScript('http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js',$socketLoaded);
+            loadScript('http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js',$socketLoaded.resolve);
         }
         var $uiLoaded = new $.Deferred();
-        loadScript('http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/javascript/semantic.min.js',$uiLoaded);
+        loadScript('http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/javascript/semantic.min.js',$uiLoaded.resolve);
         $.when($googleLoaded,$socketLoaded,$uiLoaded).done(run);
-    }
-
-    function loadJQ() {
-        var script = document.createElement("script");
-        script.src = 'http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js';
-        script.onload = loadDeps;
-        container.appendChild(script);
     }
 
     if(window.$) {
         loadDeps();
     } else {
-        loadJQ();
+        loadScript('http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js',loadDeps);
     }
+}());
