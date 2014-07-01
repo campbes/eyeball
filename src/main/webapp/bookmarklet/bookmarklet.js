@@ -5,6 +5,7 @@
     var host = eyeballScript.src.split("://")[0] + "://" + eyeballScript.src.split("://")[1].split("/")[0];
     var id = "eyeballBookmarklet";
     var container = document.getElementById(id);
+    var content;
     var build;
     var status;
     var progress;
@@ -17,40 +18,33 @@
     container = document.createElement("DIV");
     container.id = id;
 
-    Eyeball.css.forEach(function(content) {
-        var css = '<style>';
-        css += content;
-        css += '</style>';
-        container.innerHTML += css;
-    });
-
-    var semCss = document.createElement('LINK');
-    semCss.href = 'http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/css/semantic.min.css';
-    semCss.rel = 'stylesheet';
-    semCss.type = 'text/css';
-    container.appendChild(semCss);
-
-    container.innerHTML += Eyeball.Templates.bookmarklet();
+    container.innerHTML += Eyeball.Templates.bookmarklet({css:Eyeball.css});
     document.body.appendChild(container);
     container = document.getElementById(id);
 
+    function reTest() {
+        content.html(Eyeball.Templates.content());
+        run();
+    }
+
     function run() {
-        container = $("#"+id);
-        $("#eyeballClose").click(function(){container.remove();container = null;});
 
         function startSocket() {
             status.html("Eyeballing...");
             progress.width("50%");
             var socket = io.connect(host);
-                socket.on('commitRecord_'+build, function (data) {
-                socket.disconnect();
+            socket.on('commitRecord_'+build, function (data) {
+            socket.disconnect();
+
+            var recordId = data.record._id;
+
                 status.html("Rendering....");
                 progress.width("75%");
-                $.ajax(host+'/v1/results/'+data.record._id+'?view=bookmarklet').success(function(data) {
+                $.ajax(host+'/v1/results/'+recordId+'?view=bookmarklet').success(function(data) {
                     gradesEl = $('#eyeballGrades');
                     gradesEl.html(Eyeball.Templates.grades(data));
                     gradesEl.find('.ui.accordion').accordion();
-                    gradesEl.find('.ui.segment.attached.bottom').html('<a href="'+host+'/#/detail/:'+data.record._id+'">View full detailed results in Eyeball</a>');
+                    $('#eyeballGradesFooter').html('<a href="'+host+'/#/detail/:'+recordId+'">View full detailed results in Eyeball</a>');
                     var charts = ['time','uncached','size','timings','requests','download'];
                     chartsEl = $('#eyeballCharts');
                     chartsEl.html(Eyeball.Templates.charts({charts : charts}));
@@ -62,10 +56,11 @@
                     chartsEl.find('.button').click(function(){
                         chartsEl.find('.shape').shape('flip '+$(this).attr('data-direction'));
                     });
-                    chartsEl.find('.ui.segment.attached.bottom').html('<a href="'+host+'/#/har/:'+data.record._id+'">View full HTTP analysis in Eyeball</a>');
+                    $('#eyeballChartsFooter').html('<a href="'+host+'/#/har/:'+recordId+'">View full HTTP analysis in Eyeball</a>');
                     status.html("Complete!");
                     progress.width("100%");
                     progress.parent().removeClass("active");
+                    content.append($('<button/>').attr('class','ui button').click(reTest).text('Re-test'));
                 });
             });
         }
@@ -84,6 +79,13 @@
                 startSocket();
             });
 
+    }
+
+    function init() {
+        container = $("#"+id);
+        content = container.find('#eyeballContent');
+        $("#eyeballClose").click(function(){container.remove();container = null;});
+        run();
     }
 
     function loadScript(src,cb) {
@@ -114,7 +116,7 @@
         }
         var $uiLoaded = new $.Deferred();
         loadScript('http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/javascript/semantic.min.js',$uiLoaded.resolve);
-        $.when($googleLoaded,$socketLoaded,$uiLoaded).done(run);
+        $.when($googleLoaded,$socketLoaded,$uiLoaded).done(init);
     }
 
     if(window.$) {

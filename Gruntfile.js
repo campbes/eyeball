@@ -101,14 +101,20 @@ module.exports = function(grunt) {
                 options : {
                     namespace : 'Eyeball.Templates',
                     partialsUseNamespace : true,
+                    partialRegex : /.*/,
+                    partialsPathRegex: /\/partials\//,
                     processName : function(path) {
+                        path = path.replace(".tmpl","");
+                        return path.substr(path.lastIndexOf("/")+1);
+                    },
+                    processPartialName : function(path) {
                         path = path.replace(".tmpl","");
                         return path.substr(path.lastIndexOf("/")+1);
                     }
                 },
                 files : {
-                    '<%= props.out%>/handlebars/bookmarklet.js' : ['<%= props.src%>/webapp/bookmarklet/handlebars/*.tmpl'],
-                    '<%= props.test%>/resources/bookmarklet-templates.js' : ['<%= props.src%>/webapp/bookmarklet/handlebars/*.tmpl']
+                    '<%= props.out%>/handlebars/bookmarklet.js' : ['<%= props.src%>/webapp/bookmarklet/handlebars/**/*.tmpl'],
+                    '<%= props.test%>/resources/bookmarklet-templates.js' : ['<%= props.src%>/webapp/bookmarklet/handlebars/**/*.tmpl']
                 }
             }
         },

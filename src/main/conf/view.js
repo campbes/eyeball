@@ -37,18 +37,20 @@ var configView = function() {
         };
         var metric;
         reportCfg.fields.overview.items.forEach(function(obj) {
-            metric = {
-                name : reportCfg.fields[obj].name,
-                grade : data.metrics[obj].grades[reportCfg.fields[obj].metric],
-                items : []
-            };
-           reportCfg.fields[obj].items.forEach(function(item) {
-                metric.items.push({
-                    name : item.name,
-                    grade : accessObject(data.metrics[obj].grades,item.metric)
+            if(data.metrics[obj]) {
+                metric = {
+                    name : reportCfg.fields[obj].name,
+                    grade : data.metrics[obj].grades[reportCfg.fields[obj].metric],
+                    items : []
+                };
+               reportCfg.fields[obj].items.forEach(function(item) {
+                    metric.items.push({
+                        name : item.name,
+                        grade : accessObject(data.metrics[obj].grades,item.metric)
+                    });
                 });
-            });
-            view.metrics.push(metric);
+                view.metrics.push(metric);
+            }
         });
         return view;
     }
