@@ -11,6 +11,7 @@
     var progress;
     var gradesEl;
     var chartsEl;
+    var reTest;
 
     if(container) {
         container.parentNode.removeChild(container);
@@ -21,11 +22,6 @@
     container.innerHTML += Eyeball.Templates.bookmarklet({css:Eyeball.css});
     document.body.appendChild(container);
     container = document.getElementById(id);
-
-    function reTest() {
-        content.html(Eyeball.Templates.content());
-        run();
-    }
 
     function run() {
 
@@ -80,6 +76,11 @@
             });
 
     }
+
+    reTest = function() {
+        content.html(Eyeball.Templates.content());
+        run();
+    };
 
     function init() {
         container = $("#"+id);
