@@ -19,7 +19,7 @@
     container = document.createElement("DIV");
     container.id = id;
 
-    container.innerHTML += Eyeball.Templates.bookmarklet({css:Eyeball.css});
+    container.innerHTML += Eyeball.Templates.bookmarklet({css:Eyeball.css,host : host});
     document.body.appendChild(container);
     container = document.getElementById(id);
 
@@ -56,7 +56,7 @@
                     status.html("Complete!");
                     progress.width("100%");
                     progress.parent().removeClass("active");
-                    content.append($('<button/>').attr('class','ui button').click(reTest).text('Re-test'));
+                    content.append($('<button/>').attr('class','ui labelled icon button small').click(reTest).html('<i class="pause icon"></i> Re-test'));
                 });
             });
         }

@@ -2,9 +2,9 @@
 {{#each css}}
     <style>{{this}}</style>
 {{/each}}
-<h1 class=>Eyeball<button id="eyeballClose" class="ui button mini">X</button></h1>
+<h1 class="ui header black inverted"><a href="{{host}}" style="background-image:url('{{host}}/images/eyeballSmall.png')">Eyeball</a><button id="eyeballClose" class="ui button mini red">X</button></h1>
 <h2 id="eyeballStatus" class="ui header">Sending this page to Eyeball...</h2>
-<div class="ui active striped progress">
+<div class="ui active blue striped progress">
     <div id="eyeballProgress" class="bar"></div>
 </div>
 <div id="eyeballContent">
