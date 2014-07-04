@@ -54,7 +54,7 @@ function results(req,res,resultsType) {
             }
         });
 
-    };
+    }
 
     function latest(req,res) {
         results(req,res,"latest");
