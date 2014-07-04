@@ -8,7 +8,7 @@ div.container
 
     div.alert.alert-info
         |Drag&nbsp;
-        a.bookmarklet(href="javascript:(function(){var script=document.createElement('script');script.id='eyeballScript';script.src='#{host}/eyeball-bookmarklet.js?'+new Date().getTime().toString();document.body.appendChild(script);})()") Eyeball
+        a.bookmarklet(href="javascript:(function(){var script=document.createElement('script');script.id='eyeballScript';script.src='#{host}/eyeball-bookmarklet.min.js?'+new Date().getTime().toString();document.body.appendChild(script);})()") Eyeball
         |&nbsp;to your bookmarks bar to run on any web page
 
     div.panel.panel-default(ng-controller="TestCtrl")
