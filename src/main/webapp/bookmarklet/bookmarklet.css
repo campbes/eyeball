@@ -3,7 +3,7 @@
     top : 0;
     left :0;
     bottom: 0;
-    background: rgba(255,255,255,0.0);
+    background: rgba(255,255,255,0.9);
     padding: 55px 10px 20px 10px;
     font-family: Verdana, Helvetica,Arial,sans-serif !important;
     width: 350px;
@@ -83,6 +83,6 @@
     padding: 15px 10px 15px 55px;
     background-repeat: no-repeat;
 }
-#eyeballMetrics .content {
+#eyeballBookmarklet .content {
     color: inherit;
 }
