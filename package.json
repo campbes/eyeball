@@ -1,6 +1,6 @@
 {
     "name": "eyeball",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "private": true,
     "scripts": {
         "start": "node app.js"
@@ -11,7 +11,7 @@
         "request" : "*",
         "mongojs" : "*",
         "node-phantom" : "*",
-        "phantomjs" : "*",
+        "phantomjs" : "1.9.7-10",
         "socket.io" : "0.9.16",
         "winston" : "*",
         "yslow" : "*",
@@ -31,7 +31,6 @@
         "grunt-contrib-jasmine" : "0.6.1",
         "grunt-template-jasmine-istanbul" : "*",
         "jit-grunt" : "0.7.0",
-        "time-grunt" : "0.3.2",
         "grunt-contrib-handlebars" : "0.6.1"
     }
 }
