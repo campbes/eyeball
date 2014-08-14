@@ -8,6 +8,7 @@ var EyeballControllersTestPage = function() {
         page.settings = {
             resourceTimeout : 5
         };
+        page.errors = [];
 
         page.onResourceRequested = function (req) {
             page.resources[req[0].id] = {
@@ -44,6 +45,10 @@ var EyeballControllersTestPage = function() {
                 }, false);
             });
         });
+
+        page.onError = function(err) {
+            page.errors.push(err);
+        };
 
         return page;
     }

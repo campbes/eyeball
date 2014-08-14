@@ -57,9 +57,14 @@ var EyeballControllersTestTest = function(params) {
             }
         }
 
-        testObj.page.injectJs(test.src,function(){
+        if(test.src) {
+            testObj.page.injectJs(test.src,function(){
+                testObj.page.evaluate(Webpage.getTestData,processInPageTest);
+            });
+        } else {
             testObj.page.evaluate(Webpage.getTestData,processInPageTest);
-        });
+        }
+
     }
 
     function runInPageTests(test,callback) {

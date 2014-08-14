@@ -14,6 +14,9 @@ var EyeballControllersTestWebpage = function() {
         test.webpage.onContentLoad = new Date(doc.onContentLoad);
         test.webpage.resources = [].concat(test.page.resources);
         test.webpage.EYEBALLTEST = {};
+        test.webpage.EYEBALL = {
+            errors : test.page.errors
+        };
         return test;
     }
 

@@ -103,12 +103,21 @@ var EyeballControllersTestTesters = function() {
         });
     }
 
+    function codequality(page,cb) {
+    var cq = {
+            errors : page.EYEBALL.errors
+        };
+        cb(cq);
+        return cq;
+    }
+
     return {
         eyeball : addEyeballMetrics,
         dommonster : getDomMonster,
         yslow : runYslow,
         validator : runValidator,
-        aria : aria
+        aria : aria,
+        codequality : codequality
     };
 
 };

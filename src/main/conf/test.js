@@ -6,7 +6,11 @@ var configTest =  function(){
         browser : [{
             name : 'dommonster',
             src: 'lib/dommonster.js'
-        }],
+        },
+        {
+            name : 'codequality'
+        }
+        ],
         har : [{
             name : 'yslow'
         }],
