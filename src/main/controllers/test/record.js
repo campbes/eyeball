@@ -49,7 +49,6 @@ var EyeballControllersTestRecord = function(build,tag,urlsLength) {
     }
 
     function updateRecord(record,property,data) {
-        if(property === 'codequality') {console.log(data);}
         var metric = {
             url : record.url,
             timestamp: new Date(),

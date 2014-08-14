@@ -8,7 +8,14 @@ var EyeballControllersTestPage = function() {
         page.settings = {
             resourceTimeout : 5
         };
-        page.errors = [];
+        page.errors = {
+            js : [],
+            resources : []
+        };
+        page.issues = {
+            alert : [],
+            console : []
+        };
 
         page.onResourceRequested = function (req) {
             page.resources[req[0].id] = {
@@ -47,7 +54,21 @@ var EyeballControllersTestPage = function() {
         });
 
         page.onError = function(err) {
-            page.errors.push(err);
+            page.errors.js.push(err);
+        };
+
+        page.onResourceError = function(err) {
+            page.errors.resources.push(err);
+        };
+
+        page.onResourceTimeout = page.onResourceError;
+
+        page.onAlert = function(msg) {
+            page.issues.alert.push(msg);
+        };
+
+        page.onConsoleMessage = function(msg) {
+            page.issues.console.push(msg);
         };
 
         return page;

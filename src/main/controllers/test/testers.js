@@ -105,7 +105,8 @@ var EyeballControllersTestTesters = function() {
 
     function codequality(page,cb) {
     var cq = {
-            errors : page.EYEBALL.errors
+            errors : page.EYEBALL.errors || [],
+            issues : page.EYEBALL.issues || []
         };
         cb(cq);
         return cq;
