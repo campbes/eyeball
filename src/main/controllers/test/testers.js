@@ -104,10 +104,20 @@ var EyeballControllersTestTesters = function() {
     }
 
     function codequality(page,cb) {
-    var cq = {
-            errors : page.EYEBALL.errors || [],
+        var err;
+        var cq = {
+            errors : page.EYEBALL.errors || {},
             issues : page.EYEBALL.issues || []
         };
+        cq.info = {
+            errors : 0,
+            issues : cq.issues.length
+        };
+        for (err in cq.errors) {
+            if(cq.errors.hasOwnProperty(err)) {
+                cq.info.errors += cq.errors[err].length;
+            }
+        }
         cb(cq);
         return cq;
     }
