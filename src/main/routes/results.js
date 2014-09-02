@@ -46,8 +46,9 @@ function results(req,res,resultsType) {
             res.setHeader("Access-Control-Allow-Methods","GET");
             res.setHeader("Content-type","application/json");
             res.setHeader("Cache-control","max-age=3600,must-revalidate");
-            res.setHeader("Last-modified",results[0].timestamp);
-            if(!req.get("if-modified-since") || new Date(results[0].timestamp).setMilliseconds(0)  > new Date(req.get("if-modified-since"))) {
+            var modified = (results.length > 0 ? results[0].timestamp : new Date().getTime());
+            res.setHeader("Last-modified",modified);
+            if(!req.get("if-modified-since") || new Date(modified).setMilliseconds(0)  > new Date(req.get("if-modified-since"))) {
                 res.send(JSON.stringify(results));
             } else {
                 res.send(304);

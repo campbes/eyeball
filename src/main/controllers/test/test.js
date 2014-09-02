@@ -172,7 +172,7 @@ var EyeballControllersTestTest = function(params) {
             Phantom.request();
             return;
         }
-        setTimeout(closeTests,30000);
+        setTimeout(closeTests,1200000);
     };
 
     var startTests;
