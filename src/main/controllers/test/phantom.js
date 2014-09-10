@@ -48,7 +48,13 @@ var EyeballControllersTestPhantom = function() {
             respond(ph,exit);
             create(ph);
         }, {
-            phantomPath : phantomjs.path
+            phantomPath : phantomjs.path,
+            parameters : {
+                'proxy-type' : 'none',
+                'disk-cache' : true,
+                'max-disk-cache-size' : 10000,
+                'web-security' : false
+            }
         });
     }
 

@@ -11,7 +11,7 @@
         "request" : "*",
         "mongojs" : "*",
         "node-phantom" : "*",
-        "phantomjs" : "1.9.7-10",
+        "phantomjs" : "1.9.7-15",
         "socket.io" : "0.9.16",
         "winston" : "*",
         "yslow" : "*",
