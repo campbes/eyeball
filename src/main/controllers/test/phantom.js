@@ -17,20 +17,25 @@ var EyeballControllersTestPhantom = function() {
         }
     }
 
-    function phantomError(err,ph) {
+    function phantomError(err,trace,ph) {
         eyeball.logger.info("Phantom error: "+err);
+        if (trace) {
+            trace.forEach(function(item) {
+                eyeball.logger.debug("Phantom error: "+item.file+" : "+item.line);
+            });
+        }
         ph.exit(1);
     }
 
     function respond(ph,exit) {
-        function error(err) {
-            phantomError(err,ph);
+        function error(err,trace) {
+            phantomError(err,trace,ph);
         }
         ph.onError = error;
         ph.on("error",error);
-        ph.on("exit",function(msg) {
+        ph.on("exit",function(msg,trace) {
             phantomExit(msg,ph);
-            exit();
+            exit(ph._phantom.pid);
         });
         activePhantoms.push(ph);
         eyeball.logger.info("Active Phantoms: "+activePhantoms.length);
@@ -53,7 +58,8 @@ var EyeballControllersTestPhantom = function() {
                 'proxy-type' : 'none',
                 'disk-cache' : true,
                 'max-disk-cache-size' : 10000,
-                'web-security' : false
+                'web-security' : false,
+                'ignore-ssl-errors' : true
             }
         });
     }

@@ -162,17 +162,30 @@ var EyeballControllersTestTest = function(params) {
         }
     }
 
+    function testsAreActive() {
+        var test;
+        for(test in activeTests) {
+            if(activeTests.hasOwnProperty(test)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     endTests = function() {
         if(!retriedErrors && erroredUrls.length > 0) {
             // give the failures one more go
             eyeball.logger.info("Retrying errored urls...");
             urls = [].concat(erroredUrls);
+            setTimeout(closeTests,erroredUrls.length*60000);
             erroredUrls = [];
             retriedErrors = true;
-            Phantom.request();
+            Phantom.request(createPhantom,phantomExit);
             return;
         }
-        setTimeout(closeTests,1200000);
+        if(!testsAreActive()) {
+            closeTests();
+        }
     };
 
     var startTests;
@@ -182,7 +195,7 @@ var EyeballControllersTestTest = function(params) {
         startTests();
     }
 
-    function phantomExit(pid) {
+    function phantomExit(pid,arg) {
         if(activeTests[pid]) {
             erroredUrls.push(activeTests[pid]);
             delete activeTests[pid];
