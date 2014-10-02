@@ -172,6 +172,21 @@ var EyeballControllersTestTest = function(params) {
         return false;
     }
 
+    var startTests;
+
+    function createPhantom(ph) {
+        openPage(ph);
+        startTests();
+    }
+
+    function phantomExit(pid,arg) {
+        if(activeTests[pid]) {
+            erroredUrls.push(activeTests[pid]);
+            delete activeTests[pid];
+        }
+        startTests();
+    }
+
     endTests = function() {
         if(!retriedErrors && erroredUrls.length > 0) {
             // give the failures one more go
@@ -187,21 +202,6 @@ var EyeballControllersTestTest = function(params) {
             closeTests();
         }
     };
-
-    var startTests;
-
-    function createPhantom(ph) {
-        openPage(ph);
-        startTests();
-    }
-
-    function phantomExit(pid,arg) {
-        if(activeTests[pid]) {
-            erroredUrls.push(activeTests[pid]);
-            delete activeTests[pid];
-        }
-        startTests();
-    }
 
     startTests = function() {
         if(urls.length > 0) {
