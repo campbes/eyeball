@@ -1,18 +1,17 @@
 include ../test
 
-div.container
-    ol.breadcrumb
-        li
+div
+    div.ui.small.steps
+        div.step
             a(href="#") Eyeball
-        li.active Test
+        div.active.step Test
 
-    div.alert.alert-info
+    div.ui.message.yellow
         |Drag&nbsp;
-        a.bookmarklet(href="javascript:(function(){var script=document.createElement('script');script.id='eyeballScript';script.src='#{host}/eyeball-bookmarklet.min.js?'+new Date().getTime().toString();document.body.appendChild(script);})()") Eyeball
+        a.ui.button.primary.small(href="javascript:(function(){var script=document.createElement('script');script.id='eyeballScript';script.src='#{host}/eyeball-bookmarklet.min.js?'+new Date().getTime().toString();document.body.appendChild(script);})()") Eyeball
         |&nbsp;to your bookmarks bar to run on any web page
 
-    div.panel.panel-default(ng-controller="TestCtrl")
-        div.panel-heading Test
-        div.panel-body
-            mixin testForm
+    div.ui.header.top.attached.black.inverted Test
+    div.ui.segment.attached(ng-controller="TestCtrl")
+        mixin testForm
 

@@ -1,13 +1,13 @@
 include ../../test
 include ../../report
 
-div.container.table-responsive(ng-controller='ReportOverviewCtrl')
+div(ng-controller='ReportOverviewCtrl')
 
     mixin test
     mixin tabs('{{report}}')
 
     mixin filterInfo
-    table#results.table.table-striped.table-condensed(data-expanded-locked="{{resultsTable.expanded}}")
+    table#results.ui.table.segment(data-expanded-locked="{{resultsTable.expanded}}")
         mixin reportHeaders
         tbody(ng-hide="reportView === 'chart'")
             mixin reportTotals
@@ -17,7 +17,7 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                 mixin reportFields(true)
                 td(ng-repeat='f in fields',class='text-center grade{{getVal(r.metrics[f.tool].grades,f.metric)}}',data-type='grades',data-value='{{getVal(r.metrics[f.tool].grades,f.metric)}}',ng-mouseenter='setPopoverContent({metrics:r.metrics[f.tool],tool:f.tool})',ng-mouseleave='setPopoverContent()')
                     a(href="#/detail/:{{r._id}}?anchor={{f.tool}}")
-                        span.badge {{getVal(r.metrics[f.tool].grades,f.metric)}}
+                        span.ui.label {{getVal(r.metrics[f.tool].grades,f.metric)}}
             tr(ng-if='r.busy')
                 td(colspan="8")
                     div.loader
@@ -27,7 +27,11 @@ div.container.table-responsive(ng-controller='ReportOverviewCtrl')
                 td(ng-repeat='f in fields',class='text-center grade{{getVal(r.metrics[f.tool].grades,f.metric)}}',data-type='grades',data-value='{{getVal(r.metrics[f.tool].grades,f.metric)}}',ng-mouseenter='setPopoverContent({metrics:r.metrics[f.tool],tool:f.tool})',ng-mouseleave='setPopoverContent()')
                     a(href="#/detail/:{{r._id}}?anchor={{f.tool}}")
                         span.badge {{getVal(r.metrics[f.tool].grades,f.metric)}}
-        mixin reportFooters
+        tbody(ng-hide="reportView === 'chart'")
+            mixin reportTotals
+        tfoot
+            tr
+                th(colspan="8")
     mixin charts
     mixin reportPager
 
