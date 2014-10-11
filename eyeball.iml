@@ -8,6 +8,7 @@
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="eyeball node_modules" level="project" />
   </component>
 </module>
 
