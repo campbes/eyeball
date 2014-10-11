@@ -1,16 +1,45 @@
 @charset "UTF-8";
 body {
-    padding-top: 70px;
-    font-size: 9pt;
+    padding: 70px 10px 10px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+    background: #DDD url('../images/bg.png');
 }
-.label {
-    font-size: 85%;
+nav.ui.menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-radius: 0;
+    z-index: 5;
 }
-.container {
-    width: 96%;
-    margin: 0 2%;
-    max-width: 96%;
+nav.ui.menu a.item {
+    padding: 1.2rem;
 }
+.ui.inverted a {
+    color: #FFF;
+    text-decoration: none;
+}
+.ui.inverted a:hover {
+    text-decoration: underline;
+}
+h1.ui.header {
+    float: left;
+    font-size: 1.3rem;
+    margin: 0;
+}
+.logo {
+    display: inline-block;
+    background: url("../images/eyeballSmall.png") no-repeat 0 4px;
+    float: left;
+    margin: 0 5px;
+    padding: 0.9rem 0.9rem 0.8rem 55px;
+    text-decoration: none !important;
+}
+
+
+
+
 #results th:first-child {
     min-width: 200px;
     width: 400px;
@@ -29,6 +58,8 @@ body {
 }
 #results td[data-type='grades'] {
     padding: 0;
+    text-align: center;
+    vertical-align: middle;
 }
 #results tr.resultGroup td:first-child {
     padding-left: 5px;
@@ -49,11 +80,11 @@ td[data-type='grades'] a {
     width: 100%;
     height: 100%;
 }
-td:hover[data-type='grades'] {
-    background: #FFF !important;
-}
-td[data-type='grades'] span {
-    margin: 5px;
+td[data-type='grades'] span.label {
+    margin: 3px;
+    background: rgba(255,255,255,0.3);
+    font-weight: bold;
+    color: #FFF;
 }
 td[data-expand='true'] {
     width: 12px;
@@ -278,14 +309,7 @@ button[data-anchor] {
     border: 0 solid;
     margin-bottom: 10px;
 }
-a.bookmarklet {
-    color: #FFF;
-    background: #428bca;
-    padding: 6px 12px;
-    border: 1px solid #357ebd;
-    border-radius: 4px;
-    margin: 0 5px;
-}
+
 /*harpy*/
 table.harpy {
     width: 100%;

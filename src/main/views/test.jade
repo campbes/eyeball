@@ -1,20 +1,19 @@
 mixin testForm
-    form(role="form",name="testForm").form-horizontal
-        div.form-group
-            label.col-sm-3.control-label Input type
-            div.col-sm-9
-                div.radio-inline
-                    label
-                        input(type="radio",name="inputType",value="datafile",ng-model="testCriteria.inputType",ng-checked="testCriteria.inputType === 'datafile'")
-                        | Datafile
-                div.radio-inline
-                    label
-                        input(type="radio",name="inputType",value="url",ng-model="testCriteria.inputType")
-                        | Single URL
-        div.form-group(ng-if="testCriteria.inputType === 'datafile'",ng-class="(testForm.datafile.$dirty ? (testForm.datafile.$invalid ? 'has-error' : 'has-success') : '')")
-            label.col-sm-3.control-label(for='datafile') Datafile
-            div.col-sm-9
-                input#datafile.form-control(name="datafile",type='text',placeholder='Path (or URL) to list of URLs',ng-model="testCriteria.datafile",ng-required="testCriteria.inputType === 'datafile'")
+    form(role="form",name="testForm").ui.form
+        div.three.fields
+            div.field
+                label Input type
+            div.field
+                label
+                    input.ui.radio.checkbox(type="radio",name="inputType",value="datafile",ng-model="testCriteria.inputType",ng-checked="testCriteria.inputType === 'datafile'")
+                    | Datafile
+            div.field
+                label
+                    input.ui.radio.checkbox(type="radio",name="inputType",value="url",ng-model="testCriteria.inputType")
+                    | Single URL
+        div.inline.field(ng-if="testCriteria.inputType === 'datafile'",ng-class="(testForm.datafile.$dirty ? (testForm.datafile.$invalid ? 'has-error' : 'has-success') : '')")
+            label(for='datafile') Datafile
+            input#datafile.form-control(name="datafile",type='text',placeholder='Path (or URL) to list of URLs',ng-model="testCriteria.datafile",ng-required="testCriteria.inputType === 'datafile'")
         div.form-group(ng-if="testCriteria.inputType === 'url'")
             label.col-sm-3.control-label(for='url') URL
             div.col-sm-9
@@ -23,7 +22,7 @@ mixin testForm
             label.col-sm-3.control-label(for='tag') Tag
             div.col-sm-9
                 input#tag.form-control(type='text',placeholder="Tag to group multiple runs",ng-model="testCriteria.tag")
-        div.form-group
+        div.three.fields
             label.col-sm-3.control-label(for="regex") Regex
             div.col-sm-4
                 input#regex.form-control(type='text',placeholder="Regex to modify all input URLs",ng-model="testCriteria.regex")
@@ -35,7 +34,7 @@ mixin testForm
                 input#reps.form-control(type='text',ng-model="testCriteria.reps",placeholder="0",maxlength="2")
         div.form-group
             div.col-sm-offset-3.col-sm-9
-                button.btn.btn-primary(type="submit",data-dismiss="modal",ng-click="test()",ng-disabled="testForm.$invalid") Go!
+                button.ui.button.primary.green(type="submit",data-dismiss="modal",ng-click="test()",ng-disabled="testForm.$invalid") Go!
 
 
 mixin test
