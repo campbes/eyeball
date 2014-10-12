@@ -1,5 +1,5 @@
 mixin filter
-    div#modalFilter.modal.fade(tabindex="-1",role="dialog",aria-labelledby="modalFilterLabel",aria-hidden="true")
+    div#modalFilter.ui.modal.fade(tabindex="-1",role="dialog",aria-labelledby="modalFilterLabel",aria-hidden="true")
         div.modal-dialog
             div.modal-content
                 div.modal-header
@@ -47,18 +47,10 @@ mixin charts
                 div(id="{{ch.tool}}{{ch.metric}}Chart").pivotChart
 
 mixin reportView
-    div.btn-toolbar.pull-right
-        div.btn-group(data-toggle="buttons")
-            label(class="btn {{(reportView === 'table' ? 'btn-primary active' : 'btn-default')}}",ng-click="setReportView('table')")
-                input(type="radio")
-                |Report view
-            label(class="btn {{(reportView === 'chart' ? 'btn-primary active' : 'btn-default')}}",ng-click="setReportView('chart')")
-                input(type="radio")
-                |Chart view
-        div.btn-group(data-toggle="buttons")
-            button.btn.btn-default(type="button" data-toggle="modal" data-target="#modalFilter")
-                span.glyphicon.glyphicon-filter
-                |&nbsp;Filter
+    div.right.menu
+        a(ng-class="(reportView === 'table' ? 'item active' : 'item')",ng-click="setReportView('table')") Report view
+        a(ng-class="(reportView === 'chart' ? 'item active' : 'item')",ng-click="setReportView('chart')") Chart view
+        a.item(type="button" data-toggle="modal" data-target="#modalFilter") Filter
 
 mixin reportHeaders
     thead
@@ -76,19 +68,22 @@ mixin reportFooters
         mixin reportTotals
 
 mixin reportTotals
-    tr.warning(data-sort='false')
+    tr.totals(data-sort='false')
         td
-            form(role="form")
-                div.input-group.input-group-sm
-                    span.input-group-addon(ng-if="query.url")
-                        a(href='#{{path}}start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}',title='Remove filter ({{r.url}})')
-                            span.glyphicon.glyphicon-remove
-                    input.form-control(type="text",ng-model="filterParams.url")
-                    span.input-group-addon(title="Exact match")
-                        input(type="checkbox",ng-model="filterParams.urlExact",ng-checked="query.urlExact",ng-false-value="",ng-true-value="true")
-                    span.input-group-btn
-                        button.btn.btn-default.btn-sm(ng-click="filter()",type="submit",title="Filter")
-                            span.glyphicon.glyphicon-filter
+            form.ui.form.inverted(role="form")
+                div.inline.fields
+                    div.field
+                        span(ng-if="query.url")
+                            a(href='#{{path}}start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}',title='Remove filter ({{r.url}})')
+                                i.icon.remove
+                        input(type="text",ng-model="filterParams.url")
+                    div.field
+                        div.ui.toggle.checkbox
+                            input#urlExact(type="checkbox",ng-model="filterParams.urlExact",ng-checked="query.urlExact",ng-false-value="",ng-true-value="true")
+                            label(for="urlExact") Exact
+                    div.field
+                        button.ui.icon.mini.button(ng-click="filter()",type="submit",title="Filter")
+                            i.filter.icon
         td(data-expand="true")
         td(data-expandable='true')
             a(href='#{{path}}?url={{query.url}}&build={{query.build}}&tag={{query.tag}}',ng-if='query.start && query.end && query.start.substr(0,10) !== query.end.substr(0,10)')
@@ -124,13 +119,13 @@ mixin reportLoader
 
 mixin reportFields(isGroup)
     td(ng-init='isGroup = #{isGroup}')
-        button.btn.btn-xs.btn-default(ng-if='isGroup', ng-click='expandResultsGroup(r)')
-            span.glyphicon.glyphicon-chevron-down(ng-if='expandedUrls.indexOf(r.url) === -1')
-            span.glyphicon.glyphicon-chevron-up(ng-if='expandedUrls.indexOf(r.url) !== -1')
+        button.ui.button.mini.icon.basic(ng-if='isGroup', ng-click='expandResultsGroup(r)')
+            i.icon.arrow.down(ng-if='expandedUrls.indexOf(r.url) === -1')
+            i.icon.arrow.up(ng-if='expandedUrls.indexOf(r.url) !== -1')
         a(ng-if='isGroup',href="#/detail/:{{r._id}}",title="View full details for {{r.url}}") &nbsp;{{r.url.substr(0,120)}}
             span(ng-if='r.url.length > 120') ...
-        button(ng-class='"btn btn-xs "+(starredRecords.indexOf(r._id) === -1 ? "btn-default" : "btn-primary")',ng-if='!isGroup',ng-click='starRecord(r._id)')
-            span.glyphicon.glyphicon-star
+        button(ng-class='"ui button mini icon basic"+(starredRecords.indexOf(r._id) === -1 ? "" : " selected")',ng-if='!isGroup',ng-click='starRecord(r._id)')
+            i.icon.star
         a(ng-if='!isGroup',href="#/detail/:{{r._id}}",title="View full details for {{r.url}}") {{r.timestamp | date:" EEE d MMM yyyy 'at' H:mm:ss"}}
             span(ng-if='r.url.length > 120') ...
     td(data-expand="true",title="Click to lock on/off")
@@ -150,18 +145,19 @@ mixin reportFields(isGroup)
     td(data-expand="true",title="Click to lock on/off")
 
 mixin tabs(report)
-    ol.breadcrumb
-        li
+    div.ui.small.steps
+        div.step
             a(href="#") Eyeball
-        li.active Analyze
-    ul.nav.nav-tabs
-        li(ng-repeat="f in fieldConfig.display.items", ng-class="report === f.tool ? 'active' : ''")
-            a(href='#/report/{{f.tool}}?url={{query.url}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}') {{f.name}}
+        div.active.step Analyze
+
+    div.ui.pointing.menu.inverted
         mixin reportView
+        a(ng-repeat="f in fieldConfig.display.items", ng-class="report === f.tool ? 'item active' : 'item'", href='#/report/{{f.tool}}?url={{query.url}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}') {{f.name}}
+
 
 mixin results
     mixin filterInfo
-    table#results.table.table-striped.table-condensed(data-expanded-locked="{{resultsTable.expanded}}")
+    table#results.ui.table.segment(data-expanded-locked="{{resultsTable.expanded}}")
         mixin reportHeaders
         tbody(ng-hide="reportView === 'chart'")
             mixin reportTotals
@@ -190,20 +186,23 @@ mixin popover
                 span(class='badge grade{{popoverContent.grade}}') {{popoverContent.grade}}
 
 mixin reportPager
-    ul(ng-if="reportView !== 'chart'").pager
-        li(class="previous{{(resultsTable.page === 1 ? ' disabled' : '')}}")
-            a(ng-click="resultsTable.prev()")
-                span.glyphicon.glyphicon-chevron-left
-                |&nbsp;Previous
-        li Results per page&nbsp;
-            div.btn-group
-                button(class="btn btn-default{{(resultsTable.count === 10 ? ' active' : '')}}",ng-click="resultsTable.setCount(10)") 10
-                button(class="btn btn-default{{(resultsTable.count === 25 ? ' active' : '')}}",ng-click="resultsTable.setCount(25)") 25
-                button(class="btn btn-default{{(resultsTable.count === 50 ? ' active' : '')}}",ng-click="resultsTable.setCount(50)") 50
-                button(class="btn btn-default{{(resultsTable.count === 100 ? ' active' : '')}}",ng-click="resultsTable.setCount(100)") 100
-        li(class="next{{(resultsTable.page === resultsTable.pages.length ? ' disabled' : '')}}")
-            a(ng-click="resultsTable.next()") Next&nbsp;
-                span.glyphicon.glyphicon-chevron-right
+    div.ui.segment.inverted(ng-if="reportView !== 'chart'")
+        div.ui.grid
+            div.three.wide.column
+                button(class="ui button previous{{(resultsTable.page === 1 ? ' disabled' : '')}}", ng-click="resultsTable.prev()")
+                    i.icon.arrow.left
+                    |Previous
+            div.ten.wide.column.text-center
+                span Results per page&nbsp;
+                div.ui.buttons
+                    button(class="ui button{{(resultsTable.count === 10 ? ' active' : '')}}",ng-click="resultsTable.setCount(10)") 10
+                    button(class="ui button{{(resultsTable.count === 25 ? ' active' : '')}}",ng-click="resultsTable.setCount(25)") 25
+                    button(class="ui button{{(resultsTable.count === 50 ? ' active' : '')}}",ng-click="resultsTable.setCount(50)") 50
+                    button(class="ui button{{(resultsTable.count === 100 ? ' active' : '')}}",ng-click="resultsTable.setCount(100)") 100
+            div.three.wide.column.text-right
+                button(class="ui button previous{{(resultsTable.page === resultsTable.pages.length ? ' disabled' : '')}}", ng-click="resultsTable.next()")
+                    |Next
+                    i.icon.arrow.right
 
 mixin filterInfo
     div.alert.alert-info(ng-show="query.url || query.start || query.end || query.build || query.tag")

@@ -20,9 +20,6 @@ nav.ui.menu a.item {
     color: #FFF;
     text-decoration: none;
 }
-.ui.inverted a:hover {
-    text-decoration: underline;
-}
 h1.ui.header {
     float: left;
     font-size: 1.3rem;
@@ -36,10 +33,17 @@ h1.ui.header {
     padding: 0.9rem 0.9rem 0.8rem 55px;
     text-decoration: none !important;
 }
+.mini.icon.button {
+    padding: .5em;
+}
 
-
-
-
+#results tr.totals {
+    background: rgba(255,255,255,0.2);
+}
+#results tr.totals input[type="text"] {
+    width: 230px;
+    padding: 0.5em;
+}
 #results th:first-child {
     min-width: 200px;
     width: 400px;
@@ -54,7 +58,6 @@ h1.ui.header {
     white-space: normal;
     word-wrap: break-word;
     word-break: break-all;
-    padding-left :32px;
 }
 #results td[data-type='grades'] {
     padding: 0;
@@ -63,6 +66,13 @@ h1.ui.header {
 }
 #results tr.resultGroup td:first-child {
     padding-left: 5px;
+    padding-right: 40px;
+    line-height: 90%;
+}
+#results tr.resultGroup td:first-child a {
+    position: relative;
+    left: 35px;
+    margin-left: -32px;
 }
 #results tr.starred {
     font-weight: bold;
@@ -89,43 +99,50 @@ td[data-type='grades'] span.label {
 td[data-expand='true'] {
     width: 12px;
     background-image:
-        linear-gradient(45deg, #ddd 5px, transparent 0),
-        linear-gradient(135deg, #ddd 5px, #fff 0);
-    background-color: #fff;
+        linear-gradient(45deg, #222 5px, transparent 0),
+        linear-gradient(135deg, #222 5px, #494949 0);
+    background-color: #494949;
     background-position: left top;
     background-repeat: repeat-y;
-    background-size: 10px 10px;
+    background-size: 12px 12px;
 }
 tr:nth-child(odd) td[data-expand='true'] {
      background-image:
-         linear-gradient(45deg, #ddd 5px, transparent 0),
-         linear-gradient(135deg, #ddd 5px, #f9f9f9 0);
-     background-color: #ddd;
-}
-tr.warning td[data-expand='true'] {
-    background-image:
-        linear-gradient(45deg, #ddd 5px, transparent 0),
-        linear-gradient(135deg, #ddd 5px, #fcf8e3 0);
-    background-color: #ddd;
+         linear-gradient(45deg, #222 5px, transparent 0),
+         linear-gradient(135deg, #222 5px, #494949 0);
+     background-color: #494949;
 }
 td[data-expand='true']:nth-child(2) {
     background-image:
-        linear-gradient(-45deg, #ddd 5px, transparent 0),
-        linear-gradient(-135deg, #ddd 5px, #fff 0);
-    background-position: right -5px;
+        linear-gradient(-45deg, #222 5px, transparent 0),
+        linear-gradient(-135deg, #222 5px, #494949 0);
+    background-position: right -6px;
 }
 tr:nth-child(odd) td[data-expand='true']:nth-child(2) {
     background-image:
-        linear-gradient(-45deg, #ddd 5px, transparent 0),
-        linear-gradient(-135deg, #ddd 5px, #f9f9f9 0);
-    background-color: #f9f9f9;
+        linear-gradient(-45deg, #222 5px, transparent 0),
+        linear-gradient(-135deg, #222 5px, #494949 0);
+    background-color: #494949;
 }
-tr.warning td[data-expand='true']:nth-child(2) {
+tr.totals td[data-expandable='true']:nth-of-type(3) {
     background-image:
-        linear-gradient(-45deg, #ddd 5px, transparent 0),
-        linear-gradient(-135deg, #ddd 5px, #fcf8e3 0);
-    background-color: #fcf8e3;
+        linear-gradient(45deg, #222 5px, transparent 0),
+        linear-gradient(135deg, #222 5px, #494949 0);
+    background-color: #494949;
+    background-position: left top;
+    background-repeat: repeat-y;
+    background-size: 12px 12px;
 }
+tr.totals td[data-expandable='true']:nth-of-type(5) {
+    background-image:
+    linear-gradient(-45deg, #222 5px, transparent 0),
+    linear-gradient(-135deg, #222 5px, #494949 0);
+    background-color: #494949;
+    background-position: right -6px;
+    background-repeat: repeat-y;
+    background-size: 12px 12px;
+}
+
 
 
 #results tr.starred td[data-expand='true'] {
@@ -165,15 +182,17 @@ tr.warning td[data-expand='true']:nth-child(2) {
     display: table-cell;
     opacity: 0.5;
 }
-[data-expanded-locked='true'] [data-expandable='true'] {
+[data-expanded-locked='true'] [data-expandable='true'],[data-expanded='true'] tr.totals [data-expandable='true'] {
     display: table-cell;
     opacity: 1;
 }
-[data-expanded='true'] th[data-expand='true'] {
-    background: url("../images/padlock-open.png") no-repeat center center;
+[data-expanded='true'] th[data-expand='true']:before {
+    font-family: Icons;
+    content: "\f13e";
 }
-[data-expanded-locked='true'] th[data-expand='true'] {
-    background: url("../images/padlock-closed.png") no-repeat center center;
+[data-expanded-locked='true'] th[data-expand='true']:before {
+    font-family: Icons;
+    content: "\f023";
 }
 #detail td {
     white-space: normal;
@@ -340,13 +359,66 @@ div.harpyBarChart {
     width: 33%;
 }
 table.table th.header {
-    background:  url("../images/bg.gif") no-repeat center right;
     cursor: pointer;
-    padding-right: 18px;
 }
-table.table th.headerSortUp {
-    background-image: url("../images/asc.gif");
+table.table th.header:after {
+    content: "\f0dc";
+    font-family: Icons;
+    margin-left: 10px;
 }
-table.table th.headerSortDown {
-    background-image: url("../images/desc.gif");
+table.table th.headerSortUp:after {
+    content: "\f0de";
+}
+table.table th.headerSortDown:after {
+    content: "\f0dd";
+}
+
+td form.ui.form .field {
+    margin-bottom: 0;
+}
+
+.ui.inverted.default {
+    background: #000;
+}
+.ui.inverted.segment.default {
+    background : rgba(0,0,0,0.4);
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+.ui.segment.inverted.highlight {
+    background: #3071a9;
+}
+.fixed-width-small {
+    width: 100px !important;
+}
+.step a {
+    color: #000;
+    text-decoration: none;
+}
+#reportMenu {
+    float: left;
+}
+#reportView {
+    float: right;
+}
+
+.text-center {
+    text-align: center !important;
+}
+.text-right {
+    text-align: right !important;
+}
+.label.positive {
+    color: #FFF;
+    background: #58CB73;
+}
+.label.negative {
+    color: #FFF;
+    background: #E75859;
+}
+.ui.form .inline.fields .field .toggle.checkbox {
+    margin: 7px 5px 0 0;
+}
+.selected .icon {
+    color: #FF9;
 }

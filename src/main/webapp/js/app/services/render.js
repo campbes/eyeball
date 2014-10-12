@@ -89,12 +89,12 @@ eyeballApp.factory('render',function() {
             if(pc > 85) {
                 total.grade = "A";
                 total.status = "PASS";
-                total.className = "success";
+                total.className = "positive";
                 total.message = pc + "% >= B";
             } else if (pc <= 85) {
                 total.grade = "F";
                 total.status = "FAIL";
-                total.className = "danger";
+                total.className = "negative";
                 total.message = (100-pc) + "% < B";
             }
 
