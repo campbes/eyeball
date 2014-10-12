@@ -4,9 +4,7 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','persist'
 
     function TestCtrl($scope,$http,$location,persist,socket,$timeout,logger) {
         logger.log("TestCtrl");
-        $scope.testCriteria = {
-            inputType : "datafile"
-        };
+        $scope.testCriteria = {};
         var testInfo = persist.get('testInfo') || {};
         $scope.testInfo = testInfo;
 
@@ -75,8 +73,7 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','persist'
         $scope.$on("quickTest",function(sc,url) {
             logger.log("heard quicktest: "+sc);
             $scope.testCriteria = {
-                url : url,
-                inputType : "url"
+                url : url
             };
             $scope.test();
         });

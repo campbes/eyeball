@@ -11,7 +11,7 @@ html(ng-app='eyeballApp',lang='en')
         link(rel='stylesheet', href='/lib/harpy-0.0.1.min.css')
 
     body(ng-controller="GlobalCtrl")
-        nav.ui.menu.black.inverted
+        nav.ui.menu.inverted.default
             h1.ui.header
                 a.logo(href='#') Eyeball
             a(class="item{{(page === 'test' ? ' active' : '')}}",href="#test") Test

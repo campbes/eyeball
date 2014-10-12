@@ -7,7 +7,7 @@ div(ng-controller='ReportOverviewCtrl')
     mixin tabs('{{report}}')
 
     mixin filterInfo
-    table#results.ui.table.segment(data-expanded-locked="{{resultsTable.expanded}}")
+    table#results.ui.table.segment.inverted.default(data-expanded-locked="{{resultsTable.expanded}}")
         mixin reportHeaders
         tbody(ng-hide="reportView === 'chart'")
             mixin reportTotals

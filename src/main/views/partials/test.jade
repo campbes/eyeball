@@ -1,17 +1,16 @@
 include ../test
 
-div
-    div.ui.small.steps
-        div.step
-            a(href="#") Eyeball
-        div.active.step Test
+div.ui.small.steps
+    div.step
+        a(href="#") Eyeball
+    div.active.step Test
 
-    div.ui.message.yellow
-        |Drag&nbsp;
-        a.ui.button.primary.small(href="javascript:(function(){var script=document.createElement('script');script.id='eyeballScript';script.src='#{host}/eyeball-bookmarklet.min.js?'+new Date().getTime().toString();document.body.appendChild(script);})()") Eyeball
-        |&nbsp;to your bookmarks bar to run on any web page
+div.ui.message.yellow
+    |Drag&nbsp;
+    a.ui.button.primary.small(href="javascript:(function(){var script=document.createElement('script');script.id='eyeballScript';script.src='#{host}/eyeball-bookmarklet.min.js?'+new Date().getTime().toString();document.body.appendChild(script);})()") Eyeball
+    |&nbsp;to your bookmarks bar to run on any web page
 
-    div.ui.header.top.attached.black.inverted Test
-    div.ui.segment.attached(ng-controller="TestCtrl")
-        mixin testForm
+div.ui.header.top.attached.inverted.default Test
+div.ui.segment.bottom.attached.inverted.default(ng-controller="TestCtrl")
+    mixin testForm
 

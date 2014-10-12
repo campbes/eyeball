@@ -1,40 +1,29 @@
 mixin testForm
-    form(role="form",name="testForm").ui.form
-        div.three.fields
+    form(role="form",name="testForm").ui.form.inverted
+        div.ui.segment.highlight.inverted
+            div.field(ng-if="testCriteria.isDatafile",ng-class="(testForm.datafile.$dirty ? (testForm.datafile.$invalid ? 'has-error' : 'has-success') : '')")
+                input#datafile.form-control(name="datafile",type='text',placeholder='Path (or URL) to list of URLs',ng-model="testCriteria.datafile",ng-required="testCriteria.isDatafile")
+            div.field(ng-if="!testCriteria.isDatafile")
+                input#url.form-control(type='text',placeholder='URL to test',ng-model="testCriteria.url",ng-required="!testCriteria.isDatafile")
             div.field
-                label Input type
-            div.field
-                label
-                    input.ui.radio.checkbox(type="radio",name="inputType",value="datafile",ng-model="testCriteria.inputType",ng-checked="testCriteria.inputType === 'datafile'")
-                    | Datafile
-            div.field
-                label
-                    input.ui.radio.checkbox(type="radio",name="inputType",value="url",ng-model="testCriteria.inputType")
-                    | Single URL
-        div.inline.field(ng-if="testCriteria.inputType === 'datafile'",ng-class="(testForm.datafile.$dirty ? (testForm.datafile.$invalid ? 'has-error' : 'has-success') : '')")
-            label(for='datafile') Datafile
-            input#datafile.form-control(name="datafile",type='text',placeholder='Path (or URL) to list of URLs',ng-model="testCriteria.datafile",ng-required="testCriteria.inputType === 'datafile'")
-        div.form-group(ng-if="testCriteria.inputType === 'url'")
-            label.col-sm-3.control-label(for='url') URL
-            div.col-sm-9
-                input#url.form-control(type='text',placeholder='URL to test',ng-model="testCriteria.url",ng-required="testCriteria.inputType === 'url'")
-        div.form-group
+                div.ui.toggle.checkbox
+                    input#isDatafile.ui.radio.checkbox(type="checkbox",name="isDatafile",ng-model="testCriteria.isDatafile",ng-checked="testCriteria.isDatafile'")
+                    label(for="isDatafile") Datafile (use a list of urls)
+        div.field
             label.col-sm-3.control-label(for='tag') Tag
-            div.col-sm-9
-                input#tag.form-control(type='text',placeholder="Tag to group multiple runs",ng-model="testCriteria.tag")
-        div.three.fields
-            label.col-sm-3.control-label(for="regex") Regex
-            div.col-sm-4
+            input#tag.form-control(type='text',placeholder="Tag to group multiple runs",ng-model="testCriteria.tag")
+        div.ui.two.fields
+            div.field
+                label.col-sm-3.control-label(for="regex") Regex
                 input#regex.form-control(type='text',placeholder="Regex to modify all input URLs",ng-model="testCriteria.regex")
-            div.col-sm-5
+            div.field
+                label &nbsp;
                 input#regexReplace.form-control(type='text',placeholder="Replacement text",ng-model="testCriteria.regexReplace")
-        div.form-group
+        div.field
             label.col-sm-3.control-label(for="reps") Repetitions
-            div.col-sm-1
-                input#reps.form-control(type='text',ng-model="testCriteria.reps",placeholder="0",maxlength="2")
-        div.form-group
-            div.col-sm-offset-3.col-sm-9
-                button.ui.button.primary.green(type="submit",data-dismiss="modal",ng-click="test()",ng-disabled="testForm.$invalid") Go!
+            input#reps.form-control.fixed-width-small(type='text',ng-model="testCriteria.reps",placeholder="0",maxlength="2")
+        div.field
+            button.ui.button.positive.fluid(type="submit",data-dismiss="modal",ng-click="test()",ng-disabled="testForm.$invalid") Go!
 
 
 mixin test
@@ -47,7 +36,7 @@ mixin test
                 div(class="progress progress-striped {{testInfo.status}}")
                     div.progress-bar(role="progressbar",aria-valuenow="{{testInfo.progress}}",aria-valuemin="0",aria-valuemax="100",style="width:{{testInfo.progress}}%")
 
-        div#modalTest.modal.fade(tabindex="-1",role="dialog",aria-labelledby="modalTestLabel",aria-hidden="true")
+        div#modalTest.ui.modal.fade(tabindex="-1",role="dialog",aria-labelledby="modalTestLabel",aria-hidden="true")
             div.modal-dialog
                 div.modal-content
                     div.modal-header
