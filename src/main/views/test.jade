@@ -31,7 +31,8 @@ mixin test
         div(class="panel {{(testInfo.progress === 100 ? ' panel-success' : ' panel-info')}}",ng-show="testInfo.testing")
             div.panel-heading
                 div.loader(ng-show='(testInfo.progress < 100)')
-                |&nbsp;{{testInfo.message}}
+                    i.icon.loading
+                    |&nbsp;{{testInfo.message}}
             div.panel-body
                 div(class="progress progress-striped {{testInfo.status}}")
                     div.progress-bar(role="progressbar",aria-valuenow="{{testInfo.progress}}",aria-valuemin="0",aria-valuemax="100",style="width:{{testInfo.progress}}%")
