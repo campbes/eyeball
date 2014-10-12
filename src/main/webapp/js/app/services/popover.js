@@ -4,17 +4,13 @@ eyeballApp.factory('popover',function(){
     return {
         show : function(e,obj) {
             var el = $(obj);
-            el.popover({
-                html : true,
-                content : $('#popoverContent').html(),
-                placement: 'left',
-                container : 'body',
-                trigger : 'manual'
-            }).popover('show');
-
+            el.popup('removeAll');
+            el.popup('setting','content',$('#popoverContent').html());
+            el.popup('setting','position','left center');
+            el.popup('show');
         },
         hide : function(e,obj) {
-            $(obj).popover('destroy');
+
         }
     };
 });
