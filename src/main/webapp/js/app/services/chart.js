@@ -143,12 +143,21 @@ eyeballApp.factory('chart', ['render', function(render){
 
         var config = {
             vAxis : {
-                format : '#.##%'
+                format : '#.##%',
+                gridlines : {
+                    color: 'transparent'
+                },
+                textStyle : {
+                    color: '#FFF'
+                }
             },
             hAxis : {
-                title : order.label
+                title : order.label,
+                textStyle : {
+                    color: '#FFF'
+                }
             },
-            areaOpacity: 1,
+            areaOpacity: 0.7,
             series : [
                 {color: '#d9534f'},
                 {color: '#FF6633'},
@@ -162,7 +171,13 @@ eyeballApp.factory('chart', ['render', function(render){
             },
             isStacked: true,
             backgroundColor: {fill:'transparent'},
-            focusTarget : 'category'
+            focusTarget : 'category',
+            lineWidth: 0,
+            legend : {
+                textStyle : {
+                    color: '#FFF'
+                }
+            }
         };
 
         chart.draw(view,config);
