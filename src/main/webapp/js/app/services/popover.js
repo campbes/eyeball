@@ -6,6 +6,7 @@ eyeballApp.factory('popover',function(){
             var el = $(obj);
             el.popup('removeAll');
             el.popup('setting','content',$('#popoverContent').html());
+            el.popup('setting','variation','small');
             el.popup('setting','position','left center');
             el.popup('show');
         },

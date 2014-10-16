@@ -157,7 +157,7 @@ mixin tabs(report)
 
 mixin results
     mixin filterInfo
-    table#results.ui.table.segment(data-expanded-locked="{{resultsTable.expanded}}")
+    table#results.ui.table.segment.inverted.default(data-expanded-locked="{{resultsTable.expanded}}")
         mixin reportHeaders
         tbody(ng-hide="reportView === 'chart'")
             mixin reportTotals
@@ -166,7 +166,7 @@ mixin results
             tr.resultGroup(ng-init='r = resGroup.data')
                 mixin reportFields(true)
                 td(ng-repeat='f in fields',class='text-center grade{{getVal(r.metrics[f.tool].grades,f.metric)}}',data-type='grades',ng-mouseenter='setPopoverContent({grade:getVal(r.metrics[f.tool].grades,f.metric),value:format(getVal(r.metrics[f.tool].data,f.metric),f.format)})',ng-mouseleave='setPopoverContent()')
-                    span.label {{getVal(r.metrics[f.tool].grades,f.metric)}}
+                    span.ui.label {{getVal(r.metrics[f.tool].grades,f.metric)}}
             tr(ng-if='r.busy')
                 td(colspan="8")
                     i.icon.loading
@@ -174,16 +174,16 @@ mixin results
             tr(ng-repeat='r in resGroup.results',ng-if='expandedUrls.indexOf(r.url) !== -1',ng-class='(starredRecords.indexOf(r._id) !== -1 ? "starred" : "")')
                 mixin reportFields
                 td(ng-repeat='f in fields',class='text-center grade{{getVal(r.metrics[f.tool].grades,f.metric)}}',data-type='grades',ng-mouseenter='setPopoverContent({grade:getVal(r.metrics[f.tool].grades,f.metric),value:format(getVal(r.metrics[f.tool].data,f.metric),f.format)})',ng-mouseleave='setPopoverContent()')
-                    span.label {{getVal(r.metrics[f.tool].grades,f.metric)}}
+                    span.ui.label {{getVal(r.metrics[f.tool].grades,f.metric)}}
         mixin reportFooters
     mixin charts
     mixin reportPager
 
 mixin popover
     div#popoverContent.ng-hide
-        ul.list-group
-            li(class='list-group-item') {{popoverContent.value}}&nbsp;
-                span(class='badge grade{{popoverContent.grade}}') {{popoverContent.grade}}
+        div.ui.segment.attached.inverted
+            span(class='ui label grade{{popoverContent.grade}}') {{popoverContent.grade}}
+            |&nbsp;{{popoverContent.value}}
 
 mixin reportPager
     div.ui.segment.inverted(ng-if="reportView !== 'chart'")

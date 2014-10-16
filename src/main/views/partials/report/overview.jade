@@ -36,7 +36,7 @@ div(ng-controller='ReportOverviewCtrl')
     mixin reportPager
 
     div#popoverContent.ng-hide
-        div(ng-repeat='f in fieldConfig[popoverContent.tool].items', class='ui segment small attached inverted {{($first ? "top grade" + getVal(popoverContent.metrics.grades,f.metric) : ($last ? "bottom" : "") )}}')
+        div(ng-repeat='f in fieldConfig[popoverContent.tool].items', class='ui segment attached inverted {{($first ? "top grade" + getVal(popoverContent.metrics.grades,f.metric) : ($last ? "bottom" : "") )}}')
             span(class='ui label grade{{getVal(popoverContent.metrics.grades,f.metric)}}') {{getVal(popoverContent.metrics.grades,f.metric)}}
             |&nbsp;{{f.name}}
 

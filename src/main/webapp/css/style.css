@@ -36,7 +36,50 @@ h1.ui.header {
 .mini.icon.button {
     padding: .5em;
 }
-
+.ui.inverted.default {
+    background: #000;
+}
+.ui.inverted.segment.default {
+    background : rgba(0,0,0,0.4);
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+.ui.segment.inverted.highlight {
+    background: #3071a9;
+}
+.fixed-width-small {
+    width: 100px !important;
+}
+.step a {
+    color: #000;
+    text-decoration: none;
+}
+#reportMenu {
+    float: left;
+}
+#reportView {
+    float: right;
+}
+.ui.popup, .ui.popup:before {
+    background-color: #000;
+}
+.text-center {
+    text-align: center !important;
+}
+.text-right {
+    text-align: right !important;
+}
+.label.positive {
+    color: #FFF;
+    background: #58CB73;
+}
+.label.negative {
+    color: #FFF;
+    background: #E75859;
+}
+.ui.form .inline.fields .field .toggle.checkbox {
+    margin: 7px 5px 0 0;
+}
 #results tr.totals {
     background: rgba(255,255,255,0.2);
 }
@@ -145,22 +188,6 @@ tr.totals td[data-expandable='true']:nth-of-type(5) {
     background-size: 12px 12px;
 }
 
-
-
-#results tr.starred td[data-expand='true'] {
-
-}
-#results tr.starred:nth-child(odd) td[data-expand='true'] {
-
-}
-#results tr.starred td[data-expand='true']:nth-child(2) {
-
-}
-#results tr.starred:nth-child(odd) td[data-expand='true']:nth-child(2) {
-
-}
-
-
 [data-expandable='true'] {
     display: none;
 }
@@ -189,24 +216,6 @@ tr.totals td[data-expandable='true']:nth-of-type(5) {
     width: 18%;
     margin: 0 1% 0;
 }
-div.logo {
-    display: inline-block;
-    width: 53px;
-    height: 50px;
-    background: url("../images/eyeballSmall.png") no-repeat 0 2px;
-    float: left;
-    margin: 0 -5px 0 10px;
-}
-div.loader {
-    display: inline-block;
-    float: left;
-    width: 16px;
-    height: 16px;
-    background: url("../images/ajax-loader.gif") center center no-repeat;
-}
-.panel-info>.panel-heading .loader {
-    background: url("../images/ajax-loader-info.gif") center center no-repeat;
-}
 .navbar-form input {
     min-width: 300px;
 }
@@ -229,83 +238,6 @@ a.panelAnchor {
     position: absolute;
     margin-top: -60px;
 }
-.gradeA,
-.gradeB,
-.gradeC,
-.gradeD,
-.gradeE,
-.gradeF,
-tr.starred .badge {
-    color: #FFF;
-}
-.gradeA .badge,
-.gradeB .badge,
-.gradeC .badge,
-.gradeD .badge,
-.gradeE .badge,
-.gradeF .badge {
-    background : #FFF;
-}
-.gradeA,
-.panel-heading.gradeA,
-button[data-anchor].gradeA,
-#results td.gradeA,
-tr.starred .gradeA .label {
-    background : #5cb85c;
-}
-.gradeA .badge {
-    color : #5cb85c;
-}
-.gradeB,
-.panel-heading.gradeB,
-button[data-anchor].gradeB,
-#results td.gradeB,
-tr.starred .gradeB .label {
-    background : #9C9;
-}
-.gradeB .badge {
-    color : #9C9;
-}
-.gradeC,
-.panel-heading.gradeC,
-button[data-anchor].gradeC,
-#results td.gradeC,
-tr.starred .gradeC .label {
-    background : #FC6;
-}
-.gradeC .badge {
-    color : #FC6;
-}
-.gradeD,
-.panel-heading.gradeD,
-button[data-anchor].gradeD,
-#results td.gradeD,
-tr.starred .gradeD .label {
-    background : #F96;
-}
-.gradeD .badge {
-    color : #F96;
-}
-.gradeE,
-.panel-heading.gradeE,
-button[data-anchor].gradeE,
-#results td.gradeE,
-tr.starred .gradeE .label {
-    background : #F63;
-}
-.gradeE .badge {
-    color : #F63;
-}
-.gradeF,
-.panel-heading.gradeF,
-button[data-anchor].gradeF,
-#results td.gradeF,
-tr.starred .gradeF .label {
-    background : #d9534f;
-}
-.gradeF .badge {
-    color : #d9534f;
-}
 #chartArea {
     margin-top: 30px;
 }
@@ -314,6 +246,53 @@ button[data-anchor] {
     border: 0 solid;
     margin-bottom: 10px;
 }
+table.table th.header {
+    cursor: pointer;
+}
+table.table th.header:after {
+    content: "\f0dc";
+    font-family: Icons;
+    margin-left: 10px;
+}
+table.table th.headerSortUp:after {
+    content: "\f0de";
+}
+table.table th.headerSortDown:after {
+    content: "\f0dd";
+}
+
+td form.ui.form .field {
+    margin-bottom: 0;
+}
+
+/* grades */
+[class*="grade"] {
+    color: #FFF !important;
+}
+.gradeA {
+    background : rgba(92,184,92,0.7) !important;
+}
+.gradeB {
+    background : rgba(153,204,153,0.7) !important;
+}
+.gradeC {
+    background : rgba(255,204,102,0.7) !important;
+}
+.gradeD {
+    background : rgba(255,153,103,0.7) !important;
+}
+.gradeE {
+    background : rgba(255,102,51,0.7) !important;
+}
+.gradeF {
+    background : rgba(217,83,79,0.7) !important;
+}
+
+[class*="grade"]>[class*="grade"] {
+    background: rgba(255,255,255,0.3) !important;
+    font-weight: bold;
+}
+
 
 /*harpy*/
 table.harpy {
@@ -343,65 +322,4 @@ div.harpyChart {
 }
 div.harpyBarChart {
     width: 33%;
-}
-table.table th.header {
-    cursor: pointer;
-}
-table.table th.header:after {
-    content: "\f0dc";
-    font-family: Icons;
-    margin-left: 10px;
-}
-table.table th.headerSortUp:after {
-    content: "\f0de";
-}
-table.table th.headerSortDown:after {
-    content: "\f0dd";
-}
-
-td form.ui.form .field {
-    margin-bottom: 0;
-}
-
-.ui.inverted.default {
-    background: #000;
-}
-.ui.inverted.segment.default {
-    background : rgba(0,0,0,0.4);
-    box-shadow: none;
-    -webkit-box-shadow: none;
-}
-.ui.segment.inverted.highlight {
-    background: #3071a9;
-}
-.fixed-width-small {
-    width: 100px !important;
-}
-.step a {
-    color: #000;
-    text-decoration: none;
-}
-#reportMenu {
-    float: left;
-}
-#reportView {
-    float: right;
-}
-
-.text-center {
-    text-align: center !important;
-}
-.text-right {
-    text-align: right !important;
-}
-.label.positive {
-    color: #FFF;
-    background: #58CB73;
-}
-.label.negative {
-    color: #FFF;
-    background: #E75859;
-}
-.ui.form .inline.fields .field .toggle.checkbox {
-    margin: 7px 5px 0 0;
 }

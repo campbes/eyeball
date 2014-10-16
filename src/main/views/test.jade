@@ -7,7 +7,7 @@ mixin testForm
                 input#url.form-control(type='text',placeholder='URL to test',ng-model="testCriteria.url",ng-required="!testCriteria.isDatafile")
             div.field
                 div.ui.toggle.checkbox
-                    input#isDatafile.ui.radio.checkbox(type="checkbox",name="isDatafile",ng-model="testCriteria.isDatafile",ng-checked="testCriteria.isDatafile'")
+                    input#isDatafile.ui.radio.checkbox(type="checkbox",name="isDatafile",ng-model="testCriteria.isDatafile",ng-checked="testCriteria.isDatafile")
                     label(for="isDatafile") Datafile (use a list of urls)
         div.field
             label.col-sm-3.control-label(for='tag') Tag
