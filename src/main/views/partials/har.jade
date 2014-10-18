@@ -8,15 +8,12 @@ div.container
 
     mixin detailNav('har')
 
-    div.panel.panel-default
-        div.panel-heading Overview
-        div.panel-body.text-center
-            div#harComparison
-    div.panel.panel-default
-        div.panel-heading Primed cache
-        div.panel-body.text-center
-            div#harContainer
-    div.panel.panel-default
-        div.panel-heading Uncached
-        div.panel-body.text-center
-            div#harUncached
+    div.ui.segment.inverted.default.attached.top.header Overview
+    div.ui.segment.inverted.default.attached.bottom
+        div#harComparison
+    div.ui.segment.inverted.default.attached.top.header Primed cache
+    div.ui.segment.inverted.default.attached.bottom
+        div#harContainer
+    div.ui.segment.inverted.default.attached.top.header Uncached
+    div.ui.segment.inverted.default.attached.bottom
+        div#harUncached
