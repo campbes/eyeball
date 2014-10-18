@@ -8,8 +8,7 @@ div.container
 
     mixin detailNav('history')
 
-    div.panel.panel-default(ng-repeat="f in fields")
-        div.panel-heading {{f.name}}
-        div.panel-body.text-center
-            div(id="{{f.tool}}History").historyChart
-                i.icon.loading
+    div.ui.segment.inverted.default.header.attached.top(ng-repeat-start="f in fields") {{f.name}}
+    div.ui.segment.inverted.default.attached.bottom(ng-repeat-end)
+        div(id="{{f.tool}}History").historyChart
+            i.icon.loading
