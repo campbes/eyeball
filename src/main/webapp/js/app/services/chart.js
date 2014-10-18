@@ -143,7 +143,7 @@ eyeballApp.factory('chart', ['render', function(render){
 
         var config = {
             vAxis : {
-                format : '#.##%',
+                format : '#%',
                 gridlines : {
                     color: 'transparent'
                 },
@@ -153,8 +153,13 @@ eyeballApp.factory('chart', ['render', function(render){
             },
             hAxis : {
                 title : order.label,
+                format : 'dd MMM yyyy',
+                gridlines : {
+                    color: 'transparent'
+                },
                 textStyle : {
-                    color: '#FFF'
+                    color: '#FFF',
+                    fontSize: 13
                 }
             },
             areaOpacity: 0.7,
@@ -167,7 +172,7 @@ eyeballApp.factory('chart', ['render', function(render){
                 {color: '#5cb85c'}
             ],
             chartArea : {
-                height : 350
+                height : 340
             },
             isStacked: true,
             backgroundColor: {fill:'transparent'},

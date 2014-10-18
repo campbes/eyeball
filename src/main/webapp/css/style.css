@@ -63,6 +63,9 @@ h1.ui.header {
 .ui.popup, .ui.popup:before {
     background-color: #000;
 }
+.ui.header.inverted.default {
+    background: #000;
+}
 .text-center {
     text-align: center !important;
 }
@@ -230,6 +233,7 @@ tr.totals td[data-expandable='true']:nth-of-type(5) {
 }
 .pivotChart {
     height: 450px;
+    padding: 0;
 }
 .nav-tabs {
     margin-bottom: 20px;

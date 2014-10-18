@@ -41,10 +41,8 @@ mixin filter
 
 mixin charts
     div#chartArea(ng-hide="reportView !== 'chart'")
-        div.panel.panel-default(ng-repeat="ch in charts")
-            div.panel-heading {{ch.name}}
-            div.panel-body
-                div(id="{{ch.tool}}{{ch.metric}}Chart").pivotChart
+        div.ui.segment.attached.top.inverted.default.header(ng-repeat-start="ch in charts") {{ch.name}}
+        div.ui.segment.attached.bottom.inverted.default.pivotChart(id="{{ch.tool}}{{ch.metric}}Chart",ng-repeat-end)
 
 mixin reportView
     div.right.menu
