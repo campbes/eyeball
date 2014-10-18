@@ -1,37 +1,28 @@
 mixin detailNav(tab)
-    ol.breadcrumb
-        li
+
+    div.ui.small.steps
+        div.step
             a(href="#") Eyeball
-        li
+        div.step
             a(href="#/report?{{reportFilter}}") Analyze
-        li.active {{id}}
+        div.active.step {{id}}
 
-    ul.nav.nav-tabs
-        li(class='#{(tab === "detail" ? "active" : "")}')
-            a(href='#/detail/:{{id}}') Detail
-        li(class='#{(tab === "har" ? "active" : "")}')
-            a(href='#/har/:{{id}}') HAR analysis
-        li(class='#{(tab === "history" ? "active" : "")}')
-            a(href='#/history/:{{id}}') History
+    div.ui.pointing.menu.inverted
+        div.right.menu
+            a.item(type="button" data-toggle="modal" data-target="#modalFilter") Re-test
+        a(class='item #{(tab === "detail" ? "active" : "")}',href='#/detail/:{{id}}') Detail
+        a(class='item #{(tab === "har" ? "active" : "")}',href='#/har/:{{id}}') HAR analysis
+        a(class='item #{(tab === "history" ? "active" : "")}',href='#/history/:{{id}}') History
 
-        div.btn-group.pull-right(data-toggle="buttons")
-            button.btn.btn-primary(type="button",ng-click="quickTest(url)")
-                span.glyphicon.glyphicon-cog
-                | &nbsp;Re-test
-
-    div.well.well-sm
-            p
-                a(href="{{url}}",target="_blank").h4 {{url}}
-            ul.list-inline
-                li
-                    strong ID
-                    |&nbsp;{{id}}
-                li
-                    strong Timestamp
-                    |&nbsp;{{timestamp}}
-                li
-                    strong Build
-                    |&nbsp;{{build}}
-                li
-                    strong Tag
-                    |&nbsp;{{tag}}
+    div.ui.segment.inverted.header.default.attached.top
+        a(href="{{url}}",target="_blank") {{url}}
+    div.ui.segment.inverted.default.attached.bottom
+        dl.list-inline
+            dt ID
+            dd {{id}}
+            dt Timestamp
+            dd {{timestamp}}
+            dt Build
+            dd {{build}}
+            dt Tag
+            dd {{tag}}
