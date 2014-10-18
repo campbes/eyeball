@@ -8,88 +8,86 @@ div#detail.container
 
     mixin detailNav('detail')
 
+    a.panelAnchor(ng-repeat-start="f in fields",id="panel_{{f.tool}}",name="panel_{{f.tool}}")
 
-    div(ng-repeat="f in fields")
-        a.panelAnchor(id="panel_{{f.tool}}",name="panel_{{f.tool}}")
+    div.ui.segment.inverted.attached.top.default.header(ng-if="!f.metric") {{f.name}}
+    div.ui.segment.inverted.attached.bottom.default.keyInfo(ng-if="!f.metric")
+        div.ui.three.column.grid
+            div.column(ng-repeat="f in fields",ng-if="f.metric",data-anchor="panel_{{f.tool}}")
+                button(class='grade{{data.metrics[f.tool].grades[f.metric]}}')
+                    span.ui.label {{data.metrics[f.tool].grades[f.metric]}}
+                    |&nbsp;{{f.name}}
+                    span(ng-if="data.metrics[f.tool].data[f.metric]") &nbsp;({{format(data.metrics[f.tool].data[f.metric],f.format)}})
 
-        div.ui.segment.inverted.attached.top.default.header(ng-if="!f.metric") {{f.name}}
-        div.ui.segment.inverted.attached.bottom.default.keyInfo(ng-if="!f.metric")
-            div.ui.three.column.grid
-                div.column(ng-repeat="f in fields",ng-if="f.metric",data-anchor="panel_{{f.tool}}")
-                    button(class='grade{{data.metrics[f.tool].grades[f.metric]}}')
-                        span.ui.label {{data.metrics[f.tool].grades[f.metric]}}
-                        |&nbsp;{{f.name}}
-                        span(ng-if="data.metrics[f.tool].data[f.metric]") &nbsp;({{format(data.metrics[f.tool].data[f.metric],f.format)}})
-
-        div(class='ui segment inverted default top attached header grade{{data.metrics[f.tool].grades[f.metric]}}',ng-if="f.metric")
-            span.ui.label {{data.metrics[f.tool].grades[f.metric]}}
-            |&nbsp;{{f.name}}
-        div.ui.segment.attached.bottom.inverted.default.detail(ng-if="f.metric")
-            div.ui.grid
-                div.column.four.wide
-                    table.ui.table.inverted
-                        tr(ng-repeat="m in fieldConfig[f.tool].items")
-                            td
-                                span(class='ui label grade{{getVal(data.metrics[f.tool].grades,m.metric)}}') {{getVal(data.metrics[f.tool].grades,m.metric)}}
-                            td  {{m.name}}
-                            td  {{format(getVal(data.metrics[f.tool].data,m.metric),m.format)}}
-                div.column.twelve.wide(ng-switch="f.tool")
-                    table.ui.table.inverted.small(ng-switch-when="eyeball")
-                        tr(ng-repeat="m in fieldConfig[f.tool].items")
-                            td
-                                span(class='ui label label-{{getInfo(data.metrics[f.tool].grades,f.tool,m.metric).type}}') {{getInfo(data.metrics[f.tool].grades,f.tool,m.metric).type}}
-                            td
-                                strong {{m.name}} - {{getInfo(data.metrics[f.tool].grades,f.tool,m.metric).info}}
-                                p {{getInfo(data.metrics[f.tool].grades,f.tool,m.metric).message}}
-                    table.ui.table.inverted.small(ng-switch-when="time")
-                        tr(ng-repeat="m in fieldConfig[f.tool].items")
-                            td
-                                span(class='ui label grade{{getVal(data.metrics[f.tool].grades,m.metric)}}') {{getVal(data.metrics[f.tool].grades,m.metric)}}
-                            td
-                                strong {{m.name}} - {{getInfo(data.metrics[f.tool].grades,f.tool,m.metric).info}}
-                                p {{getInfo(data.metrics[f.tool].grades,f.tool,m.metric).message}}
-                    table.ui.table.inverted.small(ng-switch-when="yslow")
-                        tr(ng-repeat='i in data.metrics.yslow.data.g',ng-if='i.score < 100')
-                            td
-                                span(class='ui label grade{{i.grade}}') {{i.grade}}
-                            td
-                                strong {{i.rule}}
-                                p {{i.message}}
-                    table.ui.table.inverted.small(ng-switch-when="dommonster")
-                        tr(ng-repeat='i in data.metrics.dommonster.data.messages.warn')
-                            td
-                                span(class='ui label label-danger') Danger
-                            td
-                                strong {{i.string}}
-                                p {{i.hint}}
-                        tr(ng-repeat='i in data.metrics.dommonster.data.messages.tip')
-                            td
-                                span(class='ui label label-warning') Warning
-                            td
-                                strong {{i.string}}
-                                p {{i.hint}}
-                    table.ui.table.inverted.small(ng-switch-when="validator")
-                        tr(ng-repeat='i in data.metrics.validator.data.messages',ng-if='i.type==="error" || i.subType === "warning"')
-                            td
-                                span(class='ui label label-danger',ng-if='i.type==="error"') Error
-                                span(class='ui label label-warning',ng-if='i.subType==="warning"') Warning
-                            td
-                                strong {{i.lastLine}}:{{i.lastColumn}} {{i.message}}
-                                //p {{i.explanation}}
-                    table.ui.table.inverted.small(ng-switch-when="aria")
-                        tr(ng-repeat='i in data.metrics.aria.data.errors')
-                            td
-                                span(class='ui label label-danger',ng-if='i.type==="Error"') Error
-                                span(class='ui label label-warning',ng-if='i.type==="Warning"') Warning
-                            td
-                                strong {{i.rule}}
-                                p {{i.message}}
-                                p(ng-if="i.element !== 'undefined'") {{i.element}}
-                    table.ui.table.inverted.small(ng-switch-default)
-                        tr(ng-repeat="i in data.metrics[f.tool].data.messages")
-                            td
-                                span(class="ui label grade{{i.grade}}",ng-if="i.grade") {{i.grade}}
-                                span(class="ui label label-{{i.type}}",ng-if="i.type") {{i.type}}
-                            td
-                                strong {{i.title}}
-                                p {{i.content}}
+    div(class='ui segment inverted default top attached header grade{{data.metrics[f.tool].grades[f.metric]}}',ng-if="f.metric")
+        span.ui.label {{data.metrics[f.tool].grades[f.metric]}}
+        |&nbsp;{{f.name}}
+    div.ui.segment.attached.bottom.inverted.default.detail(ng-if="f.metric",ng-repeat-end)
+        div.ui.grid
+            div.column.four.wide
+                table.ui.table.inverted
+                    tr(ng-repeat="m in fieldConfig[f.tool].items")
+                        td
+                            span(class='ui label grade{{getVal(data.metrics[f.tool].grades,m.metric)}}') {{getVal(data.metrics[f.tool].grades,m.metric)}}
+                        td  {{m.name}}
+                        td  {{format(getVal(data.metrics[f.tool].data,m.metric),m.format)}}
+            div.column.twelve.wide(ng-switch="f.tool")
+                table.ui.table.inverted.small(ng-switch-when="eyeball")
+                    tr(ng-repeat="m in fieldConfig[f.tool].items")
+                        td
+                            span(class='ui label label-{{getInfo(data.metrics[f.tool].grades,f.tool,m.metric).type}}') {{getInfo(data.metrics[f.tool].grades,f.tool,m.metric).type}}
+                        td
+                            strong {{m.name}} - {{getInfo(data.metrics[f.tool].grades,f.tool,m.metric).info}}
+                            p {{getInfo(data.metrics[f.tool].grades,f.tool,m.metric).message}}
+                table.ui.table.inverted.small(ng-switch-when="time")
+                    tr(ng-repeat="m in fieldConfig[f.tool].items")
+                        td
+                            span(class='ui label grade{{getVal(data.metrics[f.tool].grades,m.metric)}}') {{getVal(data.metrics[f.tool].grades,m.metric)}}
+                        td
+                            strong {{m.name}} - {{getInfo(data.metrics[f.tool].grades,f.tool,m.metric).info}}
+                            p {{getInfo(data.metrics[f.tool].grades,f.tool,m.metric).message}}
+                table.ui.table.inverted.small(ng-switch-when="yslow")
+                    tr(ng-repeat='i in data.metrics.yslow.data.g',ng-if='i.score < 100')
+                        td
+                            span(class='ui label grade{{i.grade}}') {{i.grade}}
+                        td
+                            strong {{i.rule}}
+                            p {{i.message}}
+                table.ui.table.inverted.small(ng-switch-when="dommonster")
+                    tr(ng-repeat='i in data.metrics.dommonster.data.messages.warn')
+                        td
+                            span(class='ui label label-danger') Danger
+                        td
+                            strong {{i.string}}
+                            p {{i.hint}}
+                    tr(ng-repeat='i in data.metrics.dommonster.data.messages.tip')
+                        td
+                            span(class='ui label label-warning') Warning
+                        td
+                            strong {{i.string}}
+                            p {{i.hint}}
+                table.ui.table.inverted.small(ng-switch-when="validator")
+                    tr(ng-repeat='i in data.metrics.validator.data.messages',ng-if='i.type==="error" || i.subType === "warning"')
+                        td
+                            span(class='ui label label-danger',ng-if='i.type==="error"') Error
+                            span(class='ui label label-warning',ng-if='i.subType==="warning"') Warning
+                        td
+                            strong {{i.lastLine}}:{{i.lastColumn}} {{i.message}}
+                            //p {{i.explanation}}
+                table.ui.table.inverted.small(ng-switch-when="aria")
+                    tr(ng-repeat='i in data.metrics.aria.data.errors')
+                        td
+                            span(class='ui label label-danger',ng-if='i.type==="Error"') Error
+                            span(class='ui label label-warning',ng-if='i.type==="Warning"') Warning
+                        td
+                            strong {{i.rule}}
+                            p {{i.message}}
+                            p(ng-if="i.element !== 'undefined'") {{i.element}}
+                table.ui.table.inverted.small(ng-switch-default)
+                    tr(ng-repeat="i in data.metrics[f.tool].data.messages")
+                        td
+                            span(class="ui label grade{{i.grade}}",ng-if="i.grade") {{i.grade}}
+                            span(class="ui label label-{{i.type}}",ng-if="i.type") {{i.type}}
+                        td
+                            strong {{i.title}}
+                            p {{i.content}}

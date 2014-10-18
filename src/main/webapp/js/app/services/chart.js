@@ -213,7 +213,7 @@ eyeballApp.factory('chart', ['render', function(render){
         chartData.addRows(results);
 
         var view = new google.visualization.DataView(chartData);
-        var chart = new google.visualization.AreaChart(el);
+        var chart = new google.visualization.LineChart(el);
 
         var config = {
             vAxis : {
@@ -235,7 +235,10 @@ eyeballApp.factory('chart', ['render', function(render){
                     color : "#CCC"
                 },
                 gridlines : {
-                    color : "#FFF"
+                    color : 'transparent'
+                },
+                textStyle : {
+                    color: '#FFF'
                 }
             },
             hAxis : {
@@ -248,12 +251,16 @@ eyeballApp.factory('chart', ['render', function(render){
             annotation : {
                 '1': {style: 'line'}
             },
-            /*tooltip : {
-             trigger: 'none'
-             } ,*/
-            lineWidth : 2,
             focusTarget : 'category',
-            areaOpacity : 0.2
+            backgroundColor: {fill:'transparent'},
+            areaOpacity : 0.1,
+            lineWidth: 4,
+            legend : {
+                textStyle : {
+                    color: '#FFF'
+                }
+            },
+            curveType : 'function'
         };
 
         function selectHandler() {
