@@ -44,8 +44,8 @@ h1.ui.header {
     box-shadow: none;
     -webkit-box-shadow: none;
 }
-.ui.segment.inverted.highlight {
-    background: #3071a9;
+.highlight {
+    background: #3071a9 !important;
 }
 .fixed-width-small {
     width: 100px !important;
@@ -280,7 +280,11 @@ table.table th.headerSortDown:after {
 td form.ui.form .field {
     margin-bottom: 0;
 }
-
+.list-inline {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
 .list-inline>* {
     float: left;
     display: inline-block;

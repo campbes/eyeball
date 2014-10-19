@@ -5,7 +5,7 @@ mixin filter
                 div.modal-header
                     button.close(type="button",data-dismiss="modal",aria-hidden="true")
                     h4.modal-title
-                        span.glyphicon.glyphicon-filter
+                        i.icon.filter
                         |&nbsp;Filter report
                 div.modal-body
                     form(role="form",name="filterForm").form-horizontal
@@ -48,7 +48,9 @@ mixin reportView
     div.right.menu
         a(ng-class="(reportView === 'table' ? 'item active' : 'item')",ng-click="setReportView('table')") Report view
         a(ng-class="(reportView === 'chart' ? 'item active' : 'item')",ng-click="setReportView('chart')") Chart view
-        a.item(type="button" data-toggle="modal" data-target="#modalFilter") Filter
+        a.item(type="button" data-toggle="modal" data-target="#modalFilter")
+            i.ui.icon.filter
+            |&nbsp; Filter
 
 mixin reportHeaders
     thead
@@ -85,24 +87,24 @@ mixin reportTotals
         td(data-expand="true")
         td(data-expandable='true')
             a(href='#{{path}}?url={{query.url}}&build={{query.build}}&tag={{query.tag}}',ng-if='query.start && query.end && query.start.substr(0,10) !== query.end.substr(0,10)')
-                span.glyphicon.glyphicon-remove
+                i.icon.remove
                 |&nbsp;{{query.start | date:'d MMM yyyy'}} - {{query.end | date:'d MMM yyyy'}}
             a(href='#{{path}}?url={{query.url}}&build={{query.build}}&tag={{query.tag}}',ng-if='query.start && query.end && query.start.substr(0,10) === query.end.substr(0,10)')
-                span.glyphicon.glyphicon-remove
+                i.icon.remove
                 |&nbsp;{{query.start | date:'d MMM yyyy'}}
             a(href='#{{path}}?url={{query.url}}&build={{query.build}}&tag={{query.tag}}',ng-if='query.start && !query.end')
-                span.glyphicon.glyphicon-remove
+                i.icon.remove
                 |&nbsp;{{query.start | date:'d MMM yyyy'}}
             a(href='#{{path}}?url={{query.url}}&build={{query.build}}&tag={{query.tag}}',ng-if='!query.start && query.end')
-                span.glyphicon.glyphicon-remove
+                i.icon.remove
                 |&nbsp;{{query.end | date:'d MMM yyyy'}}
         td(data-expandable='true')
             a(href='#{{path}}?url={{r.url}}&start={{query.start}}&end={{query.end}}&tag={{query.tag}}',ng-if='query.build',title='{{query.build}}')
-                span.glyphicon.glyphicon-remove
+                i.icon.remove
                 |&nbsp;{{query.build.substr(0,4)}}...
         td(data-expandable='true')
             a(href='#{{path}}?url={{r.url}}&start={{query.start}}&end={{query.end}}&build={{query.build}}',ng-if='query.tag',title='{{query.tag}}')
-                span.glyphicon.glyphicon-remove
+                i.icon.remove
                 |&nbsp;{{query.tag.substr(0,10)}}
                 span(ng-if='query.tag.length > 10') ...
         td(data-expand="true")
@@ -129,15 +131,15 @@ mixin reportFields(isGroup)
     td(data-expand="true",title="Click to lock on/off")
     td(data-expandable='true')
         a(href='#{{path}}?url={{query.url}}&urlExact={{query.urlExact}}&start={{r.timestamp | date:"yyyy-MM-dd"}}&end={{r.timestamp | date:"yyyy-MM-dd"}}&build={{query.build}}&tag={{query.tag}}',title="Filter by date")
-            span.glyphicon.glyphicon-filter
+            i.ui.icon.filter
         |&nbsp;{{r.timestamp | date:'d MMM yyyy'}}
     td(title='{{r.build}}',data-expandable='true')
         a(href='#{{path}}?url={{query.url}}&urlExact={{query.urlExact}}&start={{query.start}}&end={{query.end}}&build={{r.build}}&tag={{query.tag}}')
-            span.glyphicon.glyphicon-filter
+            i.ui.icon.filter
         |&nbsp;{{r.build.substr(0,4)}}...
     td(title='{{r.tag}}',data-expandable='true')
         a(href='#{{path}}?url={{query.url}}&urlExact={{query.urlExact}}&start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{r.tag}}',ng-show="{{r.tag.length}}")
-            span.glyphicon.glyphicon-filter
+            i.ui.icon.filter
         |&nbsp;{{r.tag.substr(0,10)}}
         span(ng-if='r.tag.length > 10') ...
     td(data-expand="true",title="Click to lock on/off")
@@ -203,26 +205,26 @@ mixin reportPager
                     i.icon.arrow.right
 
 mixin filterInfo
-    div.alert.alert-info(ng-show="query.url || query.start || query.end || query.build || query.tag")
+    div.ui.segment.inverted.default.highlight(ng-show="query.url || query.start || query.end || query.build || query.tag")
         ul.list-inline
             li Showing only results for
             li(ng-show="query.url")
-                a(href="#{{path}}?start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}")
-                    span.label.label-primary
-                        span.glyphicon.glyphicon-remove
-                        |&nbsp;URL: {{query.url}}
+                a(ng-show="query.url",href="#{{path}}?start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}")
+                    i.icon.remove
+                    strong URL
+                    |&nbsp;{{query.url}}
             li(ng-show="query.start || query.end")
                 a(href="#{{path}}?url={{query.url}}&build={{query.build}}&tag={{query.tag}}")
-                    span.label.label-primary
-                        span.glyphicon.glyphicon-remove
-                        |&nbsp;Date: {{query.start}} - {{query.end}}
+                    i.icon.remove
+                    strong Date
+                    |&nbsp;{{query.start}} - {{query.end}}
             li(ng-show="query.build")
                 a(href="#{{path}}?url={{query.url}}&start={{query.start}}&end={{query.end}}&tag={{query.tag}}")
-                    span.label.label-primary
-                        span.glyphicon.glyphicon-remove
-                        |&nbsp;Test ID: {{query.build}}
+                    i.icon.remove
+                    strong Test ID
+                    |&nbsp;{{query.build}}
             li(ng-show="query.tag")
                 a(href="#{{path}}?url={{query.url}}&start={{query.start}}&end={{query.end}}&build={{query.build}}")
-                    span.label.label-primary
-                        span.glyphicon.glyphicon-remove
-                        |&nbsp;Tag: {{query.tag}}
+                    i.icon.remove
+                    strong Tag
+                    |&nbsp;{{query.tag}}

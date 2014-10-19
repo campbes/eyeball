@@ -9,7 +9,9 @@ mixin detailNav(tab)
 
     div.ui.pointing.menu.inverted
         div.right.menu
-            a.item(type="button" data-toggle="modal" data-target="#modalFilter") Re-test
+            a.item.highlight(type="button" data-toggle="modal" data-target="#modalFilter")
+                i.icon.lab
+                |&nbsp;Re-test
         a(class='item #{(tab === "detail" ? "active" : "")}',href='#/detail/:{{id}}') Detail
         a(class='item #{(tab === "har" ? "active" : "")}',href='#/har/:{{id}}') HAR analysis
         a(class='item #{(tab === "history" ? "active" : "")}',href='#/history/:{{id}}') History

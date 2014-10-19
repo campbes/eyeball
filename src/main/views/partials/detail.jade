@@ -14,7 +14,7 @@ div#detail.container
     div.ui.segment.inverted.attached.bottom.default.keyInfo(ng-if="!f.metric")
         div.ui.three.column.grid
             div.column(ng-repeat="f in fields",ng-if="f.metric",data-anchor="panel_{{f.tool}}")
-                button(class='grade{{data.metrics[f.tool].grades[f.metric]}}')
+                button(data-anchor='panel_{{f.tool}}',class='grade{{data.metrics[f.tool].grades[f.metric]}}')
                     span.ui.label {{data.metrics[f.tool].grades[f.metric]}}
                     |&nbsp;{{f.name}}
                     span(ng-if="data.metrics[f.tool].data[f.metric]") &nbsp;({{format(data.metrics[f.tool].data[f.metric],f.format)}})
