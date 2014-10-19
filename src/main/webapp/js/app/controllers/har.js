@@ -1,8 +1,8 @@
 /*global eyeballControllers,Harpy*/
 
-eyeballControllers.controller('HarCtrl',['$scope','$routeParams','$http','persist',
+eyeballControllers.controller('HarCtrl',['$scope','$routeParams','$http','persist','harpy',
 
-    function HarCtrl($scope,$routeParams,$http,persist) {
+    function HarCtrl($scope,$routeParams,$http,persist,harpy) {
 
         $scope.id = $routeParams.id.substr(1);
         $scope.reportFilter = persist.get("reportFilter");
@@ -28,14 +28,14 @@ eyeballControllers.controller('HarCtrl',['$scope','$routeParams','$http','persis
                 var har = JSON.stringify(data.metrics.har.data);
                 var harUncached = JSON.stringify(data.metrics.harUncached.data);
                 var comparator = new Harpy.Comparator(har,harUncached);
-                comparator.draw("harComparison");
+                comparator.draw("harComparison",null,harpy);
                 setTimeout(function(){
                     $scope.viewer = new Harpy.Viewer(JSON.stringify(data.metrics.har.data));
-                    $scope.viewer.draw("harContainer");
+                    $scope.viewer.draw("harContainer",harpy.pie);
                 },500);
                 setTimeout(function(){
                     $scope.uncachedViewer = new Harpy.Viewer(JSON.stringify(data.metrics.harUncached.data));
-                    $scope.uncachedViewer.draw("harUncached");
+                    $scope.uncachedViewer.draw("harUncached",harpy);
                 },500);
             });
 
