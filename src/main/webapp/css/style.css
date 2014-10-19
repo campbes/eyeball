@@ -326,11 +326,76 @@ td form.ui.form .field {
 
 /*harpy*/
 table.harpy {
+    color: #FFF;
     width: 100%;
 }
-.harpy td, .harpy th {
+table.harpy td, table.harpy th {
     text-align: left;
     font-size: 90%;
+    border-right: 0 solid !important;
+}
+table.harpy tr td {
+    border-bottom: 1px dotted #666;
+    cursor: pointer;
+}
+.harpy>thead>tr, .harpy tr.total {
+    background: #000 !important;
+}
+table.harpy tr th.header {
+    background: none;
+}
+.harpy tr {
+    color: #FFF !important;
+    background: none !important;
+}
+.harpy tr.html td:nth-child(5) {
+    color: #FFB !important;
+}
+.harpy tr.js td:nth-child(5) {
+    color: #FBF !important;
+}
+.harpy tr.image td:nth-child(5) {
+    color: #9C9 !important;
+}
+.harpy tr.css td:nth-child(5) {
+    color: #BBF !important;
+}
+.harpy tr.text td:nth-child(5) {
+    color: #FBB !important;
+}
+.harpy tr.external td.url {
+    color: #1AB8F3 !important;
+}
+.harpy tr.internal td.url {
+    color: #FC6 !important;
+}
+.harpy tr.cache {
+    opacity: 0.6;
+    background: #444 !important;
+}
+.harpy tr.error {
+    color: #d9534f !important;
+}
+table.harpy tr td.info {
+    background: rgba(26,184,243,0.1) !important;
+    cursor: default;
+}
+table.harpy tr td.info td {
+    cursor: default;
+}
+table.harpy dt, table.harpy td.info td:first-child {
+    background: none !important;
+}
+.harpy th.header:after {
+    content: "\f0dc";
+    font-family: Icons;
+    margin-left: 10px;
+}
+.harpy th.headerSortUp:after {
+    content: "\f0de";
+}
+.harpy th.headerSortDown:after {
+    content: "\f0dd";
 }
 .harpy td.info {
     word-break: break-all;

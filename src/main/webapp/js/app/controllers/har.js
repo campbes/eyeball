@@ -28,13 +28,16 @@ eyeballControllers.controller('HarCtrl',['$scope','$routeParams','$http','persis
                 var har = JSON.stringify(data.metrics.har.data);
                 var harUncached = JSON.stringify(data.metrics.harUncached.data);
                 var comparator = new Harpy.Comparator(har,harUncached);
+                $('#harComparison').html('');
                 comparator.draw("harComparison",null,harpy);
                 setTimeout(function(){
                     $scope.viewer = new Harpy.Viewer(JSON.stringify(data.metrics.har.data));
+                    $('#harContainer').html('');
                     $scope.viewer.draw("harContainer",harpy.pie);
                 },500);
                 setTimeout(function(){
                     $scope.uncachedViewer = new Harpy.Viewer(JSON.stringify(data.metrics.harUncached.data));
+                    $('#harUncached').html('');
                     $scope.uncachedViewer.draw("harUncached",harpy);
                 },500);
             });
