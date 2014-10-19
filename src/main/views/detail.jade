@@ -9,7 +9,7 @@ mixin detailNav(tab)
 
     div.ui.pointing.menu.inverted
         div.right.menu
-            a.item.highlight(type="button" data-toggle="modal" data-target="#modalFilter")
+            a.item.highlight(ng-click="quickTest(url)")
                 i.icon.lab
                 |&nbsp;Re-test
         a(class='item #{(tab === "detail" ? "active" : "")}',href='#/detail/:{{id}}') Detail
