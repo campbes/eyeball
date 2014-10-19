@@ -14,10 +14,15 @@ html(ng-app='eyeballApp',lang='en')
         nav.ui.menu.inverted.default
             h1.ui.header
                 a.logo(href='#') Eyeball
-            a(class="item{{(page === 'test' ? ' active' : '')}}",href="#test") Test
-            a(class="item{{(page === 'report' ? ' active' : '')}}",href="#report") Analyze
-
-            a(class="item right{{(page === 'monitor' ? ' active' : '')}}",href="#/monitor") Monitor
+            a(class="item{{(page === 'test' ? ' active' : '')}}",href="#test")
+                i.icon.lab
+                |&nbsp;Test
+            a(class="item{{(page === 'report' ? ' active' : '')}}",href="#report")
+                i.icon.search
+                |&nbsp;Analyze
+            a(class="item right{{(page === 'monitor' ? ' active' : '')}}",href="#/monitor")
+                i.icon.desktop
+                |&nbsp;Monitor
 
 
         div(ng-view)
