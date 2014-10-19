@@ -126,7 +126,7 @@ module.exports = function(grunt) {
                 '<%= props.out%>/<%=props.name%>/webapp/<%=pkg.name%>-bookmarklet.js' : [
                     '<%= props.src%>/webapp/bookmarklet/bookmarklet.css',
                     '<%= props.src%>/webapp/lib/handlebars.runtime-v1.3.0.js',
-                    '<%= props.src%>/webapp/lib/harpy-0.0.1.min.js',
+                    '<%= props.src%>/webapp/lib/harpy-0.0.2.min.js',
                     '<%= props.out%>/handlebars/bookmarklet.js',
                     '<%= props.src%>/webapp/bookmarklet/bookmarklet.js'
                 ]
