@@ -97,7 +97,7 @@ h1.ui.header {
     padding-left: 10px;
 }
 #results tr.totals input[type="text"] {
-    width: 230px;
+    width: 210px;
     padding: 0.5em;
 }
 #results th:first-child {
