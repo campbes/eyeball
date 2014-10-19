@@ -412,6 +412,12 @@ table.harpy dt, table.harpy td.info td:first-child {
 .harpy hr {
     margin: 10px 0;
 }
+table.harpy div.blocked, table.dns, table.harpy div.connect, table.harpy div.send, div.wait, table.harpy div.receive {
+    opacity: 0.8;
+}
+table.harpy div.loadMarker {
+    margin-top: 20px !important;
+}
 div.harpyChart {
     width: 25%;
 }
