@@ -32,11 +32,11 @@ eyeballApp.service('harpy',function() {
                 title : "Time"
             },
             type : {
-                colors : ['#CCC','#FFB','#FBF','#BBF','#FBB'],
+                colors : ['#9C9','#FFB','#FBF','#BBF','#FBB','#CCC'],
                 title : "Content"
             },
             uncached : {
-                colors : ['#CCC','#FFB','#FBF','#BBF','#FBB'],
+                colors : ['#9C9','#FFB','#FBF','#BBF','#FBB','#CCC'],
                 title : "Uncached content"
             },
             size : {
