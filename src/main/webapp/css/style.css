@@ -3,7 +3,7 @@ body {
     padding: 70px 10px 10px;
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 10pt;
-    background: #DDD url('../images/bg.png');
+    background: #333 url('../images/bg.png');
 }
 nav.ui.menu {
     position: fixed;
@@ -348,36 +348,36 @@ table.harpy tr td {
 table.harpy tr th.header {
     background: none;
 }
-.harpy tr {
+table.harpy tr {
     color: #FFF !important;
     background: none !important;
 }
 .harpy tr.html td:nth-child(5) {
-    color: #FFB !important;
+    color: #FFB;
 }
 .harpy tr.js td:nth-child(5) {
-    color: #FBF !important;
+    color: #FBF;
 }
 .harpy tr.image td:nth-child(5) {
-    color: #9C9 !important;
+    color: #9C9;
 }
 .harpy tr.css td:nth-child(5) {
-    color: #BBF !important;
+    color: #BBF;
 }
 .harpy tr.text td:nth-child(5) {
-    color: #FBB !important;
+    color: #FBB;
 }
 .harpy tr.external td.url {
-    color: #1AB8F3 !important;
+    color: #1AB8F3;
 }
 .harpy tr.internal td.url {
-    color: #FC6 !important;
+    color: #FC6;
 }
 .harpy tr.cache {
     opacity: 0.6;
     background: #444 !important;
 }
-.harpy tr.error {
+.harpy tr.error, .harpy tr.error td {
     color: #d9534f !important;
 }
 table.harpy tr td.info {
