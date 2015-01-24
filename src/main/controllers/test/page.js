@@ -2,7 +2,10 @@
 
 var EyeballControllersTestPage = function() {
 
+    var Q = require('q');
+
     function setupPage(page) {
+
         page.resources = [];
         page.libraryPath = "../";
         page.settings = {
@@ -16,8 +19,12 @@ var EyeballControllersTestPage = function() {
             alert : [],
             console : []
         };
+        page.resourceCount = 0;
+
+        page.finished = Q.defer();
 
         page.onResourceRequested = function (req) {
+            page.resourceCount++;
             page.resources[req[0].id] = {
                 request: req[0],
                 startReply: null,
@@ -35,6 +42,12 @@ var EyeballControllersTestPage = function() {
             if (res.stage === 'end') {
                 page.resources[res.id].endReply = res;
             }
+
+        };
+
+        page.onLoadFinished = function() {
+            console.log(page.resourceCount);
+            page.finished.resolve();
         };
 
         page.setFn('onCallback',function(msg) {
