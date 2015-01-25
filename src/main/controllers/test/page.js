@@ -9,7 +9,7 @@ var EyeballControllersTestPage = function() {
         page.resources = [];
         page.libraryPath = "../";
         page.settings = {
-            resourceTimeout : 5
+            resourceTimeout : 5000
         };
         page.errors = {
             js : [],
@@ -46,8 +46,8 @@ var EyeballControllersTestPage = function() {
         };
 
         page.onLoadFinished = function() {
-            console.log(page.resourceCount);
-            page.finished.resolve();
+            setTimeout(page.finished.resolve,
+            1000);
         };
 
         page.setFn('onCallback',function(msg) {
