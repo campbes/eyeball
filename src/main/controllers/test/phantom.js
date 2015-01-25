@@ -4,8 +4,7 @@ var EyeballControllersTestPhantom = function() {
     var phantom = require('node-phantom-simple');
 
     var activePhantoms = [];
-    var phantomMax = 5;
-    var phantomPort = 1;
+    var phantomMax = 10;
 
     function phantomExit(msg,ph) {
         var pid = ph.process.pid;
@@ -46,7 +45,6 @@ var EyeballControllersTestPhantom = function() {
         if(activePhantoms.length >= phantomMax) {
             return;
         }
-        phantomPort = phantomPort+1;
         phantom.create(function(err,ph){
             if(err) {
                 eyeball.logger.error(err);
