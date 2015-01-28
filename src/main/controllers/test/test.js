@@ -59,7 +59,9 @@ var EyeballControllersTestTest = function(params) {
 
         if(test.src) {
             testObj.page.injectJs(test.src,function(){
-                testObj.page.evaluate(Webpage.getTestData,processInPageTest);
+                setTimeout(function() {
+                    testObj.page.evaluate(Webpage.getTestData, processInPageTest);
+                },500);
             });
         } else {
             testObj.page.evaluate(Webpage.getTestData,processInPageTest);
@@ -77,8 +79,10 @@ var EyeballControllersTestTest = function(params) {
             throwTestError(err,test,ph);
         }
         test = Webpage.augment(test,doc);
-        runInPageTests(test,function(){
-            completePage(test,ph);
+        test.page.finished.promise.then(function() {
+            runInPageTests(test, function () {
+                completePage(test, ph);
+            });
         });
     }
 
@@ -116,37 +120,35 @@ var EyeballControllersTestTest = function(params) {
     }
 
     function createPage(test,ph) {
-        ph.createPage(function(err,page) {
-            testPage(err,page,test,ph);
+        ph.createPage(function(page,err) {
+            testPage(page,err,test,ph);
         });
     }
 
     function openPage(ph) {
-        eyeball.logger.info("Opening page with "+ph._phantom.pid);
+        eyeball.logger.info("Opening page with "+ph.process.pid);
         if(urls.length === 0 ) {
             ph.exit();
             return;
         }
         var test = new Test();
         test.pageUrl = urls.splice(0,1)[0];
-        activeTests[ph._phantom.pid] = test.pageUrl;
+        activeTests[ph.process.pid] = test.pageUrl;
         createPage(test,ph);
     }
 
     completePage = function(test,ph) {
-        test.page.close();
-        test.passes[test.passes.length] = test.webpage;
-        if(test.passes.length === 1) {
-            createPage(test,ph);
-            return;
-        }
-        Record.create(test.passes);
-        delete activeTests[ph._phantom.pid];
-        if(urls.length > 0) {
-            openPage(ph);
-        } else {
+        test.page.close(function(){
+            test.passes[test.passes.length] = test.webpage;
+            if(test.passes.length === 1) {
+                createPage(test,ph);
+                return;
+            }
+            Record.create(test.passes);
+            delete activeTests[ph.process.pid];
             ph.exit();
-        }
+            startTests();
+        });
     };
 
     function closeTests(){
@@ -176,7 +178,7 @@ var EyeballControllersTestTest = function(params) {
 
     function createPhantom(ph) {
         openPage(ph);
-        startTests();
+        setTimeout(startTests,3000);
     }
 
     function phantomExit(pid,arg) {
