@@ -146,11 +146,8 @@ var EyeballControllersTestTest = function(params) {
             }
             Record.create(test.passes);
             delete activeTests[ph.process.pid];
-            if(urls.length > 0) {
-                openPage(ph);
-            } else {
-                ph.exit();
-            }
+            ph.exit();
+            startTests();
         });
     };
 
@@ -181,7 +178,7 @@ var EyeballControllersTestTest = function(params) {
 
     function createPhantom(ph) {
         openPage(ph);
-        startTests();
+        setTimeout(startTests,3000);
     }
 
     function phantomExit(pid,arg) {

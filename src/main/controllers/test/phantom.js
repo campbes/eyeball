@@ -57,7 +57,8 @@ var EyeballControllersTestPhantom = function() {
             parameters : {
                 'proxy-type' : 'none',
                 'web-security' : false,
-                'ignore-ssl-errors' : true
+                'ignore-ssl-errors' : true,
+                'disk-cache' : false
             }
         });
     }

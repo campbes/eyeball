@@ -139,14 +139,17 @@ var EyeballControllersTestRecord = function(build,tag,urlsLength) {
 
         runTestSet(testCfg.tests.browser,passes[1]);
 
-        record.markupTestFile = (new Date()).getTime().toString() + (Math.random()*10).toString() + '.html';
+        if(testCfg.tests.markup.length > 0) {
 
-        fs.writeFile(record.markupTestFile,passes[1].content,function(error){
-            if(error) {
-                eyeball.logger.info(error);
-            }
-            runTestSet(testCfg.tests.markup,record.markupTestFile);
-        });
+            record.markupTestFile = (new Date()).getTime().toString() + (Math.random() * 10).toString() + '.html';
+
+            fs.writeFile(record.markupTestFile, passes[1].content, function (error) {
+                if (error) {
+                    eyeball.logger.info(error);
+                }
+                runTestSet(testCfg.tests.markup, record.markupTestFile);
+            });
+        }
 
     }
 
