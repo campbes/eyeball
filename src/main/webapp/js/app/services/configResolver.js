@@ -1,14 +1,14 @@
 /*global eyeballApp, eyeballAppConfig*/
 
-eyeballApp.service('configResolver',['$http',
-    function($http){
+eyeballApp.service('configResolver',['settings','$http',
+    function(settings,$http){
         var config = null;
 
         if(config) {
             return config;
         }
         config = $http({
-            url : '/config',
+            url : '/v'+settings.apiVersion+'/config',
             method : 'GET',
             cache : true
         }).success(function(res){

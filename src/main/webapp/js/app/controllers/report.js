@@ -160,14 +160,14 @@ eyeballControllers.controller('ReportCtrl',['settings','$scope','$http','$locati
         });
 
         $scope.expandResultsGroup = function(obj) {
-            var url = '/'+settings.apiVersion+'/results';
+            var url = '/v'+settings.apiVersion+'/results';
             function urlMatch(o) {
                 return o.url === obj.url || o === obj.url;
             }
 
             var expanded = _.find($scope.expandedUrls,urlMatch);
             if(expanded) {
-                url = '/'+settings.apiVersion+'/results/latest';
+                url = '/v'+settings.apiVersion+'/results/latest';
             } else {
                 obj.busy = true;
             }
@@ -204,20 +204,20 @@ eyeballControllers.controller('ReportCtrl',['settings','$scope','$http','$locati
     }
 ]);
 
-eyeballControllers.controller('ReportOverviewCtrl',['$scope','persist',
+eyeballControllers.controller('ReportOverviewCtrl',['settings','$scope','persist',
 
-    function ReportOverviewCtrl($scope,persist) {
+    function ReportOverviewCtrl(settings,$scope,persist) {
         var testInfo = persist.get('testInfo') || {};
         if(!testInfo.testing) {
-            $scope.getResults('/'+settings.apiVersion+'/results/latest',$scope.updateTotals);
+            $scope.getResults('/v'+settings.apiVersion+'/results/latest',$scope.updateTotals);
         }
     }
 
 ]);
 
-eyeballControllers.controller('ReportStandardCtrl',['$scope',
+eyeballControllers.controller('ReportStandardCtrl',['settings','$scope',
 
-    function ReportStandardCtrl($scope) {
-        $scope.getResults('/'+settings.apiVersion+'/results/latest?fields=metrics.'+$scope.report,$scope.updateTotals);
+    function ReportStandardCtrl(settings,$scope) {
+        $scope.getResults('/v'+settings.apiVersion+'/results/latest?fields=metrics.'+$scope.report,$scope.updateTotals);
     }
 ]);
