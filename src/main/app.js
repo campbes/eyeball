@@ -40,13 +40,6 @@ if ('development' === app.get('env')) {
 
 
 app.get('/', routes.index);
-app.post('/test', test);
-app.get('/report',report.overview);
-app.get('/detail', detail);
-app.get('/history', history);
-app.get('/monitor', monitor);
-app.get('/config', config);
-
 
 // new rest api
 // results
@@ -59,6 +52,8 @@ app.get('/v*/results/*', require('./routes/record').get);
 app.delete('/v*/results/*', require('./routes/record').delete);
 // test
 app.post('/v*/test', require('./routes/test'));
+// monitor
+app.get('/v*/monitor', require('./routes/monitor'));
 
 
 function setReportRoute(name) {

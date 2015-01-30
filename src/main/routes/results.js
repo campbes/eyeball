@@ -1,6 +1,7 @@
 var EyeballRoutesResults = (function() {
 
 var _ = require('lodash');
+    var util = require('../util');
 
 function results(req,res,resultsType) {
     resultsType = resultsType || "results";
@@ -9,7 +10,7 @@ function results(req,res,resultsType) {
     var fields = queryString.fields;
     var i = 0;
 
-    var dbQuery = require('../util').getDbQuery(req);
+    var dbQuery = util.getDbQuery(req);
     var cfg = {
         url : 1,
         timestamp: 1,
@@ -18,10 +19,7 @@ function results(req,res,resultsType) {
     };
 
     if(fields) {
-        fields = fields.split(",");
-        for(i=fields.length-1; i>=0; i--) {
-            cfg[fields[i]] = 1;
-        }
+        cfg = _.extend(cfg,util.buildProjection(fields));
     } else {
         var rep;
         var reportCfg = require('../conf/report');

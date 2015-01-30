@@ -1,8 +1,8 @@
 /*global eyeballControllers, _*/
 
-eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeout','$routeParams','utils','popover','tablesort','render','chart','persist','logger','config',
+eyeballControllers.controller('ReportCtrl',['settings','$scope','$http','$location','$timeout','$routeParams','utils','popover','tablesort','render','chart','persist','logger','config',
 
-    function ReportCtrl($scope,$http,$location,$timeout,$routeParams,utils,popover,tablesort,render,chart,persist,logger,config) {
+    function ReportCtrl(settings,$scope,$http,$location,$timeout,$routeParams,utils,popover,tablesort,render,chart,persist,logger,config) {
         logger.log("ReportCtrl");
         $scope.setPage("report");
         config = config.data.report;
@@ -160,14 +160,14 @@ eyeballControllers.controller('ReportCtrl',['$scope','$http','$location','$timeo
         });
 
         $scope.expandResultsGroup = function(obj) {
-            var url = '/v1/results';
+            var url = '/'+settings.apiVersion+'/results';
             function urlMatch(o) {
                 return o.url === obj.url || o === obj.url;
             }
 
             var expanded = _.find($scope.expandedUrls,urlMatch);
             if(expanded) {
-                url = '/v1/results/latest';
+                url = '/'+settings.apiVersion+'/results/latest';
             } else {
                 obj.busy = true;
             }
@@ -209,7 +209,7 @@ eyeballControllers.controller('ReportOverviewCtrl',['$scope','persist',
     function ReportOverviewCtrl($scope,persist) {
         var testInfo = persist.get('testInfo') || {};
         if(!testInfo.testing) {
-            $scope.getResults('/v1/results/latest',$scope.updateTotals);
+            $scope.getResults('/'+settings.apiVersion+'/results/latest',$scope.updateTotals);
         }
     }
 
@@ -218,6 +218,6 @@ eyeballControllers.controller('ReportOverviewCtrl',['$scope','persist',
 eyeballControllers.controller('ReportStandardCtrl',['$scope',
 
     function ReportStandardCtrl($scope) {
-        $scope.getResults('/v1/results/latest?fields=metrics.'+$scope.report,$scope.updateTotals);
+        $scope.getResults('/'+settings.apiVersion+'/results/latest?fields=metrics.'+$scope.report,$scope.updateTotals);
     }
 ]);
