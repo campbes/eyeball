@@ -52,7 +52,7 @@ eyeballControllers.controller('TestCtrl',['settings','$scope','$http','$location
             }
 
             $http({
-                url: '/'+settings.apiVersion+'/test',
+                url: '/v'+settings.apiVersion+'/test',
                 method: "POST",
                 data : $scope.testCriteria
             }).success(function(data) {

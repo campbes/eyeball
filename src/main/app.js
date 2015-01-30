@@ -52,6 +52,8 @@ app.get('/v*/results/*', require('./routes/record').get);
 app.delete('/v*/results/*', require('./routes/record').delete);
 // test
 app.post('/v*/test', require('./routes/test'));
+//config
+app.get('/v*/config',require('./routes/config'));
 // monitor
 app.get('/v*/monitor', require('./routes/monitor'));
 
