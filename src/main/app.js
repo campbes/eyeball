@@ -25,6 +25,7 @@ var app = express();
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
+app.use(express.compress());
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
@@ -78,8 +79,8 @@ var partials = function(req,res) {
 
 app.get('/partials/*',partials);
 
-var DB = require("mongojs").connect("mongodb://eyeball:eyeball@ds047958.mongolab.com:47958/eyeball", ["urls"]).urls;
-//var DB = require("mongojs").connect("eyeball", ["urls"]).urls;
+//var DB = require("mongojs").connect("mongodb://eyeball:eyeball@ds047958.mongolab.com:47958/eyeball", ["urls"]).urls;
+var DB = require("mongojs").connect("eyeball", ["urls"]).urls;
 
 var server = http.createServer(app);
 server.listen(app.get('port'), function(){
@@ -87,7 +88,7 @@ server.listen(app.get('port'), function(){
 });
 
 var exec = require('child_process').exec;
-exec('java -cp lib/vnu.jar nu.validator.servlet.Main 8888',
+exec('java -Xss512k -cp lib/vnu.jar nu.validator.servlet.Main 8888',
     function(err,stdout,stderr) {
         if(err) {
             console.log("VNU server error: "+err);
