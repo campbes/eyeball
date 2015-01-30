@@ -1,5 +1,6 @@
 var EyeballRoutesRecord = (function(){
 
+    var _ = require('lodash');
     var url = require('url');
     var mongojs = require('mongojs');
     var path = require('path');
@@ -21,8 +22,15 @@ var EyeballRoutesRecord = (function(){
         var id = path.basename(parsedUrl.pathname);
         var queryString = parsedUrl.query || {};
         var view = queryString.view;
+        var fields = queryString.fields;
 
-        return eyeball.DB.find(getDbQuery(id),function(err,results) {
+        var cfg = {};
+
+        if(fields) {
+            cfg = _.extend(cfg,require('../util').buildProjection(fields));
+        }
+
+        return eyeball.DB.find(getDbQuery(id),cfg,function(err,results) {
             if(err) {
                 res.status(500).send(err);
                 return null;
@@ -35,7 +43,7 @@ var EyeballRoutesRecord = (function(){
 
             if(view && viewCfg[view]) {
                 data = viewCfg[view](data);
-            } else {
+            } else if(data.metric && data.metrics.yslow) {
                 // do the yslow rule additions bewfore returning
                 var i;
                 var metrics = data.metrics.yslow.data.g;

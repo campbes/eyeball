@@ -74,8 +74,22 @@ var EyeballUtil = function() {
         return dbQuery;
     }
 
+    function buildProjection(fields) {
+        var proj = {}, i;
+        fields = fields.split(",");
+        for(i=fields.length-1; i>=0; i--) {
+            if(fields[i].substr(0,1) === '-') {
+                proj[fields[i].substr(1)] = 0;
+            } else {
+                proj[fields[i]] = 1;
+            }
+        }
+        return proj;
+    }
+
     return {
-        getDbQuery : getDbQuery
+        getDbQuery : getDbQuery,
+        buildProjection : buildProjection
     };
 
 };

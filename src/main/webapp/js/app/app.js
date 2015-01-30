@@ -5,6 +5,10 @@ var eyeballApp = angular.module('eyeballApp',[
     'eyeballControllers'
 ]);
 
+eyeballApp.constant('settings',{
+    apiVersion : 1
+});
+
 eyeballApp.config(['$routeProvider',
     function($routeProvider) {
 

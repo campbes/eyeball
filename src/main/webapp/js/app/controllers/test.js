@@ -1,8 +1,8 @@
 /*global eyeballControllers*/
 
-eyeballControllers.controller('TestCtrl',['$scope','$http','$location','persist','socket','$timeout','logger',
+eyeballControllers.controller('TestCtrl',['settings','$scope','$http','$location','persist','socket','$timeout','logger',
 
-    function TestCtrl($scope,$http,$location,persist,socket,$timeout,logger) {
+    function TestCtrl(settings,$scope,$http,$location,persist,socket,$timeout,logger) {
         logger.log("TestCtrl");
         $scope.testCriteria = {};
         var testInfo = persist.get('testInfo') || {};
@@ -52,7 +52,7 @@ eyeballControllers.controller('TestCtrl',['$scope','$http','$location','persist'
             }
 
             $http({
-                url: '/test',
+                url: '/'+settings.apiVersion+'/test',
                 method: "POST",
                 data : $scope.testCriteria
             }).success(function(data) {

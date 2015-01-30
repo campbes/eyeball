@@ -1,8 +1,8 @@
 /*global eyeballControllers,Harpy,$*/
 
-eyeballControllers.controller('HarCtrl',['$scope','$routeParams','$http','persist','harpy',
+eyeballControllers.controller('HarCtrl',['settings','$scope','$routeParams','$http','persist','harpy',
 
-    function HarCtrl($scope,$routeParams,$http,persist,harpy) {
+    function HarCtrl(settings,$scope,$routeParams,$http,persist,harpy) {
 
         $scope.id = $routeParams.id.substr(1);
         $scope.reportFilter = persist.get("reportFilter");
@@ -16,7 +16,7 @@ eyeballControllers.controller('HarCtrl',['$scope','$routeParams','$http','persis
         });
 
         $http({
-            url: '/detail?id='+$scope.id,
+            url: '/v'+settings.apiVersion+'/results/'+$scope.id+'?fields=url,timestamp,build,tag,metrics.har,metrics.harUncached',
             method: "GET"
         }).success(function(data) {
                 $scope.data = data;

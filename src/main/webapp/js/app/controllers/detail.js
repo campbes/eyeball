@@ -1,14 +1,16 @@
 /*global eyeballControllers,$*/
 
-eyeballControllers.controller('DetailCtrl',['$scope','$routeParams','$http','config','render','persist','utils',
+eyeballControllers.controller('DetailCtrl',['settings','$scope','$routeParams','$http','config','render','persist','utils',
 
-    function DetailCtrl($scope,$routeParams,$http,config,render,persist,utils) {
+    function DetailCtrl(settings,$scope,$routeParams,$http,config,render,persist,utils) {
 
         config = config.data.report;
         $scope.id = $routeParams.id.substr(1);
 
+        console.log(config)
+
         $http({
-            url: '/detail?id='+$scope.id,
+            url: '/v'+settings.apiVersion+'/results/'+$scope.id+'?fields=-metrics.har,-metrics.harUncached',
             method: "GET"
         }).success(function(data) {
             $scope.data = data;

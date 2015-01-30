@@ -1,8 +1,8 @@
 /*global eyeballControllers*/
 
-eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','chart','$location','config','persist','render',
+eyeballControllers.controller('HistoryCtrl',['settings','$scope','$routeParams','$http','chart','$location','config','persist','render',
 
-    function HistoryCtrl($scope,$routeParams,$http,chart,$location,config,persist,render) {
+    function HistoryCtrl(settings,$scope,$routeParams,$http,chart,$location,config,persist,render) {
         config = config.data.report;
         $scope.data = [];
         $scope.id = $routeParams.id.substr(1);
@@ -42,10 +42,8 @@ eyeballControllers.controller('HistoryCtrl',['$scope','$routeParams','$http','ch
             return array;
         }
 
-
-
         $http({
-            url: '/history?id='+$scope.id,
+            url: '/v'+settings.apiVersion+'/results/'+$scope.id+'/history?fields=-metrics.har,-metrics.harUncached',
             method: "GET"
         }).success(function(data) {
                 $scope.data = data;
