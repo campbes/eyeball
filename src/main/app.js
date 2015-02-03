@@ -78,6 +78,7 @@ app.get('/partials/*',partials);
 
 //var DB = require("mongojs").connect("mongodb://eyeball:eyeball@ds047958.mongolab.com:47958/eyeball", ["urls"]).urls;
 var DB = require("mongojs").connect("eyeball", ["urls"]).urls;
+DB.ensureIndex({timestamp:1});
 
 var server = http.createServer(app);
 server.listen(app.get('port'), function(){

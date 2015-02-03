@@ -36,6 +36,7 @@ function results(req,res,resultsType) {
         function(err,results) {
             if(err) {
                 res.send(err);
+                return;
             }
             if(resultsType === "latest") {
                 results = _.unique(results,"url");
