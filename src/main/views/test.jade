@@ -35,14 +35,3 @@ mixin test
                 div.label
                     i.icon.loading
                     |{{testInfo.message}}
-
-        div#modalTest.ui.modal.fade(tabindex="-1",role="dialog",aria-labelledby="modalTestLabel",aria-hidden="true")
-            div.modal-dialog
-                div.modal-content
-                    div.modal-header
-                        button.close(type="button",data-dismiss="modal",aria-hidden="true")
-                        h4.modal-title
-                            i.icon.lab
-                            |&nbsp;Test
-                    div.modal-body
-                        mixin testForm
