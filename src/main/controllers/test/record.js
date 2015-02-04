@@ -6,9 +6,25 @@ var EyeballControllersTestRecord = function(build,tag,urlsLength) {
     var testCfg = require('../../conf/test');
     var fs = require("fs");
 
+    var Q = require('Q');
+    var zlib = require('zlib');
+
     var committedRecords = [];
     var createdRecords = [];
     var uncommittedRecords = [];
+
+    function compress(data,metric) {
+        var deferred = Q.defer();
+        zlib.deflate(JSON.stringify(data), function(err, buffer) {
+            if (!err) {
+                deferred.resolve({
+                    data : buffer,
+                    metric : metric
+                });
+            }
+        });
+        return deferred.promise;
+    }
 
     function commitRecord(record){
 
@@ -17,19 +33,35 @@ var EyeballControllersTestRecord = function(build,tag,urlsLength) {
 
         record = testers.eyeball(record);
 
-        eyeball.DB.insert(record,function(err){
-            if(err) {
-                eyeball.logger.info(err);
-            }
-            committedRecords.push(record);
-            eyeball.logger.info("Emitting..."+build);
-            eyeball.io.sockets.volatile.emit('commitRecord_'+build,{
-                committed : committedRecords.length,
-                total : urlsLength,
-                progress : Math.floor((committedRecords.length/urlsLength) * 100),
-                record : record
+        var compressed = [
+            compress(record.metrics.har.data,'har'),
+            compress(record.metrics.harUncached.data,'harUncached')
+        ];
+
+        compressed.forEach(function(def) {
+            def.then(function(obj) {
+                record.metrics[obj.metric].data = obj.data;
+                record.metrics[obj.metric].compressed = true;
             });
         });
+
+        Q.all(compressed).then(function() {
+
+            eyeball.DB.insert(record,function(err) {
+                if(err) {
+                    eyeball.logger.info(err);
+                }
+                committedRecords.push(record);
+                eyeball.logger.info("Emitting..." + build);
+                eyeball.io.sockets.volatile.emit('commitRecord_' + build,{
+                    committed: committedRecords.length,
+                    total: urlsLength,
+                    progress: Math.floor((committedRecords.length / urlsLength) * 100),
+                    record: record
+                });
+            });
+        });
+
         var i = 0;
         for(i=0; i<uncommittedRecords.length; i++) {
             if(uncommittedRecords[i] === record) {
