@@ -38,7 +38,7 @@ eyeballControllers.controller('HarCtrl',['settings','$scope','$routeParams','$ht
                 setTimeout(function(){
                     $scope.uncachedViewer = new Harpy.Viewer(JSON.stringify(data.metrics.harUncached.data));
                     $('#harUncached').html('');
-                    $scope.uncachedViewer.draw("harUncached",harpy);
+                    $scope.uncachedViewer.draw("harUncached",harpy.pie);
                 },500);
             });
 
