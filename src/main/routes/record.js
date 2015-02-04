@@ -5,11 +5,24 @@ var EyeballRoutesRecord = (function(){
     var mongojs = require('mongojs');
     var path = require('path');
     var viewCfg = require('../conf/view');
+    var zlib = require('zlib');
+    var Q = require('Q');
 
     function getDbQuery(id) {
         return {
             _id : mongojs.ObjectId(id)
         };
+    }
+
+    function inflate(buffer,metric) {
+        var deferred = Q.defer();
+        zlib.inflate(buffer,function(err,buffer) {
+            deferred.resolve({
+                metric : metric,
+                data : JSON.parse(buffer.toString())
+            });
+        });
+        return deferred.promise;
     }
 
     var recordGet = function(req,res) {
@@ -40,6 +53,20 @@ var EyeballRoutesRecord = (function(){
                 return null;
             }
             var data = results[0];
+            var decompress = [];
+            var metric;
+
+            for (metric in data.metrics) {
+                if(data.metrics.hasOwnProperty(metric) && data.metrics[metric].compressed) {
+                    decompress.push(inflate(data.metrics[metric].data.buffer,metric));
+                }
+            }
+
+            decompress.forEach(function(def) {
+                def.then(function(obj) {
+                    data.metrics[obj.metric].data = obj.data;
+                });
+            });
 
             if(view && viewCfg[view]) {
                 data = viewCfg[view](data);
@@ -54,7 +81,10 @@ var EyeballRoutesRecord = (function(){
                 }
             }
 
-            res.send(JSON.stringify(data));
+            Q.all(decompress).then(function() {
+                res.send(JSON.stringify(data));
+            });
+
             return data;
         });
 
