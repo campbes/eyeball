@@ -420,7 +420,7 @@ table.harpy div.blocked, table.dns, table.harpy div.connect, table.harpy div.sen
     opacity: 0.8;
 }
 table.harpy div.loadMarker {
-    margin-top: 20px !important;
+    margin-top: 44px !important;
 }
 div.harpyChart {
     width: 25%;
