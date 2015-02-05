@@ -428,3 +428,8 @@ div.harpyChart {
 div.harpyBarChart {
     width: 33%;
 }
+.harpy input {
+    background: #111;
+    color: #FFF;
+    border: 1px solid #999;
+}
