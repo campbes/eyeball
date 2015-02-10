@@ -396,10 +396,10 @@ table.harpy dt, table.harpy td.info td:first-child {
     margin-left: 10px;
 }
 .harpy th.headerSortUp:after {
-    content: "\f0de";
+    content: "\f0dd";
 }
 .harpy th.headerSortDown:after {
-    content: "\f0dd";
+    content: "\f0de";
 }
 .harpy td.info {
     word-break: break-all;
