@@ -48,9 +48,7 @@ mixin reportView
     div.right.menu
         a(ng-class="(reportView === 'table' ? 'item active' : 'item')",ng-click="setReportView('table')") Report view
         a(ng-class="(reportView === 'chart' ? 'item active' : 'item')",ng-click="setReportView('chart')") Chart view
-        a.item(type="button" data-toggle="modal" data-target="#modalFilter")
-            i.ui.icon.filter
-            |&nbsp; Filter
+
 
 mixin reportHeaders
     thead
@@ -76,14 +74,11 @@ mixin reportTotals
                         span(ng-if="query.url")
                             a(href='#{{path}}start={{query.start}}&end={{query.end}}&build={{query.build}}&tag={{query.tag}}',title='Remove filter ({{r.url}})')
                                 i.icon.remove
-                        input(type="text",ng-model="filterParams.url")
+                        input(type="text",ng-model="filterParams.url",ng-keyup="textFilter()")
                     div.field
                         div.ui.toggle.checkbox
-                            input#urlExact(type="checkbox",ng-model="filterParams.urlExact",ng-checked="query.urlExact",ng-false-value="",ng-true-value="true")
+                            input#urlExact(type="checkbox",ng-model="filterParams.urlExact",ng-checked="query.urlExact",ng-false-value="",ng-true-value="true",ng-change="filter()")
                             label(for="urlExact") Exact
-                    div.field
-                        button.ui.icon.mini.button(ng-click="filter()",type="submit",title="Filter")
-                            i.filter.icon
         td(data-expand="true")
         td(data-expandable='true')
             a(href='#{{path}}?url={{query.url}}&build={{query.build}}&tag={{query.tag}}',ng-if='query.start && query.end && query.start.substr(0,10) !== query.end.substr(0,10)')

@@ -43,9 +43,13 @@ eyeballApp.config(['$routeProvider',
             }).when('/monitor', {
                 templateUrl: '/partials/monitor',
                 controller : 'MonitorCtrl'
-            }).when('/test', {
+            }).when('/test',{
                 templateUrl: '/partials/test',
-                controller : 'TestMainCtrl'
+                controller: 'TestMainCtrl'
+            }).when('/compare/:records',{
+                templateUrl: '/partials/compare',
+                controller : 'CompareCtrl',
+                resolve : resolve
             }).otherwise({
                 redirectTo: '/test'
             });

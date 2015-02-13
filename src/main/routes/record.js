@@ -9,9 +9,22 @@ var EyeballRoutesRecord = (function(){
     var Q = require('Q');
 
     function getDbQuery(id) {
-        return {
-            _id : mongojs.ObjectId(id)
-        };
+        var dbQuery = {};
+        var i;
+        id = id.split(",");
+
+        id.forEach(function(obj,i) {
+            id[i] = mongojs.ObjectId(obj);
+        });
+
+        if(id.length > 1) {
+            dbQuery._id = {
+                $in : id
+            };
+        } else if (id[0]) {
+            dbQuery._id = id[0];
+        }
+        return dbQuery;
     }
 
     function inflate(buffer,metric) {
@@ -52,40 +65,46 @@ var EyeballRoutesRecord = (function(){
                 res.status(404).send("Not found");
                 return null;
             }
-            var data = results[0];
+
             var decompress = [];
             var metric;
 
-            for (metric in data.metrics) {
-                if(data.metrics.hasOwnProperty(metric) && data.metrics[metric].compressed) {
-                    decompress.push(inflate(data.metrics[metric].data.buffer,metric));
-                }
-            }
+            results.forEach(function(data,index) {
 
-            decompress.forEach(function(def) {
-                def.then(function(obj) {
-                    data.metrics[obj.metric].data = obj.data;
-                });
-            });
-
-            if(view && viewCfg[view]) {
-                data = viewCfg[view](data);
-            } else if(data.metric && data.metrics.yslow) {
-                // do the yslow rule additions bewfore returning
-                var i;
-                var metrics = data.metrics.yslow.data.g;
-                for (i in metrics) {
-                    if(metrics.hasOwnProperty(i)) {
-                        data.metrics.yslow.data.g[i].rule = YSLOW.doc.rules[i].name;
+                for(metric in data.metrics) {
+                    if(data.metrics.hasOwnProperty(metric) && data.metrics[metric].compressed) {
+                        decompress.push(inflate(data.metrics[metric].data.buffer,metric));
                     }
                 }
-            }
 
-            Q.all(decompress).then(function() {
-                res.send(JSON.stringify(data));
+                decompress.forEach(function(def) {
+                    def.then(function(obj) {
+                        data.metrics[obj.metric].data = obj.data;
+                    });
+                });
+
+                if(view && viewCfg[view]) {
+                    data = viewCfg[view](data);
+                } else if(data.metric && data.metrics.yslow) {
+                    // do the yslow rule additions bewfore returning
+                    var i;
+                    var metrics = data.metrics.yslow.data.g;
+                    for(i in metrics) {
+                        if(metrics.hasOwnProperty(i)) {
+                            data.metrics.yslow.data.g[i].rule = YSLOW.doc.rules[i].name;
+                        }
+                    }
+                }
+
+                results[index] = data;
+
             });
 
-            return data;
+            Q.all(decompress).then(function() {
+                res.send(JSON.stringify((results.length > 1 ? results : results[0])));
+            });
+
+            return results;
         });
 
     };

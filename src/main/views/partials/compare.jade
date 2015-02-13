@@ -1,0 +1,55 @@
+div.container
+
+    div.ui.small.steps
+        div.step
+            a(href="#") Eyeball
+        div.step
+            a(href="#/report?{{reportFilter}}") Analyze
+        div.active.step Compare
+
+    div.ui.segment.inverted.default.header Load time
+    div.ui.grid
+        div.eight.wide.column
+            div.ui.segment.inverted.attached.top.default Cached
+            div.ui.segment.inverted.attached.botttom.default
+                div#time-cached
+        div.eight.wide.column
+            div.ui.segment.inverted.attached.top.default Uncached
+            div.ui.segment.inverted.attached.botttom.default
+                div#time-uncached
+    div.ui.segment.inverted.default.header Page size
+    div.ui.grid
+        div.eight.wide.column
+            div.ui.segment.inverted.attached.top.default Cached
+            div.ui.segment.inverted.attached.botttom.default
+                div#size-cached
+                div#size-cached-html
+                div#size-cached-css
+                div#size-cached-javascript
+                div#size-cached-image
+        div.eight.wide.column
+            div.ui.segment.inverted.attached.top.default Uncached
+            div.ui.segment.inverted.attached.botttom.default
+                div#size-uncached
+                div#size-uncached-html
+                div#size-uncached-css
+                div#size-uncached-javascript
+                div#size-uncached-image
+    div.ui.segment.inverted.default.header HTTP Requests
+    div.ui.grid
+        div.eight.wide.column
+            div.ui.segment.inverted.attached.top.default Cached
+            div.ui.segment.inverted.attached.botttom.default
+                div#requests-cached
+                div#requests-cached-html
+                div#requests-cached-css
+                div#requests-cached-javascript
+                div#requests-cached-image
+        div.eight.wide.column
+            div.ui.segment.inverted.attached.top.default Uncached
+            div.ui.segment.inverted.attached.botttom.default
+                div#requests-uncached
+                div#requests-uncached-html
+                div#requests-uncached-css
+                div#requests-uncached-javascript
+                div#requests-uncached-image

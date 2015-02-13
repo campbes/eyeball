@@ -126,6 +126,24 @@ eyeballControllers.controller('ReportCtrl',['settings','$scope','$http','$locati
             },500);
         };
 
+        $scope.filterById = function() {
+            $scope.filterParams.id = ($scope.filterParams.id ? "" : $scope.starredRecords.toString());
+            $scope.filter();
+        };
+
+        $scope.compare = function() {
+            $location.path('compare/:'+$scope.starredRecords.toString());
+        };
+
+        var textFilterTimer;
+
+        $scope.textFilter = function() {
+            if(textFilterTimer) {
+                clearTimeout(textFilterTimer);
+            }
+            textFilterTimer = setTimeout($scope.filter,500);
+        };
+
         utils.popover(popover);
 
         $scope.encodeQuery = function(val) {

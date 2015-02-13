@@ -25,6 +25,13 @@ h1.ui.header {
     font-size: 1.3rem;
     margin: 0;
 }
+button.ui {
+    background: none;
+    border: none;
+}
+button.ui[disabled="disabled"] {
+    opacity: 0.5;
+}
 .logo {
     display: inline-block;
     background: url("../images/eyeballSmall.png") no-repeat 0 4px;
@@ -132,6 +139,9 @@ h1.ui.header {
 }
 #results tr.starred td[data-type='grades'] {
     background: none !important;
+}
+#results td.ui.menu {
+    padding: 0;
 }
 .starred .icon {
     color: #FF9;
