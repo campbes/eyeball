@@ -20,6 +20,11 @@ html(ng-app='eyeballApp',lang='en')
             a(class="item{{(page === 'report' ? ' active' : '')}}",href="#report")
                 i.icon.search
                 |&nbsp;Analyze
+            div.item
+                form(ng-submit="quickTest()")
+                    input.ui(ng-model="quickUrl" name="url")
+                    button.small.default.inverted(type="submit")
+                        i.icon.lab
             a(class="item right{{(page === 'monitor' ? ' active' : '')}}",href="#/monitor")
                 i.icon.desktop
                 |&nbsp;Monitor
