@@ -154,6 +154,7 @@ mixin results
     mixin filterInfo
     table#results.ui.table.segment.inverted.default(data-expanded-locked="{{resultsTable.expanded}}")
         mixin reportHeaders
+        mixin starredFunctions
         tbody(ng-hide="reportView === 'chart'")
             mixin reportTotals
             mixin reportLoader
@@ -223,3 +224,17 @@ mixin filterInfo
                     i.icon.remove
                     strong Tag
                     |&nbsp;{{query.tag}}
+
+mixin starredFunctions
+    tbody
+        tr
+            td(colspan="100%").ui.menu.inverted.small
+                button.ui.item(ng-disabled="starredRecords.length === 0", ng-click="deStar()")
+                    i.icon.empty.star
+                    |&nbsp;De-star
+                button.ui.item(ng-click="filterById()", ng-disabled="starredRecords.length === 0")
+                    i(class="icon {{(filterParams.id ? 'unhide' : 'hide')}}")
+                    |{{(filterParams.id ? "Show all" : "Show starred only")}}
+                button.ui.item(ng-disabled="starredRecords.length < 2 || starredRecords.length > 5",ng-click="compare()")
+                    i.icon.bar.chart
+                    |Compare

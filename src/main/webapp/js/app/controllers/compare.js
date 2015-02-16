@@ -20,11 +20,9 @@ eyeballControllers.controller('CompareCtrl',['settings','$scope','$routeParams',
       var time = {
         cached: [
           ['URL','Dom load','Page load']
-        ],
-        uncached: [
-          ['URL','Dom load','Page load']
         ]
       };
+      time.uncached = [].concat(time.cached);
 
         var colors = ['#FFB','#9C9','#FBF','#BBF'];
 
@@ -83,7 +81,7 @@ eyeballControllers.controller('CompareCtrl',['settings','$scope','$routeParams',
             method: "GET"
         }).success(function(data) {
 
-          var types = ["html","css","javascript","image"];
+          var types = ["html","image","javascript","css"];
           types.forEach(function(t) {
             mimeTypes[t] = [];
           });
@@ -206,10 +204,10 @@ eyeballControllers.controller('CompareCtrl',['settings','$scope','$routeParams',
 
               types.forEach(function(t) {
                 var chart = new google.visualization.BarChart(document.getElementById('size-' + s + '-' + t));
-                chart.draw(google.visualization.arrayToDataTable(sizes[s][t]),typeConfig);
+                chart.draw(google.visualization.arrayToDataTable(sizes[s][t]),$.extend(typeConfig,{title:t}));
 
                 chart = new google.visualization.BarChart(document.getElementById('requests-' + s + '-' + t));
-                chart.draw(google.visualization.arrayToDataTable(requests[s][t]),typeConfig);
+                chart.draw(google.visualization.arrayToDataTable(requests[s][t]),$.extend(typeConfig,{title:t}));
               });
             }
           }

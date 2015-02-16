@@ -135,6 +135,10 @@ eyeballControllers.controller('ReportCtrl',['settings','$scope','$http','$locati
             $location.path('compare/:'+$scope.starredRecords.toString());
         };
 
+        $scope.deStar = function() {
+            $scope.starredRecords = [];
+        };
+
         var textFilterTimer;
 
         $scope.textFilter = function() {
