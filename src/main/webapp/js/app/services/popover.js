@@ -4,7 +4,9 @@ eyeballApp.factory('popover',function(){
     return {
         show : function(e,obj) {
             var el = $(obj);
-            el.popup('hide');
+            if(!el.popup('is visible')) {
+                el.popup('hide');
+            }
             el.popup({on : false});
             el.popup('setting','content',$('#popoverContent').html());
             el.popup('setting','variation','small');
