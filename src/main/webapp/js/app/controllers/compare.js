@@ -1,8 +1,22 @@
 /*global eyeballControllers,Harpy,$*/
 
-eyeballControllers.controller('CompareCtrl',['settings','$scope','$routeParams','$http','persist','harpy',
+eyeballControllers.controller('CompareCtrl',['settings','$scope','$routeParams','$http',
 
-    function CompareCtrl(settings,$scope,$routeParams,$http,persist,harpy) {
+    function CompareCtrl(settings,$scope,$routeParams,$http) {
+
+        $scope.metrics = [{
+          type: 'time',
+          label: 'Load time'
+        },{
+          type : 'size',
+          label : 'Page size',
+          mimeTypes : true
+        },{
+          type : 'requests',
+          label : 'HTTP requests',
+          mimeTypes : true
+        }];
+
         var recordIds = $routeParams.records.substr(1);
 
         var mimeTypes = {};
@@ -76,12 +90,15 @@ eyeballControllers.controller('CompareCtrl',['settings','$scope','$routeParams',
         }
       };
 
+      var types = ["html","image","javascript","css"];
+      $scope.mimeTypes = types;
+
         $http({
             url: '/v'+settings.apiVersion+'/results/'+recordIds+'?fields=url,timestamp,build,tag,metrics.har,metrics.harUncached,metrics.time.data',
             method: "GET"
         }).success(function(data) {
 
-          var types = ["html","image","javascript","css"];
+
           types.forEach(function(t) {
             mimeTypes[t] = [];
           });
