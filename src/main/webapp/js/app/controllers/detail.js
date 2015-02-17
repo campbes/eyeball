@@ -7,8 +7,6 @@ eyeballControllers.controller('DetailCtrl',['settings','$scope','$routeParams','
         config = config.data.report;
         $scope.id = $routeParams.id.substr(1);
 
-        console.log(config)
-
         $http({
             url: '/v'+settings.apiVersion+'/results/'+$scope.id+'?fields=-metrics.har,-metrics.harUncached',
             method: "GET"
