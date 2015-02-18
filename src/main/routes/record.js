@@ -67,21 +67,19 @@ var EyeballRoutesRecord = (function(){
             }
 
             var decompress = [];
-            var metric;
 
             results.forEach(function(data,index) {
-
+                var metric;
+                var def;
                 for(metric in data.metrics) {
                     if(data.metrics.hasOwnProperty(metric) && data.metrics[metric].compressed) {
-                        decompress.push(inflate(data.metrics[metric].data.buffer,metric));
+                        def = inflate(data.metrics[metric].data.buffer,metric);
+                        def.then(function(obj) {
+                            data.metrics[obj.metric].data = obj.data;
+                        });
+                        decompress.push(def);
                     }
                 }
-
-                decompress.forEach(function(def) {
-                    def.then(function(obj) {
-                        data.metrics[obj.metric].data = obj.data;
-                    });
-                });
 
                 if(view && viewCfg[view]) {
                     data = viewCfg[view](data);
