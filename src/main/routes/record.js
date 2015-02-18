@@ -6,7 +6,7 @@ var EyeballRoutesRecord = (function(){
     var path = require('path');
     var viewCfg = require('../conf/view');
     var zlib = require('zlib');
-    var Q = require('Q');
+    var Q = require('q');
 
     function getDbQuery(id) {
         var dbQuery = {};

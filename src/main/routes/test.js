@@ -22,7 +22,9 @@ var EyeballRoutesTest = function(req,res) {
             data = data.replace(new RegExp(regex,"g"),regexReplace);
 
         }
-        urls = data.split("\r\n");
+        // allow for crlf and lf
+        data = data.replace('\r\n','\n');
+        urls = data.split("\n");
         if(reps) {
             var urlset = urls;
             var i = 0;

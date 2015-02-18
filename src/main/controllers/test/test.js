@@ -137,6 +137,8 @@ var EyeballControllersTestTest = function(params) {
         createPage(test,ph);
     }
 
+    var startTests;
+
     completePage = function(test,ph) {
         test.page.close(function(){
             test.passes[test.passes.length] = test.webpage;
@@ -173,8 +175,6 @@ var EyeballControllersTestTest = function(params) {
         }
         return false;
     }
-
-    var startTests;
 
     function createPhantom(ph) {
         openPage(ph);

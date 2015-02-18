@@ -113,6 +113,8 @@ eyeball = {
     DB : DB
 };
 
+eyeball.io.set('log level',1);
+
 app.locals = {
     env : app.settings.env,
     version : pkg.version,

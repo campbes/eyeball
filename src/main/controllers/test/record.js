@@ -6,7 +6,7 @@ var EyeballControllersTestRecord = function(build,tag,urlsLength) {
     var testCfg = require('../../conf/test');
     var fs = require("fs");
 
-    var Q = require('Q');
+    var Q = require('q');
     var zlib = require('zlib');
 
     var committedRecords = [];
@@ -72,7 +72,7 @@ var EyeballControllersTestRecord = function(build,tag,urlsLength) {
         if(record.markupTestFile) {
             fs.unlink(record.markupTestFile,function(err){
                 if(err) {
-                    console.log("error deleting validator file: "+err);
+                    eyeball.logger.error("error deleting validator file: "+err);
                 }
                 eyeball.logger.info("Deleting validator file");
             });
@@ -125,7 +125,7 @@ var EyeballControllersTestRecord = function(build,tag,urlsLength) {
         uncommittedRecords.push(record);
 
         record.recordTimer = setTimeout(function(){
-            console.log("Gave up waiting for metrics");
+            eyeball.logger.info("Gave up waiting for metrics");
             commitRecord(record);
         },30000);
 
