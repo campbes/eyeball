@@ -193,7 +193,7 @@ eyeballControllers.controller('ReportCtrl',['settings','$scope','$http','$locati
             } else {
                 obj.busy = true;
             }
-            url += '?url='+obj.url + '&' + queryString.replace(/&url(\=[^&]*)?(?=&|$)|^url(\=[^&]*)?(&|$)/,'');
+            url += '?url='+encodeURIComponent(obj.url) + '&' + queryString.replace(/&url(\=[^&]*)?(?=&|$)|^url(\=[^&]*)?(&|$)/,'');
 
             $http({
                 url: url,
