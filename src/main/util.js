@@ -49,10 +49,10 @@ var EyeballUtil = function() {
         }
 
         if(queryString.urlExact && queryString.url) {
-            dbQuery.url = queryString.url;
+            dbQuery.url = decodeURIComponent(queryString.url);
         } else if (queryString.url) {
             dbQuery.url = {
-                $regex : queryString.url
+                $regex: decodeURIComponent(queryString.url.replace('?','.'))
             };
         }
 
