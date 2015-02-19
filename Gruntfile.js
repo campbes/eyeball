@@ -166,14 +166,35 @@ module.exports = function(grunt) {
             ],
             options: {
                 specs: ['<%= props.test%>/**/*Spec.js'],
-                helpers: ['<%= props.test%>/**/*Helper.js',
-                    '<%= props.test%>/lib/angular.min.js',
+                helpers: ['<%= props.test%>/**/*Helper.js'
+                ],
+                vendor : ['<%= props.test%>/lib/angular.min.js',
                     '<%= props.test%>/lib/angular-mocks.js'
                 ],
+                junit : {
+                    path : '<%=props.out%>/test-results'
+                },
                 template: require('grunt-template-jasmine-istanbul'),
                 templateOptions: {
-                    coverage: '<%= props.out%>/coverage/coverage.json',
-                    report: '<%= props.out%>/coverage'
+                    coverage: '<%=props.out%>/coverage/coverage.json',
+                    report: {
+                        type : 'cobertura',
+                        options : {
+                            dir : '<%=props.out%>/coverage'
+                        }
+                    },
+                    template: require('grunt-template-jasmine-istanbul'),
+                    templateOptions: {
+                        coverage: '<%=props.out%>/coverage/coverage.json',
+                        report :'<%=props.out%>/coverage',
+                        replace : false
+                    },
+                    thresholds: {
+                        lines: 0,
+                        statements: 0,
+                        branches: 0,
+                        functions: 0
+                    }
                 }
             }
         },

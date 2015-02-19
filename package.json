@@ -17,7 +17,8 @@
         "yslow" : "*",
         "arialinter" : "0.3.1",
         "jsdom" : "0.8.6",
-	   "lodash" : "*"
+	    "lodash" : "*",
+        "q" : "*"
     },
     "devDependencies" : {
         "grunt-contrib-clean" : "0.5.0",
