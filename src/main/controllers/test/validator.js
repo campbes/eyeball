@@ -15,7 +15,7 @@ var EyeballControllersTestValidator = function() {
         var htmlFile = item.file;
         var callback = item.cb;
         var vnuData = "";
-        var vnu = require('child_process').spawn('java',['-jar','-Dnu.validator.client.out=json','-Dfile.encoding=UTF8','lib/vnu-fast-client.jar',htmlFile]);
+        var vnu = require('child_process').exec('java -jar -Dnu.validator.client.out=json -Dfile.encoding=UTF8 lib/vnu-fast-client.jar ' +htmlFile);
         activeVnus.push(vnu);
 
         setTimeout(function(){
