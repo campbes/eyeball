@@ -10,7 +10,6 @@ var EyeballRoutesRecord = (function(){
 
     function getDbQuery(id) {
         var dbQuery = {};
-        var i;
         id = id.split(",");
 
         id.forEach(function(obj,i) {
@@ -69,14 +68,17 @@ var EyeballRoutesRecord = (function(){
             var decompress = [];
 
             results.forEach(function(data,index) {
+
+                function reapplyData(obj) {
+                    data.metrics[obj.metric].data = obj.data;
+                }
+
                 var metric;
                 var def;
                 for(metric in data.metrics) {
                     if(data.metrics.hasOwnProperty(metric) && data.metrics[metric].compressed) {
                         def = inflate(data.metrics[metric].data.buffer,metric);
-                        def.then(function(obj) {
-                            data.metrics[obj.metric].data = obj.data;
-                        });
+                        def.then(reapplyData);
                         decompress.push(def);
                     }
                 }

@@ -1,4 +1,4 @@
-/*global eyeballControllers,Harpy,$*/
+/*global eyeballControllers,Harpy,$,_,google*/
 
 eyeballControllers.controller('CompareCtrl',['settings','$scope','$routeParams','$http',
 
@@ -117,7 +117,7 @@ eyeballControllers.controller('CompareCtrl',['settings','$scope','$routeParams',
               return {
                 size: (entry.cache.hasOwnProperty('afterRequest') ? 0 : entry.response.bodySize),
                 type: type
-              }
+              };
             });
           }
 
@@ -145,14 +145,15 @@ eyeballControllers.controller('CompareCtrl',['settings','$scope','$routeParams',
                 uncached: _.filter(record.uncached,function(entry) {
                   return entry.type === t;
                 })
-              }
+              };
             });
           });
 
           var size = {};
           var request = {};
+          var s;
 
-          for(var s in sizes) {
+          for(s in sizes) {
             if(sizes.hasOwnProperty(s)) {
               types.forEach(function(t,i) {
                 sizes[s][t] = [['URL','Size',{role: 'style'}]].concat(_.map(mimeTypes[t],function(record) {
@@ -194,7 +195,7 @@ eyeballControllers.controller('CompareCtrl',['settings','$scope','$routeParams',
                     return entry.type === t;
                   }),function(res,ent) {
                     return res + ent.size;
-                  },0))
+                  },0));
                 });
                 size[s].push(vals);
                 var reqs = [record.url + " (" + record._id + ")"];
@@ -203,7 +204,7 @@ eyeballControllers.controller('CompareCtrl',['settings','$scope','$routeParams',
                     return entry.type === t;
                   }),function(res,ent) {
                     return res+(ent.size > 0);
-                  },0))
+                  },0));
                 });
                 request[s].push(reqs);
                 time[s].push([record.url+" ("+record._id+")"].concat(record.time[s]));
@@ -220,7 +221,7 @@ eyeballControllers.controller('CompareCtrl',['settings','$scope','$routeParams',
               chart.draw(google.visualization.arrayToDataTable(request[s]),summaryConfig);
 
               types.forEach(function(t) {
-                var chart = new google.visualization.BarChart(document.getElementById('size-' + s + '-' + t));
+                chart = new google.visualization.BarChart(document.getElementById('size-' + s + '-' + t));
                 chart.draw(google.visualization.arrayToDataTable(sizes[s][t]),$.extend(typeConfig,{title:t}));
 
                 chart = new google.visualization.BarChart(document.getElementById('requests-' + s + '-' + t));
