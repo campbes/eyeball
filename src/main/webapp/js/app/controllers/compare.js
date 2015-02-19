@@ -153,80 +153,90 @@ eyeballControllers.controller('CompareCtrl',['settings','$scope','$routeParams',
           var request = {};
           var s;
 
+          var sizeHeadings;
+          var requestHeadings;
+
+          function buildDataArrays(s) {
+            types.forEach(function(t,i) {
+              sizes[s][t] = [['URL','Size',{role: 'style'}]].concat(_.map(mimeTypes[t],function(record) {
+                return [
+                  record.url + " (" + record._id + ")",
+                  _.reduce(record[s],function(res,entry) {
+                    return res + entry.size;
+                  },0),
+                  colors[i]
+                ];
+              }));
+              requests[s][t] = [['URL','Requests',{role: 'style'}]].concat(_.map(mimeTypes[t],function(record) {
+                return [
+                  record.url + " (" + record._id + ")",
+                  _.reduce(record[s],function(res,ent) {
+                    return res+(ent.size > 0);
+                  },0),
+                  colors[i]
+                ];
+              }));
+            });
+          }
+
+          function setHeadings(t) {
+            sizeHeadings.push(t);
+            requestHeadings.push(t);
+          }
+
+          function buildCompositeData(s) {
+            data.forEach(function(record) {
+              var vals = [record.url + " (" + record._id + ")"];
+              types.forEach(function(t) {
+                vals.push(_.reduce(_.filter(record[s],function(entry) {
+                  return entry.type === t;
+                }),function(res,ent) {
+                  return res + ent.size;
+                },0));
+              });
+              size[s].push(vals);
+              var reqs = [record.url + " (" + record._id + ")"];
+              types.forEach(function(t) {
+                reqs.push(_.reduce(_.filter(record[s],function(entry) {
+                  return entry.type === t;
+                }),function(res,ent) {
+                  return res+(ent.size > 0);
+                },0));
+              });
+              request[s].push(reqs);
+              time[s].push([record.url+" ("+record._id+")"].concat(record.time[s]));
+
+            });
+          }
+
+          function drawCompositeCharts(s) {
+            types.forEach(function(t) {
+              new google.visualization.BarChart(document.getElementById('size-' + s + '-' + t)).draw(google.visualization.arrayToDataTable(sizes[s][t]),$.extend(typeConfig,{title:t}));
+              new google.visualization.BarChart(document.getElementById('requests-' + s + '-' + t)).draw(google.visualization.arrayToDataTable(requests[s][t]),$.extend(typeConfig,{title:t}));
+            });
+          }
+
           for(s in sizes) {
             if(sizes.hasOwnProperty(s)) {
-              types.forEach(function(t,i) {
-                sizes[s][t] = [['URL','Size',{role: 'style'}]].concat(_.map(mimeTypes[t],function(record) {
-                  return [
-                    record.url + " (" + record._id + ")",
-                    _.reduce(record[s],function(res,entry) {
-                      return res + entry.size;
-                    },0),
-                    colors[i]
-                  ];
-                }));
-                requests[s][t] = [['URL','Requests',{role: 'style'}]].concat(_.map(mimeTypes[t],function(record) {
-                  return [
-                    record.url + " (" + record._id + ")",
-                    _.reduce(record[s],function(res,ent) {
-                      return res+(ent.size > 0);
-                    },0),
-                    colors[i]
-                  ];
-                }));
-              });
+
+              buildDataArrays(s);
 
               size[s] = [];
               request[s] = [];
 
-              var sizeHeadings = ['URL'];
-              var requestHeadings = ['URL'];
-              types.forEach(function(t) {
-                sizeHeadings.push(t);
-                requestHeadings.push(t);
-              });
+              sizeHeadings = ['URL'];
+              requestHeadings = ['URL'];
+              types.forEach(setHeadings);
               size[s].push(sizeHeadings);
               request[s].push(sizeHeadings);
 
-              data.forEach(function(record) {
-                var vals = [record.url + " (" + record._id + ")"];
-                types.forEach(function(t) {
-                  vals.push(_.reduce(_.filter(record[s],function(entry) {
-                    return entry.type === t;
-                  }),function(res,ent) {
-                    return res + ent.size;
-                  },0));
-                });
-                size[s].push(vals);
-                var reqs = [record.url + " (" + record._id + ")"];
-                types.forEach(function(t) {
-                  reqs.push(_.reduce(_.filter(record[s],function(entry) {
-                    return entry.type === t;
-                  }),function(res,ent) {
-                    return res+(ent.size > 0);
-                  },0));
-                });
-                request[s].push(reqs);
-                time[s].push([record.url+" ("+record._id+")"].concat(record.time[s]));
+              buildCompositeData(s);
 
-              });
+              new google.visualization.BarChart(document.getElementById('time-' + s)).draw(google.visualization.arrayToDataTable(time[s]),summaryConfig);
+              new google.visualization.BarChart(document.getElementById('size-' + s)).draw(google.visualization.arrayToDataTable(size[s]),summaryConfig);
+              new google.visualization.BarChart(document.getElementById('requests-' + s)).draw(google.visualization.arrayToDataTable(request[s]),summaryConfig);
 
-              var chart = new google.visualization.BarChart(document.getElementById('time-' + s));
-              chart.draw(google.visualization.arrayToDataTable(time[s]),summaryConfig);
-
-              chart = new google.visualization.BarChart(document.getElementById('size-' + s));
-              chart.draw(google.visualization.arrayToDataTable(size[s]),summaryConfig);
-
-              chart = new google.visualization.BarChart(document.getElementById('requests-' + s));
-              chart.draw(google.visualization.arrayToDataTable(request[s]),summaryConfig);
-
-              types.forEach(function(t) {
-                chart = new google.visualization.BarChart(document.getElementById('size-' + s + '-' + t));
-                chart.draw(google.visualization.arrayToDataTable(sizes[s][t]),$.extend(typeConfig,{title:t}));
-
-                chart = new google.visualization.BarChart(document.getElementById('requests-' + s + '-' + t));
-                chart.draw(google.visualization.arrayToDataTable(requests[s][t]),$.extend(typeConfig,{title:t}));
-              });
+              drawCompositeCharts(s);
             }
           }
 
