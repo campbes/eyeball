@@ -7,15 +7,17 @@ describe('DetailCtrl', function() {
     beforeEach(inject(function($rootScope, $controller, $httpBackend) {
          scope = $rootScope.$new();
          httpBackend = $httpBackend;
-         httpBackend.when("GET", "/detail?id=est").respond({
+         httpBackend.when("GET", "/v1/results/est?fields=-metrics.har,-metrics.harUncached").respond({
              url : "test.com"
          });
          $controller("DetailCtrl", {
+             settings : {
+                 apiVersion : 1
+             },
              $scope: scope,
              $routeParams : {
                  id : "test"
              },
-             logger : logger,
              config : {
                  data : {
                      report : {

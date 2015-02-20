@@ -11,7 +11,7 @@ describe('HistoryCtrl', function() {
         scope = $rootScope.$new();
         scope.setPage = function(){};
         httpBackend = $httpBackend;
-        httpBackend.when("GET", '/history?id=est').respond([
+        httpBackend.when("GET", '/v1/results/est/history?fields=-metrics.har,-metrics.harUncached').respond([
             {
                 _id : 'est'
             }
@@ -20,6 +20,9 @@ describe('HistoryCtrl', function() {
             $scope: scope,
             $routeParams : {
                 id : "test"
+            },
+            settings : {
+                apiVersion : 1
             },
             chart : chart,
             config : {

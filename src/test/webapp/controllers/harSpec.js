@@ -4,10 +4,9 @@ describe('HarCtrl', function() {
 
     beforeEach(module('eyeballControllers'));
     beforeEach(inject(function($rootScope, $controller, $httpBackend) {
-
         scope = $rootScope.$new();
         httpBackend = $httpBackend;
-        httpBackend.when("GET", "/detail?id=est").respond({
+        httpBackend.when("GET", "/v1/results/est?fields=url,timestamp,build,tag,metrics.har,metrics.harUncached").respond({
             url : "test.com",
             metrics : {
                 har : {
@@ -18,10 +17,15 @@ describe('HarCtrl', function() {
                 }
             }
         });
-        $controller("HarCtrl", {$scope: scope,
+        $controller("HarCtrl", {
+            settings : {
+                apiVersion : 1
+            },
+            $scope: scope,
             $routeParams : {
                 id : "test"
             },
+            harpy : {},
             persist : {
                 get : function(){
                     return "badgers"

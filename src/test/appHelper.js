@@ -30,8 +30,6 @@ var exports = function () {
     return;
 };
 
-var module = {};
-
 var spies = {};
 
 var helpers = {
@@ -119,7 +117,7 @@ var helpers = {
             };
             var stderr = stdout;
             return {
-                spawn : function(){
+                exec : function(){
                     return {
                         on : on,
                         stdout : stdout,
@@ -141,7 +139,7 @@ var helpers = {
                     return eyeballTestData;
                 }
             }
-        } else if (name === "node-phantom") {
+        } else if (name === "node-phantom-simple") {
             return {
                 create : function(){}
             }
@@ -151,6 +149,10 @@ var helpers = {
             }
         } else if (name.indexOf("/util") !== -1) {
             return EyeballUtil();
+        } else if (name === "q") {
+            return {
+                defer : function(){}
+            }
         }
 
         return function(args) {

@@ -20,3 +20,9 @@ var Harpy = {
         }
     }
 };
+
+var  $ = function(){
+    return {
+        html : function(){}
+    }
+};
