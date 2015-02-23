@@ -438,8 +438,11 @@ div.harpyChart {
 div.harpyBarChart {
     width: 33%;
 }
-.harpy input {
+.harpy input, .harpy select {
     background: #111;
     color: #FFF;
     border: 1px solid #999;
+}
+table.harpy td>select {
+    padding: 0;
 }
