@@ -106,6 +106,11 @@ var EyeballControllersTestTest = function(params) {
         }
         test.page = Page.setup(page);
 
+        test.page.viewportSize = {
+            width: 1280,
+            height: 1024
+        };
+
         if(test.passes.length === 0){
             test.page.customHeaders = {
                 "Cache-Control" : "no-cache, no-store, must-revalidate",
@@ -114,7 +119,7 @@ var EyeballControllersTestTest = function(params) {
             };
         }
         test.start = new Date();
-        page.open(test.pageUrl,function(err,status) {
+        test.page.open(test.pageUrl,function(err,status) {
             buildWebpage(err,status,test,ph);
         });
     }
