@@ -27,11 +27,9 @@ mixin testForm
 
 
 mixin test
-    div(ng-controller='TestCtrl')
-
-        div.ui.inverted.segment(ng-show="testInfo.testing")
-            div(class="ui inverted progress {{(testInfo.progress === 100 ? 'positive' : 'neutral')}}")
-                div.bar(style="width:{{testInfo.progress}}%")
-                div.label
-                    i.icon.loading
-                    |{{testInfo.message}}
+    div(ng-controller='TestCtrl',ng-show="testInfo.testing").ui.inverted.segment
+        div(class="ui progress {{(testInfo.progress === 100 ? 'positive' : 'neutral')}}")
+            div.bar(style="width:{{testInfo.progress}}%")
+        div
+            i.icon.loading(ng-show="testInfo.status !== 'complete'")
+            |{{testInfo.message}}

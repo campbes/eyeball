@@ -82,15 +82,15 @@ button.ui[disabled="disabled"] {
 [class*='label-'] {
     white-space: nowrap;
 }
-.label.positive, .label.label-success {
+.progress.positive .bar, .label.positive, .label.label-success {
     color: #FFF;
     background: rgba(92,184,92,0.7);
 }
-.label.neutral, .label.label-warning {
+.progress.neutral .bar, .label.neutral, .label.label-warning {
     color: #FFF;
     background: rgba(255,204,102,0.7);
 }
-.label.negative, .label.label-danger {
+.negative, .label.negative, .label.label-danger {
     color: #FFF;
     background: rgba(217,83,79,0.7);
 }
@@ -335,6 +335,10 @@ td form.ui.form .field {
 [class*="grade"]>[class*="grade"] {
     background: rgba(255,255,255,0.3) !important;
     font-weight: bold;
+}
+.ui.progress {
+    background-color: #555;
+    margin-bottom: 10px;
 }
 
 
