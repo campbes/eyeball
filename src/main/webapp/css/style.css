@@ -16,6 +16,14 @@ nav.ui.menu {
 nav.ui.menu a.item {
     padding: 1.2rem;
 }
+.item input {
+    background: #555;
+    color: #FFF;
+    padding: 5px;
+    border: 0;
+    margin: 0 5px;
+    font-size: 13px;
+}
 .ui.inverted a {
     color: #FFF;
     text-decoration: none;
@@ -53,6 +61,7 @@ button.ui[disabled="disabled"] {
 }
 .highlight {
     background: #3071a9 !important;
+    color: #FFF !important;
 }
 .fixed-width-small {
     width: 100px !important;

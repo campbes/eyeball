@@ -23,7 +23,7 @@ html(ng-app='eyeballApp',lang='en')
             div.item
                 form(ng-submit="quickTest()")
                     input.ui(ng-model="quickUrl" name="url")
-                    button.small.default.inverted(type="submit")
+                    button.ui.button.mini.highlight.inverted(type="submit")
                         i.icon.lab
             a(class="item right{{(page === 'monitor' ? ' active' : '')}}",href="#/monitor")
                 i.icon.desktop
