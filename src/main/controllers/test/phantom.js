@@ -55,7 +55,7 @@ var EyeballControllersTestPhantom = function() {
         }, {
             phantomPath : phantomjs.path,
             parameters : {
-                'proxy-type' : 'none',
+                'proxy' : 'localhost:3001',
                 'web-security' : false,
                 'ignore-ssl-errors' : true,
                 'disk-cache' : false

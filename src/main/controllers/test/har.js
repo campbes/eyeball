@@ -41,9 +41,9 @@ var EyeballControllersTestHar = function() {
                     headers: endReply.headers,
                     redirectURL: "",
                     headersSize: -1,
-                    bodySize: startReply.bodySize,
+                    bodySize: resource.eyeballSize || startReply.bodySize,
                     content: {
-                        size: startReply.bodySize,
+                        size: resource.eyeballSize || startReply.bodySize,
                         mimeType: endReply.contentType
                     }
                 },

@@ -120,3 +120,19 @@ app.locals = {
     version : pkg.version,
     host : "http://localhost:3000"
 };
+
+
+
+
+http.createServer(function(req, res) {
+    var size = 0;
+    request(req.url,{
+        followRedirect : false
+    },function(err,response) {
+        var headers = response.headers;
+        headers['eyeball-size'] = Buffer.byteLength(response.body,'utf8');
+        res.writeHead(response.statusCode,headers);
+        res.end(response.body);
+    });
+
+}).listen(3001);

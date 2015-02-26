@@ -3,6 +3,7 @@
 var EyeballControllersTestPage = function() {
 
     var Q = require('q');
+    var _ = require('lodash');
 
     function setupPage(page) {
 
@@ -28,13 +29,18 @@ var EyeballControllersTestPage = function() {
             page.resources[req[0].id] = {
                 request: req[0],
                 startReply: null,
-                endReply: null
+                endReply: null,
+                eyeballSize : null
             };
         };
 
         page.onResourceReceived = function (res) {
             if(!page.resources[res.id]) {
                 return;
+            }
+            var eyeballSize = _.find(res.headers,{name : 'eyeball-size'});
+            if(eyeballSize) {
+                page.resources[res.id].eyeballSize = Number(eyeballSize.value);
             }
             if (res.stage === 'start') {
                 page.resources[res.id].startReply = res;
