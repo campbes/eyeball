@@ -125,7 +125,6 @@ app.locals = {
 
 
 http.createServer(function(req, res) {
-    var size = 0;
     request(req.url,{
         followRedirect : false
     },function(err,response) {
