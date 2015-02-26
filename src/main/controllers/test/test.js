@@ -2,6 +2,8 @@
 
 var EyeballControllersTestTest = function(params) {
 
+    var Q = require('q');
+
     params = params || {};
     var urls = params.urls;
     var urlsLength = (urls ? urls.length : 1);
@@ -79,7 +81,7 @@ var EyeballControllersTestTest = function(params) {
             throwTestError(err,test,ph);
         }
         test = Webpage.augment(test,doc);
-        test.page.finished.promise.then(function() {
+        Q.all(test.page.received.concat([test.page.finished.promise])).then(function() {
             runInPageTests(test, function () {
                 completePage(test, ph);
             });

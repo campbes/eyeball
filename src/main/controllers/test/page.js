@@ -23,6 +23,7 @@ var EyeballControllersTestPage = function() {
         page.resourceCount = 0;
 
         page.finished = Q.defer();
+        page.received = [];
 
         page.onResourceRequested = function (req) {
             page.resourceCount++;
@@ -30,8 +31,10 @@ var EyeballControllersTestPage = function() {
                 request: req[0],
                 startReply: null,
                 endReply: null,
-                eyeballSize : null
+                eyeballSize : null,
+                complete : Q.defer()
             };
+            page.received.push(page.resources[req[0].id].promise);
         };
 
         page.onResourceReceived = function (res) {
@@ -47,6 +50,7 @@ var EyeballControllersTestPage = function() {
             }
             if (res.stage === 'end') {
                 page.resources[res.id].endReply = res;
+                page.resources[res.id].complete.resolve();
             }
 
         };
