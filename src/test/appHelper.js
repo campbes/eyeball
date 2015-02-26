@@ -151,7 +151,15 @@ var helpers = {
             return EyeballUtil();
         } else if (name === "q") {
             return {
-                defer : function(){}
+                defer : function(){
+                    return {
+                        resolve : function() {}
+                    }
+                }
+            }
+        } else if (name === "lodash") {
+            return {
+                find : function(){}
             }
         }
 
