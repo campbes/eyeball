@@ -2,6 +2,9 @@
     accountKey: '12ebb2588385344195a18a6b67657081112052e8',
     appName: 'Node.js Application'
 });*/
+var HOSTNAME = process.env.HOSTNAME || "localhost";
+var PORT = process.env.PORT || 3000;
+var PROXYPORT = process.env.PROXYPORT || 3001;
 
 var pkg = require('./package.json');
 
@@ -22,7 +25,7 @@ var reportCfg = require('./conf/report');
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', PORT);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.compress());
@@ -110,7 +113,9 @@ eyeball = {
     io : socket.listen(server),
     logger : winston,
     handleExceptions : true,
-    DB : DB
+    DB : DB,
+    HOSTNAME : HOSTNAME,
+    PROXYPORT : PROXYPORT
 };
 
 eyeball.io.set('log level',1);
@@ -118,11 +123,8 @@ eyeball.io.set('log level',1);
 app.locals = {
     env : app.settings.env,
     version : pkg.version,
-    host : "http://localhost:3000"
+    host : "http://"+HOSTNAME+":"+PORT
 };
-
-
-
 
 http.createServer(function(req, res) {
     request(req.url,{
@@ -134,4 +136,4 @@ http.createServer(function(req, res) {
         res.end(response.body);
     });
 
-}).listen(3001);
+}).listen(PROXYPORT);
