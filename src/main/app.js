@@ -123,7 +123,8 @@ eyeball.io.set('log level',1);
 app.locals = {
     env : app.settings.env,
     version : pkg.version,
-    host : "http://"+HOSTNAME+":"+PORT
+    host : "http://"+HOSTNAME+":"+PORT,
+    timestamp : new Date().getTime()
 };
 
 http.createServer(function(req, res) {
