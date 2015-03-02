@@ -132,7 +132,8 @@ http.createServer(function(req, res) {
         followRedirect : false
     },function(err,response) {
         if(err) {
-            res.end(err);
+            eyeball.logger.error(err);
+            res.end("Error");
             return;
         }
         if(!response) {
