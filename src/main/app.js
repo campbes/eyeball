@@ -131,6 +131,14 @@ http.createServer(function(req, res) {
     request(req.url,{
         followRedirect : false
     },function(err,response) {
+        if(err) {
+            res.end(err);
+            return;
+        }
+        if(!response) {
+            res.end("Error - no response");
+            return;
+        }
         var headers = response.headers;
         headers['eyeball-size'] = Buffer.byteLength(response.body,'utf8');
         res.writeHead(response.statusCode,headers);

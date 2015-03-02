@@ -24,7 +24,9 @@ var EyeballRoutesTest = function(req,res) {
         }
         // allow for crlf and lf
         data = data.replace('\r\n','\n');
+        data = data.trim();
         urls = data.split("\n");
+
         if(reps) {
             var urlset = urls;
             var i = 0;
@@ -53,6 +55,7 @@ var EyeballRoutesTest = function(req,res) {
                 fileData += data.toString();
             });
             res.on("end",function() {
+                console.log(fileData)
                 go(fileData);
             });
         });
