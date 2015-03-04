@@ -89,7 +89,7 @@ server.listen(app.get('port'), function(){
 });
 
 var exec = require('child_process').exec;
-exec('java -Xss512k -cp lib/vnu.jar nu.validator.servlet.Main 8888',
+var vnu = exec('java -Xss512k -cp lib/vnu.jar nu.validator.servlet.Main 8888',
     function(err,stdout,stderr) {
         if(err) {
             console.log("VNU server error: "+err);
@@ -147,3 +147,7 @@ http.createServer(function(req, res) {
     });
 
 }).listen(PROXYPORT);
+
+process.on("exit",function() {
+    vnu.kill();
+});

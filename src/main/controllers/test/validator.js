@@ -91,6 +91,12 @@ var EyeballControllersTestValidator = function() {
         }
     }
 
+    process.on("exit",function() {
+        activeVnus.forEach(function(vnu) {
+            vnu.kill();
+        });
+    });
+
     return {
         validate : validate,
         end : end,

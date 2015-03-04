@@ -70,6 +70,12 @@ var EyeballControllersTestPhantom = function() {
         }
     }
 
+    process.on("exit",function() {
+        activePhantoms.forEach(function(phantom) {
+            phantom.kill();
+        });
+    });
+
     return {
 
         request : request,
