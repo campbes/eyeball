@@ -139,9 +139,13 @@ var helpers = {
                     return eyeballTestData;
                 }
             }
-        } else if (name === "node-phantom-simple") {
+        } else if (name === "phantom") {
             return {
                 create : function(){}
+            }
+        } else if (name === "phantomjs") {
+            return {
+                path : "somepath"
             }
         } else if (name === "mongojs") {
             return {
@@ -175,7 +179,12 @@ var helpers = {
         send : function(output) {
             this.output = output;
         }
+    },
+
+    process : {
+        on : function(){}
     }
 };
 
 require = helpers.require;
+process = helpers.process;

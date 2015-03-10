@@ -5,7 +5,7 @@ var EyeballControllersTestPage = function() {
     var Q = require('q');
     var _ = require('lodash');
 
-    function setupPage(page,firstPassResources) {
+    function setupPage(page) {
         page.timestamp = new Date();
         page.resources = [];
         page.libraryPath = "../";
