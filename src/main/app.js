@@ -136,11 +136,11 @@ http.createServer(function(req, res) {
 
     options.headers = {
         'user-agent' : req.headers['user-agent'],
-        'accept' : req.headers['accept']
+        'accept' : req.headers.accept
     };
 
     if(req.headers['x-eyeball-pass'] === "0") {
-        options.headers['pragma'] = 'no-cache';
+        options.headers.pragma = 'no-cache';
         options.headers['cache-control'] = 'no-cache';
     } else {
         options.headers['if-none-match'] = req.headers['if-none-match'];

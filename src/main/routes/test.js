@@ -55,7 +55,6 @@ var EyeballRoutesTest = function(req,res) {
                 fileData += data.toString();
             });
             res.on("end",function() {
-                console.log(fileData)
                 go(fileData);
             });
         });
