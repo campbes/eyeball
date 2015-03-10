@@ -128,9 +128,26 @@ app.locals = {
 };
 
 http.createServer(function(req, res) {
-    request(req.url,{
-        followRedirect : false
-    },function(err,response) {
+
+    var options = {
+        url : req.url,
+        method : req.method
+    };
+
+    options.headers = {
+        'user-agent' : req.headers['user-agent'],
+        'accept' : req.headers['accept']
+    };
+
+    if(req.headers['x-eyeball-pass'] === "0") {
+        options.headers['pragma'] = 'no-cache';
+        options.headers['cache-control'] = 'no-cache';
+    } else {
+        options.headers['if-none-match'] = req.headers['if-none-match'];
+        options.headers['if-modified-since'] = req.headers['if-modified-since'];
+    }
+
+    request(options,function(err,response) {
         if(err) {
             eyeball.logger.error(err);
             res.end("Error");
@@ -140,8 +157,9 @@ http.createServer(function(req, res) {
             res.end("Error - no response");
             return;
         }
-        var headers = response.headers;
-        headers['eyeball-size'] = Buffer.byteLength(response.body,'utf8');
+        var headers = response.headers || {};
+        headers['x-eyeball-size'] = Buffer.byteLength(response.body,'utf8');
+        headers['x-eyeball-status'] = response.statusCode;
         res.writeHead(response.statusCode,headers);
         res.end(response.body);
     });

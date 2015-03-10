@@ -34,20 +34,22 @@ var EyeballControllersTestHar = function() {
                     bodySize: -1
                 },
                 response: {
-                    status: endReply.status,
+                    status: resource.eyeballStatus || endReply.status,
                     statusText: endReply.statusText,
                     httpVersion: "HTTP/1.1",
                     cookies: [],
                     headers: endReply.headers,
                     redirectURL: "",
                     headersSize: -1,
-                    bodySize: resource.eyeballSize || startReply.bodySize,
+                    bodySize: (resource.eyeballStatus === 304 ? 0 : resource.eyeballSize || startReply.bodySize),
                     content: {
                         size: resource.eyeballSize || startReply.bodySize,
                         mimeType: endReply.contentType
                     }
                 },
-                cache: {},
+                cache: (resource.eyeballStatus === 304 ? {
+                    afterRequest : resource.eyeballSize || startReply.bodySize
+                } : {}),
                 timings: {
                     blocked: 0,
                     dns: -1,

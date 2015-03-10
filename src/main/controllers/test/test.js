@@ -45,7 +45,7 @@ var EyeballControllersTestTest = function(params) {
 
         var test = tests[0];
 
-        function processInPageTest(err,doc){
+        function processInPageTest(doc,err){
             if(err) {
                 throwTestError(err);
             }
@@ -96,13 +96,13 @@ var EyeballControllersTestTest = function(params) {
             throwTestError("Failed to load url",test,ph);
         } else {
             test.webpage = Webpage.create(test);
-            test.page.evaluate(Webpage.details,function(err,doc){
+            test.page.evaluate(Webpage.details,function(doc,err){
                 addWebpageDetails(err,doc,test,ph);
             });
         }
     }
 
-    function testPage(err,page,test,ph) {
+    function testPage(page,err,test,ph) {
         if(err) {
             throwTestError(err,test,ph);
         }
@@ -113,16 +113,14 @@ var EyeballControllersTestTest = function(params) {
             height: 1024
         };
 
-        if(test.passes.length === 0){
-            test.page.customHeaders = {
-                "Cache-Control" : "no-cache, no-store, must-revalidate",
-                "Pragma" : "no-cache",
-                "Expires" : 0
-            };
-        }
+        test.page.setHeaders({
+            "x-eyeball-pass" : test.passes.length
+        });
+
         test.start = new Date();
-        test.page.open(test.pageUrl,function(err,status) {
+        test.page.open(test.pageUrl,function(status,err) {
             buildWebpage(err,status,test,ph);
+            test.page.finished.resolve();
         });
     }
 
@@ -147,18 +145,18 @@ var EyeballControllersTestTest = function(params) {
     var startTests;
 
     completePage = function(test,ph) {
-        test.page.close(function(){
-            test.passes[test.passes.length] = test.webpage;
-            if(test.passes.length === 1) {
-                createPage(test,ph);
-                return;
-            }
-            Record.create(test.passes);
-            delete activeTests[ph.process.pid];
-            ph.exit();
-            startTests();
-        });
+        test.page.close();
+        test.passes[test.passes.length] = test.webpage;
+        if(test.passes.length === 1) {
+            createPage(test,ph);
+            return;
+        }
+        Record.create(test.passes);
+        delete activeTests[ph.process.pid];
+        //ph.exit();
+        startTests();
     };
+
 
     function closeTests(){
         Phantom.end();
