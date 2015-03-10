@@ -131,7 +131,8 @@ http.createServer(function(req, res) {
 
     var options = {
         url : req.url,
-        method : req.method
+        method : req.method,
+        followRedirects : false
     };
 
     options.headers = {
