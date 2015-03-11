@@ -1,7 +1,7 @@
 var EyeballControllersTestPhantom = function() {
 
     var phantomjs = require('phantomjs');
-    var phantom = require('phantom');
+    var phantom = require('node-phantom-simple');
 
     var activePhantoms = [];
     var phantomMax = 10;
@@ -31,8 +31,9 @@ var EyeballControllersTestPhantom = function() {
         function error(err,trace) {
             phantomError(err,trace,ph);
         }
-        ph.set("onError",error);
-        ph.set("onExit",function(msg,trace) {
+        ph.onError = error;
+        ph.on("error",error);
+        ph.on("exit",function(msg,trace) {
             phantomExit(msg,ph);
             exit(ph.process.pid);
         });
@@ -44,7 +45,7 @@ var EyeballControllersTestPhantom = function() {
         if(activePhantoms.length >= phantomMax) {
             return;
         }
-        phantom.create(function(ph,err){
+        phantom.create(function(err,ph){
             if(err) {
                 eyeball.logger.error(err);
                 return;
@@ -52,16 +53,12 @@ var EyeballControllersTestPhantom = function() {
             respond(ph,exit);
             create(ph);
         }, {
-            dnodeOpts : {
-                weak : false
-            },
-            path : phantomjs.path.replace('phantomjs.exe',''),
+            phantomPath : phantomjs.path,
             parameters : {
                 'proxy' : eyeball.HOSTNAME+":"+eyeball.PROXYPORT,
-                //'proxy-type' : 'none',
                 'web-security' : false,
                 'ignore-ssl-errors' : true,
-                'disk-cache' : true
+                'disk-cache' : false
             }
         });
     }

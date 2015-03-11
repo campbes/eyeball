@@ -25,21 +25,20 @@ var EyeballControllersTestPage = function() {
         page.finished = Q.defer();
         page.received = [];
 
-        page.set("onResourceRequested",function(data) {
-
+        page.onResourceRequested = function (req) {
             page.resourceCount++;
-            page.resources[data.id] = {
-                url : data.url,
-                request: data,
+            page.resources[req[0].id] = {
+                url : req[0].url,
+                request: req[0],
                 startReply: null,
                 endReply: null,
                 eyeballSize : null,
                 complete : Q.defer()
             };
-            page.received.push(page.resources[data.id].complete.promise);
-        });
+            page.received.push(page.resources[req[0].id].promise);
+        };
 
-        page.set('onResourceReceived',function (res) {
+        page.onResourceReceived = function (res) {
 
             if(!page.resources[res.id]) {
                 return;
@@ -60,14 +59,14 @@ var EyeballControllersTestPage = function() {
                 page.resources[res.id].complete.resolve();
             }
 
-        });
+        };
 
-        page.set("onLoadFinished",function() {
+        page.onLoadFinished = function() {
             setTimeout(page.finished.resolve,
             1000);
-        });
+        };
 
-        page.set('onCallback',function(msg) {
+        page.setFn('onCallback',function(msg) {
             if(msg === "DOMContentLoaded") {
                 page.evaluate(function(){
                     window.DOMContentLoaded = new Date().getTime();
@@ -75,7 +74,7 @@ var EyeballControllersTestPage = function() {
             }
         });
 
-        page.set('onInitialized',function(){
+        page.setFn('onInitialized',function(){
             page.evaluate(function() {
                 document.addEventListener('DOMContentLoaded', function() {
                     window.callPhantom('DOMContentLoaded');
@@ -83,23 +82,23 @@ var EyeballControllersTestPage = function() {
             });
         });
 
-        page.set('onError',function(err) {
+        page.onError = function(err) {
             page.errors.js.push(err);
-        });
+        };
 
-        page.set('onResourceError',function(err) {
+        page.onResourceError = function(err) {
             page.errors.resources.push(err);
-        });
+        };
 
-        page.set('onResourceTimeout',page.onResourceError);
+        page.onResourceTimeout = page.onResourceError;
 
-        page.set('onAlert',function(msg) {
+        page.onAlert = function(msg) {
             page.issues.alert.push(msg);
-        });
+        };
 
-        page.set('onConsoleMessage',function(msg) {
+        page.onConsoleMessage = function(msg) {
             page.issues.console.push(msg);
-        });
+        };
 
         return page;
     }
