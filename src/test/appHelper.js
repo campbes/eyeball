@@ -139,7 +139,7 @@ var helpers = {
                     return eyeballTestData;
                 }
             }
-        } else if (name === "phantom") {
+        } else if (name === "node-phantom-simple") {
             return {
                 create : function(){}
             }
