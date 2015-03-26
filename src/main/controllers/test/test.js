@@ -113,7 +113,12 @@ var EyeballControllersTestTest = function(params) {
             width: 1280,
             height: 1024
         });
-
+        test.page.set('clipRect',{
+            top: 0,
+            left: 0,
+            width: 1280,
+            height: 1024
+        });
         test.page.set('customHeaders',{
             "x-eyeball-pass" : test.passes.length,
             "x-eyeball-timestamp" : test.timestamp
