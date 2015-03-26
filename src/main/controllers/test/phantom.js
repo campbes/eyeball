@@ -24,7 +24,7 @@ var EyeballControllersTestPhantom = function() {
                 eyeball.logger.debug("Phantom error: "+item.file+" : "+item.line);
             });
         }
-        ph.exit(1);
+        ph.exit();
     }
 
     function respond(ph,exit) {

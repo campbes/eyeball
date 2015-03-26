@@ -16,7 +16,7 @@ var EyeballControllersTestTest = function(params) {
     function throwTestError(err,test,ph) {
         eyeball.logger.error(err);
         erroredUrls.push(test.url);
-        ph.exit(1);
+        ph.exit();
     }
 
     var TestCfg = require('../../conf/test');
@@ -122,6 +122,10 @@ var EyeballControllersTestTest = function(params) {
         test.start = new Date();
         test.page.open(test.pageUrl,function(err,status) {
             buildWebpage(err,status,test,ph);
+            var shot = 0;
+            setInterval(function(){
+                page.render((shot++)+'.jpg');
+            },10);
         });
     }
 
