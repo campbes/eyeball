@@ -122,10 +122,6 @@ var EyeballControllersTestTest = function(params) {
         test.start = new Date();
         test.page.open(test.pageUrl,function(err,status) {
             buildWebpage(err,status,test,ph);
-            var shot = 0;
-            setInterval(function(){
-                page.render((shot++)+'.jpg');
-            },10);
         });
     }
 
