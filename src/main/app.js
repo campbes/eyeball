@@ -143,15 +143,17 @@ http.createServer(function(req, res) {
     };
 
     var cacheKey = req.url+":"+req.headers["x-eyeball-timestamp"];
+    var cachedResource = proxyCache[cacheKey];
 
-    if(req.headers['x-eyeball-pass'] === "1" && proxyCache[cacheKey]) {
-        options.headers['if-none-match'] = proxyCache[cacheKey].headers.etag;
-        options.headers['if-modified-since'] = proxyCache[cacheKey].headers['last-modified'];
+    if(req.headers['x-eyeball-pass'] === "1" && cachedResource) {
+        options.headers['if-none-match'] = cachedResource.headers.etag;
+        options.headers['if-modified-since'] = cachedResource.headers['last-modified'];
     }
+
+    var responseData;
 
     request(options,function(err,response) {
         if(err) {
-            eyeball.logger.error(err);
             res.end("Error");
             return;
         }
@@ -159,24 +161,26 @@ http.createServer(function(req, res) {
             res.end("Error - no response");
             return;
         }
-        if(req.headers['x-eyeball-pass'] === "0") {
+        response.responseData = responseData;
+        if(!cachedResource) {
             proxyCache[cacheKey] = response;
         }
-        var cachedResponse = proxyCache[cacheKey] || response;
-
-        var headers = cachedResponse.headers;
-        headers['x-eyeball-size'] = headers['x-eyeball-size'] || headers['content-length'] || Buffer.byteLength(cachedResponse.body,'utf8');
+        var headers = (cachedResource ? cachedResource.headers : response.headers);
+        headers['x-eyeball-size'] = headers['x-eyeball-size'] || headers['content-length'] || Buffer.byteLength(response.body,'utf8');
         headers['x-eyeball-status'] = response.statusCode;
+        res.writeHead(response.statusCode,headers);
+        res.end((cachedResource ? cachedResource.responseData : responseData));
 
-        var statusCode = (response.statusCode === 301 || response.statusCode === 302 ? response.statusCode : 200);
-
-        res.writeHead(statusCode,headers);
-        res.end(cachedResponse.body);
-
-        if(req.headers['x-eyeball-pass'] === "1") {
+        if(cachedResource) {
             delete proxyCache[cacheKey];
         }
 
+    }).on('data',function(data) {
+        if(responseData) {
+            responseData = Buffer.concat([responseData,data]);
+        } else {
+            responseData = data;
+        }
     });
 
 }).listen(PROXYPORT);
