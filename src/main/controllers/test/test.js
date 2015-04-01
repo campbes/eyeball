@@ -126,13 +126,6 @@ var EyeballControllersTestTest = function(params) {
         });
 
         test.start = new Date();
-        var screenshots = 0;
-        /*test.renderInterval = setInterval(function() {
-            test.page.render(test.passes.length+'-'+(screenshots++)+'.jpg');
-            if (screenshots > 100) {
-                clearInterval(test.renderInterval);
-            }
-        },100);*/
         test.page.open(test.pageUrl,function(err,status) {
             buildWebpage(err,status,test,ph);
         });
