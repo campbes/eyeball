@@ -60,7 +60,7 @@
                 });
             });
         }
-        $.ajax(host+'/test',{
+        $.ajax(host+'/v1/test',{
             data : {
                 url : location.href,
                 inputType : 'url'
@@ -120,9 +120,6 @@
         $.when($googleLoaded,$socketLoaded,$uiLoaded).done(init);
     }
 
-    if(window.$) {
-        loadDeps();
-    } else {
-        loadScript('http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js',loadDeps);
-    }
+    loadScript('http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js',loadDeps);
+
 }());
