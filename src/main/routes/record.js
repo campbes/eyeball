@@ -67,7 +67,7 @@ var EyeballRoutesRecord = (function(){
 
             var decompress = [];
 
-            results.forEach(function(data,index) {
+            results.forEach(function(data) {
 
                 function reapplyData(obj) {
                     data.metrics[obj.metric].data = obj.data;
@@ -83,24 +83,27 @@ var EyeballRoutesRecord = (function(){
                     }
                 }
 
-                if(view && viewCfg[view]) {
-                    data = viewCfg[view](data);
-                } else if(data.metric && data.metrics.yslow) {
-                    // do the yslow rule additions bewfore returning
-                    var i;
-                    var metrics = data.metrics.yslow.data.g;
-                    for(i in metrics) {
-                        if(metrics.hasOwnProperty(i)) {
-                            data.metrics.yslow.data.g[i].rule = YSLOW.doc.rules[i].name;
-                        }
-                    }
-                }
-
-                results[index] = data;
-
             });
 
             Q.all(decompress).then(function() {
+
+                results.forEach(function(data,index) {
+                    if(view && viewCfg[view]) {
+                        data = viewCfg[view](data);
+                    } else if(data.metric && data.metrics.yslow) {
+                        // do the yslow rule additions bewfore returning
+                        var i;
+                        var metrics = data.metrics.yslow.data.g;
+                        for(i in metrics) {
+                            if(metrics.hasOwnProperty(i)) {
+                                data.metrics.yslow.data.g[i].rule = YSLOW.doc.rules[i].name;
+                            }
+                        }
+                    }
+
+                    results[index] = data;
+                });
+
                 res.send(JSON.stringify((results.length > 1 ? results : results[0])));
             });
 

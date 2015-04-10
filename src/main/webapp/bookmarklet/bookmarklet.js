@@ -110,11 +110,7 @@
             });
         }
         var $socketLoaded = new $.Deferred();
-        if(window.io) {
-            $socketLoaded.resolve();
-        } else {
-            loadScript('http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js',$socketLoaded.resolve);
-        }
+        loadScript('https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js',$socketLoaded.resolve);
         var $uiLoaded = new $.Deferred();
         loadScript('http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/javascript/semantic.min.js',$uiLoaded.resolve);
         $.when($googleLoaded,$socketLoaded,$uiLoaded).done(init);

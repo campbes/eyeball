@@ -2,7 +2,7 @@
     accountKey: '12ebb2588385344195a18a6b67657081112052e8',
     appName: 'Node.js Application'
 });*/
-var HOSTNAME = process.env.HOSTNAME || "localhost";
+var HOSTNAME = process.env.HOSTNAME || "http://localhost";
 var PORT = process.env.PORT || 3000;
 var PROXYPORT = process.env.PROXYPORT || 3001;
 
@@ -19,7 +19,6 @@ var config = require('./routes/config');
 var http = require('http');
 var path = require('path');
 var request = require('request');
-var socket = require('socket.io');
 var reportCfg = require('./conf/report');
 
 var app = express();
@@ -59,7 +58,6 @@ app.post('/v*/test', require('./routes/test'));
 app.get('/v*/config',require('./routes/config'));
 // monitor
 app.get('/v*/monitor', require('./routes/monitor'));
-
 
 function setReportRoute(name) {
     app.get('/report/'+name,function(req,res) {
@@ -110,22 +108,23 @@ winston.add(winston.transports.File,
 );
 
 eyeball = {
-    io : socket.listen(server),
+    io : null,
     logger : winston,
     handleExceptions : true,
     DB : DB,
     HOSTNAME : HOSTNAME,
     PROXYPORT : PROXYPORT
 };
-
-eyeball.io.set('log level',1);
-
 app.locals = {
     env : app.settings.env,
     version : pkg.version,
     host : HOSTNAME+":"+PORT,
     timestamp : new Date().getTime()
 };
+
+require('socket.io')(server).on('connection',function(socket) {
+    eyeball.io = socket;
+});
 
 var proxyCache = {};
 

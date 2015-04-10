@@ -19,211 +19,209 @@
 <script src="bookmarklet-templates.js"></script>
 <div id="eyeballBookmarklet"><link href="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/css/semantic.min.css" rel="stylesheet" type="text/css">
 
-<h1 class="">Eyeball<button id="eyeballClose" class="ui button mini">X</button></h1>
-<h2 id="eyeballStatus" class="ui header">Complete!</h2>
-<div class="ui striped blue progress">
-    <div id="eyeballProgress" class="bar" style="width: 100%;"></div>
-</div>
-<div id="eyeballContent">
-    <h2 class="ui black inverted top attached header">
-        <div class="content">
-            Eyeball results
-            <div class="sub header">Grades for page quality</div>
-        </div>
-    </h2>
-    <div id="eyeballGrades" class="ui segment attached"><div class="ui accordion">
-
-        <div class="title">
-            <div class="ui label gradeE">E</div> EyeScore
-        </div>
-        <div class="content">
-
-            <div class="ui segment inverted black attached top">
-                <div class="ui left red label">E</div> Overall
-            </div>
-
-            <div class="ui segment inverted black attached">
-                <div class="ui left red label">E</div> DOM Quality
-            </div>
-
-            <div class="ui segment inverted black attached bottom">
-                <div class="ui left red label">C</div> Performance
-            </div>
-
-        </div>
-
-        <div class="title">
-            <div class="ui label gradeA">A</div> Load time
-        </div>
-        <div class="content">
-
-            <div class="ui segment inverted black attached top">
-                <div class="ui left red label">A</div> Load time
-            </div>
-
-            <div class="ui segment inverted black attached">
-                <div class="ui left red label">A</div> DOM load time
-            </div>
-
-            <div class="ui segment inverted black attached">
-                <div class="ui left red label">C</div> Load time (uncached)
-            </div>
-
-            <div class="ui segment inverted black attached bottom">
-                <div class="ui left red label">B</div> DOM load time (uncached)
-            </div>
-
-        </div>
-
-        <div class="title">
-            <div class="ui label gradeD">D</div> YSlow
-        </div>
-        <div class="content">
-
-            <div class="ui segment inverted black attached top">
-                <div class="ui left red label">D</div> Overall
-            </div>
-
-            <div class="ui segment inverted black attached">
-                <div class="ui left red label">F</div> Page size
-            </div>
-
-            <div class="ui segment inverted black attached">
-                <div class="ui left red label">B</div> Page size (cached)
-            </div>
-
-            <div class="ui segment inverted black attached">
-                <div class="ui left red label">F</div> HTTP requests
-            </div>
-
-            <div class="ui segment inverted black attached bottom">
-                <div class="ui left red label">A</div> HTTP requests (cached)
-            </div>
-
-        </div>
-
-        <div class="title">
-            <div class="ui label gradeE">E</div> DomMonster
-        </div>
-        <div class="content">
-
-            <div class="ui segment inverted black attached top">
-                <div class="ui left red label">E</div> Overall
-            </div>
-
-            <div class="ui segment inverted black attached">
-                <div class="ui left red label">F</div> Elements
-            </div>
-
-            <div class="ui segment inverted black attached">
-                <div class="ui left red label">F</div> Nodes
-            </div>
-
-            <div class="ui segment inverted black attached">
-                <div class="ui left red label">F</div> Text nodes
-            </div>
-
-            <div class="ui segment inverted black attached">
-                <div class="ui left red label">A</div> Text node size
-            </div>
-
-            <div class="ui segment inverted black attached">
-                <div class="ui left red label">F</div> Content Percentage
-            </div>
-
-            <div class="ui segment inverted black attached">
-                <div class="ui left red label">D</div> Nesting
-            </div>
-
-            <div class="ui segment inverted black attached bottom">
-                <div class="ui left red label">A</div> DOM size
-            </div>
-
-        </div>
-
-        <div class="title">
-            <div class="ui label gradeF">F</div> Validator
-        </div>
-        <div class="content">
-
-            <div class="ui segment inverted black attached top">
-                <div class="ui left red label">F</div> Overall
-            </div>
-
-            <div class="ui segment inverted black attached">
-                <div class="ui left red label">F</div> Errors
-            </div>
-
-            <div class="ui segment inverted black attached bottom">
-                <div class="ui left red label">C</div> Warnings
-            </div>
-
-        </div>
-
-        <div class="title">
-            <div class="ui label gradeF">F</div> Accessibility
-        </div>
-        <div class="content">
-
-            <div class="ui segment inverted black attached top">
-                <div class="ui left red label">F</div> Overall
-            </div>
-
-            <div class="ui segment inverted black attached">
-                <div class="ui left red label">F</div> Errors
-            </div>
-
-            <div class="ui segment inverted black attached bottom">
-                <div class="ui left red label">A</div> Warnings
-            </div>
-
-        </div>
-
-    </div></div>
-    <h3 id="eyeballGradesFooter" class="ui bottom attached header"><a href="http://localhost:3000/#/detail/:53b056e451ce78b01175e4fd">View full detailed results in Eyeball</a></h3>
-    <h2 class="ui top attached header">
-        <div class="content">
-            HTTP metrics
-            <div class="sub header">Metrics for page performance</div>
-        </div>
-    </h2>
-    <div id="eyeballCharts" class="ui segment attached" style="height: 342px;"><div class="ui ignored icon direction buttons">
-        <button class="ui button" data-animation="flip" data-direction="left" title="Flip Left"><i class="left long arrow icon"></i></button>
-        <button class="ui button" data-animation="flip" data-direction="up" title="Flip Up"><i class="up long arrow icon"></i></button>
-        <button class="ui icon button" data-animation="flip" data-direction="down" title="Flip Down"><i class="down long arrow icon"></i></button>
-        <button class="ui icon button" data-animation="flip" data-direction="right" title="Flip Right"><i class="right long arrow icon"></i></button>
+    <link rel="stylesheet" href="http://localhost:3000/bookmarklet/bookmarklet.css"/>
+    <h1 class="ui header black inverted"><a href="http://localhost:3000" style="background-image:url('http://localhost:3000/images/eyeballSmall.png')">Eyeball</a><button id="eyeballClose" class="ui button mini red">X</button></h1>
+    <h2 id="eyeballStatus" class="ui header">Complete!</h2>
+    <div class="ui blue striped progress">
+        <div id="eyeballProgress" class="bar" style="width: 100%;"></div>
     </div>
-        <div class="ui shape rectangle">
-            <div class="sides">
+    <div id="eyeballContent">
+        <h2 class="ui top attached header black inverted">
+            <div class="content">
+                Eyeball results
+                <div class="sub header">Grades for page quality</div>
+            </div>
+        </h2>
+        <div id="eyeballGrades" class="ui segment attached"><div class="ui accordion">
 
-                <div class="active side">
-                    <div class="content" id="chart-time" data-height="300"><div class="harpyChart" style="position: relative;"><div dir="ltr" style="position: relative; width: 310px; height: 200px;"><div style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;"><svg width="310" height="200" aria-label="A chart." style="overflow: hidden;"><defs id="defs"><linearGradient id="_ABSTRACT_RENDERER_ID_0" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#d9534f;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#d9534f;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#d9534f;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#d9534f;stop-opacity:1"></stop></linearGradient><linearGradient id="_ABSTRACT_RENDERER_ID_1" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#ff6633;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#ff6633;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#ff6633;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#ff6633;stop-opacity:1"></stop></linearGradient><linearGradient id="_ABSTRACT_RENDERER_ID_2" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#ff9966;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#ff9966;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#ff9966;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#ff9966;stop-opacity:1"></stop></linearGradient><linearGradient id="_ABSTRACT_RENDERER_ID_3" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#99cc99;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#99cc99;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#99cc99;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#99cc99;stop-opacity:1"></stop></linearGradient><linearGradient id="_ABSTRACT_RENDERER_ID_4" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#ffcc66;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#ffcc66;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#ffcc66;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#ffcc66;stop-opacity:1"></stop></linearGradient><linearGradient id="_ABSTRACT_RENDERER_ID_5" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#5cb85c;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#5cb85c;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#5cb85c;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#5cb85c;stop-opacity:1"></stop></linearGradient></defs><rect x="0" y="0" width="310" height="200" stroke="none" stroke-width="0" fill="#ffffff"></rect><g><text text-anchor="start" x="10" y="18.5" font-family="Arial" font-size="10" font-weight="bold" stroke="none" stroke-width="0" fill="#000000">Time</text></g><g><rect x="211" y="30" width="99" height="90" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><rect x="211" y="30" width="99" height="10" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="235" y="38.5" font-family="Arial" font-size="10" stroke="none" stroke-width="0" fill="#222222">blocked</text></g><rect x="211" y="30" width="20" height="10" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_0)"></rect></g><g><rect x="211" y="46" width="99" height="10" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="235" y="54.5" font-family="Arial" font-size="10" stroke="none" stroke-width="0" fill="#222222">dns</text></g><rect x="211" y="46" width="20" height="10" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_1)"></rect></g><g><rect x="211" y="62" width="99" height="10" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="235" y="70.5" font-family="Arial" font-size="10" stroke="none" stroke-width="0" fill="#222222">connect</text></g><rect x="211" y="62" width="20" height="10" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_2)"></rect></g><g><rect x="211" y="78" width="99" height="10" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="235" y="86.5" font-family="Arial" font-size="10" stroke="none" stroke-width="0" fill="#222222">send</text></g><rect x="211" y="78" width="20" height="10" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_3)"></rect></g><g><rect x="211" y="94" width="99" height="10" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="235" y="102.5" font-family="Arial" font-size="10" stroke="none" stroke-width="0" fill="#222222">wait</text></g><rect x="211" y="94" width="20" height="10" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_4)"></rect></g><g><rect x="211" y="110" width="99" height="10" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="235" y="118.5" font-family="Arial" font-size="10" stroke="none" stroke-width="0" fill="#222222">receive</text></g><rect x="211" y="110" width="20" height="10" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_5)"></rect></g></g><g><path d="M103,115L103,64A51,51,0,0,1,103,64L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#d9534f"></path></g><g><path d="M103,115L103,64A51,51,0,0,1,103,64L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#ff6633"></path></g><g><path d="M103,115L103,64A51,51,0,0,1,103,64L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#ff9966"></path></g><g><path d="M103,115L103,64A51,51,0,0,1,103,64L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#99cc99"></path></g><g><path d="M103,115L87.31406365883282,66.47215849534572A51,51,0,0,1,103,64L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#5cb85c"></path></g><g><path d="M103,115L103,64A51,51,0,1,1,87.31406,66.47215L103,115A0,0,0,1,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#ffcc66"></path></g><g><path d="M103,63.49L103,30A85,85,0,0,1,103,30L103,63.49A51.51,51.51,0,0,0,103,63.49" stroke="#ffffff" stroke-width="1" fill="#d9534f"></path></g><g><path d="M103,63.49L103,30A85,85,0,0,1,103,30L103,63.49A51.51,51.51,0,0,0,103,63.49" stroke="#ffffff" stroke-width="1" fill="#ff6633"></path></g><g><path d="M103,63.49L103,30A85,85,0,0,1,103,30L103,63.49A51.51,51.51,0,0,0,103,63.49" stroke="#ffffff" stroke-width="1" fill="#ff9966"></path></g><g><path d="M103,63.49L103,30A85,85,0,0,1,103,30L103,63.49A51.51,51.51,0,0,0,103,63.49" stroke="#ffffff" stroke-width="1" fill="#99cc99"></path></g><g><path d="M69.36605478117164,75.98669676870661L47.4984402329565,50.621611829548854A85,85,0,0,1,103,30L102.99999999999999,63.49A51.51,51.51,0,0,0,69.36605,75.98669" stroke="#ffffff" stroke-width="1" fill="#5cb85c"></path></g><g><path d="M103,63.49L103,30A85,85,0,1,1,47.49844,50.62161L69.36605478117164,75.98669676870661A51.51,51.51,0,1,0,103,63.49" stroke="#ffffff" stroke-width="1" fill="#ffcc66"></path></g><g></g></svg></div></div><div style="display: none; position: absolute; top: 210px; left: 320px; white-space: nowrap; font-family: Arial; font-size: 10px;">receive</div><div></div></div></div>
+            <div class="title">
+                <div class="ui label inverted gradeE">E</div> EyeScore
+            </div>
+            <div class="content">
+
+                <div class="ui segment attached top">
+                    <div class="ui left label inverted gradeE">E</div> Overall
                 </div>
 
-                <div class="side">
-                    <div class="content" id="chart-uncached" data-height="300"><div class="harpyChart" style="position: relative;"><div dir="ltr" style="position: relative; width: 400px; height: 200px;"><div style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;"><svg width="400" height="200" aria-label="A chart." style="overflow: hidden;"><defs id="defs"><linearGradient id="_ABSTRACT_RENDERER_ID_6" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#cccccc;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#cccccc;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#cccccc;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#cccccc;stop-opacity:1"></stop></linearGradient><linearGradient id="_ABSTRACT_RENDERER_ID_7" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#ffffbb;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#ffffbb;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#ffffbb;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#ffffbb;stop-opacity:1"></stop></linearGradient><linearGradient id="_ABSTRACT_RENDERER_ID_8" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#ffbbff;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#ffbbff;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#ffbbff;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#ffbbff;stop-opacity:1"></stop></linearGradient><linearGradient id="_ABSTRACT_RENDERER_ID_9" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#bbbbff;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#bbbbff;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#bbbbff;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#bbbbff;stop-opacity:1"></stop></linearGradient><linearGradient id="_ABSTRACT_RENDERER_ID_10" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#ffbbbb;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#ffbbbb;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#ffbbbb;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#ffbbbb;stop-opacity:1"></stop></linearGradient></defs><rect x="0" y="0" width="400" height="200" stroke="none" stroke-width="0" fill="#ffffff"></rect><g><text text-anchor="start" x="10" y="18.85" font-family="Arial" font-size="11" font-weight="bold" stroke="none" stroke-width="0" fill="#000000">Uncached content</text></g><g><rect x="213" y="30" width="97" height="101" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><rect x="213" y="30" width="97" height="11" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="239" y="39.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">image</text></g><rect x="213" y="30" width="22" height="11" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_6)"></rect></g><g><rect x="213" y="48" width="97" height="11" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="239" y="57.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">html</text></g><rect x="213" y="48" width="22" height="11" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_7)"></rect></g><g><rect x="213" y="66" width="97" height="11" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="239" y="75.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">js</text></g><rect x="213" y="66" width="22" height="11" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_8)"></rect></g><g><rect x="213" y="84" width="97" height="11" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="239" y="93.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">css</text></g><rect x="213" y="84" width="22" height="11" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_9)"></rect></g><g><rect x="213" y="102" width="97" height="11" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="239" y="111.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">text</text></g><rect x="213" y="102" width="22" height="11" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_10)"></rect></g><g><rect x="213" y="120" width="97" height="11" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="239" y="129.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">other</text></g><rect x="213" y="120" width="22" height="11" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_6)"></rect></g></g><g><path d="M103,115L103,64A51,51,0,0,1,153.78245,110.29446L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#cccccc"></path></g><g><path d="M103,115L153.78245666862856,110.2944612743214A51,51,0,0,1,142.91386,146.74717L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#ffffbb"></path></g><g><path d="M103,115L102.99999999999999,64A51,51,0,0,1,103,64L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#cccccc"></path></g><g><path d="M103,115L102.99999999999999,64A51,51,0,0,1,103,64L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#ffbbbb"></path></g><g><path d="M103,115L53.21377372411869,103.93963503284192A51,51,0,0,1,103,64L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#bbbbff"></path></g><g><path d="M103,115L142.9138683155057,146.74717493088903A51,51,0,0,1,53.21377,103.93963L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#ffbbff"></path></g><g><path d="M103,63.49L103,30A85,85,0,0,1,104.26154,30.00936L103.76449560806284,63.49567351702138A51.51,51.51,0,0,0,103,63.49" stroke="#ffffff" stroke-width="1" fill="#cccccc"></path></g><g><path d="M102.99999999999999,63.49L102.99999999999999,30A85,85,0,0,1,103,30L102.99999999999999,63.49A51.51,51.51,0,0,0,103,63.49" stroke="#ffffff" stroke-width="1" fill="#cccccc"></path></g><g><path d="M102.99999999999999,63.49L102.99999999999999,30A85,85,0,0,1,103,30L102.99999999999999,63.49A51.51,51.51,0,0,0,103,63.49" stroke="#ffffff" stroke-width="1" fill="#ffbbbb"></path></g><g><path d="M102.99999999999999,63.49L102.99999999999999,30A85,85,0,0,1,103,30L102.99999999999999,63.49A51.51,51.51,0,0,0,103,63.49" stroke="#ffffff" stroke-width="1" fill="#bbbbff"></path></g><g><path d="M89.13394117826654,164.6085931341761L80.11871481562136,196.86236490788133A85,85,0,0,1,103,30L102.99999999999999,63.49A51.51,51.51,0,0,0,89.13394,164.60859" stroke="#ffffff" stroke-width="1" fill="#ffbbff"></path></g><g><path d="M103.76449560806284,63.49567351702138L104.26154390769447,30.009362239309212A85,85,0,1,1,80.11871,196.86236L89.13394117826654,164.6085931341761A51.51,51.51,0,1,0,103.76449,63.49567" stroke="#ffffff" stroke-width="1" fill="#ffffbb"></path></g><g></g></svg></div></div><div style="display: none; position: absolute; top: 210px; left: 410px; white-space: nowrap; font-family: Arial; font-size: 11px;">other</div><div></div></div></div>
+                <div class="ui segment attached">
+                    <div class="ui left label inverted gradeE">E</div> DOM Quality
                 </div>
 
-                <div class="side">
-                    <div class="content" id="chart-size" data-height="300"><div class="harpyChart" style="position: relative;"><div dir="ltr" style="position: relative; width: 400px; height: 200px;"><div style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;"><svg width="400" height="200" aria-label="A chart." style="overflow: hidden;"><defs id="defs"><linearGradient id="_ABSTRACT_RENDERER_ID_11" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#5cb85c;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#5cb85c;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#5cb85c;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#5cb85c;stop-opacity:1"></stop></linearGradient><linearGradient id="_ABSTRACT_RENDERER_ID_12" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#d9534f;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#d9534f;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#d9534f;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#d9534f;stop-opacity:1"></stop></linearGradient></defs><rect x="0" y="0" width="400" height="200" stroke="none" stroke-width="0" fill="#ffffff"></rect><g><text text-anchor="start" x="10" y="18.85" font-family="Arial" font-size="11" font-weight="bold" stroke="none" stroke-width="0" fill="#000000">Cache profile</text></g><g><rect x="213" y="30" width="97" height="29" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><rect x="213" y="30" width="97" height="11" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="239" y="39.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">cache</text></g><rect x="213" y="30" width="22" height="11" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_11)"></rect></g><g><rect x="213" y="48" width="97" height="11" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="239" y="57.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">download</text></g><rect x="213" y="48" width="22" height="11" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_12)"></rect></g></g><g><path d="M103,115L103,64A51,51,0,0,1,103,64L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#5cb85c"></path></g><g><ellipse cx="103" cy="115" rx="51" ry="51" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#d9534f"></ellipse></g><g><path d="M85.2739001862818,66.63611383073015L73.74901020838578,35.191606981402884A85,85,0,0,1,103,30L102.99999999999999,63.49A51.51,51.51,0,0,0,85.2739,66.63611" stroke="#ffffff" stroke-width="1" fill="#d9534f"></path></g><g><path d="M103,63.49L103,30A85,85,0,1,1,73.74901,35.1916L85.2739001862818,66.63611383073015A51.51,51.51,0,1,0,103,63.49" stroke="#ffffff" stroke-width="1" fill="#5cb85c"></path></g><g></g></svg></div></div><div style="display: none; position: absolute; top: 210px; left: 410px; white-space: nowrap; font-family: Arial; font-size: 11px;">download</div><div></div></div></div>
-                </div>
-
-                <div class="side">
-                    <div class="content" id="chart-timings" data-height="300"><div class="harpyChart harpyBarChart" style="position: relative;"><div dir="ltr" style="position: relative; width: 400px; height: 200px;"><div style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;"><svg width="400" height="200" aria-label="A chart." style="overflow: hidden;"><defs id="defs"><clipPath id="_ABSTRACT_RENDERER_ID_13"><rect x="67" y="38" width="267" height="124"></rect></clipPath></defs><rect x="0" y="0" width="400" height="200" stroke="none" stroke-width="0" fill="#ffffff"></rect><g><rect x="67" y="38" width="267" height="124" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g clip-path="url(#_ABSTRACT_RENDERER_ID_13)"><g><rect x="67" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="134" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="200" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="267" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="333" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect></g><g><rect x="68" y="46" width="54" height="12" stroke="none" stroke-width="0" fill="#5cb85c"></rect><rect x="68" y="87" width="72" height="12" stroke="none" stroke-width="0" fill="#5cb85c"></rect><rect x="68" y="128" width="72" height="12" stroke="none" stroke-width="0" fill="#5cb85c"></rect><rect x="68" y="59" width="120" height="12" stroke="none" stroke-width="0" fill="#d9534f"></rect><rect x="68" y="100" width="237" height="12" stroke="none" stroke-width="0" fill="#d9534f"></rect><rect x="68" y="141" width="237" height="12" stroke="none" stroke-width="0" fill="#d9534f"></rect></g><g><rect x="67" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#333333"></rect></g></g><g></g><g><g><text text-anchor="middle" x="67.5" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">0</text></g><g><text text-anchor="middle" x="134" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">1</text></g><g><text text-anchor="middle" x="200.5" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">2</text></g><g><text text-anchor="middle" x="267" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">3</text></g><g><text text-anchor="middle" x="333.5" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">4</text></g><g><text text-anchor="end" x="56" y="62.85" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">Dom load</text></g><g><text text-anchor="end" x="56" y="103.85" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">Load</text></g><g><text text-anchor="end" x="56" y="144.85" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">Total</text></g></g></g><g></g></svg></div></div><div style="display: none; position: absolute; top: 210px; left: 410px; white-space: nowrap; font-family: Arial; font-size: 11px;">...</div><div></div></div></div>
-                </div>
-
-                <div class="side">
-                    <div class="content" id="chart-requests" data-height="300"><div class="harpyChart harpyBarChart" style="position: relative;"><div dir="ltr" style="position: relative; width: 400px; height: 200px;"><div style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;"><svg width="400" height="200" aria-label="A chart." style="overflow: hidden;"><defs id="defs"><clipPath id="_ABSTRACT_RENDERER_ID_14"><rect x="67" y="38" width="267" height="124"></rect></clipPath></defs><rect x="0" y="0" width="400" height="200" stroke="none" stroke-width="0" fill="#ffffff"></rect><g><rect x="67" y="38" width="267" height="124" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g clip-path="url(#_ABSTRACT_RENDERER_ID_14)"><g><rect x="67" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="134" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="200" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="267" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="333" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect></g><g><rect x="68" y="62" width="10" height="37" stroke="none" stroke-width="0" fill="#5cb85c"></rect><rect x="68" y="100" width="241" height="37" stroke="none" stroke-width="0" fill="#d9534f"></rect></g><g><rect x="67" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#333333"></rect></g></g><g></g><g><g><text text-anchor="middle" x="67.5" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">0</text></g><g><text text-anchor="middle" x="134" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">50</text></g><g><text text-anchor="middle" x="200.5" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">100</text></g><g><text text-anchor="middle" x="267" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">150</text></g><g><text text-anchor="middle" x="333.5" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">200</text></g><g><text text-anchor="end" x="56" y="103.85" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">Requests</text></g></g></g><g></g></svg></div></div><div style="display: none; position: absolute; top: 210px; left: 410px; white-space: nowrap; font-family: Arial; font-size: 11px;">...</div><div></div></div></div>
-                </div>
-
-                <div class="side">
-                    <div class="content" id="chart-download" data-height="300"><div class="harpyChart harpyBarChart" style="position: relative;"><div dir="ltr" style="position: relative; width: 400px; height: 200px;"><div style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;"><svg width="400" height="200" aria-label="A chart." style="overflow: hidden;"><defs id="defs"><clipPath id="_ABSTRACT_RENDERER_ID_15"><rect x="67" y="38" width="267" height="124"></rect></clipPath></defs><rect x="0" y="0" width="400" height="200" stroke="none" stroke-width="0" fill="#ffffff"></rect><g><rect x="67" y="38" width="267" height="124" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g clip-path="url(#_ABSTRACT_RENDERER_ID_15)"><g><rect x="67" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="134" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="200" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="267" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="333" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect></g><g><rect x="68" y="62" width="11" height="37" stroke="none" stroke-width="0" fill="#5cb85c"></rect><rect x="68" y="100" width="226" height="37" stroke="none" stroke-width="0" fill="#d9534f"></rect></g><g><rect x="67" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#333333"></rect></g></g><g></g><g><g><text text-anchor="middle" x="67.5" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">0</text></g><g><text text-anchor="middle" x="134" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">400</text></g><g><text text-anchor="middle" x="200.5" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">800</text></g><g><text text-anchor="middle" x="267" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">1,200</text></g><g><text text-anchor="middle" x="333.5" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">1,600</text></g><g><text text-anchor="end" x="56" y="103.85" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">Size</text></g></g></g><g></g></svg></div></div><div style="display: none; position: absolute; top: 210px; left: 410px; white-space: nowrap; font-family: Arial; font-size: 11px;">...</div><div></div></div></div>
+                <div class="ui segment attached bottom">
+                    <div class="ui left label inverted gradeC">C</div> Performance
                 </div>
 
             </div>
+
+            <div class="title">
+                <div class="ui label inverted gradeA">A</div> Load time
+            </div>
+            <div class="content">
+
+                <div class="ui segment attached top">
+                    <div class="ui left label inverted gradeA">A</div> Load time
+                </div>
+
+                <div class="ui segment attached">
+                    <div class="ui left label inverted gradeA">A</div> DOM load time
+                </div>
+
+                <div class="ui segment attached">
+                    <div class="ui left label inverted gradeB">B</div> Load time (uncached)
+                </div>
+
+                <div class="ui segment attached bottom">
+                    <div class="ui left label inverted gradeB">B</div> DOM load time (uncached)
+                </div>
+
+            </div>
+
+            <div class="title">
+                <div class="ui label inverted gradeD">D</div> YSlow
+            </div>
+            <div class="content">
+
+                <div class="ui segment attached top">
+                    <div class="ui left label inverted gradeD">D</div> Overall
+                </div>
+
+                <div class="ui segment attached">
+                    <div class="ui left label inverted gradeF">F</div> Page size
+                </div>
+
+                <div class="ui segment attached">
+                    <div class="ui left label inverted gradeF">F</div> Page size (cached)
+                </div>
+
+                <div class="ui segment attached">
+                    <div class="ui left label inverted gradeF">F</div> HTTP requests
+                </div>
+
+                <div class="ui segment attached bottom">
+                    <div class="ui left label inverted gradeF">F</div> HTTP requests (cached)
+                </div>
+
+            </div>
+
+            <div class="title">
+                <div class="ui label inverted gradeE">E</div> DomMonster
+            </div>
+            <div class="content">
+
+                <div class="ui segment attached top">
+                    <div class="ui left label inverted gradeE">E</div> Overall
+                </div>
+
+                <div class="ui segment attached">
+                    <div class="ui left label inverted gradeF">F</div> Elements
+                </div>
+
+                <div class="ui segment attached">
+                    <div class="ui left label inverted gradeF">F</div> Nodes
+                </div>
+
+                <div class="ui segment attached">
+                    <div class="ui left label inverted gradeF">F</div> Text nodes
+                </div>
+
+                <div class="ui segment attached">
+                    <div class="ui left label inverted gradeA">A</div> Text node size
+                </div>
+
+                <div class="ui segment attached">
+                    <div class="ui left label inverted gradeF">F</div> Content Percentage
+                </div>
+
+                <div class="ui segment attached">
+                    <div class="ui left label inverted gradeA">A</div> Nesting
+                </div>
+
+                <div class="ui segment attached bottom">
+                    <div class="ui left label inverted gradeA">A</div> DOM size
+                </div>
+
+            </div>
+
+            <div class="title">
+                <div class="ui label inverted gradeF">F</div> Validator
+            </div>
+            <div class="content">
+
+                <div class="ui segment attached top">
+                    <div class="ui left label inverted gradeF">F</div> Overall
+                </div>
+
+                <div class="ui segment attached">
+                    <div class="ui left label inverted gradeF">F</div> Errors
+                </div>
+
+                <div class="ui segment attached bottom">
+                    <div class="ui left label inverted gradeA">A</div> Warnings
+                </div>
+
+            </div>
+
+            <div class="title">
+                <div class="ui label inverted gradeF">F</div> Accessibility
+            </div>
+            <div class="content">
+
+                <div class="ui segment attached top">
+                    <div class="ui left label inverted gradeF">F</div> Overall
+                </div>
+
+                <div class="ui segment attached">
+                    <div class="ui left label inverted gradeF">F</div> Errors
+                </div>
+
+                <div class="ui segment attached bottom">
+                    <div class="ui left label inverted gradeA">A</div> Warnings
+                </div>
+
+            </div>
+
         </div></div>
-    <h3 id="eyeballChartsFooter" class="ui bottom attached header"><a href="http://localhost:3000/#/har/:53b056e451ce78b01175e4fd">View full HTTP analysis in Eyeball</a></h3>
-    <button class="ui button">Re-test</button></div><script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script><script src="https://www.google.com/jsapi"></script><script src="http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script><script src="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/javascript/semantic.min.js"></script></div>
+        <h3 id="eyeballGradesFooter" class="ui bottom attached header black inverted"><a href="http://localhost:3000/#/detail/:5523d08512275f30128aa577">View full detailed results in Eyeball</a></h3>
+        <h2 class="ui top attached header black inverted">
+            <div class="content">
+                HTTP metrics
+                <div class="sub header">Metrics for page performance</div>
+            </div>
+        </h2>
+        <div id="eyeballCharts" class="ui segment attached" style="height: 342px;"><div class="ui ignored icon direction buttons">
+            <button class="ui mini button" data-animation="flip" data-direction="left" title="Flip Left"><i class="left long arrow icon"></i></button>
+            <button class="ui mini button" data-animation="flip" data-direction="up" title="Flip Up"><i class="up long arrow icon"></i></button>
+            <button class="ui mini icon button" data-animation="flip" data-direction="down" title="Flip Down"><i class="down long arrow icon"></i></button>
+            <button class="ui mini icon button" data-animation="flip" data-direction="right" title="Flip Right"><i class="right long arrow icon"></i></button>
+        </div>
+            <div class="ui shape rectangle">
+                <div class="sides">
 
+                    <div class="side">
+                        <div class="content" id="chart-time" data-height="300"><div class="harpyChart"><div style="position: relative;"><div dir="ltr" style="position: relative; width: 310px; height: 200px;"><div aria-label="A chart." style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;"><svg width="310" height="200" aria-label="A chart." style="overflow: hidden;"><defs id="defs"><linearGradient id="_ABSTRACT_RENDERER_ID_0" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#d9534f;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#d9534f;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#d9534f;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#d9534f;stop-opacity:1"></stop></linearGradient><linearGradient id="_ABSTRACT_RENDERER_ID_1" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#ff6633;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#ff6633;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#ff6633;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#ff6633;stop-opacity:1"></stop></linearGradient><linearGradient id="_ABSTRACT_RENDERER_ID_2" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#ff9966;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#ff9966;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#ff9966;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#ff9966;stop-opacity:1"></stop></linearGradient><linearGradient id="_ABSTRACT_RENDERER_ID_3" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#99cc99;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#99cc99;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#99cc99;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#99cc99;stop-opacity:1"></stop></linearGradient><linearGradient id="_ABSTRACT_RENDERER_ID_4" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#ffcc66;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#ffcc66;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#ffcc66;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#ffcc66;stop-opacity:1"></stop></linearGradient><linearGradient id="_ABSTRACT_RENDERER_ID_5" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#5cb85c;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#5cb85c;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#5cb85c;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#5cb85c;stop-opacity:1"></stop></linearGradient></defs><rect x="0" y="0" width="310" height="200" stroke="none" stroke-width="0" fill="#ffffff"></rect><g><text text-anchor="start" x="10" y="18.5" font-family="Arial" font-size="10" font-weight="bold" stroke="none" stroke-width="0" fill="#000000">Time</text></g><g><rect x="211" y="30" width="99" height="90" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><rect x="211" y="30" width="99" height="10" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="235" y="38.5" font-family="Arial" font-size="10" stroke="none" stroke-width="0" fill="#222222">blocked</text></g><rect x="211" y="30" width="20" height="10" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_0)"></rect></g><g><rect x="211" y="46" width="99" height="10" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="235" y="54.5" font-family="Arial" font-size="10" stroke="none" stroke-width="0" fill="#222222">dns</text></g><rect x="211" y="46" width="20" height="10" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_1)"></rect></g><g><rect x="211" y="62" width="99" height="10" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="235" y="70.5" font-family="Arial" font-size="10" stroke="none" stroke-width="0" fill="#222222">connect</text></g><rect x="211" y="62" width="20" height="10" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_2)"></rect></g><g><rect x="211" y="78" width="99" height="10" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="235" y="86.5" font-family="Arial" font-size="10" stroke="none" stroke-width="0" fill="#222222">send</text></g><rect x="211" y="78" width="20" height="10" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_3)"></rect></g><g><rect x="211" y="94" width="99" height="10" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="235" y="102.5" font-family="Arial" font-size="10" stroke="none" stroke-width="0" fill="#222222">wait</text></g><rect x="211" y="94" width="20" height="10" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_4)"></rect></g><g><rect x="211" y="110" width="99" height="10" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="235" y="118.5" font-family="Arial" font-size="10" stroke="none" stroke-width="0" fill="#222222">receive</text></g><rect x="211" y="110" width="20" height="10" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_5)"></rect></g></g><g><path d="M103,115L103,64A51,51,0,0,1,103,64L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#d9534f"></path></g><g><path d="M103,115L103,64A51,51,0,0,1,103,64L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#ff6633"></path></g><g><path d="M103,115L103,64A51,51,0,0,1,103,64L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#ff9966"></path></g><g><path d="M103,115L103,64A51,51,0,0,1,103,64L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#99cc99"></path></g><g><path d="M103,115L102.56130318066735,64.00188684764203A51,51,0,0,1,103,64L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#5cb85c"></path></g><g><path d="M103,115L103,64A51,51,0,1,1,102.56130318066735,64.00188684764203L103,115A0,0,0,1,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#ffcc66"></path></g><g><path d="M103,63.49L103,30A85,85,0,0,1,103,30L103,63.49A51.51,51.51,0,0,0,103,63.49" stroke="#ffffff" stroke-width="1" fill="#d9534f"></path></g><g><path d="M103,63.49L103,30A85,85,0,0,1,103,30L103,63.49A51.51,51.51,0,0,0,103,63.49" stroke="#ffffff" stroke-width="1" fill="#ff6633"></path></g><g><path d="M103,63.49L103,30A85,85,0,0,1,103,30L103,63.49A51.51,51.51,0,0,0,103,63.49" stroke="#ffffff" stroke-width="1" fill="#ff9966"></path></g><g><path d="M103,63.49L103,30A85,85,0,0,1,103,30L103,63.49A51.51,51.51,0,0,0,103,63.49" stroke="#ffffff" stroke-width="1" fill="#99cc99"></path></g><g><path d="M65.91119878197733,79.25505736177494L41.79735772603518,56.014946141542815A85,85,0,0,1,103,30L102.99999999999999,63.49A51.51,51.51,0,0,0,65.91119878197733,79.25505736177494" stroke="#ffffff" stroke-width="1" fill="#5cb85c"></path></g><g><path d="M103,63.49L103,30A85,85,0,1,1,41.79735772603518,56.014946141542815L65.91119878197733,79.25505736177494A51.51,51.51,0,1,0,103,63.49" stroke="#ffffff" stroke-width="1" fill="#ffcc66"></path></g><g></g></svg><div aria-label="A tabular representation of the data in the chart." style="position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;"><table><thead><tr><th></th></tr></thead><tbody><tr><td>blocked</td></tr><tr><td>dns</td></tr><tr><td>connect</td></tr><tr><td>send</td></tr><tr><td>wait</td></tr><tr><td>receive</td></tr></tbody></table></div></div></div><div aria-hidden="true" style="display: none; position: absolute; top: 210px; left: 320px; white-space: nowrap; font-family: Arial; font-size: 10px;">receive</div><div></div></div></div></div>
+                    </div>
 
-</body></html>
+                    <div class="side">
+                        <div class="content" id="chart-uncached" data-height="300"><div class="harpyChart"><div style="position: relative;"><div dir="ltr" style="position: relative; width: 400px; height: 200px;"><div aria-label="A chart." style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;"><svg width="400" height="200" aria-label="A chart." style="overflow: hidden;"><defs id="defs"><linearGradient id="_ABSTRACT_RENDERER_ID_6" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#cccccc;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#cccccc;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#cccccc;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#cccccc;stop-opacity:1"></stop></linearGradient><linearGradient id="_ABSTRACT_RENDERER_ID_7" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#ffffbb;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#ffffbb;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#ffffbb;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#ffffbb;stop-opacity:1"></stop></linearGradient><linearGradient id="_ABSTRACT_RENDERER_ID_8" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#ffbbff;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#ffbbff;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#ffbbff;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#ffbbff;stop-opacity:1"></stop></linearGradient><linearGradient id="_ABSTRACT_RENDERER_ID_9" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#bbbbff;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#bbbbff;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#bbbbff;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#bbbbff;stop-opacity:1"></stop></linearGradient><linearGradient id="_ABSTRACT_RENDERER_ID_10" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#ffbbbb;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#ffbbbb;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#ffbbbb;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#ffbbbb;stop-opacity:1"></stop></linearGradient></defs><rect x="0" y="0" width="400" height="200" stroke="none" stroke-width="0" fill="#ffffff"></rect><g><text text-anchor="start" x="10" y="18.85" font-family="Arial" font-size="11" font-weight="bold" stroke="none" stroke-width="0" fill="#000000">Uncached content</text></g><g><rect x="213" y="30" width="97" height="101" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><rect x="213" y="30" width="97" height="11" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="239" y="39.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">image</text></g><rect x="213" y="30" width="22" height="11" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_6)"></rect></g><g><rect x="213" y="48" width="97" height="11" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="239" y="57.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">html</text></g><rect x="213" y="48" width="22" height="11" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_7)"></rect></g><g><rect x="213" y="66" width="97" height="11" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="239" y="75.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">js</text></g><rect x="213" y="66" width="22" height="11" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_8)"></rect></g><g><rect x="213" y="84" width="97" height="11" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="239" y="93.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">css</text></g><rect x="213" y="84" width="22" height="11" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_9)"></rect></g><g><rect x="213" y="102" width="97" height="11" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="239" y="111.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">text</text></g><rect x="213" y="102" width="22" height="11" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_10)"></rect></g><g><rect x="213" y="120" width="97" height="11" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="239" y="129.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">other</text></g><rect x="213" y="120" width="22" height="11" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_6)"></rect></g></g><g><path d="M103,115L103,64A51,51,0,0,1,139.37773291864778,150.7443778474256L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#cccccc"></path></g><g><path d="M103,115L139.37773291864778,150.7443778474256A51,51,0,0,1,110.88178889570406,165.38727422478374L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#ffffbb"></path></g><g><path d="M103,115L91.39567447361493,65.33774442217019A51,51,0,0,1,103,64L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#cccccc"></path></g><g><path d="M103,115L91.39567447361493,65.33774442217019A51,51,0,0,1,91.39567447361493,65.33774442217019L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#ffbbbb"></path></g><g><path d="M103,115L58.315790718530934,90.41704979279594A51,51,0,0,1,91.39567447361493,65.33774442217019L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#bbbbff"></path></g><g><path d="M103,115L110.88178889570406,165.38727422478374A51,51,0,0,1,58.315790718530934,90.41704979279594L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#ffbbff"></path></g><g><path d="M103,63.49L103,30A85,85,0,0,1,103.44458675120552,30.00116269841891L103.26941957123054,63.490704595241866A51.51,51.51,0,0,0,103,63.49" stroke="#ffffff" stroke-width="1" fill="#cccccc"></path></g><g><path d="M102.99567195503025,63.49000018182851L102.99285801160107,30.00000030004705A85,85,0,0,1,103.04642900348756,30.00001268030897L102.99999999999999,63.49A51.51,51.51,0,0,0,102.94783598642877,63.490026413172295" stroke="#ffffff" stroke-width="1" fill="#cccccc"></path></g><g><path d="M102.99567195503025,63.49000018182851L102.99285801160107,30.00000030004705A85,85,0,0,1,102.99285801160107,30.00000030004705L102.99567195503025,63.49000018182851A51.51,51.51,0,0,0,102.99567195503025,63.49000018182851" stroke="#ffffff" stroke-width="1" fill="#ffbbbb"></path></g><g><path d="M102.99567195503025,63.49000018182851L102.99285801160107,30.00000030004705A85,85,0,0,1,102.99285801160107,30.00000030004705L102.99567195503025,63.49000018182851A51.51,51.51,0,0,0,102.99567195503025,63.49000018182851" stroke="#ffffff" stroke-width="1" fill="#bbbbff"></path></g><g><path d="M93.72075290705106,64.33269620960675L87.68771106774102,31.390587804631593A85,85,0,0,1,102.99285801160114,30.00000030004705L102.99567195503029,63.49000018182851A51.51,51.51,0,0,0,93.72075290705106,64.33269620960675" stroke="#ffffff" stroke-width="1" fill="#ffbbff"></path></g><g><path d="M103.26941957123054,63.490704595241866L103.44458675120552,30.00116269841891A85,85,0,1,1,87.68771106774095,31.390587804631608L93.72075290705101,64.33269620960675A51.51,51.51,0,1,0,103.26941957123054,63.490704595241866" stroke="#ffffff" stroke-width="1" fill="#ffffbb"></path></g><g></g></svg><div aria-label="A tabular representation of the data in the chart." style="position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;"><table><thead><tr><th></th></tr></thead><tbody><tr><td>image</td></tr><tr><td>html</td></tr><tr><td>js</td></tr><tr><td>css</td></tr><tr><td>text</td></tr><tr><td>other</td></tr></tbody></table></div></div></div><div aria-hidden="true" style="display: none; position: absolute; top: 210px; left: 410px; white-space: nowrap; font-family: Arial; font-size: 11px;">other</div><div></div></div></div></div>
+                    </div>
+
+                    <div class="side">
+                        <div class="content" id="chart-size" data-height="300"><div class="harpyChart"><div style="position: relative;"><div dir="ltr" style="position: relative; width: 400px; height: 200px;"><div aria-label="A chart." style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;"><svg width="400" height="200" aria-label="A chart." style="overflow: hidden;"><defs id="defs"><linearGradient id="_ABSTRACT_RENDERER_ID_11" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#5cb85c;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#5cb85c;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#5cb85c;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#5cb85c;stop-opacity:1"></stop></linearGradient><linearGradient id="_ABSTRACT_RENDERER_ID_12" x1="100%" y1="0%" x2="0%" y2="0%" gradientUnits="objectBoundingBox"><stop offset="0%" style="stop-color:#d9534f;stop-opacity:0.7"></stop><stop offset="49.99%" style="stop-color:#d9534f;stop-opacity:0.7"></stop><stop offset="50%" style="stop-color:#d9534f;stop-opacity:1"></stop><stop offset="100%" style="stop-color:#d9534f;stop-opacity:1"></stop></linearGradient></defs><rect x="0" y="0" width="400" height="200" stroke="none" stroke-width="0" fill="#ffffff"></rect><g><text text-anchor="start" x="10" y="18.85" font-family="Arial" font-size="11" font-weight="bold" stroke="none" stroke-width="0" fill="#000000">Cache profile</text></g><g><rect x="213" y="30" width="97" height="29" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><rect x="213" y="30" width="97" height="11" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="239" y="39.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">cache</text></g><rect x="213" y="30" width="22" height="11" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_11)"></rect></g><g><rect x="213" y="48" width="97" height="11" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g><text text-anchor="start" x="239" y="57.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">download</text></g><rect x="213" y="48" width="22" height="11" stroke="none" stroke-width="0" fill="url(#_ABSTRACT_RENDERER_ID_12)"></rect></g></g><g><path d="M103,115L103,64A51,51,0,0,1,103,64L103,115A0,0,0,0,0,103,115" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#5cb85c"></path></g><g><ellipse cx="103" cy="115" rx="51" ry="51" stroke="#ffffff" stroke-width="1" fill-opacity="0.7" fill="#d9534f"></ellipse></g><g><path d="M72.12577247778304,73.76818976922817L52.05242983132516,46.96070919014548A85,85,0,0,1,103,30L102.99999999999999,63.49A51.51,51.51,0,0,0,72.12577247778304,73.76818976922817" stroke="#ffffff" stroke-width="1" fill="#d9534f"></path></g><g><path d="M103,63.49L103,30A85,85,0,1,1,52.05242983132516,46.96070919014548L72.12577247778304,73.76818976922817A51.51,51.51,0,1,0,103,63.49" stroke="#ffffff" stroke-width="1" fill="#5cb85c"></path></g><g></g></svg><div aria-label="A tabular representation of the data in the chart." style="position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;"><table><thead><tr><th></th></tr></thead><tbody><tr><td>cache</td></tr><tr><td>download</td></tr></tbody></table></div></div></div><div aria-hidden="true" style="display: none; position: absolute; top: 210px; left: 410px; white-space: nowrap; font-family: Arial; font-size: 11px;">download</div><div></div></div></div></div>
+                    </div>
+
+                    <div class="side">
+                        <div class="content" id="chart-timings" data-height="300"><div class="harpyChart harpyBarChart"><div style="position: relative;"><div dir="ltr" style="position: relative; width: 400px; height: 200px;"><div aria-label="A chart." style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;"><svg width="400" height="200" aria-label="A chart." style="overflow: hidden;"><defs id="defs"><clipPath id="_ABSTRACT_RENDERER_ID_13"><rect x="67" y="38" width="267" height="124"></rect></clipPath></defs><rect x="0" y="0" width="400" height="200" stroke="none" stroke-width="0" fill="#ffffff"></rect><g><rect x="67" y="38" width="267" height="124" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g clip-path="url(#_ABSTRACT_RENDERER_ID_13)"><g><rect x="67" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="134" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="200" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="267" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="333" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect></g><g><rect x="68" y="46" width="45" height="12" stroke="none" stroke-width="0" fill="#5cb85c"></rect><rect x="68" y="87" width="152" height="12" stroke="none" stroke-width="0" fill="#5cb85c"></rect><rect x="68" y="128" width="152" height="12" stroke="none" stroke-width="0" fill="#5cb85c"></rect><rect x="68" y="59" width="138" height="12" stroke="none" stroke-width="0" fill="#d9534f"></rect><rect x="68" y="100" width="245" height="12" stroke="none" stroke-width="0" fill="#d9534f"></rect><rect x="68" y="141" width="245" height="12" stroke="none" stroke-width="0" fill="#d9534f"></rect></g><g><rect x="67" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#333333"></rect></g></g><g></g><g><g><text text-anchor="middle" x="67.5" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">0.0</text></g><g><text text-anchor="middle" x="134" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">0.7</text></g><g><text text-anchor="middle" x="200.5" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">1.4</text></g><g><text text-anchor="middle" x="267" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">2.1</text></g><g><text text-anchor="middle" x="333.5" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">2.8</text></g><g><text text-anchor="end" x="56" y="62.85" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">Dom load</text></g><g><text text-anchor="end" x="56" y="103.85" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">Load</text></g><g><text text-anchor="end" x="56" y="144.85" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">Total</text></g></g></g><g></g></svg><div aria-label="A tabular representation of the data in the chart." style="position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;"><table><thead><tr><th>Metric</th><th>Primed cache</th><th>Uncached</th></tr></thead><tbody><tr><td>Dom load</td><td>0.488</td><td>1.461</td></tr><tr><td>Load</td><td>1.607</td><td>2.591</td></tr><tr><td>Total</td><td>1.607</td><td>2.591</td></tr></tbody></table></div></div></div><div aria-hidden="true" style="display: none; position: absolute; top: 210px; left: 410px; white-space: nowrap; font-family: Arial; font-size: 11px;">...</div><div></div></div></div></div>
+                    </div>
+
+                    <div class="side active">
+                        <div class="content" id="chart-requests" data-height="300"><div class="harpyChart harpyBarChart"><div style="position: relative;"><div dir="ltr" style="position: relative; width: 400px; height: 200px;"><div aria-label="A chart." style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;"><svg width="400" height="200" aria-label="A chart." style="overflow: hidden;"><defs id="defs"><clipPath id="_ABSTRACT_RENDERER_ID_14"><rect x="67" y="38" width="267" height="124"></rect></clipPath></defs><rect x="0" y="0" width="400" height="200" stroke="none" stroke-width="0" fill="#ffffff"></rect><g><rect x="67" y="38" width="267" height="124" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g clip-path="url(#_ABSTRACT_RENDERER_ID_14)"><g><rect x="67" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="134" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="200" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="267" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="333" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect></g><g><rect x="68" y="62" width="24" height="37" stroke="none" stroke-width="0" fill="#5cb85c"></rect><rect x="68" y="100" width="220" height="37" stroke="none" stroke-width="0" fill="#d9534f"></rect></g><g><rect x="67" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#333333"></rect></g></g><g></g><g><g><text text-anchor="middle" x="67.5" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">0</text></g><g><text text-anchor="middle" x="134" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">50</text></g><g><text text-anchor="middle" x="200.5" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">100</text></g><g><text text-anchor="middle" x="267" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">150</text></g><g><text text-anchor="middle" x="333.5" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">200</text></g><g><text text-anchor="end" x="56" y="103.85" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">Requests</text></g></g></g><g></g></svg><div aria-label="A tabular representation of the data in the chart." style="position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;"><table><thead><tr><th>Metric</th><th>Primed cache</th><th>Uncached</th></tr></thead><tbody><tr><td>Requests</td><td>19</td><td>166</td></tr></tbody></table></div></div></div><div aria-hidden="true" style="display: none; position: absolute; top: 210px; left: 410px; white-space: nowrap; font-family: Arial; font-size: 11px; font-weight: bold;">166</div><div></div></div></div></div>
+                    </div>
+
+                    <div class="side">
+                        <div class="content" id="chart-download" data-height="300"><div class="harpyChart harpyBarChart"><div style="position: relative;"><div dir="ltr" style="position: relative; width: 400px; height: 200px;"><div aria-label="A chart." style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;"><svg width="400" height="200" aria-label="A chart." style="overflow: hidden;"><defs id="defs"><clipPath id="_ABSTRACT_RENDERER_ID_15"><rect x="67" y="38" width="267" height="124"></rect></clipPath></defs><rect x="0" y="0" width="400" height="200" stroke="none" stroke-width="0" fill="#ffffff"></rect><g><rect x="67" y="38" width="267" height="124" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g clip-path="url(#_ABSTRACT_RENDERER_ID_15)"><g><rect x="67" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="134" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="200" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="267" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect><rect x="333" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#cccccc"></rect></g><g><rect x="68" y="62" width="25" height="37" stroke="none" stroke-width="0" fill="#5cb85c"></rect><rect x="68" y="100" width="250" height="37" stroke="none" stroke-width="0" fill="#d9534f"></rect></g><g><rect x="67" y="38" width="1" height="124" stroke="none" stroke-width="0" fill="#333333"></rect></g></g><g></g><g><g><text text-anchor="middle" x="67.5" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">0</text></g><g><text text-anchor="middle" x="134" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">750</text></g><g><text text-anchor="middle" x="200.5" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">1,500</text></g><g><text text-anchor="middle" x="267" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">2,250</text></g><g><text text-anchor="middle" x="333.5" y="178.35" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#444444">3,000</text></g><g><text text-anchor="end" x="56" y="103.85" font-family="Arial" font-size="11" stroke="none" stroke-width="0" fill="#222222">Size</text></g></g></g><g></g></svg><div aria-label="A tabular representation of the data in the chart." style="position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;"><table><thead><tr><th>Metric</th><th>Primed cache</th><th>Uncached</th></tr></thead><tbody><tr><td>Size</td><td>292.10546875</td><td>2825.857421875</td></tr></tbody></table></div></div></div><div aria-hidden="true" style="display: none; position: absolute; top: 210px; left: 410px; white-space: nowrap; font-family: Arial; font-size: 11px;">...</div><div></div></div></div></div>
+                    </div>
+
+                </div>
+            </div></div>
+        <h3 id="eyeballChartsFooter" class="ui bottom attached header black inverted"><a href="http://localhost:3000/#/har/:5523d08512275f30128aa577">View full HTTP analysis in Eyeball</a></h3>
+        <button class="ui labelled icon button small"><i class="pause icon"></i> Re-test</button></div><script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script><script src="https://www.google.com/jsapi"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script><script src="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/javascript/semantic.min.js"></script></div>

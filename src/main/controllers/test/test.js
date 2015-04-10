@@ -170,7 +170,7 @@ var EyeballControllersTestTest = function(params) {
         Validator.end();
         if(erroredUrls.length > 0) {
             eyeball.logger.info("Forcing test finish");
-            eyeball.io.sockets.volatile.emit('commitRecord_'+build,{
+            eyeball.io.volatile.emit('commitRecord_'+build,{
                 committed : Record.committedRecords.length,
                 total : urlsLength,
                 progress : 100

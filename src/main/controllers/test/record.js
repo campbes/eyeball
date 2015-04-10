@@ -53,7 +53,7 @@ var EyeballControllersTestRecord = function(build,tag,urlsLength) {
                 }
                 committedRecords.push(record);
                 eyeball.logger.info("Emitting..." + build);
-                eyeball.io.sockets.volatile.emit('commitRecord_' + build,{
+                eyeball.io.volatile.emit('commitRecord_' + build,{
                     committed: committedRecords.length,
                     total: urlsLength,
                     progress: Math.floor((committedRecords.length / urlsLength) * 100),
