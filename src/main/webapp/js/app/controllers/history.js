@@ -51,7 +51,7 @@ eyeballControllers.controller('HistoryCtrl',['settings','$scope','$routeParams',
                 setTimeout(function(){
                     chart.drawHistoryChart(obj[0],obj[1],obj[2],obj[3],obj[4]);
                 },10);
-            })
+            });
         };
 
         $http({
@@ -89,7 +89,7 @@ eyeballControllers.controller('HistoryCtrl',['settings','$scope','$routeParams',
                     size: [],
                     requestsUncached: [],
                     sizeUncached: []
-                }
+                };
 
                 data.forEach(function(obj) {
 

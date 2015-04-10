@@ -267,7 +267,7 @@ eyeballApp.factory('chart', ['render', function(render){
                 textStyle : {
                     color: '#FFF'
                 }
-            }
+            };
         }
 
         if(variant === 'area') {

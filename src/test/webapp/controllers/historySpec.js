@@ -13,7 +13,23 @@ describe('HistoryCtrl', function() {
         httpBackend = $httpBackend;
         httpBackend.when("GET", '/v1/results/est/history?fields=-metrics.har,-metrics.harUncached').respond([
             {
-                _id : 'est'
+                _id : 'est',
+                metrics : {
+                    time :{
+                        data : {
+                            dt: 0,
+                            dt_u: 0,
+                            lt: 0,
+                            lt_u: 0
+                        }
+                    },
+                    yslow : {
+                        data : {
+                            stats : {},
+                            stats_c : {}
+                        }
+                    }
+                }
             }
         ]);
         $controller("HistoryCtrl", {
