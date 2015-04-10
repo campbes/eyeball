@@ -8,7 +8,32 @@ div.container
 
     mixin detailNav('history')
 
-    div.ui.segment.inverted.default.header.attached.top(ng-repeat-start="f in fields") {{f.name}}
-    div.ui.segment.inverted.default.attached.bottom(ng-repeat-end)
+    div.ui.pointing.menu.inverted
+        a(ng-class="(historyView === 'grades' ? 'item active' : 'item')",ng-click="setHistoryView('grades')") Grades
+        a(ng-class="(historyView === 'figures' ? 'item active' : 'item')",ng-click="setHistoryView('figures')") Figures
+
+    div.ui.segment.inverted.default.header.attached.top(ng-repeat-start="f in fields",ng-show="historyView === 'grades'") {{f.name}}
+    div.ui.segment.inverted.default.attached.bottom(ng-repeat-end,ng-show="historyView === 'grades'")
         div(id="{{f.tool}}History").historyChart
+            i.icon.loading
+
+    div.ui.segment.inverted.default.header.attached.top(ng-show="historyView === 'figures'") Timings
+    div.ui.segment.inverted.default.attached.bottom(ng-repeat-end,ng-show="historyView === 'figures'")
+        div(id="timingsHistory").historyChart
+            i.icon.loading
+    div.ui.segment.inverted.default.header.attached.top(ng-show="historyView === 'figures'") Requests (Primed cache)
+    div.ui.segment.inverted.default.attached.bottom(ng-repeat-end,ng-show="historyView === 'figures'")
+        div(id="requestsHistory").historyChart
+            i.icon.loading
+    div.ui.segment.inverted.default.header.attached.top(ng-show="historyView === 'figures'") Size (Primed cache)
+    div.ui.segment.inverted.default.attached.bottom(ng-repeat-end,ng-show="historyView === 'figures'")
+        div(id="sizeHistory").historyChart
+            i.icon.loading
+    div.ui.segment.inverted.default.header.attached.top(ng-show="historyView === 'figures'") Requests (Uncached)
+    div.ui.segment.inverted.default.attached.bottom(ng-repeat-end,ng-show="historyView === 'figures'")
+        div(id="requestsUncachedHistory").historyChart
+            i.icon.loading
+    div.ui.segment.inverted.default.header.attached.top(ng-show="historyView === 'figures'") Size (Uncached)
+    div.ui.segment.inverted.default.attached.bottom(ng-repeat-end,ng-show="historyView === 'figures'")
+        div(id="sizeUncachedHistory").historyChart
             i.icon.loading

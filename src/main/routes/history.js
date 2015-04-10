@@ -4,14 +4,19 @@ var EyeballRoutesHistory = function(req,res) {
     var mongojs = require('mongojs');
     var reportCfg = require('../conf/report');
 
-    var queryString = url.parse(req.url, true).query || {};
+    var id = url.parse(req.url).path.match(/[A-z0-9]{24}/)[0];
+
     var dbQuery = {
-        _id : mongojs.ObjectId(queryString.id)
+        _id : mongojs.ObjectId(id)
     };
 
     return eyeball.DB.find(dbQuery,{url : 1},function(err,results) {
         if(err) {
-            res.send(err);
+            res.status(500).send(err);
+        }
+        if(results.length === 0) {
+            res.status(404).send("Not found");
+            return null;
         }
         dbQuery = {
             url : results[0].url
@@ -30,11 +35,18 @@ var EyeballRoutesHistory = function(req,res) {
             cfg["metrics."+rep+".tool"] = 1;
             cfg["metrics."+rep+".grades"] = 1;
         }
+        // specific items for the figures
+        cfg["metrics.time.data"] = 1;
+        cfg["metrics.yslow.data.stats"] = 1;
+        cfg["metrics.yslow.data.stats_c"] = 1;
+
         eyeball.DB.find(dbQuery,cfg,function(err,data) {
             if(err) {
-                res.send(err);
+                res.status(500).send(err);
+                return null;
             }
             res.send(JSON.stringify(data));
+            return data;
         });
 
         return cfg;

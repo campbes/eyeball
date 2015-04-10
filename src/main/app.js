@@ -48,7 +48,7 @@ app.get('/', routes.index);
 app.get('/v*/results', require('./routes/results').results);
 app.get('/v*/results/latest', require('./routes/results').latest);
 // record history
-app.get('/v*/results/*/history', require('./routes/historyNew'));
+app.get('/v*/results/*/history', require('./routes/history'));
 // record
 app.get('/v*/results/*', require('./routes/record').get);
 app.delete('/v*/results/*', require('./routes/record').delete);

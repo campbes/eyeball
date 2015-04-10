@@ -189,8 +189,7 @@ eyeballApp.factory('chart', ['render', function(render){
 
     }
 
-
-    function drawHistoryChart(results,cols,container,handler) {
+    function drawHistoryChart(results,cols,container,handler,variant) {
         var el = document.getElementById(container);
 
         if(!el) {
@@ -213,10 +212,38 @@ eyeballApp.factory('chart', ['render', function(render){
         chartData.addRows(results);
 
         var view = new google.visualization.DataView(chartData);
-        var chart = new google.visualization.LineChart(el);
+        var chart = new google.visualization.AreaChart(el);
 
         var config = {
             vAxis : {
+                textStyle : {
+                    color: '#FFF'
+                }
+            },
+            hAxis : {
+                textPosition: 'none'
+            },
+            chartArea : {
+                //width: 800,
+                height: 400
+            },
+            annotation : {
+                '1': {style: 'line'}
+            },
+            focusTarget : 'category',
+            backgroundColor: {fill:'transparent'},
+            areaOpacity : 0.1,
+            lineWidth: 3,
+            legend : {
+                textStyle : {
+                    color: '#FFF'
+                }
+            },
+            curveType : 'function'
+        };
+
+        if(variant === 'grade') {
+            config.vAxis = {
                 ticks: [
                     { v : 6, f : "A" },
                     { v : 5, f : "B" },
@@ -240,28 +267,12 @@ eyeballApp.factory('chart', ['render', function(render){
                 textStyle : {
                     color: '#FFF'
                 }
-            },
-            hAxis : {
-                textPosition: 'none'
-            },
-            chartArea : {
-                //width: 800,
-                height: 400
-            },
-            annotation : {
-                '1': {style: 'line'}
-            },
-            focusTarget : 'category',
-            backgroundColor: {fill:'transparent'},
-            areaOpacity : 0.1,
-            lineWidth: 4,
-            legend : {
-                textStyle : {
-                    color: '#FFF'
-                }
-            },
-            curveType : 'function'
-        };
+            }
+        }
+
+        if(variant === 'area') {
+            config.isStacked = true;
+        }
 
         function selectHandler() {
             if(handler) {

@@ -11,6 +11,9 @@ eyeballControllers.controller('HistoryCtrl',['settings','$scope','$routeParams',
         $scope.timestamp = 'Getting timestamp...';
         $scope.fields = config.fields.display.items;
         $scope.reportFilter = persist.get("reportFilter");
+        $scope.historyView = 'grades';
+
+        var chartObjects = [];
 
         function relocate(obj) {
             $scope.$apply(function(){
@@ -42,10 +45,26 @@ eyeballControllers.controller('HistoryCtrl',['settings','$scope','$routeParams',
             return array;
         }
 
+        $scope.setHistoryView = function(view) {
+            $scope.historyView = view;
+            chartObjects.forEach(function(obj){
+                setTimeout(function(){
+                    chart.drawHistoryChart(obj[0],obj[1],obj[2],obj[3],obj[4]);
+                },10);
+            })
+        };
+
         $http({
             url: '/v'+settings.apiVersion+'/results/'+$scope.id+'/history?fields=-metrics.har,-metrics.harUncached',
             method: "GET"
         }).success(function(data) {
+
+                var colConfig = [
+                    ['string', 'ID'],
+                    [{type:'string', role:'annotation'}],
+                    [{type:'string',role:'tooltip'}]
+                ];
+
                 $scope.data = data;
                 var n = 0, i = 0, j = 0;
                 var array = null;
@@ -53,11 +72,7 @@ eyeballControllers.controller('HistoryCtrl',['settings','$scope','$routeParams',
 
                 for(n=0; n<$scope.fields.length;n++) {
                     array = [];
-                    cols = [
-                        ['string', 'ID'],
-                        [{type:'string', role:'annotation'}],
-                        [{type:'string',role:'tooltip'}]
-                    ];
+                    cols = [].concat(colConfig);
 
                     for(i=0; i<data.length; i++) {
                         array.push(generateArray(data[i],cols,$scope.fields[n].tool));
@@ -65,8 +80,86 @@ eyeballControllers.controller('HistoryCtrl',['settings','$scope','$routeParams',
                     for(j =0; j<config.fields[$scope.fields[n].tool].items.length; j++) {
                         cols.push(['number',config.fields[$scope.fields[n].tool].items[j].name]);
                     }
-                    chart.drawHistoryChart(array,cols,$scope.fields[n].tool+'History',relocate);
+                    chart.drawHistoryChart(array,cols,$scope.fields[n].tool+'History',relocate,'grade');
                 }
+
+                var figureData = {
+                    timings: [],
+                    requests: [],
+                    size: [],
+                    requestsUncached: [],
+                    sizeUncached: []
+                }
+
+                data.forEach(function(obj) {
+
+                    var time = obj.metrics.time.data;
+                    var yslow = obj.metrics.yslow.data.stats_c;
+                    var yslowUncached = obj.metrics.yslow.data.stats;
+
+                    figureData.timings.push([
+                        obj._id,
+                        (obj._id === $routeParams.id.substr(1) ? obj._id : null),
+                        obj._id+" ("+new Date(obj.timestamp).toDateString()+")",
+                        time.dt,
+                        time.lt,
+                        time.dt_u,
+                        time.lt_u
+                    ]);
+
+                    function addYslowData(array,data,field) {
+                        figureData[array].push([
+                            obj._id,
+                            (obj._id === $routeParams.id.substr(1) ? obj._id : null),
+                            obj._id+" ("+new Date(obj.timestamp).toDateString()+")",
+                            (data.doc ? data.doc[field] : 0),
+                            (data.json ? data.json[field] : 0),
+                            (data.css ? data.css[field] : 0),
+                            (data.js ? data.js[field] : 0),
+                            (data.image ? data.image[field] : 0)
+                        ]);
+                    }
+
+                    addYslowData("requests",yslow,"r");
+                    addYslowData("size",yslow,"w");
+                    addYslowData("requestsUncached",yslowUncached,"r");
+                    addYslowData("sizeUncached",yslowUncached,"w");
+                });
+
+                chartObjects.push([
+                    figureData.timings,
+                    [].concat(colConfig).concat([
+                        ['number','DOM Load time'],
+                        ['number','Load time'],
+                        ['number','DOM Load time (uncached)'],
+                        ['number','Load time (uncached)']
+                    ]),
+                    'timingsHistory',
+                    relocate
+                ]);
+
+                var mimeTypes = [
+                    ['number','HTML'],
+                    ['number','JSON'],
+                    ['number','CSS'],
+                    ['number','JS'],
+                    ['number','Image']
+                ];
+
+                function addYslowFigureChart(name) {
+                    chartObjects.push([
+                        figureData[name],
+                        [].concat(colConfig).concat(mimeTypes),
+                        name+'History',
+                        relocate,
+                        'area'
+                    ]);
+                }
+
+                addYslowFigureChart("requests");
+                addYslowFigureChart("size");
+                addYslowFigureChart("requestsUncached");
+                addYslowFigureChart("sizeUncached");
 
             });
 
