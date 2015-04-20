@@ -3,8 +3,7 @@
 eyeballApp.factory('socket', ['$rootScope',function ($rootScope) {
 
     function connection() {
-        var socket = io.connect();
-        socket.socket.reconnect();
+        var socket = io();
 
         return {
             on: function (eventName, callback) {
