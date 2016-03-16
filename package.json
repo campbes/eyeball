@@ -1,39 +1,39 @@
 {
-    "name": "eyeball",
-    "version": "0.0.4",
-    "private": true,
-    "scripts": {
-        "start": "node app.js"
-    },
-    "dependencies": {
-        "express": "3.4.0",
-        "jade": "*",
-        "request" : "*",
-        "mongojs" : "*",
-        "node-phantom" : "*",
-        "phantomjs" : "*",
-        "socket.io" : "*",
-        "winston" : "*",
-        "yslow" : "*",
-        "arialinter" : "0.3.1",
-        "jsdom" : "0.8.6",
-	    "lodash" : "*",
-        "q" : "*"
-    },
-    "devDependencies" : {
-        "grunt-contrib-clean" : "0.5.0",
-        "grunt-contrib-copy" : "0.4.1",
-        "grunt-contrib-concat" : "0.3.0",
-        "grunt-contrib-compress" : "0.5.2",
-        "grunt-contrib-cssmin" : "0.7.0",
-        "grunt-closurecompiler" : "0.9.9",
-        "grunt-jslint" : "1.1.1",
-        "grunt-curl" : "1.1.1",
-        "grunt-plato" : "1.0.0",
-        "grunt-contrib-jasmine" : "0.6.1",
-        "grunt-template-jasmine-istanbul" : "*",
-        "jit-grunt" : "0.7.0",
-        "grunt-contrib-handlebars" : "0.6.1",
-        "time-grunt" : "1.0.0"
-    }
+  "name": "eyeball",
+  "version": "0.0.4",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "arialinter": "0.3.1",
+    "express": "3.4.0",
+    "jade": "*",
+    "jsdom": "*",
+    "lodash": "3.6.0",
+    "mongojs": "0.18.2",
+    "node-phantom-simple": "1.2.0",
+    "phantomjs": "1.9.16",
+    "q": "1.2.0",
+    "request": "2.55.0",
+    "socket.io": "*",
+    "winston": "*",
+    "yslow": "3.1.0"
+  },
+  "devDependencies": {
+    "grunt-contrib-clean": "0.5.0",
+    "grunt-contrib-copy": "0.4.1",
+    "grunt-contrib-concat": "0.3.0",
+    "grunt-contrib-compress": "0.5.2",
+    "grunt-contrib-cssmin": "0.7.0",
+    "grunt-closurecompiler": "0.9.9",
+    "grunt-jslint": "1.1.1",
+    "grunt-curl": "1.1.1",
+    "grunt-plato": "1.0.0",
+    "grunt-contrib-jasmine": "0.6.1",
+    "grunt-template-jasmine-istanbul": "*",
+    "jit-grunt": "0.7.0",
+    "grunt-contrib-handlebars": "0.6.1",
+    "time-grunt": "1.0.0"
+  }
 }

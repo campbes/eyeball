@@ -87,7 +87,7 @@ server.listen(app.get('port'), function(){
 });
 
 var exec = require('child_process').exec;
-var vnu = exec('java -Xss512k -cp lib/vnu.jar nu.validator.servlet.Main 8888',
+var vnu = exec('java -Xss1024k -cp ./lib/vnu.jar nu.validator.servlet.Main 8888',
     function(err,stdout,stderr) {
         if(err) {
             console.log("VNU server error: "+err);
@@ -128,6 +128,8 @@ require('socket.io')(server).on('connection',function(socket) {
 
 var proxyCache = {};
 
+var proxyCookies = '';
+
 http.createServer(function(req, res) {
 
     var options = {
@@ -138,7 +140,8 @@ http.createServer(function(req, res) {
 
     options.headers = {
         'user-agent' : req.headers['user-agent'],
-        'accept' : req.headers.accept
+        'accept' : req.headers.accept,
+        'cookie' : proxyCookies
     };
 
     var cacheKey = req.url+":"+req.headers["x-eyeball-timestamp"];

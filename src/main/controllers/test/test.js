@@ -114,6 +114,10 @@ var EyeballControllersTestTest = function(params) {
             width: 1280,
             height: 1024
         });
+        test.page.viewportSize = {
+            width: 1280,
+            height: 1024
+        };
         test.page.set('clipRect',{
             top: 0,
             left: 0,

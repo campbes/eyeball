@@ -20,13 +20,13 @@ var EyeballControllersTestValidator = function() {
 
         setTimeout(function(){
             vnu.kill();
-        },5000);
+        },10000);
 
         vnu.stdout.on('data',function(data) {
             vnuData += data;
         });
 
-        vnu.stdout.on('end',function(code) {
+        vnu.stdout.on('end',function() {
             var errors = 0;
             var warnings = 0;
             var val;
@@ -34,6 +34,7 @@ var EyeballControllersTestValidator = function() {
             try {
                 val = JSON.parse(vnuData);
             } catch (e) {
+                console.log(vnuData)
                 eyeball.logger.error("Invalid VNU response: "+e);
                 return;
             }
